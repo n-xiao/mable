@@ -1,18 +1,13 @@
 package code.frontend.foundation;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.geom.GeneralPath;
-
-import javax.swing.JPanel;
-
 import code.frontend.misc.Vals;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
 
 // dont use setPreferredSize() with layout null
-public class CustomBox extends JPanel {
+public class CustomBox extends ResizableCanvas {
     // CORNER_OFFSET > CORNER_DEVIATION
     final private double DEVIATION;
     final private double CORNER_DEVIATION;
@@ -24,7 +19,6 @@ public class CustomBox extends JPanel {
 
     public CustomBox(int thickness) {
         this.thickness = thickness;
-        this.setLayout(null);
         DEVIATION = Vals.GraphicalUI.DEVIATION;
         CORNER_DEVIATION = Vals.GraphicalUI.CORNER_DEVIATION;
         CORNER_OFFSET = Vals.GraphicalUI.CORNER_OFFSET;
@@ -32,7 +26,6 @@ public class CustomBox extends JPanel {
 
     public CustomBox(int thickness, double dev, double cornerDev, double cornerOffset) {
         this.thickness = thickness;
-        this.setLayout(null);
         DEVIATION = (dev >= 0) ? dev : Vals.GraphicalUI.DEVIATION;
         CORNER_DEVIATION = (cornerDev >= 0) ? cornerDev : Vals.GraphicalUI.CORNER_DEVIATION;
         CORNER_OFFSET = (cornerOffset >= 0) ? cornerOffset : Vals.GraphicalUI.CORNER_OFFSET;
@@ -40,27 +33,26 @@ public class CustomBox extends JPanel {
     }
 
     @Override
-    public void paintComponent(Graphics g) { // pack() and setPreferredSize() and setBounds() will call
-        Graphics2D g2d = (Graphics2D) g.create();
-        g2d.setPaint(Color.WHITE); // for testing only, use variable later
-        g2d.setStroke(new BasicStroke(thickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        GeneralPath outline1 = new GeneralPath(GeneralPath.WIND_EVEN_ODD, 8);
-        GeneralPath outline2 = new GeneralPath(GeneralPath.WIND_EVEN_ODD, 8);
-        assembleBoxPath(outline1);
-        g2d.draw(outline1);
-        assembleBoxPath(outline2);
-        g2d.draw(outline2);
+    protected void draw(GraphicsContext gc) {
+        gc.setStroke(Color.WHITE);
+        gc.setLineWidth(this.thickness);
+        gc.setLineCap(StrokeLineCap.ROUND);
+        gc.setLineJoin(StrokeLineJoin.ROUND);
+        assembleBoxPath(gc);
+        assembleBoxPath(gc);
     }
 
-    private void assembleBoxPath(GeneralPath path) {
+    private void assembleBoxPath(GraphicsContext gc) {
         Coordinate[] fixed = getFixedCoords();
         Coordinate[] ctrl = getControlCoords();
-        path.moveTo(fixed[0].x, fixed[0].y);
+        gc.beginPath();
+        gc.moveTo(fixed[0].x, fixed[0].y);
         for (int i = 0; i < ctrl.length; i++) {
             int fixedIndex = (i == ctrl.length - 1) ? 0 : i + 1; // allows wrap-around
-            path.quadTo(ctrl[i].x, ctrl[i].y, fixed[fixedIndex].x, fixed[fixedIndex].y);
+            gc.quadraticCurveTo(ctrl[i].x, ctrl[i].y, fixed[fixedIndex].x, fixed[fixedIndex].y);
+            // System.out.println("x: " + fixed[fixedIndex].x + "y: " + fixed[fixedIndex].y);
         }
+        gc.stroke();
     }
 
     /*
@@ -73,13 +65,15 @@ public class CustomBox extends JPanel {
      * 3---------------2
      */
     public Coordinate[] getCornerCoords() {
-        if (this.cornerCoords != null) return this.cornerCoords;
+        // if (this.cornerCoords != null) return this.cornerCoords;
         int width = getPaddedWidth();
         int height = getPaddedHeight();
         this.cornerCoords = new Coordinate[4];
         for (int i = 0; i < cornerCoords.length; i++) {
-            double xPos = this.getX() + ((i == 1 || i == 2) ? width : 0);
-            double yPos = this.getY() + ((i == 2 || i == 3) ? height : 0);
+            // double xPos = this.getLayoutX() + ((i == 1 || i == 2) ? width : 0);
+            // double yPos = this.getLayoutY() + ((i == 2 || i == 3) ? height : 0);
+            double xPos = (i == 1 || i == 2) ? width : 0;
+            double yPos = (i == 2 || i == 3) ? height : 0;
             this.cornerCoords[i] = new Coordinate(xPos, yPos);
         }
         return this.cornerCoords;
@@ -96,7 +90,7 @@ public class CustomBox extends JPanel {
      *      |
      */
     private Coordinate[] getFixedCoords() {
-        if (this.fixedCoords != null) return this.fixedCoords;
+        // if (this.fixedCoords != null) return this.fixedCoords;
         Coordinate[] corners = getCornerCoords();
         this.fixedCoords = new Coordinate[8];
         int width = getPaddedWidth();
@@ -173,22 +167,15 @@ public class CustomBox extends JPanel {
     }
 
     private int getPaddedHeight() {
-        int height = this.getHeight();
+        double height = this.getHeight();
         double bigDev = Math.max(DEVIATION, CORNER_DEVIATION);
         return (int) Math.floor(height - height * bigDev);
     }
 
     private int getPaddedWidth() {
-        int width = this.getWidth();
+        double width = this.getWidth();
         double bigDev = Math.max(DEVIATION, CORNER_DEVIATION);
         return (int) Math.floor(width - width * bigDev);
-    }
-
-    public void forceRegen() {
-        // no idea why you might do this but eh
-        this.cornerCoords = null;
-        this.fixedCoords = null;
-        this.repaint();
     }
 }
 

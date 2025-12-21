@@ -5,7 +5,10 @@ import code.frontend.misc.Vals;
 import javafx.application.Application;
 import javafx.embed.swing.SwingNode;
 import javafx.scene.Scene;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Launcher extends Application {
@@ -25,11 +28,12 @@ public class Launcher extends Application {
         p.setMinSize(Vals.GraphicalUI.MIN_WIDTH, Vals.GraphicalUI.MIN_HEIGHT);
         p.relocate(0, 0);
 
-        SwingNode swingNode = new SwingNode();
-        CustomBox box = new CustomBox(8);
-        box.setSize(200, 200);
-        swingNode.setContent(box);
-        p.getChildren().add(swingNode);
+        CustomBox box = new CustomBox(4);
+        p.getChildren().add(box);
+        // p.setBackground(new Background(new BackgroundFill(Color.GRAY, null, null)));
+
+        box.widthProperty().bind(p.widthProperty());
+        box.heightProperty().bind(p.heightProperty());
 
         Scene scene = new Scene(p);
         scene.setFill(Vals.Colour.BACKGROUND);

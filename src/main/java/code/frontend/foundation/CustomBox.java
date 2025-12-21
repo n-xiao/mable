@@ -9,7 +9,7 @@ import java.awt.geom.GeneralPath;
 
 import javax.swing.JPanel;
 
-import code.frontend.misc.DefaultValues;
+import code.frontend.misc.Vals;
 
 // dont use setPreferredSize() with layout null
 public class CustomBox extends JPanel {
@@ -25,17 +25,17 @@ public class CustomBox extends JPanel {
     public CustomBox(int thickness) {
         this.thickness = thickness;
         this.setLayout(null);
-        DEVIATION = DefaultValues.DEVIATION;
-        CORNER_DEVIATION = DefaultValues.CORNER_DEVIATION;
-        CORNER_OFFSET = DefaultValues.CORNER_OFFSET;
+        DEVIATION = Vals.GraphicalUI.DEVIATION;
+        CORNER_DEVIATION = Vals.GraphicalUI.CORNER_DEVIATION;
+        CORNER_OFFSET = Vals.GraphicalUI.CORNER_OFFSET;
     }
 
     public CustomBox(int thickness, double dev, double cornerDev, double cornerOffset) {
         this.thickness = thickness;
         this.setLayout(null);
-        DEVIATION = (dev >= 0) ? dev : DefaultValues.DEVIATION;
-        CORNER_DEVIATION = (cornerDev >= 0) ? cornerDev : DefaultValues.CORNER_DEVIATION;
-        CORNER_OFFSET = (cornerOffset >= 0) ? cornerOffset : DefaultValues.CORNER_OFFSET;
+        DEVIATION = (dev >= 0) ? dev : Vals.GraphicalUI.DEVIATION;
+        CORNER_DEVIATION = (cornerDev >= 0) ? cornerDev : Vals.GraphicalUI.CORNER_DEVIATION;
+        CORNER_OFFSET = (cornerOffset >= 0) ? cornerOffset : Vals.GraphicalUI.CORNER_OFFSET;
         assert CORNER_OFFSET > CORNER_DEVIATION;
     }
 

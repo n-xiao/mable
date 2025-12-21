@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 
 import code.backend.Countdown;
 import code.frontend.foundation.CustomBox;
-import code.frontend.misc.DefaultValues;
+import code.frontend.misc.Vals;
 
 /*
  * This class is the JPanel for a single Countdown.
@@ -25,7 +25,7 @@ public class CountdownPanel extends JPanel {
     public CountdownPanel(Countdown c, Instant now) {
         assert c != null;
         this.setLayout(null);
-        this.setBackground(DefaultValues.BACKGROUND_COLOUR);
+        this.setBackground(Vals.Colour.BACKGROUND_COLOUR);
         this.setSize(WIDTH, HEIGHT);
 
         addBorder(this);
@@ -43,7 +43,7 @@ public class CountdownPanel extends JPanel {
         int daysTillDue = Math.abs(c.daysUntilDue(now));
         String daysString = Integer.toString(daysTillDue);
         JLabel daysRemain = new JLabel(daysString, JLabel.CENTER);
-        daysRemain.setFont(new Font(DefaultValues.getFontFamily(), Font.PLAIN, 40));
+        daysRemain.setFont(new Font(Vals.getFontFamily(), Font.PLAIN, 40));
         cdnPanel.add(daysRemain);
         daysRemain.setLocation(0, -30);
         daysRemain.setSize(WIDTH, HEIGHT - 20);
@@ -53,7 +53,7 @@ public class CountdownPanel extends JPanel {
         String adverb = (c.isOverdue(now)) ? "AGO" : "LEFT";
         JLabel nounLabel = new JLabel(noun, JLabel.CENTER);
         JLabel adverbLabel = new JLabel(adverb, JLabel.CENTER);
-        Font labelFont = new Font(DefaultValues.getFontFamily(), Font.BOLD, 16);
+        Font labelFont = new Font(Vals.getFontFamily(), Font.BOLD, 16);
         nounLabel.setFont(labelFont);
         adverbLabel.setFont(labelFont);
         int nounY = HEIGHT - 100; // defines y pos just below daysRemain

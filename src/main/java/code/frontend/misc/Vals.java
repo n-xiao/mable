@@ -5,15 +5,22 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.io.InputStream;
 
-public class DefaultValues {
+public class Vals {
 
-    // colours
-    public static final Color BACKGROUND_COLOUR = new Color(20,20,30);
+    public final class Colour {
+        public static final Color BACKGROUND_COLOUR = new Color(20,20,30);
+    }
 
-    // LaF
-    public static final double DEVIATION = 0.02;
-    public static final double CORNER_DEVIATION = 0.02;
-    public static final double CORNER_OFFSET = 0.2;
+    public final class GraphicalUI {
+        public static final int PREF_WIDTH = 1120;
+        public static final int PREF_HEIGHT = 730;
+        public static final int MIN_WIDTH = 620;
+        public static final int MIN_HEIGHT = 430;
+        public static final double DEVIATION = 0.02;
+        public static final double CORNER_DEVIATION = 0.02;
+        public static final double CORNER_OFFSET = 0.2;
+    }
+
 
     // fonts
     private static String font = null;
@@ -47,5 +54,5 @@ public class DefaultValues {
         return font;
     }
 
-    private DefaultValues() {}
+    private Vals() {}
 }

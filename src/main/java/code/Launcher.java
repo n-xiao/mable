@@ -21,7 +21,10 @@ public class Launcher extends Application {
         Pane p = new Pane();
         p.setPrefSize(Vals.GraphicalUI.PREF_WIDTH, Vals.GraphicalUI.PREF_HEIGHT);
         p.setMinSize(Vals.GraphicalUI.MIN_WIDTH, Vals.GraphicalUI.MIN_HEIGHT);
+        p.setLayoutX(0);
+        p.setLayoutY(0);
         Scene scene = new Scene(p);
+        scene.setFill(Vals.Colour.BACKGROUND);
         stage.setScene(scene);
         stage.show();
     }

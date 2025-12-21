@@ -25,7 +25,7 @@ public class CountdownPanel extends JPanel {
     public CountdownPanel(Countdown c, Instant now) {
         assert c != null;
         this.setLayout(null);
-        this.setBackground(Vals.Colour.BACKGROUND_COLOUR);
+        this.setBackground(Color.BLACK);
         this.setSize(WIDTH, HEIGHT);
 
         addBorder(this);

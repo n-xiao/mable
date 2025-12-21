@@ -1,14 +1,15 @@
 package code.frontend.misc;
 
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.io.InputStream;
 
+import javafx.scene.paint.Color;
+
 public class Vals {
 
     public final class Colour {
-        public static final Color BACKGROUND_COLOUR = new Color(20,20,30);
+        public static final Color BACKGROUND = Color.rgb(20, 20, 30);
     }
 
     public final class GraphicalUI {

@@ -9,7 +9,7 @@ repositories {
 
 javafx {
     version = "25"
-    modules = [ 'javafx.base', 'javafx.controls', 'javafx.graphics', 'javafx.media' ]
+    modules = [ 'javafx.base', 'javafx.controls', 'javafx.graphics', 'javafx.media', 'javafx.swing' ]
 }
 
 application {

@@ -1,7 +1,9 @@
 package code;
 
+import code.frontend.foundation.CustomBox;
 import code.frontend.misc.Vals;
 import javafx.application.Application;
+import javafx.embed.swing.SwingNode;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -21,8 +23,14 @@ public class Launcher extends Application {
         Pane p = new Pane();
         p.setPrefSize(Vals.GraphicalUI.PREF_WIDTH, Vals.GraphicalUI.PREF_HEIGHT);
         p.setMinSize(Vals.GraphicalUI.MIN_WIDTH, Vals.GraphicalUI.MIN_HEIGHT);
-        p.setLayoutX(0);
-        p.setLayoutY(0);
+        p.relocate(0, 0);
+
+        SwingNode swingNode = new SwingNode();
+        CustomBox box = new CustomBox(8);
+        box.setSize(200, 200);
+        swingNode.setContent(box);
+        p.getChildren().add(swingNode);
+
         Scene scene = new Scene(p);
         scene.setFill(Vals.Colour.BACKGROUND);
         stage.setScene(scene);

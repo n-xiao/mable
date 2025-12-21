@@ -17,10 +17,12 @@ and I would want to minimise the risk of data loss due to any repository managem
 Once I get the time to learn more, I will definitely allow code contributions.
 
 # License
-     This file is part of Mable.
+This file is part of Mable.
 
-    Mable is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+Mable is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    Mable is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+Mable is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License along with Mable. If not, see <https://www.gnu.org/licenses/>. 
+You should have received a copy of the GNU General Public License along with Mable. If not, see <https://www.gnu.org/licenses/>. 
+
+Copyright © 2026 Nicholas Siow

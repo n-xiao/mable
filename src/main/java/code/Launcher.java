@@ -28,15 +28,15 @@ public class Launcher extends Application {
         p.relocate(0, 0);
 
         Pane p2 = new Pane();
-        p2.setPrefSize(100, 100);
+        p2.setPrefSize(300, 300);
         p2.setMinSize(50, 50);
         p2.relocate(20, 20);
 
-        CustomBox box = new CustomBox(4);
+        CustomBox box = new CustomBox(2);
         // p.setBackground(new Background(new BackgroundFill(Color.GRAY, null, null)));
 
         CustomBox.applyAsPaneBorder(p2, box);
-        p2.setBackground(new Background(new BackgroundFill(Color.BLUEVIOLET, null, null)));
+        // p2.setBackground(new Background(new BackgroundFill(Color.BLUEVIOLET, null, null)));
         p.getChildren().add(p2);
 
         Scene scene = new Scene(p);

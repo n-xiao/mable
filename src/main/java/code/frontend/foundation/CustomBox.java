@@ -73,14 +73,14 @@ public class CustomBox extends ResizableCanvas {
      */
     public Coordinate[] getCornerCoords() {
         // if (this.cornerCoords != null) return this.cornerCoords;
-        int width = getPaddedWidth();
-        int height = getPaddedHeight();
+        double width = getPaddedWidth();
+        double height = getPaddedHeight();
         this.cornerCoords = new Coordinate[4];
         for (int i = 0; i < cornerCoords.length; i++) {
             // double xPos = this.getLayoutX() + ((i == 1 || i == 2) ? width : 0);
             // double yPos = this.getLayoutY() + ((i == 2 || i == 3) ? height : 0);
-            double xPos = ((i == 1 || i == 2) ? width : 2);
-            double yPos = ((i == 2 || i == 3) ? height : 2);
+            double xPos = getHorizPadding() + ((i == 1 || i == 2) ? width : 0);
+            double yPos = getVertiPadding() + ((i == 2 || i == 3) ? height : 0);
             this.cornerCoords[i] = new Coordinate(xPos, yPos);
         }
         return this.cornerCoords;
@@ -100,8 +100,8 @@ public class CustomBox extends ResizableCanvas {
         // if (this.fixedCoords != null) return this.fixedCoords;
         Coordinate[] corners = getCornerCoords();
         this.fixedCoords = new Coordinate[8];
-        int width = getPaddedWidth();
-        int height = getPaddedHeight();
+        double width = getPaddedWidth();
+        double height = getPaddedHeight();
         double offset = (Math.min(width, height) * CORNER_OFFSET);
         // ew ugly code... but it's readable so sike
         this.fixedCoords[0] = new Coordinate(corners[0].x, corners[0].y + offset);
@@ -135,8 +135,8 @@ public class CustomBox extends ResizableCanvas {
     private Coordinate[] getControlCoords() {
         getCornerCoords();
         Coordinate[] controlCoords = new Coordinate[8];
-        int width = getPaddedWidth();
-        int height = getPaddedHeight();
+        double width = getPaddedWidth();
+        double height = getPaddedHeight();
         // first add the corner ctrl points
         for (int i = 0; i < 4; i++) {
             int index = i * 2;
@@ -173,16 +173,24 @@ public class CustomBox extends ResizableCanvas {
         return controlCoords;
     }
 
-    private int getPaddedHeight() {
-        double height = this.getHeight();
-        double bigDev = Math.max(DEVIATION, CORNER_DEVIATION);
-        return (int) Math.floor(height - height * bigDev);
+    private double getHorizPadding() {
+        return 0.5 * (this.getHeight() - getPaddedHeight());
     }
 
-    private int getPaddedWidth() {
+    private double getVertiPadding() {
+        return 0.5 * (this.getWidth() - getPaddedWidth());
+    }
+
+    private double getPaddedHeight() {
+        double height = this.getHeight();
+        double bigDev = height * Math.max(DEVIATION, CORNER_DEVIATION);
+        return Math.floor(height - bigDev) - this.thickness;
+    }
+
+    private double getPaddedWidth() {
         double width = this.getWidth();
-        double bigDev = Math.max(DEVIATION, CORNER_DEVIATION);
-        return (int) Math.floor(width - width * bigDev);
+        double bigDev = width * Math.max(DEVIATION, CORNER_DEVIATION);
+        return Math.floor(width - bigDev) - this.thickness;
     }
 }
 

@@ -1,14 +1,10 @@
 package code;
 
-import code.frontend.foundation.CustomBox;
 import code.frontend.misc.Vals;
 import code.frontend.panels.CountdownPanel;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Launcher extends Application {

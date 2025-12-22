@@ -13,8 +13,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 public class CountdownPanel extends VBox {
-    private final double WIDTH = 250;
-    private final double HEIGHT = 130;
+    private final double WIDTH = 260;
+    private final double HEIGHT = 140;
+    private final double CONTENT_HEIGHT = 100;
 
     private HBox hoverHBox;
     private HBox contentHBox;
@@ -30,19 +31,19 @@ public class CountdownPanel extends VBox {
 
     private void initHoverHBox() {
         this.hoverHBox = new HBox();
-        hoverHBox.setPrefSize(WIDTH, 30);
-        VBox.setMargin(hoverHBox, new Insets(0, 0, 1, 0));
-        hoverHBox.setBackground(new Background(new BackgroundFill(Color.PINK, null, null)));
+        hoverHBox.setPrefSize(WIDTH, HEIGHT - CONTENT_HEIGHT);
+        // VBox.setMargin(hoverHBox, new Insets(0, 0, 1, 0));
+        // hoverHBox.setBackground(new Background(new BackgroundFill(Color.PINK, null, null)));
 
         // todo mouse listener stuff
     }
 
     private void initContentHBox() {
         this.contentHBox = new HBox();
-        contentHBox.setPrefSize(WIDTH, 100);
+        contentHBox.setPrefSize(WIDTH, CONTENT_HEIGHT);
         CustomBox border = new CustomBox(3);
         CustomBox.applyAsPaneBorder(contentHBox, border);
-        contentHBox.setBackground(new Background(new BackgroundFill(Color.GRAY, null, null)));
+        // contentHBox.setBackground(new Background(new BackgroundFill(Color.GRAY, null, null)));
     }
 
 }

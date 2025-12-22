@@ -36,7 +36,7 @@ public class Launcher extends Application {
         // p.setBackground(new Background(new BackgroundFill(Color.GRAY, null, null)));
 
         CustomBox.applyAsPaneBorder(p2, box);
-        // p2.setBackground(new Background(new BackgroundFill(Color.GRAY, null, null)));
+        p2.setBackground(new Background(new BackgroundFill(Color.BLUEVIOLET, null, null)));
         p.getChildren().add(p2);
 
         Scene scene = new Scene(p);

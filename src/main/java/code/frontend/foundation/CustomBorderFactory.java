@@ -1,31 +1,35 @@
 package code.frontend.foundation;
 
 import code.frontend.misc.Vals;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.QuadCurveTo;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.shape.StrokeType;
 
 // dont use setPreferredSize() with layout null
-public class CustomBox extends ResizableCanvas {
+public class CustomBorderFactory {
     // CORNER_OFFSET > CORNER_DEVIATION
     final private double DEVIATION;
     final private double CORNER_DEVIATION;
     final private double CORNER_OFFSET;
 
     private int thickness;
+    private Pane pane;
     private Coordinate[] cornerCoords = null;
     private Coordinate[] fixedCoords = null;
 
-    public CustomBox(int thickness) {
+    public CustomBorderFactory(int thickness) {
         this.thickness = thickness;
         DEVIATION = Vals.GraphicalUI.DEVIATION;
         CORNER_DEVIATION = Vals.GraphicalUI.CORNER_DEVIATION;
         CORNER_OFFSET = Vals.GraphicalUI.CORNER_OFFSET;
     }
 
-    public CustomBox(int thickness, double dev, double cornerDev, double cornerOffset) {
+    public CustomBorderFactory(int thickness, double dev, double cornerDev, double cornerOffset) {
         this.thickness = thickness;
         DEVIATION = (dev >= 0) ? dev : Vals.GraphicalUI.DEVIATION;
         CORNER_DEVIATION = (cornerDev >= 0) ? cornerDev : Vals.GraphicalUI.CORNER_DEVIATION;
@@ -33,33 +37,33 @@ public class CustomBox extends ResizableCanvas {
         assert CORNER_OFFSET > CORNER_DEVIATION;
     }
 
-    public static void applyAsPaneBorder(Pane p, CustomBox box) {
-        p.getChildren().add(box);
-        box.widthProperty().bind(p.widthProperty());
-        box.heightProperty().bind(p.heightProperty());
+    public void applyBorder(Pane p) {
+        this.pane = p;
+        p.getChildren().addAll(assembleBoxPath(), assembleBoxPath());
     }
 
-    @Override
-    protected void draw(GraphicsContext gc) {
-        gc.setStroke(Color.WHITE);
-        gc.setLineWidth(this.thickness);
-        gc.setLineCap(StrokeLineCap.ROUND);
-        gc.setLineJoin(StrokeLineJoin.ROUND);
-        assembleBoxPath(gc);
-        assembleBoxPath(gc);
-    }
-
-    private void assembleBoxPath(GraphicsContext gc) {
+    private Path assembleBoxPath() {
+        Path path = new Path();
+        configurePath(path);
         Coordinate[] fixed = getFixedCoords();
         Coordinate[] ctrl = getControlCoords();
-        gc.beginPath();
-        gc.moveTo(fixed[0].x, fixed[0].y);
+        path.getElements().add(new MoveTo(fixed[0].x, fixed[0].y));
         for (int i = 0; i < ctrl.length; i++) {
             int fixedIndex = (i == ctrl.length - 1) ? 0 : i + 1; // allows wrap-around
-            gc.quadraticCurveTo(ctrl[i].x, ctrl[i].y, fixed[fixedIndex].x, fixed[fixedIndex].y);
+            QuadCurveTo quadTo = new QuadCurveTo(ctrl[i].x, ctrl[i].y, fixed[fixedIndex].x, fixed[fixedIndex].y);
+            path.getElements().add(quadTo);
+            // gc.quadraticCurveTo(ctrl[i].x, ctrl[i].y, fixed[fixedIndex].x, fixed[fixedIndex].y);
             // System.out.println("x: " + fixed[fixedIndex].x + "y: " + fixed[fixedIndex].y);
         }
-        gc.stroke();
+        return path;
+    }
+
+    private void configurePath(Path path) {
+        path.setStroke(Color.WHITE);
+        path.setStrokeType(StrokeType.INSIDE);
+        path.setStrokeLineCap(StrokeLineCap.ROUND);
+        path.setStrokeLineJoin(StrokeLineJoin.ROUND);
+        path.setStrokeWidth(this.thickness);
     }
 
     /*
@@ -174,13 +178,13 @@ public class CustomBox extends ResizableCanvas {
     }
 
     private int getPaddedHeight() {
-        double height = this.getHeight();
+        double height = this.pane.getHeight();
         double bigDev = Math.max(DEVIATION, CORNER_DEVIATION);
         return (int) Math.floor(height - height * bigDev);
     }
 
     private int getPaddedWidth() {
-        double width = this.getWidth();
+        double width = this.pane.getWidth();
         double bigDev = Math.max(DEVIATION, CORNER_DEVIATION);
         return (int) Math.floor(width - width * bigDev);
     }

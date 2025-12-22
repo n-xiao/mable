@@ -3,6 +3,11 @@ package code.frontend.foundation;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
+/**
+ * Allows drawings on a Canvas to be resized if necessary.
+ * However, resizing should be kept to a minimum because
+ * it causes many re-drawings to occur, causing UI lag.
+ */
 public abstract class ResizableCanvas extends Canvas {
 
     public ResizableCanvas() {

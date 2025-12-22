@@ -3,7 +3,6 @@ package code;
 import code.frontend.foundation.CustomBox;
 import code.frontend.misc.Vals;
 import javafx.application.Application;
-import javafx.embed.swing.SwingNode;
 import javafx.scene.Scene;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -28,12 +27,17 @@ public class Launcher extends Application {
         p.setMinSize(Vals.GraphicalUI.MIN_WIDTH, Vals.GraphicalUI.MIN_HEIGHT);
         p.relocate(0, 0);
 
+        Pane p2 = new Pane();
+        p2.setPrefSize(100, 100);
+        p2.setMinSize(50, 50);
+        p2.relocate(20, 20);
+
         CustomBox box = new CustomBox(4);
-        p.getChildren().add(box);
         // p.setBackground(new Background(new BackgroundFill(Color.GRAY, null, null)));
 
-        box.widthProperty().bind(p.widthProperty());
-        box.heightProperty().bind(p.heightProperty());
+        CustomBox.applyAsPaneBorder(p2, box);
+        // p2.setBackground(new Background(new BackgroundFill(Color.GRAY, null, null)));
+        p.getChildren().add(p2);
 
         Scene scene = new Scene(p);
         scene.setFill(Vals.Colour.BACKGROUND);

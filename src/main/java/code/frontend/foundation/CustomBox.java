@@ -2,6 +2,8 @@ package code.frontend.foundation;
 
 import code.frontend.misc.Vals;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
@@ -30,6 +32,12 @@ public class CustomBox extends ResizableCanvas {
         CORNER_DEVIATION = (cornerDev >= 0) ? cornerDev : Vals.GraphicalUI.CORNER_DEVIATION;
         CORNER_OFFSET = (cornerOffset >= 0) ? cornerOffset : Vals.GraphicalUI.CORNER_OFFSET;
         assert CORNER_OFFSET > CORNER_DEVIATION;
+    }
+
+    public static void applyAsPaneBorder(Pane p, CustomBox box) {
+        p.getChildren().add(box);
+        box.widthProperty().bind(p.widthProperty());
+        box.heightProperty().bind(p.heightProperty());
     }
 
     @Override
@@ -72,8 +80,8 @@ public class CustomBox extends ResizableCanvas {
         for (int i = 0; i < cornerCoords.length; i++) {
             // double xPos = this.getLayoutX() + ((i == 1 || i == 2) ? width : 0);
             // double yPos = this.getLayoutY() + ((i == 2 || i == 3) ? height : 0);
-            double xPos = (i == 1 || i == 2) ? width : 0;
-            double yPos = (i == 2 || i == 3) ? height : 0;
+            double xPos = this.thickness / 2 + ((i == 1 || i == 2) ? width : 2);
+            double yPos = this.thickness / 2 + ((i == 2 || i == 3) ? height : 2);
             this.cornerCoords[i] = new Coordinate(xPos, yPos);
         }
         return this.cornerCoords;
@@ -167,13 +175,13 @@ public class CustomBox extends ResizableCanvas {
     }
 
     private int getPaddedHeight() {
-        double height = this.getHeight();
+        double height = this.getHeight() - this.thickness;
         double bigDev = Math.max(DEVIATION, CORNER_DEVIATION);
         return (int) Math.floor(height - height * bigDev);
     }
 
     private int getPaddedWidth() {
-        double width = this.getWidth();
+        double width = this.getWidth() - this.thickness;
         double bigDev = Math.max(DEVIATION, CORNER_DEVIATION);
         return (int) Math.floor(width - width * bigDev);
     }

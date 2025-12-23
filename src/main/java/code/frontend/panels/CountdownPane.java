@@ -7,6 +7,7 @@ import code.backend.Countdown;
 import code.frontend.foundation.CustomBox;
 import code.frontend.foundation.CustomLine;
 import code.frontend.misc.Vals;
+import javafx.animation.FadeTransition;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -22,6 +23,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import javafx.util.Duration;
 
 public class CountdownPane extends VBox {
     public final double WIDTH = 290;
@@ -63,28 +65,41 @@ public class CountdownPane extends VBox {
         HBox.setMargin(endDateLabel, new Insets(0, leftRightPadding, 0, 0));
         hoverHBox.setFillHeight(true);
         hoverHBox.getChildren().addAll(statusLabel, spacer, endDateLabel);
-        hoverHBox.setVisible(false);
+
+        FadeTransition ft = new FadeTransition(Duration.millis(300), hoverHBox);
         // hoverHBox.setBackground(new Background(new BackgroundFill(Color.VIOLET, null, null)));
 
         // todo mouse listener stuff
         this.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                setMouseEnterAnim(ft);
                 Instant now = Instant.now();
                 String status = cd.getStatusString(now);
                 String end = cd.getStringDueDate(now, LocalDate.now());
                 statusLabel.setText(status);
-                endDateLabel.setText(end);
-                hoverHBox.setVisible(true);
+                endDateLabel.setText("Due: " + end);
+                ft.play();
             }
         });
 
         this.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                hoverHBox.setVisible(false);
+                setMouseExitAnim(ft);
+                ft.play();
             }
         });
+    }
+
+    private void setMouseEnterAnim(FadeTransition anim) {
+        anim.setFromValue(0);
+        anim.setToValue(1);
+    }
+
+    private void setMouseExitAnim(FadeTransition anim) {
+        anim.setFromValue(1);
+        anim.setToValue(0);
     }
 
     private void initContentHBox(Countdown cd, Instant now) {

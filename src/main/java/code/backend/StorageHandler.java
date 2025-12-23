@@ -6,26 +6,27 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.TreeSet;
 
 import code.frontend.misc.DisplayBridge;
 
 public class StorageHandler {
     public static boolean active = true;
-    public final static String STORAGE_FILE_PATH;
-    public final static File STORAGE_FILE;
+    public final static Path STORAGE_FILE_PATH;
     private static TreeSet<DisplayBridge> displayables = new TreeSet<DisplayBridge>(new SortByRemainingDays());
 
     private StorageHandler() {}
 
     static {
-        // fyi windows is \\ separator while unix is /
-        // will support unix first
-        STORAGE_FILE_PATH = System.getProperty("user.home") + "/mable_data/storage.mable";
-        STORAGE_FILE = new File(STORAGE_FILE_PATH);
+        // btw, Path should automatically account for different OS path separators
+        STORAGE_FILE_PATH = Path.of(System.getProperty("user.home") + "/mable_data/storage.mable");
         try {
-            if (!STORAGE_FILE.exists())
-                STORAGE_FILE.createNewFile();
+            if (!Files.exists(STORAGE_FILE_PATH)) {
+                Files.createDirectory(Path.of(System.getProperty("user.home") + "/mable_data"));
+                Files.createFile(STORAGE_FILE_PATH);
+            }
         } catch (Exception e) {
             System.err.println("Failed to activate persistent storage!");
             active = false;
@@ -34,7 +35,7 @@ public class StorageHandler {
 
     public static void save() throws IOException {
         if (!active) throw new IOException("Storage is inactive.");
-        FileOutputStream outputStream = new FileOutputStream(STORAGE_FILE);
+        FileOutputStream outputStream = new FileOutputStream(STORAGE_FILE_PATH.toString());
         ObjectOutputStream objOutputStream = new ObjectOutputStream(outputStream);
         objOutputStream.writeObject(displayables);
         objOutputStream.flush();
@@ -44,7 +45,7 @@ public class StorageHandler {
     @SuppressWarnings("unchecked")
     public static void load() throws IOException, ClassNotFoundException {
         if (!active) throw new IOException("Storage is inactive.");
-        FileInputStream inputStream = new FileInputStream(STORAGE_FILE);
+        FileInputStream inputStream = new FileInputStream(STORAGE_FILE_PATH.toString());
         ObjectInputStream objInputStream = new ObjectInputStream(inputStream);
         displayables = (TreeSet<DisplayBridge>) objInputStream.readObject();
         objInputStream.close();

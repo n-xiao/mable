@@ -1,6 +1,9 @@
 package code.frontend.misc;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -21,51 +24,42 @@ public class Vals {
         public static final double CORNER_OFFSET = 0.2;
     }
 
-    public enum FontVar {
-        REGULAR,
-        BOLD,
-        BOLD_ITALIC,
-        MEDIUM_ITALIC
-    }
-
     public class FontTools {
+
+        public static final String FONT_FAM = "Shantell Sans";
 
         public static void initFonts() {
             try {
-                loadFont("ShantellSans-Regular.ttf");
-                loadFont("ShantellSans-Bold.ttf");
-                loadFont("ShantellSans-MediumItalic.ttf");
-                loadFont("ShantellSans-BoldItalic.ttf");
+                InputStream manifestStream = Thread.currentThread()
+                                             .getContextClassLoader()
+                                             .getResourceAsStream("manifest.txt");
+                InputStreamReader manifestStreamReader = new InputStreamReader(manifestStream);
+                BufferedReader manifestReader = new BufferedReader(manifestStreamReader);
+
+                String fileName;
+                ArrayList<String> fontFilePaths = new ArrayList<>();
+
+                while ((fileName = manifestReader.readLine()) != null)
+                    fontFilePaths.add(fileName);
+
+                manifestStream.close();
+
+                for (String string : fontFilePaths)
+                    loadFont(string);
+
             } catch (Exception e) {
                 System.err.println("Failed to init fonts");
                 System.err.println(e.getStackTrace());
             }
         }
 
-        public static void loadFont(String fileName) throws Exception {
+        private static void loadFont(String fileName) throws Exception {
             InputStream stream = Thread.currentThread()
                                        .getContextClassLoader()
                                        .getResourceAsStream(fileName);
             Font.loadFont(stream, 12);
+            // System.out.println(f.getName());
             stream.close();
-        }
-
-        public static String getFontName(FontVar variant) {
-            String font = "Shantell Sans ";
-
-            switch (variant) {
-            case REGULAR:
-                return font + "Regular";
-            case BOLD:
-                return font + "Bold";
-            case BOLD_ITALIC:
-                return font + "Bold Italic";
-            case MEDIUM_ITALIC:
-                return font + "Medium Italic";
-            default:
-                return font + "Regular";
-            }
-
         }
 
     }

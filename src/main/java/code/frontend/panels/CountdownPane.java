@@ -6,7 +6,6 @@ import code.backend.Countdown;
 import code.frontend.foundation.CustomBox;
 import code.frontend.foundation.CustomLine;
 import code.frontend.misc.Vals;
-import code.frontend.misc.Vals.FontVar;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -17,6 +16,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
 public class CountdownPane extends VBox {
@@ -24,7 +25,6 @@ public class CountdownPane extends VBox {
     public final double HEIGHT = 140;
     public final double NAME_WIDTH = 150;
     public final double DIV_WIDTH = 10;
-    // public final double COUNT_WIDTH = WIDTH - NAME_WIDTH - DIV_WIDTH - 50;
     public final double CONTENT_HEIGHT = 100;
 
     private HBox hoverHBox;
@@ -65,7 +65,7 @@ public class CountdownPane extends VBox {
     private Label createNameLabel(Countdown cd) {
         String name = cd.getName();
         Label nameLabel = new Label(name);
-        Font nameFont = Font.font(Vals.FontTools.getFontName(FontVar.REGULAR), 16);
+        Font nameFont = Font.font(Vals.FontTools.FONT_FAM, FontWeight.SEMI_BOLD, 18);
         nameLabel.setAlignment(Pos.CENTER);
         nameLabel.setTextAlignment(TextAlignment.JUSTIFY);
         nameLabel.setTextOverrun(OverrunStyle.ELLIPSIS);
@@ -79,7 +79,7 @@ public class CountdownPane extends VBox {
 
     private Pane createVerticalDivider() {
         Pane pane = new Pane();
-        Color colour = Color.rgb(255, 255, 255, 0.5);
+        Color colour = Color.rgb(255, 255, 255, 0.3);
         CustomLine separator = new CustomLine(2, CustomLine.Type.VERTICAL_TYPE);
         pane.setPrefSize(DIV_WIDTH, HEIGHT);
         separator.setColour(colour);
@@ -93,7 +93,7 @@ public class CountdownPane extends VBox {
         int daysLeft = Math.abs(cd.daysUntilDue(now));
 
         Label numLabel = new Label(Integer.toString(daysLeft));
-        Font numFont = Font.font(Vals.FontTools.getFontName(FontVar.BOLD), 30);
+        Font numFont = Font.font(Vals.FontTools.FONT_FAM, FontWeight.BOLD, FontPosture.ITALIC, 30);
         numLabel.setAlignment(Pos.CENTER);
         numLabel.setTextAlignment(TextAlignment.CENTER);
         numLabel.setFont(numFont);
@@ -103,7 +103,7 @@ public class CountdownPane extends VBox {
         // VBox.setMargin(numLabel, new Insets(5, 0, 0, 0));
         display.getChildren().add(numLabel);
 
-        Font textFont = Font.font(Vals.FontTools.getFontName(FontVar.BOLD_ITALIC), 13);
+        Font textFont = Font.font(Vals.FontTools.FONT_FAM, FontWeight.BOLD, FontPosture.ITALIC, 13);
         String textNoun = (daysLeft != 1) ? "DAYS" : "DAY";
         String textAdverb = (cd.isOverdue(now)) ? "AGO" : "LEFT";
         Label textLabel = new Label(textNoun + "\n" + textAdverb);
@@ -112,13 +112,9 @@ public class CountdownPane extends VBox {
         textLabel.setFont(textFont);
         textLabel.setTextFill(Color.WHITE);
         textLabel.prefWidthProperty().bind(display.widthProperty());
-        // textLabel.setPrefWidth(COUNT_WIDTH);
         display.getChildren().add(textLabel);
-        // display.setBackground(new Background(new BackgroundFill(Color.BLUE, null, null)));
-        // display.setMinWidth(COUNT_WIDTH);
         HBox.setMargin(display, new Insets(10, 10, 10, 0));
         HBox.setHgrow(display, Priority.ALWAYS);
-        // display.setPrefWidth(COUNT_WIDTH);
         return display;
     }
 }

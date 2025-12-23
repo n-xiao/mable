@@ -10,7 +10,7 @@ import code.frontend.misc.DisplayBridge;
 public class Countdown implements DisplayBridge {
     private String name = null;
     private Instant deadline = null;
-    boolean finished = false;
+    boolean isDone = false;
     public final UUID ID; // represents unique id
 
     // todo String parser
@@ -59,8 +59,17 @@ public class Countdown implements DisplayBridge {
         return deadline;
     }
 
+    public String getStatusString(Instant now) {
+        if (isOverdue(now))
+            return "Overdue";
+        else if (this.isDone)
+            return "Completed";
+        else
+            return "Ongoing";
+    }
+
     public boolean isOverdue(Instant now) {
-        return deadline.isBefore(now) && !finished;
+        return deadline.isBefore(now) && !isDone;
     }
 
     public void setName(String name) {

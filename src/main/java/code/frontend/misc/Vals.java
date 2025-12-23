@@ -12,6 +12,7 @@ public class Vals {
 
     public final class Colour {
         public static final Color BACKGROUND = Color.rgb(20, 20, 30);
+        public static final Color TXT_GHOST = Color.rgb(220, 220, 220, 0.8);
     }
 
     public final class GraphicalUI {
@@ -63,8 +64,6 @@ public class Vals {
         }
 
     }
-
-
 
     private Vals() {}
 }

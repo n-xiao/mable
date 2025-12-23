@@ -35,8 +35,6 @@ public class Vals {
         } catch (Exception e) {
             System.err.println("Failed to init fonts");
             System.err.println(e.getStackTrace());
-        }
-        finally {
             font = "Serif"; // uses fallback font (ugly! but doesnt stop program)
         }
     }
@@ -45,8 +43,7 @@ public class Vals {
         InputStream stream = Thread.currentThread()
                                    .getContextClassLoader()
                                    .getResourceAsStream(fileName);
-        Font f = Font.loadFont(stream, 12);
-        System.out.println(f.getName());
+        Font.loadFont(stream, 12);
         stream.close();
     }
 

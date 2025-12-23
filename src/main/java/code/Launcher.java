@@ -7,20 +7,17 @@ import code.frontend.misc.Vals;
 import code.frontend.panels.CountdownPane;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Launcher extends Application {
     @Override
     public void init() throws Exception {
+        Vals.FontTools.initFonts();
     }
 
     @Override
     public void start(Stage stage) {
-        Vals.initFonts();
         stage.setMinWidth(Vals.GraphicalUI.MIN_WIDTH);
         stage.setMinHeight(Vals.GraphicalUI.MIN_HEIGHT);
         stage.setWidth(Vals.GraphicalUI.PREF_WIDTH);

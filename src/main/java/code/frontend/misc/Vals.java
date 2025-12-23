@@ -21,35 +21,56 @@ public class Vals {
         public static final double CORNER_OFFSET = 0.2;
     }
 
+    public enum FontVar {
+        REGULAR,
+        BOLD,
+        BOLD_ITALIC,
+        MEDIUM_ITALIC
+    }
 
-    // fonts
-    private static String font = null;
+    public class FontTools {
 
-    public static void initFonts() {
-        if (font != null) return;
-        try {
-            loadFont("ShantellSans-Regular.ttf");
-            loadFont("ShantellSans-Bold.ttf");
-            loadFont("ShantellSans-MediumItalic.ttf");
-            font = "Shantell Sans";
-        } catch (Exception e) {
-            System.err.println("Failed to init fonts");
-            System.err.println(e.getStackTrace());
-            font = "Serif"; // uses fallback font (ugly! but doesnt stop program)
+        public static void initFonts() {
+            try {
+                loadFont("ShantellSans-Regular.ttf");
+                loadFont("ShantellSans-Bold.ttf");
+                loadFont("ShantellSans-MediumItalic.ttf");
+                loadFont("ShantellSans-BoldItalic.ttf");
+            } catch (Exception e) {
+                System.err.println("Failed to init fonts");
+                System.err.println(e.getStackTrace());
+            }
         }
+
+        public static void loadFont(String fileName) throws Exception {
+            InputStream stream = Thread.currentThread()
+                                       .getContextClassLoader()
+                                       .getResourceAsStream(fileName);
+            Font.loadFont(stream, 12);
+            stream.close();
+        }
+
+        public static String getFontName(FontVar variant) {
+            String font = "Shantell Sans ";
+
+            switch (variant) {
+            case REGULAR:
+                return font + "Regular";
+            case BOLD:
+                return font + "Bold";
+            case BOLD_ITALIC:
+                return font + "Bold Italic";
+            case MEDIUM_ITALIC:
+                return font + "Medium Italic";
+            default:
+                return font + "Regular";
+            }
+
+        }
+
     }
 
-    public static void loadFont(String fileName) throws Exception {
-        InputStream stream = Thread.currentThread()
-                                   .getContextClassLoader()
-                                   .getResourceAsStream(fileName);
-        Font.loadFont(stream, 12);
-        stream.close();
-    }
 
-    public static String getFontFamily() {
-        return font;
-    }
 
     private Vals() {}
 }

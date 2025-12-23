@@ -2,6 +2,7 @@ package code.frontend.foundation;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.Pane;
 
 /**
  * Allows drawings on a Canvas to be resized if necessary.
@@ -15,15 +16,24 @@ public abstract class ResizableCanvas extends Canvas {
         heightProperty().addListener(event -> resizeAndDraw());
     }
 
-    private void resizeAndDraw() {
+    protected void resizeAndDraw() {
         double width = this.getWidth();
         double height = this.getHeight();
-        GraphicsContext gc = getGraphicsContext2D();
-        gc.clearRect(0, 0, width, height);
-        draw(gc);
+        if (width > 0 && height > 0) {
+            GraphicsContext gc = getGraphicsContext2D();
+            gc.clearRect(0, 0, width, height);
+            draw(gc);
+        }
     }
 
     protected abstract void draw(GraphicsContext gc);
+
+    public static Pane applyToPane(Pane p, ResizableCanvas canvas) {
+        p.getChildren().add(canvas);
+        canvas.widthProperty().bind(p.widthProperty());
+        canvas.heightProperty().bind(p.heightProperty());
+        return p;
+    }
 
     @Override
     public boolean isResizable() {

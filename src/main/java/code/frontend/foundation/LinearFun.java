@@ -2,23 +2,28 @@ package code.frontend.foundation;
 
 public class LinearFun {
     // y = mx + c
-    int m, c;
+    double m, c;
 
-    public LinearFun(int m, int c) {
+    public LinearFun(double m, double c) {
         this.m = m;
         this.c = c;
     }
 
-    public LinearFun(int x1, int y1, int x2, int y2) {
-        this.m = Math.round((y2 - y1) / (x2 - x1));
-        this.c = y1 - this.m * x1;
+    public LinearFun(Coordinate coord1, Coordinate coord2) {
+        this.m = (coord2.y - coord1.y) / (coord2.x - coord1.x);
+        this.c = coord1.y - this.m * coord1.x;
     }
 
-    public int getOutput(int x) {
+    public LinearFun(double m, Coordinate coord) {
+        this.m = m;
+        this.c = coord.y - m * coord.x;
+    }
+
+    public double getOutput(double x) {
         return this.m * x + this.c;
     }
 
-    public int getInput(int y) {
+    public double getInput(double y) {
         return (y - this.c) / this.m;
     }
 }

@@ -1,77 +1,91 @@
 package code.frontend.foundation;
 
-import java.awt.BasicStroke;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.geom.GeneralPath;
-
-import javax.swing.JPanel;
-
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 
 public class CustomLine extends ResizableCanvas {
+    public enum Type {
+        VERTICAL_TYPE,
+        HORIZONTAL_TYPE
+    }
 
     private Coordinate start;
     private Coordinate end;
     private int thickness;
+    private Type lineType;
+    private double startPadding;
+    private double endPadding;
+    private Color colour;
     private final double DEVIATION; // determined using thickness
 
-    public CustomLine(Coordinate start, Coordinate end, int thickness) {
-        assert start != null && end != null;
-        this.start = start;
-        this.end = end;
+    public CustomLine(int thickness, Type type) {
+        this.DEVIATION = 0.5;
         this.thickness = thickness;
-        DEVIATION = 0.5;
-    }
-
-    public CustomLine(Coordinate start, Coordinate end, int deviation, int thickness) {
-        assert start != null && end != null && deviation >= 0;
-        this.start = start;
-        this.end = end;
-        this.thickness = thickness;
-        DEVIATION = deviation;
+        this.lineType = type;
+        this.startPadding = 0;
+        this.endPadding = 0;
+        this.colour = Color.WHITE;
     }
 
     @Override
     protected void draw(GraphicsContext gc) {
-        gc.setStroke(Color.WHITE);
+        gc.setStroke(this.colour);
         gc.setLineWidth(this.thickness);
         gc.setLineCap(StrokeLineCap.ROUND);
         gc.setLineJoin(StrokeLineJoin.ROUND);
+
+        double width = this.getWidth();
+        double height = this.getHeight();
+
+        switch (this.lineType) {
+        case VERTICAL_TYPE:
+            this.start = new Coordinate(width / 2, startPadding);
+            this.end = new Coordinate(width / 2, height - endPadding);
+            break;
+        case HORIZONTAL_TYPE:
+            this.start = new Coordinate(startPadding, height / 2);
+            this.end = new Coordinate(width - endPadding, height / 2);
+            break;
+        default:
+            throw new IllegalArgumentException("Invalid CustomLine Type was encountered.");
+        }
 
         double midX = (this.start.x + this.end.x) / 2;
         double midY = (this.start.y + this.end.y) / 2;
         Coordinate midCoord = new Coordinate(midX, midY);
         midCoord.setDeviations(DEVIATION * thickness);
         gc.beginPath();
-        // straight line first
+        // adds straight line first
         gc.moveTo(start.x, start.y);
         gc.lineTo(end.x, end.y);
-        // then the messy line
+        // adds the messy line
         gc.quadraticCurveTo(midCoord.getVarX(), midCoord.getVarY(), start.x, start.y);
         gc.stroke();
     }
 
-    // protected void paintComponent(Graphics g) {
-    //     Graphics2D g2d = (Graphics2D) g.create();
-    //     g2d.setPaint(Color.WHITE); // for testing only, use variable later
-    //     g2d.setStroke(new BasicStroke(thickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-    //     g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-    //     double midX = (this.start.x + this.end.x) / 2;
-    //     double midY = (this.start.y + this.end.y) / 2;
-    //     Coordinate midCoord = new Coordinate(midX, midY);
-    //     GeneralPath line1 = new GeneralPath(GeneralPath.WIND_EVEN_ODD, 3);
-    //     line1.moveTo(start.x, start.y);
-    //     line1.quadTo(midCoord.x, midCoord.y, end.x, end.y);
-    //     midCoord.setDeviations(0, DEVIATION * thickness);
-    //     GeneralPath line2 = new GeneralPath(GeneralPath.WIND_EVEN_ODD, 3);
-    //     line2.moveTo(start.x, start.y);
-    //     line2.quadTo(midCoord.getVarX(), midCoord.getVarY(), end.x, end.y);
-    //     g2d.draw(line1);
-    //     g2d.draw(line2);
-    // }
+    public void setStartPadding(double startPadding) {
+        this.startPadding = startPadding;
+        resizeAndDraw();
+    }
+
+    public void setEndPadding(double endPadding) {
+        this.endPadding = endPadding;
+        resizeAndDraw();
+    }
+
+    /*
+     * Convenience method
+     */
+    public void setPadding(double startEndPadding) {
+        this.startPadding = startEndPadding;
+        this.endPadding = startEndPadding;
+        resizeAndDraw();
+    }
+
+    public void setColour(Color colour) {
+        this.colour = colour;
+        resizeAndDraw();
+    }
 }

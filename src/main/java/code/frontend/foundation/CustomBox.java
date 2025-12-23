@@ -33,12 +33,6 @@ public class CustomBox extends ResizableCanvas {
         assert CORNER_OFFSET > CORNER_DEVIATION;
     }
 
-    public static void applyAsPaneBorder(Pane p, CustomBox box) {
-        p.getChildren().add(box);
-        box.widthProperty().bind(p.widthProperty());
-        box.heightProperty().bind(p.heightProperty());
-    }
-
     @Override
     protected void draw(GraphicsContext gc) {
         gc.setStroke(Color.WHITE);

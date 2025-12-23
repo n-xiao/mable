@@ -51,6 +51,14 @@ public class Countdown implements DisplayBridge {
         return today.plusDays(dist);
     }
 
+    public String getStringDueDate(Instant now, LocalDate today) {
+        LocalDate localDue = getLocalDueDate(now, today);
+        String day = Integer.toString(localDue.getDayOfMonth());
+        String month = Integer.toString(localDue.getMonthValue());
+        String year = Integer.toString(localDue.getYear());
+        return day + "/" + month + "/" + year; // uses the correct format
+    }
+
     public String getName() {
         return name;
     }

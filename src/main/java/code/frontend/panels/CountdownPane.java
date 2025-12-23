@@ -41,7 +41,7 @@ public class CountdownPane extends VBox {
     }
 
     private void initHoverHBox(Countdown cd) {
-        int leftRightPadding = 18;
+        int leftRightPadding = 16;
         double height = this.HEIGHT - this.CONTENT_HEIGHT;
         this.hoverHBox = new HBox();
         hoverHBox.setPrefSize(this.WIDTH, height);
@@ -63,21 +63,26 @@ public class CountdownPane extends VBox {
         HBox.setMargin(endDateLabel, new Insets(0, leftRightPadding, 0, 0));
         hoverHBox.setFillHeight(true);
         hoverHBox.getChildren().addAll(statusLabel, spacer, endDateLabel);
+        hoverHBox.setVisible(false);
         // hoverHBox.setBackground(new Background(new BackgroundFill(Color.VIOLET, null, null)));
 
         // todo mouse listener stuff
         this.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                String status = cd.getStatusString(Instant.now());
-                String end = cd.getLocalDueDate(Instant.now(), LocalDate.now()).toString();
+                Instant now = Instant.now();
+                String status = cd.getStatusString(now);
+                String end = cd.getStringDueDate(now, LocalDate.now());
+                statusLabel.setText(status);
+                endDateLabel.setText(end);
+                hoverHBox.setVisible(true);
             }
         });
 
         this.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                // TODO Auto-generated method stub
+                hoverHBox.setVisible(false);
             }
         });
     }

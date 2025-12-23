@@ -29,8 +29,6 @@ public class CountdownPane extends VBox {
 
     public CountdownPane(Countdown cd, Instant now) {
         this.setAlignment(Pos.CENTER);
-        this.setMinSize(WIDTH, HEIGHT);
-        this.setMaxSize(WIDTH, HEIGHT);
         initHoverHBox();
         initContentHBox(cd, now);
         this.getChildren().addAll(this.hoverHBox, this.contentHBox);
@@ -38,7 +36,7 @@ public class CountdownPane extends VBox {
 
     private void initHoverHBox() {
         this.hoverHBox = new HBox();
-        hoverHBox.setPrefSize(WIDTH, HEIGHT - CONTENT_HEIGHT);
+        hoverHBox.setPrefSize(this.WIDTH, this.HEIGHT - this.CONTENT_HEIGHT);
         // VBox.setMargin(hoverHBox, new Insets(0, 0, 1, 0));
         // hoverHBox.setBackground(new Background(new BackgroundFill(Color.PINK, null, null)));
 
@@ -52,6 +50,7 @@ public class CountdownPane extends VBox {
         // adds the border
         CustomBox border = new CustomBox(3);
         CustomBox.applyToPane(contentHBox, border);
+        // ! THIS IS BROKENNNNN... border is being resized by the box
         // adds the name display
         contentHBox.getChildren().add(createNameLabel(cd));
         // adds the divider
@@ -64,12 +63,15 @@ public class CountdownPane extends VBox {
     private Label createNameLabel(Countdown cd) {
         String name = cd.getName();
         Label nameLabel = new Label(name);
-        Font nameFont = Font.font(Vals.getFontFamily(), FontWeight.NORMAL, FontPosture.REGULAR, 18);
+        Font nameFont = Font.font("Shantell Sans Regular", 18);
         nameLabel.setAlignment(Pos.CENTER);
         nameLabel.setTextAlignment(TextAlignment.JUSTIFY);
         nameLabel.setTextOverrun(OverrunStyle.ELLIPSIS);
         nameLabel.setFont(nameFont);
+        nameLabel.setTextFill(Color.WHITE);
         nameLabel.setPrefWidth(200);
+
+        HBox.setMargin(nameLabel, new Insets(10));
         return nameLabel;
     }
 
@@ -78,6 +80,7 @@ public class CountdownPane extends VBox {
         Color colour = Color.rgb(255, 255, 255, 0.5);
         CustomLine separator = new CustomLine(2, CustomLine.Type.VERTICAL_TYPE);
         separator.setColour(colour);
+        separator.setPadding(10);
         CustomLine.applyToPane(pane, separator);
         return pane;
     }
@@ -107,6 +110,7 @@ public class CountdownPane extends VBox {
         VBox.setMargin(textLabel, new Insets(0, 0, 30, 0));
         display.getChildren().add(textLabel);
 
+        HBox.setMargin(display, new Insets(10));
         return display;
     }
 }

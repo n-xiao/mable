@@ -1,10 +1,9 @@
 package code.frontend.misc;
 
-import java.awt.Font;
-import java.awt.GraphicsEnvironment;
 import java.io.InputStream;
 
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 public class Vals {
 
@@ -43,12 +42,12 @@ public class Vals {
     }
 
     public static void loadFont(String fileName) throws Exception {
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         InputStream stream = Thread.currentThread()
                                    .getContextClassLoader()
                                    .getResourceAsStream(fileName);
-        Font font = Font.createFont(Font.TRUETYPE_FONT, stream);
-        ge.registerFont(font);
+        Font f = Font.loadFont(stream, 12);
+        System.out.println(f.getName());
+        stream.close();
     }
 
     public static String getFontFamily() {

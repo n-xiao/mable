@@ -1,20 +1,26 @@
 package code;
 
+import java.time.Instant;
+
+import code.backend.Countdown;
 import code.frontend.misc.Vals;
-import code.frontend.panels.CountdownPanel;
+import code.frontend.panels.CountdownPane;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Launcher extends Application {
     @Override
     public void init() throws Exception {
-        Vals.initFonts();
     }
 
     @Override
     public void start(Stage stage) {
+        Vals.initFonts();
         stage.setMinWidth(Vals.GraphicalUI.MIN_WIDTH);
         stage.setMinHeight(Vals.GraphicalUI.MIN_HEIGHT);
         stage.setWidth(Vals.GraphicalUI.PREF_WIDTH);
@@ -23,8 +29,10 @@ public class Launcher extends Application {
         p.setPrefSize(Vals.GraphicalUI.PREF_WIDTH, Vals.GraphicalUI.PREF_HEIGHT);
         p.setMinSize(Vals.GraphicalUI.MIN_WIDTH, Vals.GraphicalUI.MIN_HEIGHT);
         p.relocate(0, 0);
+        p.setBackground(null);
 
-        CountdownPanel c = new CountdownPanel(null, null);
+        Countdown countdown = Countdown.create("hello", 25, 12, 2025);
+        CountdownPane c = new CountdownPane(countdown, Instant.now());
         c.relocate(20,20);
         p.getChildren().add(c);
 

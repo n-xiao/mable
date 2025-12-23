@@ -24,6 +24,7 @@ public abstract class ResizableCanvas extends Canvas {
             gc.clearRect(0, 0, width, height);
             draw(gc);
         }
+        this.setManaged(false); // this stops layouts from messing with it
     }
 
     protected abstract void draw(GraphicsContext gc);

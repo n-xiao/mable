@@ -1,7 +1,6 @@
 package code.frontend.foundation;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 
@@ -17,7 +16,6 @@ public class CustomLine extends ResizableCanvas {
     private Type lineType;
     private double startPadding;
     private double endPadding;
-    private Color colour;
     private final double DEVIATION; // determined using thickness
 
     public CustomLine(int thickness, Type type) {
@@ -26,12 +24,10 @@ public class CustomLine extends ResizableCanvas {
         this.lineType = type;
         this.startPadding = 0;
         this.endPadding = 0;
-        this.colour = Color.WHITE;
     }
 
     @Override
     protected void draw(GraphicsContext gc) {
-        gc.setStroke(this.colour);
         gc.setLineWidth(this.thickness);
         gc.setLineCap(StrokeLineCap.ROUND);
         gc.setLineJoin(StrokeLineJoin.ROUND);
@@ -81,11 +77,6 @@ public class CustomLine extends ResizableCanvas {
     public void setPadding(double startEndPadding) {
         this.startPadding = startEndPadding;
         this.endPadding = startEndPadding;
-        resizeAndDraw();
-    }
-
-    public void setColour(Color colour) {
-        this.colour = colour;
         resizeAndDraw();
     }
 }

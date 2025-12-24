@@ -26,6 +26,7 @@ public class Vals {
     }
 
     public final class GraphicalUI {
+        public static final int DRAW_THICKNESS = 2;
         public static final int PREF_WIDTH = 1120;
         public static final int PREF_HEIGHT = 730;
         public static final int MIN_WIDTH = 620;

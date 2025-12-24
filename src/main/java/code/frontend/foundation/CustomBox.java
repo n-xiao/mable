@@ -5,7 +5,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 
-public class CustomBox extends ResizableCanvas {
+public class CustomBox extends ResizableCanvas
+{
     // CORNER_OFFSET > CORNER_DEVIATION
     private double deviation = Vals.GraphicalUI.DEVIATION;
     private double cornerDeviation = Vals.GraphicalUI.CORNER_DEVIATION;
@@ -15,15 +16,18 @@ public class CustomBox extends ResizableCanvas {
     private Coordinate[] cornerCoords = null;
     private Coordinate[] fixedCoords = null;
 
-    public CustomBox() {
+    public CustomBox()
+    {
         this.thickness = Vals.GraphicalUI.DRAW_THICKNESS;
     }
 
-    public CustomBox(int thickness) {
+    public CustomBox(int thickness)
+    {
         this.thickness = thickness;
     }
 
-    public CustomBox(int thickness, double dev, double cornerDev, double cornerOffset) {
+    public CustomBox(int thickness, double dev, double cornerDev, double cornerOffset)
+    {
         this.thickness = thickness;
         this.deviation = (dev >= 0) ? dev : Vals.GraphicalUI.DEVIATION;
         this.cornerDeviation = (cornerDev >= 0) ? cornerDev : Vals.GraphicalUI.CORNER_DEVIATION;
@@ -32,7 +36,8 @@ public class CustomBox extends ResizableCanvas {
     }
 
     @Override
-    protected void draw(GraphicsContext gc) {
+    protected void draw(GraphicsContext gc)
+    {
         gc.setLineWidth(this.thickness);
         gc.setLineCap(StrokeLineCap.ROUND);
         gc.setLineJoin(StrokeLineJoin.ROUND);
@@ -40,16 +45,18 @@ public class CustomBox extends ResizableCanvas {
         assembleBoxPath(gc);
     }
 
-    private void assembleBoxPath(GraphicsContext gc) {
+    private void assembleBoxPath(GraphicsContext gc)
+    {
         Coordinate[] fixed = getFixedCoords();
         Coordinate[] ctrl = getControlCoords();
         gc.beginPath();
         gc.moveTo(fixed[0].x, fixed[0].y);
-        for (int i = 0; i < ctrl.length; i++) {
-            int fixedIndex = (i == ctrl.length - 1) ? 0 : i + 1; // allows wrap-around
-            gc.quadraticCurveTo(ctrl[i].x, ctrl[i].y, fixed[fixedIndex].x, fixed[fixedIndex].y);
-            // System.out.println("x: " + fixed[fixedIndex].x + "y: " + fixed[fixedIndex].y);
-        }
+        for (int i = 0; i < ctrl.length; i++)
+            {
+                int fixedIndex = (i == ctrl.length - 1) ? 0 : i + 1; // allows wrap-around
+                gc.quadraticCurveTo(ctrl[i].x, ctrl[i].y, fixed[fixedIndex].x, fixed[fixedIndex].y);
+                // System.out.println("x: " + fixed[fixedIndex].x + "y: " + fixed[fixedIndex].y);
+            }
         gc.stroke();
     }
 
@@ -62,18 +69,20 @@ public class CustomBox extends ResizableCanvas {
      * |               |
      * 3---------------2
      */
-    public Coordinate[] getCornerCoords() {
+    public Coordinate[] getCornerCoords()
+    {
         // if (this.cornerCoords != null) return this.cornerCoords;
         double width = getPaddedWidth();
         double height = getPaddedHeight();
         this.cornerCoords = new Coordinate[4];
-        for (int i = 0; i < cornerCoords.length; i++) {
-            // the reasoning for the code below is trivial
-            // and is left as an exercise for the reader :3
-            double xPos = getVertiPadding() + ((i == 1 || i == 2) ? width : 0);
-            double yPos = getHorizPadding() + ((i == 2 || i == 3) ? height : 0);
-            this.cornerCoords[i] = new Coordinate(xPos, yPos);
-        }
+        for (int i = 0; i < cornerCoords.length; i++)
+            {
+                // the reasoning for the code below is trivial
+                // and is left as an exercise for the reader :3
+                double xPos = getVertiPadding() + ((i == 1 || i == 2) ? width : 0);
+                double yPos = getHorizPadding() + ((i == 2 || i == 3) ? height : 0);
+                this.cornerCoords[i] = new Coordinate(xPos, yPos);
+            }
         return this.cornerCoords;
     }
 
@@ -87,7 +96,8 @@ public class CustomBox extends ResizableCanvas {
      *      xy0
      *      |
      */
-    private Coordinate[] getFixedCoords() {
+    private Coordinate[] getFixedCoords()
+    {
         // if (this.fixedCoords != null) return this.fixedCoords;
         Coordinate[] corners = getCornerCoords();
         this.fixedCoords = new Coordinate[8];
@@ -123,20 +133,22 @@ public class CustomBox extends ResizableCanvas {
      * |               |
      * 6-------5-------4
      */
-    private Coordinate[] getControlCoords() {
+    private Coordinate[] getControlCoords()
+    {
         getCornerCoords();
         Coordinate[] controlCoords = new Coordinate[8];
         double width = getPaddedWidth();
         double height = getPaddedHeight();
         // first add the corner ctrl points
-        for (int i = 0; i < 4; i++) {
-            int index = i * 2;
-            Coordinate coord = this.cornerCoords[i];
-            coord.setDeviations((Math.min(width, height) + thickness) * cornerDeviation);
-            double x = this.cornerCoords[i].getVarX();
-            double y = this.cornerCoords[i].getVarY();
-            controlCoords[index] = new Coordinate(x, y);
-        }
+        for (int i = 0; i < 4; i++)
+            {
+                int index = i * 2;
+                Coordinate coord = this.cornerCoords[i];
+                coord.setDeviations((Math.min(width, height) + thickness) * cornerDeviation);
+                double x = this.cornerCoords[i].getVarX();
+                double y = this.cornerCoords[i].getVarY();
+                controlCoords[index] = new Coordinate(x, y);
+            }
         // then add the side ctrl points
         double midHeight = height / 2;
         double midWidth = width / 2;
@@ -151,34 +163,39 @@ public class CustomBox extends ResizableCanvas {
         controlCoords[7] = new Coordinate(minX, minY + midHeight);
 
         int count = 0;
-        for (int i = 1; i < controlCoords.length; i+=2) {
-            boolean evenCount = count % 2 == 0;
-            double xDeviation = ((((evenCount) ? width : height) + thickness) * deviation);
-            double yDeviation = ((((evenCount) ? height : width) + thickness) * deviation);
-            controlCoords[i].setDeviations(xDeviation,yDeviation);
-            controlCoords[i].x = controlCoords[i].getVarX();
-            controlCoords[i].y = controlCoords[i].getVarY();
-            count++;
-        }
+        for (int i = 1; i < controlCoords.length; i+=2)
+            {
+                boolean evenCount = count % 2 == 0;
+                double xDeviation = ((((evenCount) ? width : height) + thickness) * deviation);
+                double yDeviation = ((((evenCount) ? height : width) + thickness) * deviation);
+                controlCoords[i].setDeviations(xDeviation,yDeviation);
+                controlCoords[i].x = controlCoords[i].getVarX();
+                controlCoords[i].y = controlCoords[i].getVarY();
+                count++;
+            }
 
         return controlCoords;
     }
 
-    private double getHorizPadding() {
+    private double getHorizPadding()
+    {
         return 0.5 * (this.getHeight() - getPaddedHeight());
     }
 
-    private double getVertiPadding() {
+    private double getVertiPadding()
+    {
         return 0.5 * (this.getWidth() - getPaddedWidth());
     }
 
-    private double getPaddedHeight() {
+    private double getPaddedHeight()
+    {
         double height = this.getHeight();
         double bigDev = height * Math.max(deviation, cornerDeviation);
         return Math.floor(height - bigDev) - this.thickness;
     }
 
-    private double getPaddedWidth() {
+    private double getPaddedWidth()
+    {
         double width = this.getWidth();
         double bigDev = width * Math.max(deviation, cornerDeviation);
         return Math.floor(width - bigDev) - this.thickness;

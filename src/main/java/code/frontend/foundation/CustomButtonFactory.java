@@ -12,7 +12,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 
-public abstract class CustomButtonFactory {
+public abstract class CustomButtonFactory
+{
     private Color feedbackColour = Vals.Colour.FEEDBACK;
     private int btnBorderThickness = Vals.GraphicalUI.DRAW_THICKNESS;
     private Font labelFont = new Font(Vals.FontTools.FONT_FAM, 13);
@@ -33,7 +34,8 @@ public abstract class CustomButtonFactory {
      * @param cbf
      * @param bgInsets
      */
-    public static void setup(Pane pane, CustomButtonFactory cbf, double bgInsets) {
+    public static void setup(Pane pane, CustomButtonFactory cbf, double bgInsets)
+    {
         Pane clickPane = new Pane();
         clickPane.prefWidthProperty().bind(pane.widthProperty());
         clickPane.prefHeightProperty().bind(pane.heightProperty());
@@ -44,9 +46,11 @@ public abstract class CustomButtonFactory {
         cbf.clickAnim = new FadeTransition(Duration.millis(200), clickPane);
         cbf.clickAnim.setFromValue(1);
         cbf.clickAnim.setToValue(0);
-        clickPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        clickPane.setOnMouseClicked(new EventHandler<MouseEvent>()
+        {
             @Override
-            public void handle(MouseEvent event) {
+            public void handle(MouseEvent event)
+            {
                 if (cbf.hoverAnim != null)
                     cbf.hoverAnim.stop();
                 cbf.executeOnClick();
@@ -55,41 +59,47 @@ public abstract class CustomButtonFactory {
             }
         });
 
-        if (cbf.useHoverAnim) {
-            Pane hoverPane = new Pane();
-            double hoverOpacity = 0.5;
-            cbf.hoverAnim = new FadeTransition(Duration.millis(300), hoverPane);
-            hoverPane.setBackground(Vals.Colour.createBG(cbf.feedbackColour, 10, bgInsets));
-            hoverPane.setOpacity(0);
-            hoverPane.setOnMouseEntered(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    if (cbf.clickAnim != null
-                            && cbf.clickAnim.getStatus().equals(Animation.Status.RUNNING))
-                        return;
-                    cbf.hoverAnim.setFromValue(0);
-                    cbf.hoverAnim.setToValue(hoverOpacity);
-                    cbf.hoverAnim.playFromStart();
-                }
-            });
+        if (cbf.useHoverAnim)
+            {
+                Pane hoverPane = new Pane();
+                double hoverOpacity = 0.5;
+                cbf.hoverAnim = new FadeTransition(Duration.millis(300), hoverPane);
+                hoverPane.setBackground(Vals.Colour.createBG(cbf.feedbackColour, 10, bgInsets));
+                hoverPane.setOpacity(0);
+                hoverPane.setOnMouseEntered(new EventHandler<MouseEvent>()
+                {
+                    @Override
+                    public void handle(MouseEvent event)
+                    {
+                        if (cbf.clickAnim != null
+                                && cbf.clickAnim.getStatus().equals(Animation.Status.RUNNING))
+                            return;
+                        cbf.hoverAnim.setFromValue(0);
+                        cbf.hoverAnim.setToValue(hoverOpacity);
+                        cbf.hoverAnim.playFromStart();
+                    }
+                });
 
-            hoverPane.setOnMouseExited(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    if (cbf.clickAnim != null
-                            && cbf.clickAnim.getStatus().equals(Animation.Status.RUNNING))
-                        return;
-                    cbf.hoverAnim.setFromValue(hoverOpacity);
-                    cbf.hoverAnim.setToValue(0);
-                    cbf.hoverAnim.playFromStart();
-                }
-            });
-        }
+                hoverPane.setOnMouseExited(new EventHandler<MouseEvent>()
+                {
+                    @Override
+                    public void handle(MouseEvent event)
+                    {
+                        if (cbf.clickAnim != null
+                                && cbf.clickAnim.getStatus().equals(Animation.Status.RUNNING))
+                            return;
+                        cbf.hoverAnim.setFromValue(hoverOpacity);
+                        cbf.hoverAnim.setToValue(0);
+                        cbf.hoverAnim.playFromStart();
+                    }
+                });
+            }
 
         pane.getChildren().add(clickPane);
     }
 
-    public static Pane createButton(String btnText, CustomButtonFactory cbf) {
+    public static Pane createButton(String btnText, CustomButtonFactory cbf)
+    {
         Pane btn = new Pane();
         CustomBox border = new CustomBox(cbf.btnBorderThickness);
         CustomBox.applyToPane(btn, border);
@@ -114,11 +124,13 @@ public abstract class CustomButtonFactory {
      *
      * @param feedbackColour
      */
-    public void setFeedbackColour(Color feedbackColour) {
+    public void setFeedbackColour(Color feedbackColour)
+    {
         this.feedbackColour = feedbackColour;
     }
 
-    public void setBtnBorderThickness(int btnBorderThickness) {
+    public void setBtnBorderThickness(int btnBorderThickness)
+    {
         this.btnBorderThickness = btnBorderThickness;
     }
 
@@ -127,7 +139,8 @@ public abstract class CustomButtonFactory {
      * (but does not click) over it. It is true by default.
      * @param useHoverAnim
      */
-    public void setUseHoverAnim(boolean useHoverAnim) {
+    public void setUseHoverAnim(boolean useHoverAnim)
+    {
         this.useHoverAnim = useHoverAnim;
     }
 }

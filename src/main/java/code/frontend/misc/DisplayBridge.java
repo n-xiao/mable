@@ -4,7 +4,8 @@ import java.time.Instant;
 
 import code.backend.Countdown;
 
-public interface DisplayBridge {
+public interface DisplayBridge
+{
     public int daysUntilDue(Instant now);
     public String getName(); // for UI display purposes
     public Countdown[] getFolderContents(); // only for folders, null otherwise

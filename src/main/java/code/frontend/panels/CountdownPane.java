@@ -25,7 +25,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
-public class CountdownPane extends VBox {
+public class CountdownPane extends VBox
+{
     public final double WIDTH = 290;
     public final double HEIGHT = 140;
     public final double NAME_WIDTH = 150;
@@ -35,14 +36,16 @@ public class CountdownPane extends VBox {
     private HBox hoverHBox;
     private HBox contentHBox;
 
-    public CountdownPane(Countdown cd, Instant now) {
+    public CountdownPane(Countdown cd, Instant now)
+    {
         this.setAlignment(Pos.CENTER);
         initContentHBox(cd, now);
         initHoverHBox(cd);
         this.getChildren().addAll(this.hoverHBox, this.contentHBox);
     }
 
-    private void initHoverHBox(Countdown cd) {
+    private void initHoverHBox(Countdown cd)
+    {
         int leftRightPadding = 16;
         double height = this.HEIGHT - this.CONTENT_HEIGHT;
         this.hoverHBox = new HBox();
@@ -70,9 +73,11 @@ public class CountdownPane extends VBox {
         // hoverHBox.setBackground(new Background(new BackgroundFill(Color.VIOLET, null, null)));
 
         // todo mouse listener stuff
-        contentHBox.setOnMouseEntered(new EventHandler<MouseEvent>() {
+        contentHBox.setOnMouseEntered(new EventHandler<MouseEvent>()
+        {
             @Override
-            public void handle(MouseEvent event) {
+            public void handle(MouseEvent event)
+            {
                 ft.stop();
                 setMouseEnterAnim(ft);
                 Instant now = Instant.now();
@@ -84,26 +89,31 @@ public class CountdownPane extends VBox {
             }
         });
 
-        contentHBox.setOnMouseExited(new EventHandler<MouseEvent>() {
+        contentHBox.setOnMouseExited(new EventHandler<MouseEvent>()
+        {
             @Override
-            public void handle(MouseEvent event) {
+            public void handle(MouseEvent event)
+            {
                 setMouseExitAnim(ft);
                 ft.playFromStart();
             }
         });
     }
 
-    private void setMouseEnterAnim(FadeTransition anim) {
+    private void setMouseEnterAnim(FadeTransition anim)
+    {
         anim.setFromValue(0);
         anim.setToValue(1);
     }
 
-    private void setMouseExitAnim(FadeTransition anim) {
+    private void setMouseExitAnim(FadeTransition anim)
+    {
         anim.setFromValue(1);
         anim.setToValue(0);
     }
 
-    private void initContentHBox(Countdown cd, Instant now) {
+    private void initContentHBox(Countdown cd, Instant now)
+    {
         this.contentHBox = new HBox();
         contentHBox.setPrefSize(WIDTH, CONTENT_HEIGHT);
         contentHBox.setFillHeight(true);
@@ -120,7 +130,8 @@ public class CountdownPane extends VBox {
         // contentHBox.setBackground(new Background(new BackgroundFill(Color.GRAY, null, null)));
     }
 
-    private Label createNameLabel(Countdown cd) {
+    private Label createNameLabel(Countdown cd)
+    {
         String name = cd.getName();
         Label nameLabel = new Label(name);
         Font nameFont = Font.font(Vals.FontTools.FONT_FAM, FontWeight.SEMI_BOLD, 19);
@@ -135,7 +146,8 @@ public class CountdownPane extends VBox {
         return nameLabel;
     }
 
-    private Pane createVerticalDivider() {
+    private Pane createVerticalDivider()
+    {
         Pane pane = new Pane();
         Color colour = Color.rgb(255, 255, 255, 0.3);
         CustomLine separator = new CustomLine(2, CustomLine.Type.VERTICAL_TYPE);
@@ -146,7 +158,8 @@ public class CountdownPane extends VBox {
         return pane;
     }
 
-    private VBox createCountdownDisplay(Countdown cd, Instant now) {
+    private VBox createCountdownDisplay(Countdown cd, Instant now)
+    {
         VBox display = new VBox();
         int daysLeft = Math.abs(cd.daysUntilDue(now));
 

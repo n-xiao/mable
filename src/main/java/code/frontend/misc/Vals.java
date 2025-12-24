@@ -12,20 +12,24 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
-public class Vals {
+public class Vals
+{
 
-    public final class Colour {
+    public final class Colour
+    {
         public static final Color BACKGROUND = Color.rgb(20, 20, 30);
         public static final Color FEEDBACK = Color.rgb(75, 148, 174);
         public static final Color TXT_GHOST = Color.rgb(200, 200, 230);
 
-        public static Background createBG(Color c, double radius, double ins) {
+        public static Background createBG(Color c, double radius, double ins)
+        {
             BackgroundFill bgFill = new BackgroundFill(c, new CornerRadii(radius), new Insets(ins));
             return new Background(bgFill);
         }
     }
 
-    public final class GraphicalUI {
+    public final class GraphicalUI
+    {
         public static final int DRAW_THICKNESS = 2;
         public static final int PREF_WIDTH = 1120;
         public static final int PREF_HEIGHT = 730;
@@ -36,36 +40,42 @@ public class Vals {
         public static final double CORNER_OFFSET = 0.2;
     }
 
-    public class FontTools {
+    public class FontTools
+    {
 
         public static final String FONT_FAM = "Shantell Sans";
 
-        public static void initFonts() {
-            try {
-                InputStream manifestStream = Thread.currentThread()
-                                             .getContextClassLoader()
-                                             .getResourceAsStream("manifest.txt");
-                InputStreamReader manifestStreamReader = new InputStreamReader(manifestStream);
-                BufferedReader manifestReader = new BufferedReader(manifestStreamReader);
+        public static void initFonts()
+        {
+            try
+                {
+                    InputStream manifestStream = Thread.currentThread()
+                                                 .getContextClassLoader()
+                                                 .getResourceAsStream("manifest.txt");
+                    InputStreamReader manifestStreamReader = new InputStreamReader(manifestStream);
+                    BufferedReader manifestReader = new BufferedReader(manifestStreamReader);
 
-                String fileName;
-                ArrayList<String> fontFilePaths = new ArrayList<>();
+                    String fileName;
+                    ArrayList<String> fontFilePaths = new ArrayList<>();
 
-                while ((fileName = manifestReader.readLine()) != null)
-                    fontFilePaths.add(fileName);
+                    while ((fileName = manifestReader.readLine()) != null)
+                        fontFilePaths.add(fileName);
 
-                manifestStream.close();
+                    manifestStream.close();
 
-                for (String string : fontFilePaths)
-                    loadFont(string);
+                    for (String string : fontFilePaths)
+                        loadFont(string);
 
-            } catch (Exception e) {
-                System.err.println("Failed to init fonts");
-                System.err.println(e.getStackTrace());
-            }
+                }
+            catch (Exception e)
+                {
+                    System.err.println("Failed to init fonts");
+                    System.err.println(e.getStackTrace());
+                }
         }
 
-        private static void loadFont(String fileName) throws Exception {
+        private static void loadFont(String fileName) throws Exception
+        {
             InputStream stream = Thread.currentThread()
                                        .getContextClassLoader()
                                        .getResourceAsStream(fileName);

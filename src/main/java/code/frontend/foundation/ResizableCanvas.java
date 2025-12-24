@@ -17,11 +17,11 @@ public abstract class ResizableCanvas extends Canvas
 
     public ResizableCanvas()
     {
-        widthProperty().addListener(event -> resizeAndDraw());
-        heightProperty().addListener(event -> resizeAndDraw());
+        widthProperty().addListener(event -> resizeAndDraw(true));
+        heightProperty().addListener(event -> resizeAndDraw(true));
     }
 
-    protected void resizeAndDraw()
+    protected void resizeAndDraw(boolean recompute)
     {
         double width = this.getWidth();
         double height = this.getHeight();
@@ -30,12 +30,12 @@ public abstract class ResizableCanvas extends Canvas
                 GraphicsContext gc = getGraphicsContext2D();
                 gc.clearRect(0, 0, width, height);
                 gc.setStroke(this.strokeColour);
-                draw(gc);
+                draw(gc, recompute);
             }
         this.setManaged(false); // this stops layouts from messing with it
     }
 
-    protected abstract void draw(GraphicsContext gc);
+    protected abstract void draw(GraphicsContext gc, boolean recompute);
 
     public static Pane applyToPane(Pane p, ResizableCanvas canvas)
     {
@@ -48,7 +48,7 @@ public abstract class ResizableCanvas extends Canvas
     public void setStrokeColour(Color strokeColour)
     {
         this.strokeColour = strokeColour;
-        resizeAndDraw();
+        resizeAndDraw(false);
     }
 
     public Color getStrokeColour()

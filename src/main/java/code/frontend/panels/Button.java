@@ -86,7 +86,7 @@ public abstract class Button extends Pane
     {
         ft.stop();
         ft.setDuration(Duration.millis(200));
-        ft.setFromValue(1);
+        ft.setFromValue(0.8);
         ft.setToValue(0);
         ft.playFromStart();
     }

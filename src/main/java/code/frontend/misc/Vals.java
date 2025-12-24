@@ -48,7 +48,7 @@ public class Vals
 
         public static Font getButtonFont()
         {
-            return new Font(FONT_FAM, 15);
+            return new Font(FONT_FAM + " Medium", 16);
         }
 
         public static void initFonts()

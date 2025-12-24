@@ -5,6 +5,7 @@ public class Coordinate
 
     double x, y; // defines centre
     private double xDeviation, yDeviation; // defines allowable deviation(s) from centre
+    private double varX, varY;
 
     protected Coordinate(double x, double y)
     {
@@ -39,19 +40,27 @@ public class Coordinate
         this.yDeviation = both;
     }
 
-    public double getVarX()
+    public double getVarX(boolean recompute)
     {
-        double min = (this.x < this.xDeviation) ? -this.x : -this.xDeviation;
-        double max = this.xDeviation;
-        double deviation = min + (Math.random() * ((max - min) + 1));
-        return this.x + deviation;
+        if (recompute)
+            {
+                double min = (this.x < this.xDeviation) ? -this.x : -this.xDeviation;
+                double max = this.xDeviation;
+                double deviation = min + (Math.random() * ((max - min) + 1));
+                this.varX = this.x + deviation;
+            }
+        return this.varX;
     }
 
-    public double getVarY()
+    public double getVarY(boolean recompute)
     {
-        double min = (this.y < this.yDeviation) ? -this.y : -this.yDeviation;
-        double max = this.yDeviation;
-        double deviation = min + (Math.random() * ((max - min) + 1));
-        return this.y + deviation;
+        if (recompute)
+            {
+                double min = (this.y < this.yDeviation) ? -this.y : -this.yDeviation;
+                double max = this.yDeviation;
+                double deviation = min + (Math.random() * ((max - min) + 1));
+                this.varY = this.y + deviation;
+            }
+        return this.varY;
     }
 }

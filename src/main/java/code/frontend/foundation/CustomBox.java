@@ -36,19 +36,19 @@ public class CustomBox extends ResizableCanvas
     }
 
     @Override
-    protected void draw(GraphicsContext gc)
+    protected void draw(GraphicsContext gc, boolean recompute)
     {
         gc.setLineWidth(this.thickness);
         gc.setLineCap(StrokeLineCap.ROUND);
         gc.setLineJoin(StrokeLineJoin.ROUND);
-        assembleBoxPath(gc);
-        assembleBoxPath(gc);
+        assembleBoxPath(gc, recompute);
+        assembleBoxPath(gc, recompute);
     }
 
-    private void assembleBoxPath(GraphicsContext gc)
+    private void assembleBoxPath(GraphicsContext gc, boolean recompute)
     {
         Coordinate[] fixed = getFixedCoords();
-        Coordinate[] ctrl = getControlCoords();
+        Coordinate[] ctrl = getControlCoords(recompute);
         gc.beginPath();
         gc.moveTo(fixed[0].x, fixed[0].y);
         for (int i = 0; i < ctrl.length; i++)
@@ -133,7 +133,7 @@ public class CustomBox extends ResizableCanvas
      * |               |
      * 6-------5-------4
      */
-    private Coordinate[] getControlCoords()
+    private Coordinate[] getControlCoords(boolean recompute)
     {
         getCornerCoords();
         Coordinate[] controlCoords = new Coordinate[8];
@@ -145,8 +145,8 @@ public class CustomBox extends ResizableCanvas
                 int index = i * 2;
                 Coordinate coord = this.cornerCoords[i];
                 coord.setDeviations((Math.min(width, height) + thickness) * cornerDeviation);
-                double x = this.cornerCoords[i].getVarX();
-                double y = this.cornerCoords[i].getVarY();
+                double x = this.cornerCoords[i].getVarX(recompute);
+                double y = this.cornerCoords[i].getVarY(recompute);
                 controlCoords[index] = new Coordinate(x, y);
             }
         // then add the side ctrl points
@@ -169,8 +169,8 @@ public class CustomBox extends ResizableCanvas
                 double xDeviation = ((((evenCount) ? width : height) + thickness) * deviation);
                 double yDeviation = ((((evenCount) ? height : width) + thickness) * deviation);
                 controlCoords[i].setDeviations(xDeviation,yDeviation);
-                controlCoords[i].x = controlCoords[i].getVarX();
-                controlCoords[i].y = controlCoords[i].getVarY();
+                controlCoords[i].x = controlCoords[i].getVarX(recompute);
+                controlCoords[i].y = controlCoords[i].getVarY(recompute);
                 count++;
             }
 

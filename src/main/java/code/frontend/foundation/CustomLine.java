@@ -14,6 +14,7 @@ public class CustomLine extends ResizableCanvas
 
     private Coordinate start;
     private Coordinate end;
+    private Coordinate mid;
     private int thickness;
     private Type lineType;
     private double startPadding;
@@ -30,7 +31,7 @@ public class CustomLine extends ResizableCanvas
     }
 
     @Override
-    protected void draw(GraphicsContext gc)
+    protected void draw(GraphicsContext gc, boolean recompute)
     {
         gc.setLineWidth(this.thickness);
         gc.setLineCap(StrokeLineCap.ROUND);
@@ -55,27 +56,27 @@ public class CustomLine extends ResizableCanvas
 
         double midX = (this.start.x + this.end.x) / 2;
         double midY = (this.start.y + this.end.y) / 2;
-        Coordinate midCoord = new Coordinate(midX, midY);
-        midCoord.setDeviations(DEVIATION * thickness);
+        this.mid = new Coordinate(midX, midY);
+        mid.setDeviations(DEVIATION * thickness);
         gc.beginPath();
         // adds straight line first
         gc.moveTo(start.x, start.y);
         gc.lineTo(end.x, end.y);
         // adds the messy line
-        gc.quadraticCurveTo(midCoord.getVarX(), midCoord.getVarY(), start.x, start.y);
+        gc.quadraticCurveTo(mid.getVarX(recompute), mid.getVarY(recompute), start.x, start.y);
         gc.stroke();
     }
 
     public void setStartPadding(double startPadding)
     {
         this.startPadding = startPadding;
-        resizeAndDraw();
+        resizeAndDraw(true);
     }
 
     public void setEndPadding(double endPadding)
     {
         this.endPadding = endPadding;
-        resizeAndDraw();
+        resizeAndDraw(true);
     }
 
     /*
@@ -85,6 +86,6 @@ public class CustomLine extends ResizableCanvas
     {
         this.startPadding = startEndPadding;
         this.endPadding = startEndPadding;
-        resizeAndDraw();
+        resizeAndDraw(true);
     }
 }

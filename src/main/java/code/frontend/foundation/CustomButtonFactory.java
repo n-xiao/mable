@@ -15,7 +15,7 @@ import javafx.util.Duration;
 public abstract class CustomButtonFactory
 {
     private Color feedbackColour = Vals.Colour.FEEDBACK;
-    private int btnBorderThickness = Vals.GraphicalUI.DRAW_THICKNESS;
+    private double btnBorderThickness = Vals.GraphicalUI.DRAW_THICKNESS;
     private Font labelFont = new Font(Vals.FontTools.FONT_FAM, 13);
     private Pane hoverPane = null;
     private Pane clickPane = null;

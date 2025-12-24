@@ -12,7 +12,7 @@ public class CustomBox extends ResizableCanvas
     private double cornerDeviation = Vals.GraphicalUI.CORNER_DEVIATION;
     private double cornerOffset = Vals.GraphicalUI.CORNER_OFFSET;
 
-    private int thickness;
+    private double thickness;
     private Coordinate[] cornerCoords = null;
     private Coordinate[] fixedCoords = null;
 
@@ -21,12 +21,12 @@ public class CustomBox extends ResizableCanvas
         this.thickness = Vals.GraphicalUI.DRAW_THICKNESS;
     }
 
-    public CustomBox(int thickness)
+    public CustomBox(double thickness)
     {
         this.thickness = thickness;
     }
 
-    public CustomBox(int thickness, double dev, double cornerDev, double cornerOffset)
+    public CustomBox(double thickness, double dev, double cornerDev, double cornerOffset)
     {
         this.thickness = thickness;
         this.deviation = (dev >= 0) ? dev : Vals.GraphicalUI.DEVIATION;
@@ -177,12 +177,12 @@ public class CustomBox extends ResizableCanvas
         return controlCoords;
     }
 
-    private double getHorizPadding()
+    public double getHorizPadding()
     {
         return 0.5 * (this.getHeight() - getPaddedHeight());
     }
 
-    private double getVertiPadding()
+    public double getVertiPadding()
     {
         return 0.5 * (this.getWidth() - getPaddedWidth());
     }

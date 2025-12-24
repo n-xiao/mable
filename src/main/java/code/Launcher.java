@@ -5,6 +5,7 @@ import java.time.Instant;
 import code.backend.Countdown;
 import code.frontend.foundation.CustomButtonFactory;
 import code.frontend.misc.Vals;
+import code.frontend.panels.Button;
 import code.frontend.panels.CountdownPane;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -37,17 +38,16 @@ public class Launcher extends Application
         c.relocate(20,20);
         p.getChildren().add(c);
 
-        CustomButtonFactory cbf = new CustomButtonFactory()
+        Button btnTest = new Button("hello")
         {
             @Override
             public void executeOnClick()
             {
-                System.out.println("hello!");
+                System.out.println("hi");
             }
         };
-        Pane btnTest = CustomButtonFactory.createButton("test", cbf);
-        btnTest.relocate(300, 200);
-        btnTest.setPrefSize(100, 50);
+        btnTest.setPrefSize(300, 100);
+        btnTest.relocate(300, 300);
         p.getChildren().add(btnTest);
 
         Scene scene = new Scene(p);

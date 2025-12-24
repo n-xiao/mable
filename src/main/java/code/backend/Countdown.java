@@ -21,7 +21,7 @@ public class Countdown implements DisplayBridge
         this.name = name;
         LocalDate now = LocalDate.now();
         long dist = ChronoUnit.DAYS.between(now, rawDate); // gets days between now and due
-        this.deadline = Instant.now().plus(dist, ChronoUnit.DAYS); // inits due date in UTC
+        this.deadline = Instant.now().plus(dist + 1, ChronoUnit.DAYS); // inits due date in UTC
     }
 
     public static Countdown create(String name, int day, int month, int year)
@@ -41,7 +41,7 @@ public class Countdown implements DisplayBridge
     {
         // Instant now has to be provided to "freeze" time during ops
         double days = (double) ChronoUnit.DAYS.between(now, this.deadline);
-        return (int) ((days < 0) ? days : ++days);
+        return (int) days;
     }
 
     @Override

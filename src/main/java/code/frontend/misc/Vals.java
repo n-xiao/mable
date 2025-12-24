@@ -5,6 +5,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import javafx.geometry.Insets;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
@@ -12,7 +16,13 @@ public class Vals {
 
     public final class Colour {
         public static final Color BACKGROUND = Color.rgb(20, 20, 30);
-        public static final Color TXT_GHOST = Color.rgb(220, 220, 220, 0.8);
+        public static final Color FEEDBACK = Color.rgb(75, 148, 174);
+        public static final Color TXT_GHOST = Color.rgb(200, 200, 230);
+
+        public static Background createBG(Color c, double radius, double ins) {
+            BackgroundFill bgFill = new BackgroundFill(c, new CornerRadii(radius), new Insets(ins));
+            return new Background(bgFill);
+        }
     }
 
     public final class GraphicalUI {

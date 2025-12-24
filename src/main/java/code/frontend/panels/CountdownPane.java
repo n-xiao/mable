@@ -37,8 +37,8 @@ public class CountdownPane extends VBox {
 
     public CountdownPane(Countdown cd, Instant now) {
         this.setAlignment(Pos.CENTER);
-        initHoverHBox(cd);
         initContentHBox(cd, now);
+        initHoverHBox(cd);
         this.getChildren().addAll(this.hoverHBox, this.contentHBox);
     }
 
@@ -70,9 +70,10 @@ public class CountdownPane extends VBox {
         // hoverHBox.setBackground(new Background(new BackgroundFill(Color.VIOLET, null, null)));
 
         // todo mouse listener stuff
-        this.setOnMouseEntered(new EventHandler<MouseEvent>() {
+        contentHBox.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                ft.stop();
                 setMouseEnterAnim(ft);
                 Instant now = Instant.now();
                 String status = cd.getStatusString(now);
@@ -83,11 +84,11 @@ public class CountdownPane extends VBox {
             }
         });
 
-        this.setOnMouseExited(new EventHandler<MouseEvent>() {
+        contentHBox.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 setMouseExitAnim(ft);
-                ft.play();
+                ft.playFromStart();
             }
         });
     }

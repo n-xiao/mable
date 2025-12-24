@@ -51,6 +51,11 @@ public abstract class ResizableCanvas extends Canvas
         resizeAndDraw();
     }
 
+    public Color getStrokeColour()
+    {
+        return strokeColour;
+    }
+
     @Override
     public boolean isResizable()
     {

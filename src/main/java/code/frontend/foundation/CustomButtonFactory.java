@@ -17,6 +17,8 @@ public abstract class CustomButtonFactory
     private Color feedbackColour = Vals.Colour.FEEDBACK;
     private int btnBorderThickness = Vals.GraphicalUI.DRAW_THICKNESS;
     private Font labelFont = new Font(Vals.FontTools.FONT_FAM, 13);
+    private Pane hoverPane = null;
+    private Pane clickPane = null;
     private FadeTransition hoverAnim = null;
     private FadeTransition clickAnim = null;
     private boolean useHoverAnim = true;
@@ -36,23 +38,26 @@ public abstract class CustomButtonFactory
      */
     public static void setup(Pane pane, CustomButtonFactory cbf, double bgInsets)
     {
-        Pane clickPane = new Pane();
-        clickPane.prefWidthProperty().bind(pane.widthProperty());
-        clickPane.prefHeightProperty().bind(pane.heightProperty());
-        clickPane.relocate(0, 0);
-        clickPane.setBackground(Vals.Colour.createBG(cbf.feedbackColour, 10, bgInsets));
-        clickPane.setOpacity(0);
+        cbf.clickPane = new Pane();
+        cbf.clickPane.prefWidthProperty().bind(pane.widthProperty());
+        cbf.clickPane.prefHeightProperty().bind(pane.heightProperty());
+        cbf.clickPane.relocate(0, 0);
+        cbf.clickPane.setBackground(Vals.Colour.createBG(cbf.feedbackColour, 4, bgInsets));
+        cbf.clickPane.setOpacity(0);
 
-        cbf.clickAnim = new FadeTransition(Duration.millis(200), clickPane);
+        cbf.clickAnim = new FadeTransition(Duration.millis(200), cbf.clickPane);
         cbf.clickAnim.setFromValue(1);
         cbf.clickAnim.setToValue(0);
-        clickPane.setOnMouseClicked(new EventHandler<MouseEvent>()
+        cbf.clickPane.setOnMouseClicked(new EventHandler<MouseEvent>()
         {
             @Override
             public void handle(MouseEvent event)
             {
                 if (cbf.hoverAnim != null)
-                    cbf.hoverAnim.stop();
+                    {
+                        cbf.hoverAnim.stop();
+                        cbf.hoverPane.setOpacity(0);
+                    }
                 cbf.executeOnClick();
                 if (cbf.feedbackColour != null)
                     cbf.clickAnim.playFromStart();
@@ -61,12 +66,15 @@ public abstract class CustomButtonFactory
 
         if (cbf.useHoverAnim)
             {
-                Pane hoverPane = new Pane();
-                double hoverOpacity = 0.5;
-                cbf.hoverAnim = new FadeTransition(Duration.millis(300), hoverPane);
-                hoverPane.setBackground(Vals.Colour.createBG(cbf.feedbackColour, 10, bgInsets));
-                hoverPane.setOpacity(0);
-                hoverPane.setOnMouseEntered(new EventHandler<MouseEvent>()
+
+                cbf.hoverPane = new Pane();
+                double hoverOpacity = 0.2;
+                cbf.hoverAnim = new FadeTransition(Duration.millis(300), cbf.hoverPane);
+                cbf.hoverPane.prefWidthProperty().bind(pane.widthProperty());
+                cbf.hoverPane.prefHeightProperty().bind(pane.heightProperty());
+                cbf.hoverPane.setBackground(Vals.Colour.createBG(cbf.feedbackColour, 4, bgInsets));
+                cbf.hoverPane.setOpacity(0);
+                cbf.clickPane.setOnMouseEntered(new EventHandler<MouseEvent>()
                 {
                     @Override
                     public void handle(MouseEvent event)
@@ -80,7 +88,7 @@ public abstract class CustomButtonFactory
                     }
                 });
 
-                hoverPane.setOnMouseExited(new EventHandler<MouseEvent>()
+                cbf.clickPane.setOnMouseExited(new EventHandler<MouseEvent>()
                 {
                     @Override
                     public void handle(MouseEvent event)
@@ -93,9 +101,10 @@ public abstract class CustomButtonFactory
                         cbf.hoverAnim.playFromStart();
                     }
                 });
+                pane.getChildren().add(cbf.hoverPane);
             }
 
-        pane.getChildren().add(clickPane);
+        pane.getChildren().add(cbf.clickPane);
     }
 
     public static Pane createButton(String btnText, CustomButtonFactory cbf)
@@ -105,6 +114,7 @@ public abstract class CustomButtonFactory
         CustomBox.applyToPane(btn, border);
 
         Label label = new Label(btnText);
+        label.setTextFill(border.getStrokeColour());
         label.setAlignment(Pos.CENTER);
         label.setFont(cbf.labelFont);
         label.prefWidthProperty().bind(btn.widthProperty());
@@ -112,7 +122,7 @@ public abstract class CustomButtonFactory
         label.relocate(0, 0);
         btn.getChildren().add(label);
 
-        setup(btn, cbf, cbf.btnBorderThickness * 2);
+        setup(btn, cbf, cbf.btnBorderThickness * 1.5);
 
         return btn;
     }

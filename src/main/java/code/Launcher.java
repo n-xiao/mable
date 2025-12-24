@@ -3,6 +3,7 @@ package code;
 import java.time.Instant;
 
 import code.backend.Countdown;
+import code.frontend.foundation.CustomButtonFactory;
 import code.frontend.misc.Vals;
 import code.frontend.panels.CountdownPane;
 import javafx.application.Application;
@@ -35,6 +36,19 @@ public class Launcher extends Application
         CountdownPane c = new CountdownPane(countdown, Instant.now());
         c.relocate(20,20);
         p.getChildren().add(c);
+
+        CustomButtonFactory cbf = new CustomButtonFactory()
+        {
+            @Override
+            public void executeOnClick()
+            {
+                System.out.println("hello!");
+            }
+        };
+        Pane btnTest = CustomButtonFactory.createButton("test", cbf);
+        btnTest.relocate(300, 200);
+        btnTest.setPrefSize(100, 50);
+        p.getChildren().add(btnTest);
 
         Scene scene = new Scene(p);
         scene.setFill(Vals.Colour.BACKGROUND);

@@ -35,8 +35,9 @@ public class Vals
         public static final int PREF_HEIGHT = 730;
         public static final int MIN_WIDTH = 620;
         public static final int MIN_HEIGHT = 430;
-        public static final double DEVIATION = 0.02;
-        public static final double CORNER_DEVIATION = 0.02;
+        // CORNER_OFFSET > CORNER_DEVIATION
+        public static final double DEVIATION = 0.03;
+        public static final double CORNER_DEVIATION = 0.03;
         public static final double CORNER_OFFSET = 0.2;
     }
 

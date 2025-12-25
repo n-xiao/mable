@@ -2,7 +2,6 @@ package code.backend;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Files;
@@ -10,39 +9,39 @@ import java.nio.file.Path;
 import java.util.Set;
 import java.util.TreeSet;
 
+/**
+ *  Handles all mutable file read/writing operations. Note that this does not handle resources
+ *  (resources are handled by {@link code.frontend.misc.Vals}) since data in resouces are
+ *  immutable by a user.
+ */
 public class StorageHandler
 {
-    public static boolean active = true;
-    public final static Path STORAGE_FILE_PATH;
+    public static Path storagePath;
     private static TreeSet<Countdown> countdowns = new TreeSet<Countdown>(new SortByRemainingDays());
 
     private StorageHandler() {}
 
-    static
+    public static void init() throws Exception
     {
         // btw, Path should automatically account for different OS path separators
-        STORAGE_FILE_PATH = Path.of(System.getProperty("user.home") + "/mable_data/storage.mable");
-        try
+        storagePath = Path.of(System.getProperty("user.home") + "/mable_data/storage.mable");
+        if (!Files.exists(storagePath))
             {
-                if (!Files.exists(STORAGE_FILE_PATH))
-                    {
-                        Files.createDirectory(Path.of(System.getProperty("user.home") + "/mable_data"));
-                        Files.createFile(STORAGE_FILE_PATH);
-                    }
+                Files.createDirectory(Path.of(System.getProperty("user.home") + "/mable_data"));
+                Files.createFile(storagePath);
             }
-        catch (Exception e)
+        else
             {
-                System.err.println("Failed to activate persistent storage!");
-                active = false;
+                load();
             }
     }
 
-    public static void save()
+    private static void save()
     {
         try
             {
-                if (!active) throw new IOException("Storage is inactive.");
-                FileOutputStream outputStream = new FileOutputStream(STORAGE_FILE_PATH.toString());
+                // if (!active) throw new IOException("Storage is inactive.");
+                FileOutputStream outputStream = new FileOutputStream(storagePath.toString());
                 ObjectOutputStream objOutputStream = new ObjectOutputStream(outputStream);
                 objOutputStream.writeObject(countdowns);
                 objOutputStream.flush();
@@ -56,12 +55,12 @@ public class StorageHandler
     }
 
     @SuppressWarnings("unchecked")
-    public static void load()
+    private static void load()
     {
         try
             {
-                if (!active) throw new IOException("Storage is inactive.");
-                FileInputStream inputStream = new FileInputStream(STORAGE_FILE_PATH.toString());
+                // if (!active) throw new IOException("Storage is inactive.");
+                FileInputStream inputStream = new FileInputStream(storagePath.toString());
                 ObjectInputStream objInputStream = new ObjectInputStream(inputStream);
                 countdowns = (TreeSet<Countdown>) objInputStream.readObject();
                 objInputStream.close();

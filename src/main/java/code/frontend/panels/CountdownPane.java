@@ -26,7 +26,7 @@ import javafx.util.Duration;
 
 public class CountdownPane extends VBox
 {
-    public final double WIDTH = 290;
+    public final double WIDTH = 280;
     public final double HEIGHT = 140;
     public final double NAME_WIDTH = 150;
     public final double DIV_WIDTH = 10;
@@ -58,7 +58,7 @@ public class CountdownPane extends VBox
         double height = this.HEIGHT - this.CONTENT_HEIGHT;
         this.hoverHBox = new HBox();
         hoverHBox.setPrefSize(this.WIDTH, height);
-        Font font = Font.font(Vals.FontTools.FONT_FAM, FontWeight.LIGHT, FontPosture.ITALIC, 14);
+        Font font = Font.font(Vals.FontTools.FONT_FAM, FontWeight.MEDIUM, FontPosture.ITALIC, 14);
         statusLabel = new Label();
         statusLabel.setAlignment(Pos.BOTTOM_LEFT);
         statusLabel.setFont(font);
@@ -220,9 +220,9 @@ public class CountdownPane extends VBox
                 else
                     {
                         // select procedure
-                        border.setStrokeColour(Vals.Colour.FEEDBACK);
-                        statusLabel.setTextFill(Vals.Colour.FEEDBACK);
-                        endDateLabel.setTextFill(Vals.Colour.FEEDBACK);
+                        border.setStrokeColour(Vals.Colour.SELECTED);
+                        statusLabel.setTextFill(Vals.Colour.SELECTED);
+                        endDateLabel.setTextFill(Vals.Colour.SELECTED);
                     }
                 selected = !selected;
             }

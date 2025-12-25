@@ -1,6 +1,6 @@
 package code;
 
-import java.time.Instant;
+import java.time.LocalDate;
 
 import code.backend.Countdown;
 import code.frontend.misc.Vals;
@@ -32,8 +32,8 @@ public class Launcher extends Application
         p.relocate(0, 0);
         p.setBackground(null);
 
-        Countdown countdown = Countdown.create("hello", 25, 12, 2025);
-        CountdownPane c = new CountdownPane(countdown, Instant.now());
+        Countdown countdown = new Countdown("hello", 29, 12, 2025);
+        CountdownPane c = new CountdownPane(countdown, LocalDate.now());
         c.relocate(20,20);
         p.getChildren().add(c);
 

@@ -15,31 +15,32 @@ public class Guardian
     {
         if (test > (long) Integer.MAX_VALUE)
             {
-                triggerErrorMsg(ErrorType.DAYS_INT_OVERFLOW);
                 return false;
             }
         else if (test < (long) Integer.MIN_VALUE)
             {
-                triggerErrorMsg(ErrorType.DAYS_INT_UNDERFLOW);
                 return false;
             }
         return true;
     }
 
     // todo: method should call frontend to display errors
-    private static String triggerErrorMsg(ErrorType err)
+    public static void triggerErrorMsg(ErrorType err)
     {
         switch (err)
             {
             case ErrorType.DAYS_INT_OVERFLOW:
-                return "dude, that's too far into the future... we'd all be dead by then";
+                System.err.println("dude, that's too far into the future... we'd all be dead by then");
+                break;
             case ErrorType.DAYS_INT_UNDERFLOW:
-                return "i know nostalgia is strong, but that's a little too far back";
+                System.err.println("i know nostalgia is strong, but that's a little too far back");
+                break;
             case ErrorType.FOLDER_NAME_CONFLICT:
-                return "another folder already has that name?!";
-
+                System.err.println("another folder already has that name?!");
+                break;
             default:
-                return "";
+                System.err.println("an unknown error has occured");
+                break;
             }
     }
 }

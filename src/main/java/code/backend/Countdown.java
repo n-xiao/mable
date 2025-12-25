@@ -1,7 +1,14 @@
+// PLEASE REWRITE THIS, THANKS LUV U
+
+
 package code.backend;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
@@ -10,38 +17,34 @@ import code.frontend.misc.DisplayBridge;
 public class Countdown implements DisplayBridge
 {
     private String name = null;
-    private Instant deadline = null;
-    boolean isDone = false;
+    private ZonedDateTime dueDateTime;
+    private boolean isDone = false;
     public final UUID ID; // represents unique id
+    private final String ZONE_ID_STR = "UTC";
 
     // todo String parser
-    private Countdown(String name, LocalDate rawDate)
-    {
-        this.ID = UUID.randomUUID(); // hopefully no collision occurs
-        this.name = name;
-        LocalDate now = LocalDate.now();
-        long dist = ChronoUnit.DAYS.between(now, rawDate); // gets days between now and due
-        this.deadline = Instant.now().plus(dist + 1, ChronoUnit.DAYS); // inits due date in UTC
-    }
 
-    public static Countdown create(String name, int day, int month, int year)
+    /**
+     * Creates a Countdown object. The responsibility for sanitising inputs is handed to
+     * the frontend; it is assumed that all values passed to this constructor will not
+     * cause errors due to incompatible types (e.g integer over/under flow).
+     */
+    public Countdown(String name, int day, int month, int year)
     {
+        this.ID = UUID.randomUUID();
+        this.name = name;
         LocalDate dueDate = LocalDate.of(year, month, day);
-        LocalDate now = LocalDate.now();
-        long dist = ChronoUnit.DAYS.between(now, dueDate);
-        if (!Guardian.integerCanFit(dist)) return null;
-        Countdown countdown = new Countdown(name, dueDate);
-        return countdown;
+        this.dueDateTime = dueDate.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
     }
 
     /*
      * Returns days until due. Keep in mind that this is a vector.
      */
-    public int daysUntilDue(Instant now)
+    public int daysUntilDue(LocalDate now)
     {
-        // Instant now has to be provided to "freeze" time during ops
-        double days = (double) ChronoUnit.DAYS.between(now, this.deadline);
-        return (int) days;
+        ZonedDateTime zonedNow = now.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
+        Duration duration = Duration.between(zonedNow, this.dueDateTime);
+        return (int) duration.toDaysPart();
     }
 
     @Override
@@ -51,15 +54,14 @@ public class Countdown implements DisplayBridge
         return null;
     }
 
-    public LocalDate getLocalDueDate(Instant now, LocalDate today)
+    public LocalDate getLocalDueDate(LocalDate now)
     {
-        long dist = daysUntilDue(now);
-        return today.plusDays(dist);
+        return now.plusDays(daysUntilDue(now));
     }
 
-    public String getStringDueDate(Instant now, LocalDate today)
+    public String getStringDueDate(LocalDate now)
     {
-        LocalDate localDue = getLocalDueDate(now, today);
+        LocalDate localDue = getLocalDueDate(now);
         String day = Integer.toString(localDue.getDayOfMonth());
         String month = Integer.toString(localDue.getMonthValue());
         String year = Integer.toString(localDue.getYear());
@@ -71,12 +73,12 @@ public class Countdown implements DisplayBridge
         return name;
     }
 
-    public Instant getDueDate()
+    public ZonedDateTime getDueDateTime()
     {
-        return deadline;
+        return dueDateTime;
     }
 
-    public String getStatusString(Instant now)
+    public String getStatusString(LocalDate now)
     {
         if (isOverdue(now))
             return "Overdue";
@@ -86,9 +88,10 @@ public class Countdown implements DisplayBridge
             return "Ongoing";
     }
 
-    public boolean isOverdue(Instant now)
+    public boolean isOverdue(LocalDate now)
     {
-        return deadline.isBefore(now) && !isDone;
+        ZonedDateTime nowDateTime = now.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
+        return dueDateTime.isBefore(nowDateTime) && !isDone;
     }
 
     public void setName(String name)
@@ -96,14 +99,10 @@ public class Countdown implements DisplayBridge
         this.name = name;
     }
 
-    public boolean setDueDate(int day, int month, int year)
+    public void setDueDate(int day, int month, int year)
     {
         LocalDate dueDate = LocalDate.of(year, month, day);
-        LocalDate now = LocalDate.now();
-        long dist = ChronoUnit.DAYS.between(now, dueDate);
-        if (!Guardian.integerCanFit(dist)) return false;
-        this.deadline = Instant.now().plus(dist, ChronoUnit.DAYS);
-        return true;
+        this.dueDateTime = dueDate.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
     }
 
 }

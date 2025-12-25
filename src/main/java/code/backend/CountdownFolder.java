@@ -1,6 +1,6 @@
 package code.backend;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.TreeSet;
 
 import code.frontend.misc.DisplayBridge;
@@ -22,7 +22,7 @@ public class CountdownFolder implements DisplayBridge
         return (Countdown[]) map.toArray();
     }
 
-    public int daysUntilDue(Instant now)
+    public int daysUntilDue(LocalDate now)
     {
         // todo
         return 0;

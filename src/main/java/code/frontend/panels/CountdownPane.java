@@ -1,6 +1,5 @@
 package code.frontend.panels;
 
-import java.time.Instant;
 import java.time.LocalDate;
 
 import code.backend.Countdown;
@@ -36,7 +35,7 @@ public class CountdownPane extends VBox
     private HBox hoverHBox;
     private HBox contentHBox;
 
-    public CountdownPane(Countdown cd, Instant now)
+    public CountdownPane(Countdown cd, LocalDate now)
     {
         this.setAlignment(Pos.CENTER);
         initContentHBox(cd, now);
@@ -80,9 +79,9 @@ public class CountdownPane extends VBox
             {
                 ft.stop();
                 setMouseEnterAnim(ft);
-                Instant now = Instant.now();
+                LocalDate now = LocalDate.now();
                 String status = cd.getStatusString(now);
-                String end = cd.getStringDueDate(now, LocalDate.now());
+                String end = cd.getStringDueDate(now);
                 statusLabel.setText(status);
                 endDateLabel.setText("Due: " + end);
                 ft.play();
@@ -112,7 +111,7 @@ public class CountdownPane extends VBox
         anim.setToValue(0);
     }
 
-    private void initContentHBox(Countdown cd, Instant now)
+    private void initContentHBox(Countdown cd, LocalDate now)
     {
         this.contentHBox = new HBox();
         contentHBox.setPrefSize(WIDTH, CONTENT_HEIGHT);
@@ -158,7 +157,7 @@ public class CountdownPane extends VBox
         return pane;
     }
 
-    private VBox createCountdownDisplay(Countdown cd, Instant now)
+    private VBox createCountdownDisplay(Countdown cd, LocalDate now)
     {
         VBox display = new VBox();
         int daysLeft = Math.abs(cd.daysUntilDue(now));

@@ -13,6 +13,7 @@ public class CustomBox extends ResizableCanvas
     private double cornerOffset = Vals.GraphicalUI.CORNER_OFFSET;
 
     private double thickness;
+    private Coordinate[] controlCoords = null;
     private Coordinate[] cornerCoords = null;
     private Coordinate[] fixedCoords = null;
 
@@ -47,8 +48,8 @@ public class CustomBox extends ResizableCanvas
 
     private void assembleBoxPath(GraphicsContext gc, boolean recompute)
     {
-        Coordinate[] fixed = getFixedCoords();
-        Coordinate[] ctrl = getControlCoords(recompute);
+        Coordinate[] fixed = (!recompute && this.fixedCoords != null) ? this.fixedCoords : getFixedCoords();
+        Coordinate[] ctrl = (!recompute && this.controlCoords != null) ? this.controlCoords : getControlCoords(recompute);
         gc.beginPath();
         gc.moveTo(fixed[0].x, fixed[0].y);
         for (int i = 0; i < ctrl.length; i++)
@@ -173,6 +174,8 @@ public class CustomBox extends ResizableCanvas
                 controlCoords[i].y = controlCoords[i].getVarY(recompute);
                 count++;
             }
+
+        this.controlCoords = controlCoords;
 
         return controlCoords;
     }

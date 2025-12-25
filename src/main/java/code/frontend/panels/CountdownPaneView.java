@@ -34,6 +34,7 @@ public class CountdownPaneView extends ScrollPane
         this.setFitToWidth(true);
         this.setHbarPolicy(ScrollBarPolicy.NEVER);
         this.setVbarPolicy(ScrollBarPolicy.NEVER);
+        this.getChildren().add(fp);
     }
 
     public static CountdownPaneView getInstance()

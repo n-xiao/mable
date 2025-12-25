@@ -3,16 +3,14 @@ package code.backend;
 import java.time.LocalDate;
 import java.util.Comparator;
 
-import code.frontend.misc.DisplayBridge;
-
-public class SortByRemainingDays implements Comparator<DisplayBridge>
+public class SortByRemainingDays implements Comparator<Countdown>
 {
     @Override
-    public int compare(DisplayBridge d1, DisplayBridge d2)
+    public int compare(Countdown c1, Countdown c2)
     {
         LocalDate now = LocalDate.now();
-        int dist1 = d1.daysUntilDue(now);
-        int dist2 = d2.daysUntilDue(now);
+        int dist1 = c1.daysUntilDue(now);
+        int dist2 = c2.daysUntilDue(now);
         return dist1 - dist2;
     }
 }

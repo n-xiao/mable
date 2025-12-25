@@ -1,20 +1,13 @@
-// PLEASE REWRITE THIS, THANKS LUV U
-
-
 package code.backend;
 
 import java.time.Duration;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
-import code.frontend.misc.DisplayBridge;
 
-public class Countdown implements DisplayBridge
+public class Countdown
 {
     private String name = null;
     private ZonedDateTime dueDateTime;
@@ -45,13 +38,6 @@ public class Countdown implements DisplayBridge
         ZonedDateTime zonedNow = now.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
         Duration duration = Duration.between(zonedNow, this.dueDateTime);
         return (int) duration.toDaysPart();
-    }
-
-    @Override
-    public Countdown[] getFolderContents()
-    {
-        // indicates that this is not a folder
-        return null;
     }
 
     public LocalDate getLocalDueDate(LocalDate now)

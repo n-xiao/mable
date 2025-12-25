@@ -18,6 +18,8 @@ public class Vals
     public final class Colour
     {
         public static final Color BACKGROUND = Color.rgb(20, 20, 30);
+        public static final Color SIDE_BAR = Color.rgb(67, 67, 75);
+        public static final Color VIEW_PICKER = Color.rgb(44, 44, 53);
         public static final Color FEEDBACK = Color.rgb(75, 148, 174);
         public static final Color TXT_GHOST = Color.rgb(200, 200, 230);
 

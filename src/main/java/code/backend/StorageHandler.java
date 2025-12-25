@@ -7,15 +7,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Set;
 import java.util.TreeSet;
-
-import code.frontend.misc.DisplayBridge;
 
 public class StorageHandler
 {
     public static boolean active = true;
     public final static Path STORAGE_FILE_PATH;
-    private static TreeSet<DisplayBridge> displayables = new TreeSet<DisplayBridge>(new SortByRemainingDays());
+    private static TreeSet<Countdown> countdowns = new TreeSet<Countdown>(new SortByRemainingDays());
 
     private StorageHandler() {}
 
@@ -43,7 +42,7 @@ public class StorageHandler
         if (!active) throw new IOException("Storage is inactive.");
         FileOutputStream outputStream = new FileOutputStream(STORAGE_FILE_PATH.toString());
         ObjectOutputStream objOutputStream = new ObjectOutputStream(outputStream);
-        objOutputStream.writeObject(displayables);
+        objOutputStream.writeObject(countdowns);
         objOutputStream.flush();
         objOutputStream.close();
     }
@@ -54,12 +53,24 @@ public class StorageHandler
         if (!active) throw new IOException("Storage is inactive.");
         FileInputStream inputStream = new FileInputStream(STORAGE_FILE_PATH.toString());
         ObjectInputStream objInputStream = new ObjectInputStream(inputStream);
-        displayables = (TreeSet<DisplayBridge>) objInputStream.readObject();
+        countdowns = (TreeSet<Countdown>) objInputStream.readObject();
         objInputStream.close();
     }
 
-    public static DisplayBridge[] getDisplayables()
+    public static Countdown[] getCountdowns()
     {
-        return (DisplayBridge[]) displayables.toArray();
+        return (Countdown[]) countdowns.toArray();
+    }
+
+    public static Countdown[] getAscendingCountdowns()
+    {
+        Set<Countdown> ascendingSet = countdowns.descendingSet().reversed();
+        return (Countdown[]) ascendingSet.toArray();
+    }
+
+    public static Countdown[] getDescendingCountdowns()
+    {
+        Set<Countdown> descendingSet = countdowns.descendingSet();
+        return (Countdown[]) descendingSet.toArray();
     }
 }

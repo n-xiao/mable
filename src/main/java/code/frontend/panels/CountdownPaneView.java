@@ -15,7 +15,7 @@ enum DisplayOrder
 
 /**
  * This is the scrollable Pane that is responsible for displaying {@link CountdownPane}.
- * An instance of this class should be added to a {@link ContentView} instance.
+ * An instance of this class should be added to a {@link Content} instance.
  */
 public class CountdownPaneView extends ScrollPane
 {

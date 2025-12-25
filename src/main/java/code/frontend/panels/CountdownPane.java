@@ -175,7 +175,7 @@ public class CountdownPane extends VBox
         VBox display = new VBox();
         int daysLeft = Math.abs(cd.daysUntilDue(now));
 
-        Label numLabel = new Label(Integer.toString(daysLeft));
+        Label numLabel = new Label(Vals.GraphicalUI.intToString(daysLeft));
         Font numFont = Font.font(Vals.FontTools.FONT_FAM, FontWeight.BOLD, FontPosture.ITALIC, 30);
         numLabel.setAlignment(Pos.CENTER);
         numLabel.setTextAlignment(TextAlignment.CENTER);

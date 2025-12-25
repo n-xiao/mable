@@ -3,7 +3,10 @@ package code.frontend.misc;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.CompactNumberFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import javafx.geometry.Insets;
 import javafx.scene.layout.Background;
@@ -42,6 +45,13 @@ public class Vals
         public static final double DEVIATION = 0.023;
         public static final double CORNER_DEVIATION = 0.03;
         public static final double CORNER_OFFSET = 0.2;
+
+        public static String intToString(int input)
+        {
+            NumberFormat formatter = NumberFormat
+                                     .getCompactNumberInstance(Locale.US, NumberFormat.Style.SHORT);
+            return formatter.format(input);
+        }
     }
 
     public class FontTools

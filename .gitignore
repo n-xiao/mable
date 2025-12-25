@@ -55,5 +55,5 @@ tokens/
 ##########
 app/.classpath
 app/bin/
-.classpath/
+.classpath
 bin/

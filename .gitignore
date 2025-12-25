@@ -49,8 +49,11 @@ Thumbs.db
 ##################
 *.json
 app/tokens/
+tokens/
 
 # Others #
 ##########
 app/.classpath
 app/bin/
+.classpath/
+bin/

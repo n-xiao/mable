@@ -37,24 +37,71 @@ public class StorageHandler
             }
     }
 
-    public static void save() throws IOException
+    public static void save()
     {
-        if (!active) throw new IOException("Storage is inactive.");
-        FileOutputStream outputStream = new FileOutputStream(STORAGE_FILE_PATH.toString());
-        ObjectOutputStream objOutputStream = new ObjectOutputStream(outputStream);
-        objOutputStream.writeObject(countdowns);
-        objOutputStream.flush();
-        objOutputStream.close();
+        try
+            {
+                if (!active) throw new IOException("Storage is inactive.");
+                FileOutputStream outputStream = new FileOutputStream(STORAGE_FILE_PATH.toString());
+                ObjectOutputStream objOutputStream = new ObjectOutputStream(outputStream);
+                objOutputStream.writeObject(countdowns);
+                objOutputStream.flush();
+                objOutputStream.close();
+            }
+        catch (Exception e)
+            {
+                System.err.println("error while saving data!");
+                e.printStackTrace();
+            }
     }
 
     @SuppressWarnings("unchecked")
-    public static void load() throws IOException, ClassNotFoundException
+    public static void load()
     {
-        if (!active) throw new IOException("Storage is inactive.");
-        FileInputStream inputStream = new FileInputStream(STORAGE_FILE_PATH.toString());
-        ObjectInputStream objInputStream = new ObjectInputStream(inputStream);
-        countdowns = (TreeSet<Countdown>) objInputStream.readObject();
-        objInputStream.close();
+        try
+            {
+                if (!active) throw new IOException("Storage is inactive.");
+                FileInputStream inputStream = new FileInputStream(STORAGE_FILE_PATH.toString());
+                ObjectInputStream objInputStream = new ObjectInputStream(inputStream);
+                countdowns = (TreeSet<Countdown>) objInputStream.readObject();
+                objInputStream.close();
+            }
+        catch (Exception e)
+            {
+                System.err.println("error while loading save data!");
+                e.printStackTrace();
+            }
+    }
+
+    public static void editCountdownName(Countdown c, String name)
+    {
+        c.setName(name);
+        save();
+    }
+
+
+    public static void editCountdownDueDate(Countdown c, int day, int month, int year)
+    {
+        c.setDueDate(day, month, year);
+        save();
+    }
+
+    public static void setCountdownDone(Countdown c, boolean isDone)
+    {
+        c.setDone(isDone);
+        save();
+    }
+
+    public static void deleteCountdown(Countdown c)
+    {
+        countdowns.remove(c);
+        save();
+    }
+
+    public static void addCountdown(Countdown c)
+    {
+        countdowns.add(c);
+        save();
     }
 
     public static Countdown[] getCountdowns()

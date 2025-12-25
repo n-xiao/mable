@@ -34,16 +34,18 @@ public class CountdownPane extends VBox
 
     private HBox hoverHBox;
     private HBox contentHBox;
+    private Countdown countdown;
 
     public CountdownPane(Countdown cd, LocalDate now)
     {
+        this.countdown = cd;
         this.setAlignment(Pos.CENTER);
-        initContentHBox(cd, now);
-        initHoverHBox(cd);
+        initContentHBox(now);
+        initHoverHBox();
         this.getChildren().addAll(this.hoverHBox, this.contentHBox);
     }
 
-    private void initHoverHBox(Countdown cd)
+    private void initHoverHBox()
     {
         int leftRightPadding = 16;
         double height = this.HEIGHT - this.CONTENT_HEIGHT;
@@ -80,8 +82,8 @@ public class CountdownPane extends VBox
                 ft.stop();
                 setMouseEnterAnim(ft);
                 LocalDate now = LocalDate.now();
-                String status = cd.getStatusString(now);
-                String end = cd.getStringDueDate(now);
+                String status = countdown.getStatusString(now);
+                String end = countdown.getStringDueDate(now);
                 statusLabel.setText(status);
                 endDateLabel.setText("Due: " + end);
                 ft.play();
@@ -111,7 +113,7 @@ public class CountdownPane extends VBox
         anim.setToValue(0);
     }
 
-    private void initContentHBox(Countdown cd, LocalDate now)
+    private void initContentHBox(LocalDate now)
     {
         this.contentHBox = new HBox();
         contentHBox.setPrefSize(WIDTH, CONTENT_HEIGHT);
@@ -120,11 +122,11 @@ public class CountdownPane extends VBox
         CustomBox border = new CustomBox();
         CustomBox.applyToPane(contentHBox, border);
         // adds the name display
-        contentHBox.getChildren().add(createNameLabel(cd));
+        contentHBox.getChildren().add(createNameLabel(countdown));
         // adds the divider
         contentHBox.getChildren().add(createVerticalDivider());
         // adds the day countdown pane
-        contentHBox.getChildren().add(createCountdownDisplay(cd, now));
+        contentHBox.getChildren().add(createCountdownDisplay(countdown, now));
 
         // contentHBox.setBackground(new Background(new BackgroundFill(Color.GRAY, null, null)));
     }
@@ -186,5 +188,10 @@ public class CountdownPane extends VBox
         HBox.setMargin(display, new Insets(10, 10, 10, 0));
         HBox.setHgrow(display, Priority.ALWAYS);
         return display;
+    }
+
+    public Countdown getCountdown()
+    {
+        return countdown;
     }
 }

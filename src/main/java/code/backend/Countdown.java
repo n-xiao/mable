@@ -80,15 +80,20 @@ public class Countdown
         return dueDateTime.isBefore(nowDateTime) && !isDone;
     }
 
-    public void setName(String name)
+    protected void setName(String name)
     {
         this.name = name;
     }
 
-    public void setDueDate(int day, int month, int year)
+    protected void setDueDate(int day, int month, int year)
     {
         LocalDate dueDate = LocalDate.of(year, month, day);
         this.dueDateTime = dueDate.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
+    }
+
+    protected void setDone(boolean isDone)
+    {
+        this.isDone = isDone;
     }
 
 }

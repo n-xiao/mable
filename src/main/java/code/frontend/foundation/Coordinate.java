@@ -40,27 +40,21 @@ public class Coordinate
         this.yDeviation = both;
     }
 
-    public double getVarX(boolean recompute)
+    public double getVarX()
     {
-        if (recompute)
-            {
-                double min = (this.x < this.xDeviation) ? -this.x : -this.xDeviation;
-                double max = this.xDeviation;
-                double deviation = min + (Math.random() * ((max - min) + 1));
-                this.varX = this.x + deviation;
-            }
+        double min = (this.x < this.xDeviation) ? -this.x : -this.xDeviation;
+        double max = this.xDeviation;
+        double deviation = min + (Math.random() * ((max - min) + 1));
+        this.varX = this.x + deviation;
         return this.varX;
     }
 
-    public double getVarY(boolean recompute)
+    public double getVarY()
     {
-        if (recompute)
-            {
-                double min = (this.y < this.yDeviation) ? -this.y : -this.yDeviation;
-                double max = this.yDeviation;
-                double deviation = min + (Math.random() * ((max - min) + 1));
-                this.varY = this.y + deviation;
-            }
+        double min = (this.y < this.yDeviation) ? -this.y : -this.yDeviation;
+        double max = this.yDeviation;
+        double deviation = min + (Math.random() * ((max - min) + 1));
+        this.varY = this.y + deviation;
         return this.varY;
     }
 }

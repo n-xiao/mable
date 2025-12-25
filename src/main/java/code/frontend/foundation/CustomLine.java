@@ -15,6 +15,7 @@ public class CustomLine extends ResizableCanvas
     private Coordinate start;
     private Coordinate end;
     private Coordinate mid;
+    private Coordinate midVar;
     private int thickness;
     private Type lineType;
     private double startPadding;
@@ -63,7 +64,11 @@ public class CustomLine extends ResizableCanvas
         gc.moveTo(start.x, start.y);
         gc.lineTo(end.x, end.y);
         // adds the messy line
-        gc.quadraticCurveTo(mid.getVarX(recompute), mid.getVarY(recompute), start.x, start.y);
+        double midVarX = mid.getVarX();
+        double midVarY = mid.getVarY();
+        if (recompute || this.midVar == null)
+            this.midVar = new Coordinate(midVarX, midVarY);
+        gc.quadraticCurveTo(midVar.x, midVar.y, start.x, start.y);
         gc.stroke();
     }
 

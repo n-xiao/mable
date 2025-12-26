@@ -19,7 +19,7 @@ public class TextInput extends BorderPane
 
     public TextInput()
     {
-        this.border = new CustomBox(2);
+        this.border = new CustomBox(Vals.GraphicalUI.INPUT_BORDER_WIDTH);
         CustomBox.applyToPane(this, border);
         this.textField = new TextField();
         this.textField.setBackground(null);

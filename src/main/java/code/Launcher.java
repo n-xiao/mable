@@ -30,11 +30,6 @@ public class Launcher extends Application
         p.relocate(0, 0);
         p.setBackground(null);
 
-        TextInput tiTest = new TextInput();
-        tiTest.setPrefSize(200, 50);
-        tiTest.relocate(30, 30);
-        p.getChildren().add(tiTest);
-
         Scene scene = new Scene(p);
         scene.setFill(Vals.Colour.BACKGROUND);
         stage.setScene(scene);

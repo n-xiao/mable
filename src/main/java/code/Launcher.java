@@ -1,6 +1,7 @@
 package code;
 
 import code.frontend.misc.Vals;
+import code.frontend.panels.TextInput;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -28,6 +29,11 @@ public class Launcher extends Application
         p.setMinSize(Vals.GraphicalUI.MIN_WIDTH, Vals.GraphicalUI.MIN_HEIGHT);
         p.relocate(0, 0);
         p.setBackground(null);
+
+        TextInput tiTest = new TextInput();
+        tiTest.setPrefSize(200, 50);
+        tiTest.relocate(30, 30);
+        p.getChildren().add(tiTest);
 
         Scene scene = new Scene(p);
         scene.setFill(Vals.Colour.BACKGROUND);

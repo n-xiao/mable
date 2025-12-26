@@ -16,22 +16,27 @@ public class TextInput extends BorderPane
 {
     private TextField textField;
     private CustomBox border;
+    private InputFilter inputFilter;
 
     public TextInput()
     {
-        this.border = new CustomBox(Vals.GraphicalUI.INPUT_BORDER_WIDTH);
+        border = new CustomBox(Vals.GraphicalUI.INPUT_BORDER_WIDTH);
         CustomBox.applyToPane(this, border);
-        this.textField = new TextField();
-        this.textField.setBackground(null);
-        this.textField.setBorder(null);
-        this.textField.prefHeightProperty().bind(this.heightProperty());
-        this.textField.prefWidthProperty().bind(this.widthProperty());
-        this.textField.setFont(new Font(Vals.FontTools.FONT_FAM + " Medium", 13));
-        this.textField.setStyle("-fx-text-fill: white");
+        textField = new TextField();
+        textField.setBackground(null);
+        textField.setBorder(null);
+        textField.prefHeightProperty().bind(this.heightProperty());
+        textField.prefWidthProperty().bind(this.widthProperty());
+        textField.setFont(new Font(Vals.FontTools.FONT_FAM + " Medium", 13));
+        textField.setStyle("-fx-text-fill: white");
 
-        BorderPane.setAlignment(this.textField, Pos.CENTER);
-        BorderPane.setMargin(this.textField, new Insets(6));
-        this.setCenter(this.textField);
+        inputFilter = new InputFilter();
+        TextFormatter<String> tf = new TextFormatter<String>(inputFilter);
+        textField.setTextFormatter(tf);
+
+        BorderPane.setAlignment(textField, Pos.CENTER);
+        BorderPane.setMargin(textField, new Insets(6));
+        this.setCenter(textField);
     }
 
     public TextField getTextField()
@@ -41,24 +46,33 @@ public class TextInput extends BorderPane
 
     public void setTextLimit(int chars)
     {
-        MaxLengthFilter mlf = new MaxLengthFilter(chars);
-        TextFormatter<String> tf = new TextFormatter<String>(mlf);
-        textField.setTextFormatter(tf);
+        inputFilter.maxLength = chars;
     }
 
-    private class MaxLengthFilter implements UnaryOperator<TextFormatter.Change>
+    public void setNumInputOnly(boolean numOnly)
+    {
+        inputFilter.numOnly = numOnly;
+    }
+
+    private class InputFilter implements UnaryOperator<TextFormatter.Change>
     {
         private int maxLength;
+        private boolean numOnly;
 
-        public MaxLengthFilter(int maxLength)
+        public InputFilter()
         {
-            this.maxLength = maxLength;
+            this.maxLength = 0;
+            this.numOnly = false;
         }
 
         @Override
         public Change apply(Change t)
         {
-            return (t.getControlNewText().length() > maxLength) ? null : t;
+            String text = t.getControlNewText();
+            boolean hasNumOnly = text.matches("^[0-9]+$");
+            // boolean invalid = (maxLength > 0 && text.length() > maxLength) || (numOnly && !hasNumOnly);
+            boolean valid = (maxLength <= 0 || text.length() <= maxLength) && (!numOnly || hasNumOnly);
+            return (valid) ? t : null;
         }
     }
 }

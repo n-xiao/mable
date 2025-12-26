@@ -131,7 +131,7 @@ public class CountdownPane extends VBox
         contentHBox.setFillHeight(true);
         // adds the border
         this.border = new CustomBox();
-        CustomBox.applyToPane(contentHBox, border);
+        CustomBox.applyCustomBorder(contentHBox, border);
         // adds the name display
         contentHBox.getChildren().add(createNameLabel(countdown));
         // adds the divider
@@ -166,7 +166,7 @@ public class CountdownPane extends VBox
         pane.setPrefSize(DIV_WIDTH, HEIGHT);
         separator.setStrokeColour(colour);
         separator.setPadding(20);
-        CustomLine.applyToPane(pane, separator);
+        CustomLine.applyCustomBorder(pane, separator);
         return pane;
     }
 

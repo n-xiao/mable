@@ -37,7 +37,7 @@ public abstract class ResizableCanvas extends Canvas
 
     protected abstract void draw(GraphicsContext gc, boolean recompute);
 
-    public static Pane applyToPane(Pane p, ResizableCanvas canvas)
+    public static Pane applyCustomBorder(Pane p, ResizableCanvas canvas)
     {
         p.getChildren().add(canvas);
         canvas.widthProperty().bind(p.widthProperty());

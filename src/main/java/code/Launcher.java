@@ -1,8 +1,11 @@
 package code;
 
+import javax.swing.JTextField;
+
 import code.frontend.misc.Vals;
-import code.frontend.panels.TextInput;
+import code.frontend.panels.InputField;
 import javafx.application.Application;
+import javafx.embed.swing.SwingNode;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;

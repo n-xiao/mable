@@ -28,7 +28,7 @@ public abstract class Button extends Pane
     public Button(String text)
     {
         CustomBox border = new CustomBox(borderThickness);
-        CustomBox.applyToPane(this, border);
+        CustomBox.applyCustomBorder(this, border);
 
         Label label = new Label(text);
         label.setTextFill(border.getStrokeColour());

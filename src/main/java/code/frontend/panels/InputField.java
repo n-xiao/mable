@@ -10,25 +10,29 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextFormatter.Change;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
-public class TextInput extends BorderPane
+public class InputField extends BorderPane
 {
     private TextField textField;
     private CustomBox border;
     private InputFilter inputFilter;
+    private Color borderColour;
 
-    public TextInput()
+    public InputField()
     {
+        borderColour = Color.WHITE;
         border = new CustomBox(Vals.GraphicalUI.INPUT_BORDER_WIDTH);
-        CustomBox.applyToPane(this, border);
+        CustomBox.applyCustomBorder(this, border);
         textField = new TextField();
         textField.setBackground(null);
         textField.setBorder(null);
         textField.prefHeightProperty().bind(this.heightProperty());
         textField.prefWidthProperty().bind(this.widthProperty());
         textField.setFont(new Font(Vals.FontTools.FONT_FAM + " Medium", 13));
-        textField.setStyle("-fx-text-fill: white");
+        textField.setStyle("-fx-text-fill: white; user-select: none;");
+        this.applyFocusLogic();
 
         inputFilter = new InputFilter();
         TextFormatter<String> tf = new TextFormatter<String>(inputFilter);
@@ -37,6 +41,22 @@ public class TextInput extends BorderPane
         BorderPane.setAlignment(textField, Pos.CENTER);
         BorderPane.setMargin(textField, new Insets(6));
         this.setCenter(textField);
+    }
+
+    private void applyFocusLogic()
+    {
+        textField.focusedProperty().addListener(((observable, oldValue, newValue) ->
+        {
+            if (newValue)
+                {
+                    borderColour = border.getStrokeColour();
+                    border.setStrokeColour(Vals.Colour.SELECTED);
+                }
+            else
+                {
+                    border.setStrokeColour(borderColour);
+                }
+        }));
     }
 
     public TextField getTextField()
@@ -52,6 +72,12 @@ public class TextInput extends BorderPane
     public void setNumInputOnly(boolean numOnly)
     {
         inputFilter.numOnly = numOnly;
+    }
+
+    public void setBorderColour(Color borderColour)
+    {
+        this.borderColour = borderColour;
+        border.setStrokeColour(borderColour);
     }
 
     private class InputFilter implements UnaryOperator<TextFormatter.Change>

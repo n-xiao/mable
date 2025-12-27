@@ -2,6 +2,7 @@ package code.frontend.panels;
 
 import code.frontend.foundation.CustomBox;
 import code.frontend.misc.Vals;
+
 import javafx.animation.FadeTransition;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -16,8 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 
-public abstract class Button extends Pane
-{
+public abstract class Button extends Pane {
     private final double HOVER_OPACITY = 0.2;
     private Font labelFont = Vals.FontTools.getButtonFont();
     private double borderThickness = Vals.GraphicalUI.DRAW_THICKNESS;
@@ -25,8 +25,7 @@ public abstract class Button extends Pane
     private Pane animPane = new Pane();
     private FadeTransition ft = new FadeTransition();
 
-    public Button(String text)
-    {
+    public Button(String text) {
         CustomBox border = new CustomBox(borderThickness);
         CustomBox.applyCustomBorder(this, border);
 
@@ -41,8 +40,9 @@ public abstract class Button extends Pane
 
         double vertiInset = border.getVertiPadding() + 3;
         double horizInset = border.getHorizPadding() + 4;
-        Insets animPaneInsets = new Insets(vertiInset,horizInset,vertiInset,horizInset);
-        BackgroundFill bgFill = new BackgroundFill(feedbackColour, new CornerRadii(12), animPaneInsets);
+        Insets animPaneInsets = new Insets(vertiInset, horizInset, vertiInset, horizInset);
+        BackgroundFill bgFill =
+            new BackgroundFill(feedbackColour, new CornerRadii(12), animPaneInsets);
         animPane.setBackground(new Background(bgFill));
         animPane.prefWidthProperty().bind(this.widthProperty());
         animPane.prefHeightProperty().bind(this.heightProperty());
@@ -53,28 +53,22 @@ public abstract class Button extends Pane
 
         this.getChildren().addAll(label, animPane);
 
-        this.setOnMouseClicked(new EventHandler<MouseEvent>()
-        {
+        this.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(MouseEvent event)
-            {
+            public void handle(MouseEvent event) {
                 executeOnClick();
                 playClickAnim();
             }
         });
-        this.setOnMouseEntered(new EventHandler<MouseEvent>()
-        {
+        this.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(MouseEvent event)
-            {
+            public void handle(MouseEvent event) {
                 playMouseEnterAnim();
             }
         });
-        this.setOnMouseExited(new EventHandler<MouseEvent>()
-        {
+        this.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(MouseEvent event)
-            {
+            public void handle(MouseEvent event) {
                 playMouseExitAnim();
             }
         });
@@ -82,8 +76,7 @@ public abstract class Button extends Pane
 
     public abstract void executeOnClick();
 
-    private void playClickAnim()
-    {
+    private void playClickAnim() {
         ft.stop();
         ft.setDuration(Duration.millis(200));
         ft.setFromValue(0.8);
@@ -91,8 +84,7 @@ public abstract class Button extends Pane
         ft.playFromStart();
     }
 
-    private void playMouseEnterAnim()
-    {
+    private void playMouseEnterAnim() {
         ft.stop();
         ft.setDuration(Duration.millis(300));
         ft.setFromValue(0);
@@ -100,8 +92,7 @@ public abstract class Button extends Pane
         ft.playFromStart();
     }
 
-    private void playMouseExitAnim()
-    {
+    private void playMouseExitAnim() {
         ft.stop();
         ft.setDuration(Duration.millis(300));
         ft.setFromValue(HOVER_OPACITY);
@@ -109,14 +100,11 @@ public abstract class Button extends Pane
         ft.playFromStart();
     }
 
-    public void setFeedbackColour(Color feedbackColour)
-    {
+    public void setFeedbackColour(Color feedbackColour) {
         this.feedbackColour = feedbackColour;
     }
 
-    public void setBorderThickness(int borderThickness)
-    {
+    public void setBorderThickness(int borderThickness) {
         this.borderThickness = borderThickness;
     }
-
 }

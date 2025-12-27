@@ -1,27 +1,21 @@
 package code;
 
-import javax.swing.JTextField;
-
 import code.frontend.misc.Vals;
-import code.frontend.panels.InputField;
+
 import javafx.application.Application;
-import javafx.embed.swing.SwingNode;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-public class Launcher extends Application
-{
+public class Launcher extends Application {
     @Override
-    public void init() throws Exception
-    {
+    public void init() throws Exception {
         Vals.FontTools.initFonts();
         // StorageHandler.init();
     }
 
     @Override
-    public void start(Stage stage)
-    {
+    public void start(Stage stage) {
         stage.setMinWidth(Vals.GraphicalUI.MIN_WIDTH);
         stage.setMinHeight(Vals.GraphicalUI.MIN_HEIGHT);
         stage.setWidth(Vals.GraphicalUI.PREF_WIDTH);
@@ -39,9 +33,7 @@ public class Launcher extends Application
         stage.show();
     }
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         launch();
     }
-
 }

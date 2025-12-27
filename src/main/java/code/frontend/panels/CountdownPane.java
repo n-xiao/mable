@@ -1,11 +1,10 @@
 package code.frontend.panels;
 
-import java.time.LocalDate;
-
 import code.backend.Countdown;
 import code.frontend.foundation.CustomBox;
 import code.frontend.foundation.CustomLine;
 import code.frontend.misc.Vals;
+
 import javafx.animation.FadeTransition;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -24,8 +23,9 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
-public class CountdownPane extends VBox
-{
+import java.time.LocalDate;
+
+public class CountdownPane extends VBox {
     public final double WIDTH = 280;
     public final double HEIGHT = 140;
     public final double NAME_WIDTH = 150;
@@ -41,8 +41,7 @@ public class CountdownPane extends VBox
     private CustomBox border;
     private boolean selected;
 
-    public CountdownPane(Countdown cd, LocalDate now)
-    {
+    public CountdownPane(Countdown cd, LocalDate now) {
         this.countdown = cd;
         this.selected = false;
         this.setAlignment(Pos.CENTER);
@@ -52,8 +51,7 @@ public class CountdownPane extends VBox
         this.getChildren().addAll(this.hoverHBox, this.contentHBox);
     }
 
-    private void initHoverHBox()
-    {
+    private void initHoverHBox() {
         int leftRightPadding = 16;
         double height = this.HEIGHT - this.CONTENT_HEIGHT;
         this.hoverHBox = new HBox();
@@ -81,13 +79,12 @@ public class CountdownPane extends VBox
         // hoverHBox.setBackground(new Background(new BackgroundFill(Color.VIOLET, null, null)));
 
         // todo mouse listener stuff
-        contentHBox.setOnMouseEntered(new EventHandler<MouseEvent>()
-        {
+        contentHBox.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(MouseEvent event)
-            {
+            public void handle(MouseEvent event) {
                 ft.stop();
-                if (selected) return; // do nothing if selected
+                if (selected)
+                    return; // do nothing if selected
                 setMouseEnterAnim(ft);
                 // TODO: put this in its own update method later, to be called by a watchdog
                 LocalDate now = LocalDate.now();
@@ -99,12 +96,11 @@ public class CountdownPane extends VBox
             }
         });
 
-        contentHBox.setOnMouseExited(new EventHandler<MouseEvent>()
-        {
+        contentHBox.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(MouseEvent event)
-            {
-                if (selected) return; // do nothing if selected
+            public void handle(MouseEvent event) {
+                if (selected)
+                    return; // do nothing if selected
                 ft.stop();
                 setMouseExitAnim(ft);
                 ft.playFromStart();
@@ -112,20 +108,17 @@ public class CountdownPane extends VBox
         });
     }
 
-    private void setMouseEnterAnim(FadeTransition anim)
-    {
+    private void setMouseEnterAnim(FadeTransition anim) {
         anim.setFromValue(0);
         anim.setToValue(1);
     }
 
-    private void setMouseExitAnim(FadeTransition anim)
-    {
+    private void setMouseExitAnim(FadeTransition anim) {
         anim.setFromValue(1);
         anim.setToValue(0);
     }
 
-    private void initContentHBox(LocalDate now)
-    {
+    private void initContentHBox(LocalDate now) {
         this.contentHBox = new HBox();
         contentHBox.setPrefSize(WIDTH, CONTENT_HEIGHT);
         contentHBox.setFillHeight(true);
@@ -142,8 +135,7 @@ public class CountdownPane extends VBox
         // contentHBox.setBackground(new Background(new BackgroundFill(Color.GRAY, null, null)));
     }
 
-    private Label createNameLabel(Countdown cd)
-    {
+    private Label createNameLabel(Countdown cd) {
         String name = cd.getName();
         Label nameLabel = new Label(name);
         Font nameFont = Font.font(Vals.FontTools.FONT_FAM, FontWeight.SEMI_BOLD, 19);
@@ -158,8 +150,7 @@ public class CountdownPane extends VBox
         return nameLabel;
     }
 
-    private Pane createVerticalDivider()
-    {
+    private Pane createVerticalDivider() {
         Pane pane = new Pane();
         Color colour = Color.rgb(255, 255, 255, 0.3);
         CustomLine separator = new CustomLine(2, CustomLine.Type.VERTICAL_TYPE);
@@ -170,8 +161,7 @@ public class CountdownPane extends VBox
         return pane;
     }
 
-    private VBox createCountdownDisplay(Countdown cd, LocalDate now)
-    {
+    private VBox createCountdownDisplay(Countdown cd, LocalDate now) {
         VBox display = new VBox();
         int daysLeft = Math.abs(cd.daysUntilDue(now));
 
@@ -201,42 +191,33 @@ public class CountdownPane extends VBox
         return display;
     }
 
-    private void initSelectable()
-    {
-        contentHBox.setOnMouseClicked(new EventHandler<MouseEvent>()
-        {
+    private void initSelectable() {
+        contentHBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(MouseEvent event)
-            {
+            public void handle(MouseEvent event) {
                 ft.stop();
                 hoverHBox.setOpacity(1);
-                if (selected)
-                    {
-                        // deselct procedure
-                        border.setStrokeColour(Color.WHITE);
-                        statusLabel.setTextFill(Vals.Colour.TXT_GHOST);
-                        endDateLabel.setTextFill(Vals.Colour.TXT_GHOST);
-                    }
-                else
-                    {
-                        // select procedure
-                        border.setStrokeColour(Vals.Colour.SELECTED);
-                        statusLabel.setTextFill(Vals.Colour.SELECTED);
-                        endDateLabel.setTextFill(Vals.Colour.SELECTED);
-                    }
+                if (selected) {
+                    // deselct procedure
+                    border.setStrokeColour(Color.WHITE);
+                    statusLabel.setTextFill(Vals.Colour.TXT_GHOST);
+                    endDateLabel.setTextFill(Vals.Colour.TXT_GHOST);
+                } else {
+                    // select procedure
+                    border.setStrokeColour(Vals.Colour.SELECTED);
+                    statusLabel.setTextFill(Vals.Colour.SELECTED);
+                    endDateLabel.setTextFill(Vals.Colour.SELECTED);
+                }
                 selected = !selected;
             }
         });
     }
 
-    public Countdown getCountdown()
-    {
+    public Countdown getCountdown() {
         return countdown;
     }
 
-    public boolean isSelected()
-    {
+    public boolean isSelected() {
         return selected;
     }
-
 }

@@ -1,13 +1,5 @@
 package code.frontend.misc;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.text.CompactNumberFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Locale;
-
 import javafx.geometry.Insets;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -15,95 +7,86 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
-public class Vals
-{
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Locale;
 
-    public final class Colour
-    {
+public class Vals {
+    public final class Colour {
         public static final Color BACKGROUND = Color.rgb(20, 20, 30);
         public static final Color SIDE_BAR = Color.rgb(67, 67, 75);
         public static final Color VIEW_PICKER = Color.rgb(44, 44, 53);
         public static final Color FEEDBACK = Color.rgb(75, 148, 174);
         public static final Color TXT_GHOST = Color.rgb(200, 200, 230);
         public static final Color SELECTED = Color.rgb(136, 175, 252);
+        public static final Color ERROR = Color.rgb(163, 11, 11);
 
-        public static Background createBG(Color c, double radius, double ins)
-        {
+        public static Background createBG(Color c, double radius, double ins) {
             BackgroundFill bgFill = new BackgroundFill(c, new CornerRadii(radius), new Insets(ins));
             return new Background(bgFill);
         }
     }
 
-    public final class GraphicalUI
-    {
+    public final class GraphicalUI {
         public static final double DRAW_THICKNESS = 2.5;
         public static final double INPUT_BORDER_WIDTH = 2;
         public static final int PREF_WIDTH = 1120;
         public static final int PREF_HEIGHT = 730;
         public static final int MIN_WIDTH = 620;
         public static final int MIN_HEIGHT = 430;
+        public static final int INPUT_MIN_HEIGHT = 50;
         // CORNER_OFFSET > CORNER_DEVIATION
         public static final double DEVIATION = 0.023;
         public static final double CORNER_DEVIATION = 0.03;
         public static final double CORNER_OFFSET = 0.2;
 
-        public static String intToString(int input)
-        {
-            NumberFormat formatter = NumberFormat
-                                     .getCompactNumberInstance(Locale.US, NumberFormat.Style.SHORT);
+        public static String intToString(int input) {
+            NumberFormat formatter =
+                NumberFormat.getCompactNumberInstance(Locale.US, NumberFormat.Style.SHORT);
             return formatter.format(input);
         }
     }
 
-    public class FontTools
-    {
-
+    public class FontTools {
         public static final String FONT_FAM = "Shantell Sans";
 
-        public static Font getButtonFont()
-        {
+        public static Font getButtonFont() {
             return new Font(FONT_FAM + " Medium", 16);
         }
 
-        public static void initFonts()
-        {
-            try
-                {
-                    InputStream manifestStream = Thread.currentThread()
-                                                 .getContextClassLoader()
-                                                 .getResourceAsStream("manifest.txt");
-                    InputStreamReader manifestStreamReader = new InputStreamReader(manifestStream);
-                    BufferedReader manifestReader = new BufferedReader(manifestStreamReader);
+        public static void initFonts() {
+            try {
+                InputStream manifestStream =
+                    Thread.currentThread().getContextClassLoader().getResourceAsStream(
+                        "manifest.txt");
+                InputStreamReader manifestStreamReader = new InputStreamReader(manifestStream);
+                BufferedReader manifestReader = new BufferedReader(manifestStreamReader);
 
-                    String fileName;
-                    ArrayList<String> fontFilePaths = new ArrayList<>();
+                String fileName;
+                ArrayList<String> fontFilePaths = new ArrayList<>();
 
-                    while ((fileName = manifestReader.readLine()) != null)
-                        fontFilePaths.add(fileName);
+                while ((fileName = manifestReader.readLine()) != null) fontFilePaths.add(fileName);
 
-                    manifestStream.close();
+                manifestStream.close();
 
-                    for (String string : fontFilePaths)
-                        loadFont(string);
+                for (String string : fontFilePaths) loadFont(string);
 
-                }
-            catch (Exception e)
-                {
-                    System.err.println("Failed to init fonts");
-                    System.err.println(e.getStackTrace());
-                }
+            } catch (Exception e) {
+                System.err.println("Failed to init fonts");
+                System.err.println(e.getStackTrace());
+            }
         }
 
-        private static void loadFont(String fileName) throws Exception
-        {
-            InputStream stream = Thread.currentThread()
-                                       .getContextClassLoader()
-                                       .getResourceAsStream(fileName);
+        private static void loadFont(String fileName) throws Exception {
+            InputStream stream =
+                Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
             Font.loadFont(stream, 12);
             // System.out.println(f.getName());
             stream.close();
         }
-
     }
 
     private Vals() {}

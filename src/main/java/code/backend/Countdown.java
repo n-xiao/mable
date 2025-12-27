@@ -6,9 +6,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-
-public class Countdown
-{
+public class Countdown {
     private String name = null;
     private ZonedDateTime dueDateTime;
     private boolean isDone = false;
@@ -22,8 +20,7 @@ public class Countdown
      * the frontend; it is assumed that all values passed to this constructor will not
      * cause errors due to incompatible types (e.g integer over/under flow).
      */
-    public Countdown(String name, int day, int month, int year)
-    {
+    public Countdown(String name, int day, int month, int year) {
         this.ID = UUID.randomUUID();
         this.name = name;
         LocalDate dueDate = LocalDate.of(year, month, day);
@@ -33,20 +30,17 @@ public class Countdown
     /*
      * Returns days until due. Keep in mind that this is a vector.
      */
-    public int daysUntilDue(LocalDate now)
-    {
+    public int daysUntilDue(LocalDate now) {
         ZonedDateTime zonedNow = now.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
         Duration duration = Duration.between(zonedNow, this.dueDateTime);
         return (int) duration.toDaysPart();
     }
 
-    public LocalDate getLocalDueDate(LocalDate now)
-    {
+    public LocalDate getLocalDueDate(LocalDate now) {
         return now.plusDays(daysUntilDue(now));
     }
 
-    public String getStringDueDate(LocalDate now)
-    {
+    public String getStringDueDate(LocalDate now) {
         LocalDate localDue = getLocalDueDate(now);
         String day = Integer.toString(localDue.getDayOfMonth());
         String month = Integer.toString(localDue.getMonthValue());
@@ -54,18 +48,15 @@ public class Countdown
         return day + "/" + month + "/" + year; // uses the correct format
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public ZonedDateTime getDueDateTime()
-    {
+    public ZonedDateTime getDueDateTime() {
         return dueDateTime;
     }
 
-    public String getStatusString(LocalDate now)
-    {
+    public String getStatusString(LocalDate now) {
         if (isOverdue(now))
             return "Overdue";
         else if (this.isDone)
@@ -74,26 +65,21 @@ public class Countdown
             return "Ongoing";
     }
 
-    public boolean isOverdue(LocalDate now)
-    {
+    public boolean isOverdue(LocalDate now) {
         ZonedDateTime nowDateTime = now.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
         return dueDateTime.isBefore(nowDateTime) && !isDone;
     }
 
-    protected void setName(String name)
-    {
+    protected void setName(String name) {
         this.name = name;
     }
 
-    protected void setDueDate(int day, int month, int year)
-    {
+    protected void setDueDate(int day, int month, int year) {
         LocalDate dueDate = LocalDate.of(year, month, day);
         this.dueDateTime = dueDate.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
     }
 
-    protected void setDone(boolean isDone)
-    {
+    protected void setDone(boolean isDone) {
         this.isDone = isDone;
     }
-
 }

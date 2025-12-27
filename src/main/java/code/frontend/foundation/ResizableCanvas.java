@@ -10,68 +10,56 @@ import javafx.scene.paint.Color;
  * However, resizing should be kept to a minimum because
  * it causes many re-drawings to occur, causing UI lag.
  */
-public abstract class ResizableCanvas extends Canvas
-{
-
+public abstract class ResizableCanvas extends Canvas {
     private Color strokeColour = Color.WHITE;
 
-    public ResizableCanvas()
-    {
+    public ResizableCanvas() {
         widthProperty().addListener(event -> resizeAndDraw(true));
         heightProperty().addListener(event -> resizeAndDraw(true));
     }
 
-    protected void resizeAndDraw(boolean recompute)
-    {
+    protected void resizeAndDraw(boolean recompute) {
         double width = this.getWidth();
         double height = this.getHeight();
-        if (width > 0 && height > 0)
-            {
-                GraphicsContext gc = getGraphicsContext2D();
-                gc.clearRect(0, 0, width, height);
-                gc.setStroke(this.strokeColour);
-                draw(gc, recompute);
-            }
+        if (width > 0 && height > 0) {
+            GraphicsContext gc = getGraphicsContext2D();
+            gc.clearRect(0, 0, width, height);
+            gc.setStroke(this.strokeColour);
+            draw(gc, recompute);
+        }
         this.setManaged(false); // this stops layouts from messing with it
     }
 
     protected abstract void draw(GraphicsContext gc, boolean recompute);
 
-    public static Pane applyCustomBorder(Pane p, ResizableCanvas canvas)
-    {
+    public static Pane applyCustomBorder(Pane p, ResizableCanvas canvas) {
         p.getChildren().add(canvas);
         canvas.widthProperty().bind(p.widthProperty());
         canvas.heightProperty().bind(p.heightProperty());
         return p;
     }
 
-    public void setStrokeColour(Color strokeColour)
-    {
+    public void setStrokeColour(Color strokeColour) {
         this.strokeColour = strokeColour;
         resizeAndDraw(false);
     }
 
-    public Color getStrokeColour()
-    {
+    public Color getStrokeColour() {
         return strokeColour;
     }
 
     @Override
-    public boolean isResizable()
-    {
+    public boolean isResizable() {
         return true;
     }
 
     @Override
-    public double prefWidth(double height)
-    {
+    public double prefWidth(double height) {
         return getWidth();
     }
 
     @Override
-    public double prefHeight(double width)
-    {
+    public double prefHeight(double width) {
         return getHeight();
     }
-
 }

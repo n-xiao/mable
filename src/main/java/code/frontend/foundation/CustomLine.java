@@ -4,13 +4,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 
-public class CustomLine extends ResizableCanvas
-{
-    public enum Type
-    {
-        VERTICAL_TYPE,
-        HORIZONTAL_TYPE
-    }
+public class CustomLine extends ResizableCanvas {
+    public enum Type { VERTICAL_TYPE, HORIZONTAL_TYPE }
 
     private Coordinate start;
     private Coordinate end;
@@ -22,8 +17,7 @@ public class CustomLine extends ResizableCanvas
     private double endPadding;
     private final double DEVIATION; // determined using thickness
 
-    public CustomLine(int thickness, Type type)
-    {
+    public CustomLine(int thickness, Type type) {
         this.DEVIATION = 0.5;
         this.thickness = thickness;
         this.lineType = type;
@@ -32,8 +26,7 @@ public class CustomLine extends ResizableCanvas
     }
 
     @Override
-    protected void draw(GraphicsContext gc, boolean recompute)
-    {
+    protected void draw(GraphicsContext gc, boolean recompute) {
         gc.setLineWidth(this.thickness);
         gc.setLineCap(StrokeLineCap.ROUND);
         gc.setLineJoin(StrokeLineJoin.ROUND);
@@ -41,8 +34,7 @@ public class CustomLine extends ResizableCanvas
         double width = this.getWidth();
         double height = this.getHeight();
 
-        switch (this.lineType)
-            {
+        switch (this.lineType) {
             case VERTICAL_TYPE:
                 this.start = new Coordinate(width / 2, startPadding);
                 this.end = new Coordinate(width / 2, height - endPadding);
@@ -53,7 +45,7 @@ public class CustomLine extends ResizableCanvas
                 break;
             default:
                 throw new IllegalArgumentException("Invalid CustomLine Type was encountered.");
-            }
+        }
 
         double midX = (this.start.x + this.end.x) / 2;
         double midY = (this.start.y + this.end.y) / 2;
@@ -72,14 +64,12 @@ public class CustomLine extends ResizableCanvas
         gc.stroke();
     }
 
-    public void setStartPadding(double startPadding)
-    {
+    public void setStartPadding(double startPadding) {
         this.startPadding = startPadding;
         resizeAndDraw(true);
     }
 
-    public void setEndPadding(double endPadding)
-    {
+    public void setEndPadding(double endPadding) {
         this.endPadding = endPadding;
         resizeAndDraw(true);
     }
@@ -87,8 +77,7 @@ public class CustomLine extends ResizableCanvas
     /*
      * Convenience method
      */
-    public void setPadding(double startEndPadding)
-    {
+    public void setPadding(double startEndPadding) {
         this.startPadding = startEndPadding;
         this.endPadding = startEndPadding;
         resizeAndDraw(true);

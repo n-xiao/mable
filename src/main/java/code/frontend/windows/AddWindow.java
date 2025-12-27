@@ -1,7 +1,3 @@
 package code.frontend.windows;
 
-public class AddWindow
-{
-
-
-}
+public class AddWindow {}

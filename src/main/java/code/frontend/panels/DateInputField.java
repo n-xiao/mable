@@ -110,4 +110,16 @@ public class DateInputField extends VBox {
             return null;
         }
     }
+
+    public InputField getDayInput() {
+        return dayInput;
+    }
+
+    public InputField getMonthInput() {
+        return monthInput;
+    }
+
+    public InputField getYearInput() {
+        return yearInput;
+    }
 }

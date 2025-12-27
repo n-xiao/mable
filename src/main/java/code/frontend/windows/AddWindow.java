@@ -25,6 +25,7 @@ public class AddWindow {
     private static InputField nameField;
     private static DateInputField dateField;
     private static InputField daysField;
+    private static Button button;
 
     private AddWindow() {}
 
@@ -57,6 +58,10 @@ public class AddWindow {
     }
 
     private static void configureChildren() {
+        nameField = createNameInputField();
+        dateField = createDateInputField();
+        daysField = createDaysInputField();
+        button = createButton("create!");
         Pane namePart = createNamePart();
         Pane duePart = createDuePart();
         Pane buttonPart = createButtonPart();
@@ -72,7 +77,6 @@ public class AddWindow {
         label.setAlignment(Pos.CENTER_LEFT);
         label.setMaxWidth(UtilityUI.WIDTH);
         label.setFont(UtilityUI.getFont());
-        nameField = new InputField();
         nameField.setMaxWidth(UtilityUI.WIDTH);
         VBox.setMargin(label, new Insets(0, 0, 0, 8));
         // VBox.setMargin(nameField, new Insets(3, 5, 0, 5));
@@ -97,7 +101,6 @@ public class AddWindow {
         dateLabel.setMaxWidth(UtilityUI.WIDTH);
         dateLabel.setFont(UtilityUI.getFont());
         dateLabel.setTextFill(Color.WHITE);
-        dateField = new DateInputField();
         dateField.setMaxWidth(UtilityUI.WIDTH);
         VBox.setMargin(dateLabel, new Insets(0, 0, 0, 8));
         // VBox.setMargin(dateLabel, new Insets(0, 5, 0, 5));
@@ -118,7 +121,6 @@ public class AddWindow {
         daysLabel.setMaxWidth(UtilityUI.WIDTH);
         daysLabel.setFont(UtilityUI.getFont());
         daysLabel.setTextFill(Color.WHITE);
-        daysField = new InputField();
         daysField.setNumInputOnly(true);
         daysField.setTextLimit(5);
         // VBox.setMargin(daysLabel, new Insets(3, 5, 0, 5));
@@ -134,17 +136,60 @@ public class AddWindow {
     private static Pane createButtonPart() {
         BorderPane container = new BorderPane();
         container.setPrefWidth(UtilityUI.WIDTH);
-        Button button = new Button("create!") {
-            @Override
-            public void executeOnClick() {
-                // TODO
-            }
-        };
         button.setMaxSize(150, 40);
         button.setMinSize(150, 40);
         container.setCenter(button);
 
         VBox.setMargin(container, new Insets(30, 0, 40, 0));
         return container;
+    }
+
+    /**
+     * By default, this just returns a new InputField before any
+     * styling has been applied to it by this class. Child classes
+     * can override this method to add properties to the object
+     * before it is styled. Avoid applying changes that may impact
+     * its layout (e.g applying insets or changing its width/height).
+     */
+    protected static InputField createNameInputField() {
+        return new InputField();
+    }
+
+    /**
+     * By default, this just returns a new DateInputField before any
+     * styling has been applied to it by this class. Child classes
+     * can override this method to add properties to the object
+     * before it is styled. Avoid applying changes that may impact
+     * its layout (e.g applying insets or changing its width/height).
+     */
+    protected static DateInputField createDateInputField() {
+        return new DateInputField();
+    }
+
+    /**
+     * By default, this just returns a new InputField before any
+     * styling has been applied to it by this class. Child classes
+     * can override this method to add properties to the object
+     * before it is styled. Avoid applying changes that may impact
+     * its layout (e.g applying insets or changing its width/height).
+     */
+    protected static InputField createDaysInputField() {
+        return new InputField();
+    }
+
+    /**
+     * By default, this just returns a new Button before any
+     * styling has been applied to it by this class. Child classes
+     * can override this method to add properties to the object
+     * before it is styled. Avoid applying changes that may impact
+     * its layout (e.g applying insets or changing its width/height).
+     */
+    protected static Button createButton(String buttonText) {
+        return new Button(buttonText) {
+            @Override
+            public void executeOnClick() {
+                // TODO Auto-generated method stub
+            }
+        };
     }
 }

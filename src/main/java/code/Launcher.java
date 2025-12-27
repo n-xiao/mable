@@ -1,9 +1,10 @@
 package code;
 
+import code.backend.Countdown;
 import code.frontend.misc.Vals;
-import code.frontend.panels.DateInputField;
+import code.frontend.panels.CountdownPane;
 import code.frontend.windows.AddWindow;
-
+import java.time.LocalDate;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -29,9 +30,9 @@ public class Launcher extends Application {
         p.relocate(0, 0);
         p.setBackground(null);
 
-        DateInputField dif = new DateInputField();
-        dif.relocate(50, 50);
-        p.getChildren().add(dif);
+        CountdownPane pd = new CountdownPane(new Countdown("hello", 30, 12, 2025), LocalDate.now());
+        pd.relocate(30, 30);
+        p.getChildren().add(pd);
 
         Scene scene = new Scene(p);
         scene.setFill(Vals.Colour.BACKGROUND);

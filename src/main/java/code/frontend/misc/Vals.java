@@ -50,6 +50,14 @@ public class Vals {
         }
     }
 
+    public class UtilityUI {
+        public static final int WIDTH = 600;
+        public static final int HEIGHT = 800;
+        public static Font getFont() {
+            return Font.font(Vals.FontTools.FONT_FAM, 13);
+        }
+    }
+
     public class FontTools {
         public static final String FONT_FAM = "Shantell Sans";
 

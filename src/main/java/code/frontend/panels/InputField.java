@@ -5,6 +5,7 @@ import code.frontend.misc.Vals;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextFormatter.Change;
@@ -19,6 +20,7 @@ public class InputField extends BorderPane {
     private CustomBox border;
     private InputFilter inputFilter;
     private Color borderColour;
+    private Label label = null;
 
     public InputField() {
         borderColour = Color.WHITE;
@@ -47,8 +49,12 @@ public class InputField extends BorderPane {
             if (newValue) {
                 borderColour = border.getStrokeColour();
                 border.setStrokeColour(Vals.Colour.SELECTED);
+                if (label != null)
+                    label.setTextFill(Vals.Colour.SELECTED);
             } else {
                 border.setStrokeColour(borderColour);
+                if (label != null)
+                    label.setTextFill(borderColour);
             }
         }));
     }
@@ -68,6 +74,17 @@ public class InputField extends BorderPane {
     public void setBorderColour(Color borderColour) {
         this.borderColour = borderColour;
         border.setStrokeColour(borderColour);
+    }
+
+    /**
+     * (Optional) If there is a label that should be associated with this
+     * input, set it here. It is assumed that the border colour and that
+     * that label is the same, where the label will be set to the border's
+     * colour.
+     */
+    public void setLabel(Label label) {
+        label.setTextFill(borderColour);
+        this.label = label;
     }
 
     private class InputFilter implements UnaryOperator<TextFormatter.Change> {

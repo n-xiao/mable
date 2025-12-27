@@ -109,7 +109,8 @@ public class AddWindow {
         dateLabel.setMaxWidth(UtilityUI.WIDTH);
         dateLabel.setFont(UtilityUI.getFont());
         dateLabel.setTextFill(Color.WHITE);
-        dateField.setMaxWidth(UtilityUI.WIDTH);
+        dateField.setMaxWidth(300);
+        dateField.setMinWidth(300);
         VBox.setMargin(dateLabel, new Insets(0, 0, 0, 8));
         // VBox.setMargin(dateLabel, new Insets(0, 5, 0, 5));
         // VBox.setMargin(dateField, new Insets(3, 5, 0, 5));
@@ -121,6 +122,8 @@ public class AddWindow {
         separator.setAlignment(Pos.CENTER);
         separator.setFont(UtilityUI.getFont());
         separator.setTextFill(Color.WHITE);
+        separator.setMaxWidth(UtilityUI.WIDTH);
+        HBox.setHgrow(separator, Priority.ALWAYS);
         HBox.setMargin(separator, new Insets(0, 8, 0, 8));
 
         VBox daysFieldContainer = new VBox();
@@ -131,13 +134,16 @@ public class AddWindow {
         daysLabel.setTextFill(Color.WHITE);
         daysField.setNumInputOnly(true);
         daysField.setTextLimit(7);
+        daysField.setMaxWidth(150);
+        daysField.setMinWidth(150);
+        daysField.getTextField().setAlignment(Pos.CENTER);
         // VBox.setMargin(daysLabel, new Insets(3, 5, 0, 5));
         // VBox.setMargin(daysField, new Insets(-3, 0, 0, 0));
         VBox.setVgrow(filler2, Priority.ALWAYS);
         daysFieldContainer.getChildren().addAll(filler2, daysField, daysLabel);
         container.getChildren().addAll(dateFieldContainer, separator, daysFieldContainer);
+        VBox.setMargin(container, new Insets(10, 14, 10, 14));
 
-        VBox.setMargin(container, new Insets(10));
         return container;
     }
 

@@ -46,6 +46,7 @@ public class DateInputField extends VBox {
         monthInput = new InputField();
         yearInput = new InputField();
         configInputs(dayInput, monthInput, yearInput);
+        yearInput.setPrefWidth(110);
         yearInput.setTextLimit(4);
         ft = new FadeTransition();
         ft.setNode(hintLabel);

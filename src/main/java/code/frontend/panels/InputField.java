@@ -2,7 +2,7 @@ package code.frontend.panels;
 
 import code.frontend.foundation.CustomBox;
 import code.frontend.misc.Vals;
-
+import java.util.function.UnaryOperator;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -12,8 +12,6 @@ import javafx.scene.control.TextFormatter.Change;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-
-import java.util.function.UnaryOperator;
 
 public class InputField extends BorderPane {
     private TextField textField;
@@ -99,7 +97,7 @@ public class InputField extends BorderPane {
         @Override
         public Change apply(Change t) {
             String text = t.getControlNewText();
-            boolean hasNumOnly = text.matches("^[0-9]+$");
+            boolean hasNumOnly = text.matches("^-?[0-9]+$");
             // boolean invalid = (maxLength > 0 && text.length() > maxLength) || (numOnly &&
             // !hasNumOnly);
             boolean valid =

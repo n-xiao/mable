@@ -1,6 +1,7 @@
 package code;
 
 import code.frontend.misc.Vals;
+import code.frontend.panels.DateInputField;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -26,6 +27,10 @@ public class Launcher extends Application {
         p.setMinSize(Vals.GraphicalUI.MIN_WIDTH, Vals.GraphicalUI.MIN_HEIGHT);
         p.relocate(0, 0);
         p.setBackground(null);
+
+        DateInputField dif = new DateInputField();
+        dif.relocate(50, 50);
+        p.getChildren().add(dif);
 
         Scene scene = new Scene(p);
         scene.setFill(Vals.Colour.BACKGROUND);

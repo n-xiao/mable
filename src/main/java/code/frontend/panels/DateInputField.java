@@ -5,12 +5,12 @@ import code.frontend.misc.Vals;
 
 import javafx.animation.FadeTransition;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
 
@@ -32,13 +32,15 @@ public class DateInputField extends VBox {
         contents = new HBox();
         contents.setFillHeight(true);
         contents.prefWidthProperty().bind(this.widthProperty());
+        contents.setMaxHeight(Vals.GraphicalUI.INPUT_MIN_HEIGHT);
         this.setFillWidth(true);
         format = "dd/MM/yyyy"; // to be made configurable later, for the USA peeps
-        hintLabel = new Label("please follow this format: " + format.toLowerCase());
+        hintLabel = new Label("please use this format: " + format.toLowerCase());
         hintLabel.setTextFill(Vals.Colour.ERROR);
         hintLabel.setOpacity(0);
-        hintLabel.setFont(
-            Font.font(Vals.FontTools.FONT_FAM, FontWeight.BOLD, FontPosture.ITALIC, 10));
+        hintLabel.setFont(Font.font(Vals.FontTools.FONT_FAM + " Medium Italic", 13));
+        hintLabel.setAlignment(Pos.CENTER);
+        hintLabel.maxWidthProperty().bind(this.widthProperty());
         border = new CustomBox(Vals.GraphicalUI.INPUT_BORDER_WIDTH);
         CustomBox.applyCustomBorder(contents, border);
         dayInput = new InputField();
@@ -49,8 +51,10 @@ public class DateInputField extends VBox {
         ft = new FadeTransition();
         ft.setNode(hintLabel);
 
+        VBox.setMargin(hintLabel, new Insets(3, 0, 0, 0));
         contents.getChildren().addAll(
             dayInput, createSlashSeparator(), monthInput, createSlashSeparator(), yearInput);
+        this.getChildren().addAll(contents, hintLabel);
     }
 
     private void configInputs(InputField... inputs) {
@@ -62,6 +66,7 @@ public class DateInputField extends VBox {
             input.setTextLimit(2);
             input.setMinHeight(Vals.GraphicalUI.INPUT_MIN_HEIGHT);
             input.setMinWidth(70);
+            input.getTextField().setAlignment(Pos.CENTER);
             HBox.setMargin(input, new Insets(5));
         }
     }
@@ -75,7 +80,7 @@ public class DateInputField extends VBox {
         return slash;
     }
 
-    public void triggerFormatHint() {
+    private void triggerFormatHint() {
         ft.stop();
         ft.setDuration(Duration.millis(200));
         ft.setCycleCount(3);

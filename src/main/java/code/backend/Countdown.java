@@ -11,7 +11,7 @@ public class Countdown {
     private ZonedDateTime dueDateTime;
     private boolean isDone = false;
     public final UUID ID; // represents unique id
-    private final String ZONE_ID_STR = "UTC";
+    private static final String ZONE_ID_STR = "UTC";
 
     // todo String parser
 
@@ -25,6 +25,13 @@ public class Countdown {
         this.name = name;
         LocalDate dueDate = LocalDate.of(year, month, day);
         this.dueDateTime = dueDate.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
+    }
+
+    public static int getDaysBetween(LocalDate date1, LocalDate date2) {
+        ZonedDateTime zoned1 = date1.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
+        ZonedDateTime zoned2 = date2.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
+        Duration duration = Duration.between(zoned1, zoned2);
+        return (int) duration.toDaysPart();
     }
 
     /*

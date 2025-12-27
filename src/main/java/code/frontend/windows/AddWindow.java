@@ -1,14 +1,21 @@
 package code.frontend.windows;
 
+import code.backend.Countdown;
 import code.frontend.misc.Vals;
 import code.frontend.misc.Vals.UtilityUI;
 import code.frontend.panels.Button;
 import code.frontend.panels.DateInputField;
 import code.frontend.panels.InputField;
+import java.time.LocalDate;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -65,6 +72,7 @@ public class AddWindow {
         Pane namePart = createNamePart();
         Pane duePart = createDuePart();
         Pane buttonPart = createButtonPart();
+        createDateDayLink();
         root.getChildren().addAll(namePart, duePart, buttonPart);
     }
 
@@ -122,7 +130,7 @@ public class AddWindow {
         daysLabel.setFont(UtilityUI.getFont());
         daysLabel.setTextFill(Color.WHITE);
         daysField.setNumInputOnly(true);
-        daysField.setTextLimit(5);
+        daysField.setTextLimit(7);
         // VBox.setMargin(daysLabel, new Insets(3, 5, 0, 5));
         // VBox.setMargin(daysField, new Insets(-3, 0, 0, 0));
         VBox.setVgrow(filler2, Priority.ALWAYS);
@@ -142,6 +150,44 @@ public class AddWindow {
 
         VBox.setMargin(container, new Insets(30, 0, 40, 0));
         return container;
+    }
+
+    private static void createDateDayLink() {
+        TextField[] dateTextFields = new TextField[3];
+        dateTextFields[0] = dateField.getDayInput().getTextField();
+        dateTextFields[1] = dateField.getMonthInput().getTextField();
+        dateTextFields[2] = dateField.getYearInput().getTextField();
+        TextField dayTextField = daysField.getTextField();
+
+        for (TextField textField : dateTextFields) {
+            textField.textProperty().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                    if (!textField.isFocused())
+                        return;
+                    LocalDate date = dateField.getLocalDateInput(true);
+                    if (date != null) {
+                        int daysBetween = Countdown.getDaysBetween(LocalDate.now(), date);
+                        dayTextField.setText(Integer.toString(daysBetween));
+                    }
+                }
+            });
+        }
+
+        dayTextField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!dayTextField.isFocused())
+                    return;
+                LocalDate date = LocalDate.now();
+                try {
+                    date = date.plusDays(Integer.parseInt(newValue));
+                } catch (NumberFormatException e) {
+                    return;
+                }
+                dateField.setLocalDateInput(date);
+            }
+        });
     }
 
     /**

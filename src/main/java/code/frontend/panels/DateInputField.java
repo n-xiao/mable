@@ -2,6 +2,7 @@ package code.frontend.panels;
 
 import code.frontend.foundation.CustomBox;
 import code.frontend.misc.Vals;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -32,7 +33,7 @@ public class DateInputField extends VBox {
         contents.prefWidthProperty().bind(this.widthProperty());
         contents.setMaxHeight(Vals.GraphicalUI.INPUT_MIN_HEIGHT);
         this.setFillWidth(true);
-        format = "dd/MM/yyyy"; // to be made configurable later, for the USA peeps
+        format = "dd-MM-yyyy"; // to be made configurable later, for the USA peeps
         hintLabel = new Label("please use this format: " + format.toLowerCase());
         hintLabel.setTextFill(Vals.Colour.ERROR);
         hintLabel.setOpacity(0);
@@ -97,18 +98,28 @@ public class DateInputField extends VBox {
      *
      * @return LocalDate
      */
-    public LocalDate getLocalDateInput() {
+    public LocalDate getLocalDateInput(boolean silent) {
         String day = dayInput.getTextField().getText();
         String month = monthInput.getTextField().getText();
-        String year = monthInput.getTextField().getText();
-        String dateString = day + "-" + month + "-" + year;
-        DateTimeFormatter format = DateTimeFormatter.ofPattern(this.format);
+        String year = yearInput.getTextField().getText();
         try {
+            DecimalFormat decimalFormat = new DecimalFormat("00");
+            day = decimalFormat.format(Integer.parseInt(day));
+            month = decimalFormat.format(Integer.parseInt(month));
+            String dateString = day + "-" + month + "-" + year;
+            DateTimeFormatter format = DateTimeFormatter.ofPattern(this.format);
             return LocalDate.parse(dateString, format);
-        } catch (DateTimeParseException e) {
-            triggerFormatHint();
+        } catch (Exception e) {
+            if (!silent)
+                triggerFormatHint();
             return null;
         }
+    }
+
+    public void setLocalDateInput(LocalDate date) {
+        dayInput.getTextField().setText(Integer.toString(date.getDayOfMonth()));
+        monthInput.getTextField().setText(Integer.toString(date.getMonthValue()));
+        yearInput.getTextField().setText(Integer.toString(date.getYear()));
     }
 
     public InputField getDayInput() {

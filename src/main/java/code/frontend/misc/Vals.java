@@ -1,18 +1,17 @@
 package code.frontend.misc;
 
-import javafx.geometry.Insets;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Locale;
+import javafx.geometry.Insets;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 public class Vals {
     public final class Colour {
@@ -51,10 +50,10 @@ public class Vals {
     }
 
     public class UtilityUI {
-        public static final int WIDTH = 600;
-        public static final int HEIGHT = 800;
+        public static final int WIDTH = 550;
+        public static final int HEIGHT = 370;
         public static Font getFont() {
-            return Font.font(Vals.FontTools.FONT_FAM, 13);
+            return Font.font(Vals.FontTools.FONT_FAM + " Medium", 15);
         }
     }
 

@@ -2,6 +2,7 @@ package code;
 
 import code.frontend.misc.Vals;
 import code.frontend.panels.DateInputField;
+import code.frontend.windows.AddWindow;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -36,6 +37,7 @@ public class Launcher extends Application {
         scene.setFill(Vals.Colour.BACKGROUND);
         stage.setScene(scene);
         stage.show();
+        AddWindow.getInstance();
     }
 
     public static void main(String[] args) {

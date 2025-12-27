@@ -29,9 +29,9 @@ public class InputField extends BorderPane {
         textField = new TextField();
         textField.setBackground(null);
         textField.setBorder(null);
-        textField.prefHeightProperty().bind(this.heightProperty());
-        textField.prefWidthProperty().bind(this.widthProperty());
-        textField.setFont(new Font(Vals.FontTools.FONT_FAM + " Medium", 13));
+        // textField.prefHeightProperty().bind(this.heightProperty());
+        // textField.prefWidthProperty().bind(this.widthProperty());
+        textField.setFont(new Font(Vals.FontTools.FONT_FAM + " Medium", 15));
         textField.setStyle("-fx-text-fill: white; user-select: none;");
         this.applyFocusLogic();
 
@@ -40,7 +40,7 @@ public class InputField extends BorderPane {
         textField.setTextFormatter(tf);
 
         BorderPane.setAlignment(textField, Pos.CENTER);
-        BorderPane.setMargin(textField, new Insets(6));
+        BorderPane.setMargin(textField, new Insets(12, 12, 12, 12));
         this.setCenter(textField);
     }
 
@@ -103,7 +103,8 @@ public class InputField extends BorderPane {
             // boolean invalid = (maxLength > 0 && text.length() > maxLength) || (numOnly &&
             // !hasNumOnly);
             boolean valid =
-                (maxLength <= 0 || text.length() <= maxLength) && (!numOnly || hasNumOnly);
+                (maxLength <= 0 || text.length() <= maxLength) && (!numOnly || hasNumOnly)
+                || text.isEmpty();
             return (valid) ? t : null;
         }
     }

@@ -2,7 +2,9 @@ package code.frontend.panels;
 
 import code.frontend.foundation.CustomBox;
 import code.frontend.misc.Vals;
-
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import javafx.animation.FadeTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,10 +15,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 public class DateInputField extends VBox {
     private Label hintLabel;
@@ -67,7 +65,7 @@ public class DateInputField extends VBox {
             input.setMinHeight(Vals.GraphicalUI.INPUT_MIN_HEIGHT);
             input.setMinWidth(70);
             input.getTextField().setAlignment(Pos.CENTER);
-            HBox.setMargin(input, new Insets(5));
+            HBox.setMargin(input, new Insets(2, 5, 2, 5));
         }
     }
 

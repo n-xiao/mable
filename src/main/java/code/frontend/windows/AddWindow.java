@@ -5,7 +5,6 @@ import code.frontend.misc.Vals.UtilityUI;
 import code.frontend.panels.Button;
 import code.frontend.panels.DateInputField;
 import code.frontend.panels.InputField;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -13,36 +12,38 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class AddWindow extends Stage {
-    private static AddWindow window = null;
+public class AddWindow {
+    private static Stage window = null;
     private static VBox root;
 
     private static InputField nameField;
     private static DateInputField dateField;
     private static InputField daysField;
 
-    private AddWindow() {
-        this.setResizable(false);
-        this.initStyle(StageStyle.UTILITY);
-        this.setMinWidth(UtilityUI.WIDTH);
-        this.setMaxWidth(UtilityUI.WIDTH);
-        this.setMinHeight(UtilityUI.HEIGHT);
-        this.setMaxHeight(UtilityUI.HEIGHT);
-        this.setTitle("creating countdown");
-    }
+    private AddWindow() {}
 
-    public static AddWindow getStage() {
+    public static Stage getInstance() {
         if (window == null) {
-            window = new AddWindow();
+            window = new Stage();
+
+            window.setResizable(false);
+            window.initStyle(StageStyle.UTILITY);
+            window.setMinWidth(UtilityUI.WIDTH);
+            window.setMaxWidth(UtilityUI.WIDTH);
+            window.setMinHeight(UtilityUI.HEIGHT);
+            window.setMaxHeight(UtilityUI.HEIGHT);
+            window.setTitle("creating countdown");
 
             root = new VBox();
             root.setPrefSize(UtilityUI.WIDTH, UtilityUI.HEIGHT);
-            root.setOpacity(0);
             root.relocate(0, 0);
+            root.setBackground(null);
 
             configureChildren();
 
@@ -67,20 +68,27 @@ public class AddWindow extends Stage {
         container.setFillWidth(true);
 
         Label label = new Label("its name is...");
+        label.setTextFill(Color.WHITE);
         label.setAlignment(Pos.CENTER_LEFT);
         label.setMaxWidth(UtilityUI.WIDTH);
         label.setFont(UtilityUI.getFont());
         nameField = new InputField();
         nameField.setMaxWidth(UtilityUI.WIDTH);
-        VBox.setMargin(label, new Insets(10, 5, 0, 5));
-        VBox.setMargin(nameField, new Insets(3, 5, 0, 5));
+        VBox.setMargin(label, new Insets(0, 0, 0, 8));
+        // VBox.setMargin(nameField, new Insets(3, 5, 0, 5));
 
         container.getChildren().addAll(label, nameField);
 
+        VBox.setMargin(container, new Insets(10));
         return container;
     }
 
     private static Pane createDuePart() {
+        Pane filler1 = new Pane();
+        Pane filler2 = new Pane();
+        filler1.setVisible(false);
+        filler2.setVisible(false);
+
         HBox container = new HBox();
 
         VBox dateFieldContainer = new VBox();
@@ -88,16 +96,20 @@ public class AddWindow extends Stage {
         dateLabel.setAlignment(Pos.CENTER_LEFT);
         dateLabel.setMaxWidth(UtilityUI.WIDTH);
         dateLabel.setFont(UtilityUI.getFont());
+        dateLabel.setTextFill(Color.WHITE);
         dateField = new DateInputField();
         dateField.setMaxWidth(UtilityUI.WIDTH);
-        VBox.setMargin(dateLabel, new Insets(0, 5, 0, 5));
-        VBox.setMargin(dateField, new Insets(3, 5, 0, 5));
-        dateFieldContainer.getChildren().addAll(dateLabel, dateField);
+        VBox.setMargin(dateLabel, new Insets(0, 0, 0, 8));
+        // VBox.setMargin(dateLabel, new Insets(0, 5, 0, 5));
+        // VBox.setMargin(dateField, new Insets(3, 5, 0, 5));
+        VBox.setVgrow(filler1, Priority.ALWAYS);
+        dateFieldContainer.getChildren().addAll(dateLabel, dateField, filler1);
 
         Label separator = new Label("or in");
-        separator.maxHeightProperty().bind(dateFieldContainer.heightProperty());
+        separator.setMaxHeight(UtilityUI.HEIGHT);
         separator.setAlignment(Pos.CENTER);
         separator.setFont(UtilityUI.getFont());
+        separator.setTextFill(Color.WHITE);
         HBox.setMargin(separator, new Insets(0, 8, 0, 8));
 
         VBox daysFieldContainer = new VBox();
@@ -105,14 +117,17 @@ public class AddWindow extends Stage {
         daysLabel.setAlignment(Pos.CENTER_RIGHT);
         daysLabel.setMaxWidth(UtilityUI.WIDTH);
         daysLabel.setFont(UtilityUI.getFont());
+        daysLabel.setTextFill(Color.WHITE);
         daysField = new InputField();
         daysField.setNumInputOnly(true);
         daysField.setTextLimit(5);
-        VBox.setMargin(daysLabel, new Insets(0, 5, 0, 5));
-        VBox.setMargin(daysField, new Insets(0, 5, 3, 5));
-        daysFieldContainer.getChildren().addAll(daysField, daysLabel);
-
+        // VBox.setMargin(daysLabel, new Insets(3, 5, 0, 5));
+        // VBox.setMargin(daysField, new Insets(-3, 0, 0, 0));
+        VBox.setVgrow(filler2, Priority.ALWAYS);
+        daysFieldContainer.getChildren().addAll(filler2, daysField, daysLabel);
         container.getChildren().addAll(dateFieldContainer, separator, daysFieldContainer);
+
+        VBox.setMargin(container, new Insets(10));
         return container;
     }
 
@@ -125,10 +140,11 @@ public class AddWindow extends Stage {
                 // TODO
             }
         };
-        button.setPrefHeight(50);
-        button.setPrefWidth(80);
+        button.setMaxSize(150, 40);
+        button.setMinSize(150, 40);
         container.setCenter(button);
 
+        VBox.setMargin(container, new Insets(30, 0, 40, 0));
         return container;
     }
 }

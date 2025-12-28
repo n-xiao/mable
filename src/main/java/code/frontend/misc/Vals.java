@@ -22,6 +22,7 @@ public class Vals {
         public static final Color TXT_GHOST = Color.rgb(200, 200, 230);
         public static final Color SELECTED = Color.rgb(136, 175, 252);
         public static final Color ERROR = Color.rgb(250, 11, 11);
+        public static final Color DISABLED = Color.rgb(100, 100, 100);
 
         public static Background createBG(Color c, double radius, double ins) {
             BackgroundFill bgFill = new BackgroundFill(c, new CornerRadii(radius), new Insets(ins));

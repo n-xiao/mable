@@ -191,22 +191,33 @@ public class CountdownPane extends VBox {
         return display;
     }
 
+    public void applyDeselectStyle() {
+        ft.stop();
+        hoverHBox.setOpacity(1);
+        border.setStrokeColour(Color.WHITE);
+        statusLabel.setTextFill(Vals.Colour.TXT_GHOST);
+        endDateLabel.setTextFill(Vals.Colour.TXT_GHOST);
+    }
+
+    public void applySelectStyle() {
+        ft.stop();
+        hoverHBox.setOpacity(1);
+        border.setStrokeColour(Vals.Colour.SELECTED);
+        statusLabel.setTextFill(Vals.Colour.SELECTED);
+        endDateLabel.setTextFill(Vals.Colour.SELECTED);
+    }
+
     private void initSelectable() {
         contentHBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                ft.stop();
-                hoverHBox.setOpacity(1);
                 if (selected) {
                     // deselct procedure
-                    border.setStrokeColour(Color.WHITE);
-                    statusLabel.setTextFill(Vals.Colour.TXT_GHOST);
-                    endDateLabel.setTextFill(Vals.Colour.TXT_GHOST);
+                    applyDeselectStyle();
                 } else {
                     // select procedure
-                    border.setStrokeColour(Vals.Colour.SELECTED);
-                    statusLabel.setTextFill(Vals.Colour.SELECTED);
-                    endDateLabel.setTextFill(Vals.Colour.SELECTED);
+                    applySelectStyle();
+                    CountdownPaneControls.getInstance().updateSelectionButtonIndicator();
                 }
                 selected = !selected;
             }
@@ -219,5 +230,9 @@ public class CountdownPane extends VBox {
 
     public boolean isSelected() {
         return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 }

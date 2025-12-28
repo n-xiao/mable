@@ -2,7 +2,7 @@ package code.frontend.panels;
 
 import code.frontend.foundation.CustomBox;
 import code.frontend.misc.Vals;
-
+import code.frontend.misc.Vals.Colour;
 import javafx.animation.FadeTransition;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -24,52 +24,63 @@ public abstract class Button extends Pane {
     private Color feedbackColour = Vals.Colour.FEEDBACK;
     private Pane animPane = new Pane();
     private FadeTransition ft = new FadeTransition();
+    private Label label;
+    private boolean enabled;
+    private CustomBox border;
 
     public Button(String text) {
-        CustomBox border = new CustomBox(borderThickness);
+        this.enabled = true;
+
+        this.border = new CustomBox(borderThickness);
         CustomBox.applyCustomBorder(this, border);
 
-        Label label = new Label(text);
-        label.setTextFill(border.getStrokeColour());
-        label.setAlignment(Pos.CENTER);
-        label.setFont(labelFont);
-        label.prefWidthProperty().bind(this.widthProperty());
-        label.prefHeightProperty().bind(this.heightProperty());
-        label.relocate(0, 0);
-        label.setViewOrder(2);
+        this.label = new Label(text);
+        this.label.setTextFill(border.getStrokeColour());
+        this.label.setAlignment(Pos.CENTER);
+        this.label.setFont(labelFont);
+        this.label.prefWidthProperty().bind(this.widthProperty());
+        this.label.prefHeightProperty().bind(this.heightProperty());
+        this.label.relocate(0, 0);
+        this.label.setViewOrder(2);
 
         double vertiInset = border.getVertiPadding() + 3;
         double horizInset = border.getHorizPadding() + 4;
         Insets animPaneInsets = new Insets(vertiInset, horizInset, vertiInset, horizInset);
         BackgroundFill bgFill =
             new BackgroundFill(feedbackColour, new CornerRadii(12), animPaneInsets);
-        animPane.setBackground(new Background(bgFill));
-        animPane.prefWidthProperty().bind(this.widthProperty());
-        animPane.prefHeightProperty().bind(this.heightProperty());
-        animPane.relocate(0, 0);
-        animPane.setOpacity(0);
-        animPane.setViewOrder(1);
-        ft.setNode(animPane);
+        this.animPane.setBackground(new Background(bgFill));
+        this.animPane.prefWidthProperty().bind(this.widthProperty());
+        this.animPane.prefHeightProperty().bind(this.heightProperty());
+        this.animPane.relocate(0, 0);
+        this.animPane.setOpacity(0);
+        this.animPane.setViewOrder(1);
+        this.ft.setNode(animPane);
 
         this.getChildren().addAll(label, animPane);
 
         this.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                executeOnClick();
-                playClickAnim();
+                if (enabled) {
+                    executeOnClick();
+                    playClickAnim();
+                }
             }
         });
         this.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                playMouseEnterAnim();
+                if (enabled) {
+                    playMouseEnterAnim();
+                }
             }
         });
         this.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                playMouseExitAnim();
+                if (enabled) {
+                    playMouseExitAnim();
+                }
             }
         });
     }
@@ -77,27 +88,27 @@ public abstract class Button extends Pane {
     public abstract void executeOnClick();
 
     private void playClickAnim() {
-        ft.stop();
-        ft.setDuration(Duration.millis(200));
-        ft.setFromValue(0.8);
-        ft.setToValue(0);
-        ft.playFromStart();
+        this.ft.stop();
+        this.ft.setDuration(Duration.millis(200));
+        this.ft.setFromValue(0.8);
+        this.ft.setToValue(0);
+        this.ft.playFromStart();
     }
 
     private void playMouseEnterAnim() {
-        ft.stop();
-        ft.setDuration(Duration.millis(300));
-        ft.setFromValue(0);
-        ft.setToValue(HOVER_OPACITY);
-        ft.playFromStart();
+        this.ft.stop();
+        this.ft.setDuration(Duration.millis(300));
+        this.ft.setFromValue(0);
+        this.ft.setToValue(HOVER_OPACITY);
+        this.ft.playFromStart();
     }
 
     private void playMouseExitAnim() {
-        ft.stop();
-        ft.setDuration(Duration.millis(300));
-        ft.setFromValue(HOVER_OPACITY);
-        ft.setToValue(0);
-        ft.playFromStart();
+        this.ft.stop();
+        this.ft.setDuration(Duration.millis(300));
+        this.ft.setFromValue(HOVER_OPACITY);
+        this.ft.setToValue(0);
+        this.ft.playFromStart();
     }
 
     public void setFeedbackColour(Color feedbackColour) {
@@ -106,5 +117,20 @@ public abstract class Button extends Pane {
 
     public void setBorderThickness(int borderThickness) {
         this.borderThickness = borderThickness;
+    }
+
+    public void setTextLabel(String text) {
+        this.label.setText(text);
+    }
+
+    public void setEnabled(boolean enabled) {
+        if (enabled) {
+            this.border.setStrokeColour(Color.WHITE);
+            this.label.setTextFill(Color.WHITE);
+        } else {
+            this.border.setStrokeColour(Colour.DISABLED);
+            this.label.setTextFill(Colour.DISABLED);
+        }
+        this.enabled = enabled;
     }
 }

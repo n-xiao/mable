@@ -30,6 +30,7 @@ public class CountdownPaneView extends ScrollPane {
         fp.setHgap(GAP_BETWEEN);
         fp.setVgap(GAP_BETWEEN);
         this.setFitToWidth(true);
+        this.setBackground(null);
         this.setHbarPolicy(ScrollBarPolicy.NEVER);
         this.setVbarPolicy(ScrollBarPolicy.NEVER);
         this.getChildren().add(fp);

@@ -37,7 +37,7 @@ public class StorageHandler {
         }
     }
 
-    private static void save() {
+    public static void save() {
         try {
             // if (!active) throw new IOException("Storage is inactive.");
             FileOutputStream outputStream = new FileOutputStream(storagePath.toString());
@@ -65,40 +65,27 @@ public class StorageHandler {
         }
     }
 
-    public static void editCountdownName(Countdown c, String name) {
-        c.setName(name);
-        save();
-    }
-
-    public static void editCountdownDueDate(Countdown c, int day, int month, int year) {
-        c.setDueDate(day, month, year);
-        save();
-    }
-
-    public static void editCountdownDueDate(Countdown c, LocalDate date) {
-        c.setDueDate(date);
-        save();
-    }
-
     public static void setCountdownDone(Countdown c, boolean isDone) {
         c.setDone(isDone);
-        save();
     }
 
     public static void editCountdown(Countdown c, String name, LocalDate date) {
         c.setName(name);
         c.setDueDate(date);
-        save();
     }
 
     public static void deleteCountdown(Countdown c) {
         countdowns.remove(c);
-        save();
+    }
+
+    public static void deleteCountdowns(Countdown... cs) {
+        for (Countdown countdown : cs) {
+            countdowns.remove(countdown);
+        }
     }
 
     public static void addCountdown(Countdown c) {
         countdowns.add(c);
-        save();
     }
 
     public static Countdown[] getCountdowns() {

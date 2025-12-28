@@ -27,6 +27,12 @@ public class Countdown {
         this.dueDateTime = dueDate.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
     }
 
+    public Countdown(String name, LocalDate dueDate) {
+        this.ID = UUID.randomUUID();
+        this.name = name;
+        this.dueDateTime = dueDate.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
+    }
+
     public static int getDaysBetween(LocalDate date1, LocalDate date2) {
         ZonedDateTime zoned1 = date1.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
         ZonedDateTime zoned2 = date2.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));

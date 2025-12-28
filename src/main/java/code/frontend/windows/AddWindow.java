@@ -1,16 +1,16 @@
 package code.frontend.windows;
 
 import code.backend.Countdown;
+import code.backend.StorageHandler;
 import code.frontend.misc.Vals;
 import code.frontend.misc.Vals.UtilityUI;
 import code.frontend.panels.Button;
+import code.frontend.panels.CountdownPaneView;
 import code.frontend.panels.DateInputField;
 import code.frontend.panels.InputField;
 import java.time.LocalDate;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -25,20 +25,20 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class AddWindow {
-    private static Stage window = null;
-    private static VBox root;
+public class AddWindow extends Stage {
+    private static AddWindow window = null;
+    private VBox root;
 
-    private static InputField nameField;
-    private static DateInputField dateField;
-    private static InputField daysField;
-    private static Button button;
+    private InputField nameField;
+    private DateInputField dateField;
+    private InputField daysField;
+    private Button button;
 
-    private AddWindow() {}
+    protected AddWindow() {}
 
     public static Stage getInstance() {
         if (window == null) {
-            window = new Stage();
+            window = new AddWindow();
 
             window.setResizable(false);
             window.initStyle(StageStyle.UTILITY);
@@ -48,14 +48,14 @@ public class AddWindow {
             window.setMaxHeight(UtilityUI.HEIGHT);
             window.setTitle("creating countdown");
 
-            root = new VBox();
-            root.setPrefSize(UtilityUI.WIDTH, UtilityUI.HEIGHT);
-            root.relocate(0, 0);
-            root.setBackground(null);
+            window.root = new VBox();
+            window.root.setPrefSize(UtilityUI.WIDTH, UtilityUI.HEIGHT);
+            window.root.relocate(0, 0);
+            window.root.setBackground(null);
 
-            configureChildren();
+            window.configureChildren();
 
-            Scene scene = new Scene(root);
+            Scene scene = new Scene(window.root);
             scene.setFill(Vals.Colour.BACKGROUND);
             window.setScene(scene);
             window.show();
@@ -64,7 +64,7 @@ public class AddWindow {
         return window;
     }
 
-    private static void configureChildren() {
+    private void configureChildren() {
         nameField = createNameInputField();
         dateField = createDateInputField();
         daysField = createDaysInputField();
@@ -76,7 +76,7 @@ public class AddWindow {
         root.getChildren().addAll(namePart, duePart, buttonPart);
     }
 
-    private static Pane createNamePart() {
+    private Pane createNamePart() {
         VBox container = new VBox();
         container.setFillWidth(true);
 
@@ -95,7 +95,7 @@ public class AddWindow {
         return container;
     }
 
-    private static Pane createDuePart() {
+    private Pane createDuePart() {
         Pane filler1 = new Pane();
         Pane filler2 = new Pane();
         filler1.setVisible(false);
@@ -147,7 +147,7 @@ public class AddWindow {
         return container;
     }
 
-    private static Pane createButtonPart() {
+    private Pane createButtonPart() {
         BorderPane container = new BorderPane();
         container.setPrefWidth(UtilityUI.WIDTH);
         button.setMaxSize(150, 40);
@@ -158,7 +158,7 @@ public class AddWindow {
         return container;
     }
 
-    private static void createDateDayLink() {
+    private void createDateDayLink() {
         TextField[] dateTextFields = new TextField[3];
         dateTextFields[0] = dateField.getDayInput().getTextField();
         dateTextFields[1] = dateField.getMonthInput().getTextField();
@@ -203,7 +203,7 @@ public class AddWindow {
      * before it is styled. Avoid applying changes that may impact
      * its layout (e.g applying insets or changing its width/height).
      */
-    protected static InputField createNameInputField() {
+    protected InputField createNameInputField() {
         return new InputField();
     }
 
@@ -214,7 +214,7 @@ public class AddWindow {
      * before it is styled. Avoid applying changes that may impact
      * its layout (e.g applying insets or changing its width/height).
      */
-    protected static DateInputField createDateInputField() {
+    protected DateInputField createDateInputField() {
         return new DateInputField();
     }
 
@@ -225,7 +225,7 @@ public class AddWindow {
      * before it is styled. Avoid applying changes that may impact
      * its layout (e.g applying insets or changing its width/height).
      */
-    protected static InputField createDaysInputField() {
+    protected InputField createDaysInputField() {
         return new InputField();
     }
 
@@ -236,11 +236,17 @@ public class AddWindow {
      * before it is styled. Avoid applying changes that may impact
      * its layout (e.g applying insets or changing its width/height).
      */
-    protected static Button createButton(String buttonText) {
+    protected Button createButton(String buttonText) {
         return new Button(buttonText) {
             @Override
             public void executeOnClick() {
-                // TODO Auto-generated method stub
+                String name = nameField.getTextField().getText();
+                LocalDate due = dateField.getLocalDateInput(false);
+                if (due == null)
+                    return;
+                StorageHandler.addCountdown(new Countdown(name, due));
+                CountdownPaneView.getInstance().repopulate(LocalDate.now());
+                AddWindow.getInstance().close();
             }
         };
     }

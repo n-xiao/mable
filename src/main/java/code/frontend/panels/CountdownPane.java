@@ -4,7 +4,7 @@ import code.backend.Countdown;
 import code.frontend.foundation.CustomBox;
 import code.frontend.foundation.CustomLine;
 import code.frontend.misc.Vals;
-
+import java.time.LocalDate;
 import javafx.animation.FadeTransition;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -23,8 +23,6 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
-import java.time.LocalDate;
-
 public class CountdownPane extends VBox {
     public final double WIDTH = 280;
     public final double HEIGHT = 140;
@@ -32,16 +30,18 @@ public class CountdownPane extends VBox {
     public final double DIV_WIDTH = 10;
     public final double CONTENT_HEIGHT = 100;
 
-    private HBox hoverHBox;
-    private HBox contentHBox;
-    private Label statusLabel;
-    private Label endDateLabel;
-    private FadeTransition ft;
-    private Countdown countdown;
-    private CustomBox border;
-    private boolean selected;
+    private HBox hoverHBox; // container
+    private HBox contentHBox; // container
+    private Label statusLabel; // for displaying the status on mouse hover
+    private Label endDateLabel; // for displaying the due date on mouse hover
+    private FadeTransition ft; // for ui hover animation
+    private Countdown countdown; // points to the backend object
+    private CustomBox border; // for selection ui indication
+    private boolean selected; // for selection detection
+    private CountdownPane prev; // for multi-select functionality
 
     public CountdownPane(Countdown cd, LocalDate now) {
+        this.prev = null;
         this.countdown = cd;
         this.selected = false;
         this.setAlignment(Pos.CENTER);

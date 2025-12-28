@@ -6,7 +6,9 @@ import code.frontend.panels.CountdownPane;
 import code.frontend.windows.AddWindow;
 import java.time.LocalDate;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 

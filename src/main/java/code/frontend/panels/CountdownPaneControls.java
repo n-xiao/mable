@@ -33,6 +33,7 @@ public class CountdownPaneControls extends HBox {
     private Button deselectBtn; // deselect
 
     protected static final String DESELECT_DEFAULT_STR = "deselect";
+    protected static final String REMOVE_DEFAULT_STR = "remove";
 
     private CountdownPaneView view;
 
@@ -57,7 +58,7 @@ public class CountdownPaneControls extends HBox {
                     instance.edit();
                 }
             };
-            instance.removeBtn = new Button("remove") {
+            instance.removeBtn = new Button(REMOVE_DEFAULT_STR) {
                 @Override
                 public void executeOnClick() {
                     instance.remove();
@@ -111,6 +112,7 @@ public class CountdownPaneControls extends HBox {
         deselectAll();
         StorageHandler.save();
         this.view.repopulate(LocalDate.now());
+        this.removeBtn.setTextLabel(REMOVE_DEFAULT_STR);
     }
 
     private void deselectAll() {
@@ -123,14 +125,17 @@ public class CountdownPaneControls extends HBox {
         setMode(ControlMode.NO_SELECT);
     }
 
-    public void updateSelectionButtonIndicator() {
+    public void updateSelectionButtonIndicators() {
         // shows the user how many selections there are via the deselectButton
-        String newButtonLabel = DESELECT_DEFAULT_STR;
+        String newDeselectButtonLabel = DESELECT_DEFAULT_STR;
+        String newRemoveButtonLabel = REMOVE_DEFAULT_STR;
         int numOfSelections = CountdownPaneView.getInstance().getAllSelected().size();
         if (numOfSelections > 0) {
-            newButtonLabel += " (" + Integer.toString(numOfSelections) + ")";
+            newDeselectButtonLabel += " (" + Integer.toString(numOfSelections + 1) + ")";
+            newRemoveButtonLabel += " (" + Integer.toString(numOfSelections + 1) + ")";
         }
-        deselectBtn.setTextLabel(newButtonLabel);
+        this.deselectBtn.setTextLabel(newDeselectButtonLabel);
+        this.removeBtn.setTextLabel(newRemoveButtonLabel);
     }
 
     public void setMode(ControlMode mode) {

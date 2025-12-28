@@ -1,6 +1,7 @@
 package code.frontend.gui;
 
 import code.frontend.gui.pages.HomePage;
+import javafx.geometry.Insets;
 import javafx.scene.layout.StackPane;
 
 public class Content extends StackPane {
@@ -8,6 +9,8 @@ public class Content extends StackPane {
 
     private Content() {
         this.setBackground(null);
+        HomePage homepage = HomePage.getInstance();
+        StackPane.setMargin(homepage, new Insets(10));
         this.getChildren().addAll(HomePage.getInstance());
     }
 

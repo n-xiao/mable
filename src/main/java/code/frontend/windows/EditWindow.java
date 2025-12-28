@@ -23,8 +23,8 @@ public class EditWindow extends ConfigWindowTemplate {
         EditWindow.countdown = countdownToEdit;
         if (window == null) {
             window = new EditWindow();
-            window.show();
         }
+        window.show();
         window.toFront();
         return window;
     }
@@ -61,6 +61,7 @@ public class EditWindow extends ConfigWindowTemplate {
                 StorageHandler.save();
                 window.close();
                 CountdownPaneView.getInstance().repopulate(LocalDate.now());
+                window = null;
             }
         };
     }

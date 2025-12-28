@@ -20,7 +20,7 @@ import javafx.util.Duration;
 public abstract class Button extends Pane {
     private final double HOVER_OPACITY = 0.2;
     private Font labelFont = Vals.FontTools.getButtonFont();
-    private double borderThickness = Vals.GraphicalUI.DRAW_THICKNESS;
+    private double borderThickness = Vals.GraphicalUI.BTTN_THICKNESS;
     private Color feedbackColour = Vals.Colour.FEEDBACK;
     private Pane animPane = new Pane();
     private FadeTransition ft = new FadeTransition();

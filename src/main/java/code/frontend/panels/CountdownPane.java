@@ -138,15 +138,17 @@ public class CountdownPane extends VBox {
     private Label createNameLabel(Countdown cd) {
         String name = cd.getName();
         Label nameLabel = new Label(name);
-        Font nameFont = Font.font(Vals.FontTools.FONT_FAM, FontWeight.SEMI_BOLD, 19);
+        Font nameFont = Font.font(Vals.FontTools.FONT_FAM, FontWeight.SEMI_BOLD, 17);
         nameLabel.setAlignment(Pos.CENTER);
         nameLabel.setTextAlignment(TextAlignment.JUSTIFY);
         nameLabel.setTextOverrun(OverrunStyle.ELLIPSIS);
         nameLabel.setFont(nameFont);
         nameLabel.setTextFill(Color.WHITE);
-        nameLabel.setPrefSize(NAME_WIDTH, HEIGHT);
+        nameLabel.setPrefWidth(NAME_WIDTH);
+        nameLabel.prefHeightProperty().bind(this.heightProperty());
 
-        HBox.setMargin(nameLabel, new Insets(10));
+        HBox.setMargin(nameLabel, new Insets(10, 5, 10, 10));
+        HBox.setHgrow(nameLabel, Priority.ALWAYS);
         return nameLabel;
     }
 
@@ -215,12 +217,12 @@ public class CountdownPane extends VBox {
                     // deselect procedure
                     applyDeselectStyle();
                     CountdownPaneView.getInstance().removeSelected(thisInstance);
-                    CountdownPaneControls.getInstance().updateSelectionButtonIndicator();
+                    CountdownPaneControls.getInstance().updateSelectionButtonIndicators();
                 } else {
                     // select procedure
                     applySelectStyle();
                     CountdownPaneView.getInstance().addSelected(thisInstance);
-                    CountdownPaneControls.getInstance().updateSelectionButtonIndicator();
+                    CountdownPaneControls.getInstance().updateSelectionButtonIndicators();
                 }
                 selected = !selected;
             }

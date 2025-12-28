@@ -5,13 +5,10 @@ import code.backend.StorageHandler;
 import code.frontend.misc.Vals.Colour;
 import code.frontend.panels.CountdownPaneControls.ControlMode;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.NavigableSet;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 /**
  * This is the scrollable Pane that is responsible for displaying {@link CountdownPane}.
@@ -19,7 +16,8 @@ import javafx.scene.shape.Rectangle;
  */
 public class CountdownPaneView extends ScrollPane {
     enum DisplayOrder { ASCENDING, DESCENDING }
-    private final double GAP_BETWEEN = 8;
+    private final double HGAP_BETWEEN = 20;
+    private final double VGAP_BETWEEN = -5;
     private FlowPane fp;
     private LinkedHashSet<CountdownPane> cdPanes;
     private DisplayOrder displayOrder;
@@ -35,8 +33,8 @@ public class CountdownPaneView extends ScrollPane {
         this.fp.minHeightProperty().bind(this.heightProperty().add(-2));
         this.fp.setMaxHeight(Double.MAX_VALUE);
         this.fp.setBackground(Colour.createBG(Colour.BACKGROUND, 0, 0));
-        this.fp.setHgap(GAP_BETWEEN);
-        this.fp.setVgap(GAP_BETWEEN);
+        this.fp.setHgap(HGAP_BETWEEN);
+        this.fp.setVgap(VGAP_BETWEEN);
         this.setBackground(null);
         this.setFitToWidth(true);
         this.setHbarPolicy(ScrollBarPolicy.NEVER);

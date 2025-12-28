@@ -32,6 +32,7 @@ public class Vals {
 
     public final class GraphicalUI {
         public static final double DRAW_THICKNESS = 2.5;
+        public static final double BTTN_THICKNESS = 3;
         public static final double INPUT_BORDER_WIDTH = 2;
         public static final int PREF_WIDTH = 1120;
         public static final int PREF_HEIGHT = 730;
@@ -39,9 +40,9 @@ public class Vals {
         public static final int MIN_HEIGHT = 430;
         public static final int INPUT_MIN_HEIGHT = 50;
         // CORNER_OFFSET > CORNER_DEVIATION
-        public static final double DEVIATION = 0.023;
-        public static final double CORNER_DEVIATION = 0.03;
-        public static final double CORNER_OFFSET = 0.2;
+        public static final double DEVIATION = 0.026;
+        public static final double CORNER_DEVIATION = 0.025;
+        public static final double CORNER_OFFSET = 0.25;
 
         public static String intToString(int input) {
             NumberFormat formatter =

@@ -92,6 +92,10 @@ public class Countdown {
         this.dueDateTime = dueDate.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
     }
 
+    protected void setDueDate(LocalDate dueDate) {
+        this.dueDateTime = dueDate.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
+    }
+
     protected void setDone(boolean isDone) {
         this.isDone = isDone;
     }

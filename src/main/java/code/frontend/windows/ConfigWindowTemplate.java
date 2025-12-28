@@ -32,6 +32,11 @@ public abstract class ConfigWindowTemplate extends Stage {
     private Button button;
 
     protected ConfigWindowTemplate() {
+        this.setStageStyling();
+        this.configureChildren();
+    }
+
+    protected void setStageStyling() {
         this.setResizable(false);
         this.initStyle(StageStyle.UTILITY);
         this.setMinWidth(UtilityUI.WIDTH);
@@ -44,14 +49,12 @@ public abstract class ConfigWindowTemplate extends Stage {
         this.root.relocate(0, 0);
         this.root.setBackground(null);
 
-        this.configureChildren();
-
         Scene scene = new Scene(this.root);
         scene.setFill(Vals.Colour.BACKGROUND);
         this.setScene(scene);
     }
 
-    private void configureChildren() {
+    protected void configureChildren() {
         nameField = createNameInputField();
         dateField = createDateInputField();
         daysField = createDaysInputField();
@@ -228,6 +231,14 @@ public abstract class ConfigWindowTemplate extends Stage {
             @Override
             public void executeOnClick() {}
         };
+    }
+
+    protected InputField getNameField() {
+        return nameField;
+    }
+
+    protected DateInputField getDateField() {
+        return dateField;
     }
 
     protected abstract String getNameInputuserHint();

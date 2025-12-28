@@ -12,10 +12,7 @@ import javafx.stage.Stage;
 public class AddWindow extends ConfigWindowTemplate {
     private static AddWindow window = null;
 
-    private InputField nameField;
-    private DateInputField dateField;
-
-    protected AddWindow() {
+    private AddWindow() {
         super();
         this.setTitle("creating countdown");
     }
@@ -34,8 +31,8 @@ public class AddWindow extends ConfigWindowTemplate {
         return new Button("create") {
             @Override
             public void executeOnClick() {
-                String name = nameField.getTextField().getText();
-                LocalDate due = dateField.getLocalDateInput(false);
+                String name = getNameField().getTextField().getText();
+                LocalDate due = getDateField().getLocalDateInput(false);
                 if (due == null)
                     return;
                 StorageHandler.addCountdown(new Countdown(name, due));

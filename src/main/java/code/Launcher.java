@@ -4,6 +4,7 @@ import code.backend.Countdown;
 import code.frontend.misc.Vals;
 import code.frontend.panels.CountdownPane;
 import code.frontend.windows.AddWindow;
+import code.frontend.windows.EditWindow;
 import java.time.LocalDate;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -40,7 +41,7 @@ public class Launcher extends Application {
         scene.setFill(Vals.Colour.BACKGROUND);
         stage.setScene(scene);
         stage.show();
-        AddWindow.getInstance();
+        EditWindow.getInstance(new Countdown("hello", 30, 12, 2025));
     }
 
     public static void main(String[] args) {

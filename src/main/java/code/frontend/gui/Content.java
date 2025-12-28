@@ -7,6 +7,7 @@ public class Content extends StackPane {
     private static Content instance = null;
 
     private Content() {
+        this.setBackground(null);
         this.getChildren().addAll(HomePage.getInstance());
     }
 

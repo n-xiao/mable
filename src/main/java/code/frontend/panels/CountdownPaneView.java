@@ -2,11 +2,14 @@ package code.frontend.panels;
 
 import code.backend.Countdown;
 import code.backend.StorageHandler;
+import code.frontend.misc.Vals.Colour;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 /**
  * This is the scrollable Pane that is responsible for displaying {@link CountdownPane}.
@@ -25,15 +28,18 @@ public class CountdownPaneView extends ScrollPane {
         this.displayOrder = DisplayOrder.DESCENDING;
         this.cdPanes = new LinkedHashSet<>();
         this.fp = new FlowPane();
-        // fp.prefWidthProperty().bind(this.widthProperty());
-        fp.prefWrapLengthProperty().bind(this.widthProperty());
-        fp.setHgap(GAP_BETWEEN);
-        fp.setVgap(GAP_BETWEEN);
-        this.setFitToWidth(true);
+        this.fp.prefWrapLengthProperty().bind(this.widthProperty());
+        // the -2 below is needed to correct a small offset when at minHeight
+        this.fp.minHeightProperty().bind(this.heightProperty().add(-2));
+        this.fp.setMaxHeight(Double.MAX_VALUE);
+        this.fp.setBackground(Colour.createBG(Colour.BACKGROUND, 0, 0));
+        this.fp.setHgap(GAP_BETWEEN);
+        this.fp.setVgap(GAP_BETWEEN);
         this.setBackground(null);
+        this.setFitToWidth(true);
         this.setHbarPolicy(ScrollBarPolicy.NEVER);
         this.setVbarPolicy(ScrollBarPolicy.NEVER);
-        this.getChildren().add(fp);
+        this.setContent(this.fp);
     }
 
     public static CountdownPaneView getInstance() {

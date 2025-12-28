@@ -75,6 +75,8 @@ public class CountdownPaneControls extends HBox {
     private static void applyStyling(Button... buttons) {
         for (Button button : buttons) {
             HBox.setMargin(button, new Insets(5, 10, 5, 10));
+            button.setMinWidth(130);
+            button.setMinHeight(40);
         }
 
         Pane filler = new Pane();

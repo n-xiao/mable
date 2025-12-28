@@ -1,16 +1,14 @@
 package code;
 
-import code.backend.Countdown;
+import code.backend.StorageHandler;
+import code.frontend.gui.MainContainer;
 import code.frontend.misc.Vals;
-import code.frontend.panels.CountdownPane;
-import code.frontend.windows.AddWindow;
-import code.frontend.windows.EditWindow;
-import java.time.LocalDate;
+import code.frontend.misc.Vals.Colour;
+import code.frontend.panels.CountdownPaneView;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Launcher extends Application {
@@ -27,21 +25,21 @@ public class Launcher extends Application {
         stage.setWidth(Vals.GraphicalUI.PREF_WIDTH);
         stage.setHeight(Vals.GraphicalUI.PREF_HEIGHT);
 
-        Pane p = new Pane();
-        p.setPrefSize(Vals.GraphicalUI.PREF_WIDTH, Vals.GraphicalUI.PREF_HEIGHT);
-        p.setMinSize(Vals.GraphicalUI.MIN_WIDTH, Vals.GraphicalUI.MIN_HEIGHT);
-        p.relocate(0, 0);
-        p.setBackground(null);
+        MainContainer root = MainContainer.getInstance();
+        root.prefWidthProperty().bind(stage.widthProperty());
+        root.prefHeightProperty().bind(stage.heightProperty());
 
-        CountdownPane pd = new CountdownPane(new Countdown("hello", 30, 12, 2025), LocalDate.now());
-        pd.relocate(30, 30);
-        p.getChildren().add(pd);
+        // Pane root = new Pane();
+        // root.setBackground(Colour.createBG(Color.BLACK, 0, 0));
+        // CountdownPaneView view = CountdownPaneView.getInstance();
+        // view.relocate(20, 20);
+        // view.setPrefSize(400, 400);
+        // root.getChildren().add(view);
 
-        Scene scene = new Scene(p);
+        Scene scene = new Scene(root);
         scene.setFill(Vals.Colour.BACKGROUND);
         stage.setScene(scene);
         stage.show();
-        EditWindow.getInstance(new Countdown("hello", 30, 12, 2025));
     }
 
     public static void main(String[] args) {

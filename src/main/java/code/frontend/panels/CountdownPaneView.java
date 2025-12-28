@@ -3,9 +3,11 @@ package code.frontend.panels;
 import code.backend.Countdown;
 import code.backend.StorageHandler;
 import code.frontend.misc.Vals.Colour;
+import code.frontend.panels.CountdownPaneControls.ControlMode;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.NavigableSet;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
@@ -48,7 +50,7 @@ public class CountdownPaneView extends ScrollPane {
     }
 
     public void repopulate(LocalDate now) {
-        Countdown[] countdowns;
+        NavigableSet<Countdown> countdowns;
         // this if-else is ok for now since there's only two DisplayOrders rn
         if (displayOrder.equals(DisplayOrder.ASCENDING))
             countdowns = StorageHandler.getAscendingCountdowns();
@@ -64,13 +66,33 @@ public class CountdownPaneView extends ScrollPane {
         }
     }
 
-    public CountdownPane[] getAllSelected() {
-        HashSet<CountdownPane> selected = new HashSet<>();
+    public LinkedHashSet<CountdownPane> getAllSelected() {
+        LinkedHashSet<CountdownPane> selected = new LinkedHashSet<>();
         for (CountdownPane pane : this.cdPanes) {
             if (pane.isSelected())
                 selected.add(pane);
         }
-        return (CountdownPane[]) selected.toArray();
+        return selected;
+    }
+
+    public void addSelected(CountdownPane pane) {
+        this.cdPanes.add(pane);
+        CountdownPaneControls controls = CountdownPaneControls.getInstance();
+        if (this.cdPanes.size() == 1) {
+            controls.setMode(ControlMode.SINGLE_SELECT);
+        } else if (this.cdPanes.size() > 1) {
+            controls.setMode(ControlMode.MULTI_SELECT);
+        }
+    }
+
+    public void removeSelected(CountdownPane pane) {
+        this.cdPanes.remove(pane);
+        CountdownPaneControls controls = CountdownPaneControls.getInstance();
+        if (this.cdPanes.size() == 0) {
+            controls.setMode(ControlMode.NO_SELECT);
+        } else if (this.cdPanes.size() == 1) {
+            controls.setMode(ControlMode.SINGLE_SELECT);
+        }
     }
 
     public DisplayOrder getDisplayOrder() {

@@ -3,6 +3,8 @@ package code.frontend.panels;
 import code.backend.StorageHandler;
 import code.frontend.windows.AddWindow;
 import code.frontend.windows.EditWindow;
+import java.time.LocalDate;
+import java.util.LinkedHashSet;
 import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -37,6 +39,7 @@ public class CountdownPaneControls extends HBox {
     private CountdownPaneControls() {
         this.setBackground(null);
         this.setFillHeight(true);
+        this.view = CountdownPaneView.getInstance();
     }
 
     public static CountdownPaneControls getInstance() {
@@ -68,6 +71,7 @@ public class CountdownPaneControls extends HBox {
             };
             applyStyling(
                 instance.addBtn, instance.editBtn, instance.removeBtn, instance.deselectBtn);
+            instance.setMode(ControlMode.NO_SELECT); // sets mode on startup
         }
         return instance;
     }
@@ -93,32 +97,36 @@ public class CountdownPaneControls extends HBox {
     }
 
     private void edit() {
-        CountdownPane[] selectedPanes = view.getAllSelected();
-        if (selectedPanes == null || selectedPanes.length == 0)
+        LinkedHashSet<CountdownPane> selectedPanes = view.getAllSelected();
+        if (selectedPanes.isEmpty())
             return;
-        EditWindow.getInstance(selectedPanes[0].getCountdown());
+        EditWindow.getInstance(selectedPanes.getFirst().getCountdown());
+        this.view.repopulate(LocalDate.now());
     }
 
     private void remove() {
-        CountdownPane[] selectedPanes = view.getAllSelected();
+        LinkedHashSet<CountdownPane> selectedPanes = view.getAllSelected();
         for (CountdownPane countdownPane : selectedPanes)
             StorageHandler.deleteCountdown(countdownPane.getCountdown());
+        deselectAll();
         StorageHandler.save();
+        this.view.repopulate(LocalDate.now());
     }
 
     private void deselectAll() {
-        CountdownPane[] selectedPanes = view.getAllSelected();
+        LinkedHashSet<CountdownPane> selectedPanes = view.getAllSelected();
         for (CountdownPane countdownPane : selectedPanes) {
             countdownPane.setSelected(false);
             countdownPane.applyDeselectStyle();
         }
         deselectBtn.setTextLabel(DESELECT_DEFAULT_STR);
+        setMode(ControlMode.NO_SELECT);
     }
 
     public void updateSelectionButtonIndicator() {
         // shows the user how many selections there are via the deselectButton
         String newButtonLabel = DESELECT_DEFAULT_STR;
-        int numOfSelections = CountdownPaneView.getInstance().getAllSelected().length;
+        int numOfSelections = CountdownPaneView.getInstance().getAllSelected().size();
         if (numOfSelections > 0) {
             newButtonLabel += " (" + Integer.toString(numOfSelections) + ")";
         }

@@ -20,8 +20,8 @@ public class AddWindow extends ConfigWindowTemplate {
     public static Stage getInstance() {
         if (window == null) {
             window = new AddWindow();
-            window.show();
         }
+        window.show();
         window.toFront();
         return window;
     }
@@ -39,6 +39,7 @@ public class AddWindow extends ConfigWindowTemplate {
                 CountdownPaneView.getInstance().repopulate(LocalDate.now());
                 StorageHandler.save();
                 window.close();
+                window = null;
             }
         };
     }

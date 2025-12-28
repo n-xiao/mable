@@ -47,7 +47,7 @@ public class CountdownPane extends VBox {
         this.setAlignment(Pos.CENTER);
         initContentHBox(now);
         initHoverHBox();
-        initSelectable();
+        initSelectable(this);
         this.getChildren().addAll(this.hoverHBox, this.contentHBox);
     }
 
@@ -207,16 +207,19 @@ public class CountdownPane extends VBox {
         endDateLabel.setTextFill(Vals.Colour.SELECTED);
     }
 
-    private void initSelectable() {
+    private void initSelectable(CountdownPane thisInstance) {
         contentHBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 if (selected) {
-                    // deselct procedure
+                    // deselect procedure
                     applyDeselectStyle();
+                    CountdownPaneView.getInstance().removeSelected(thisInstance);
+                    CountdownPaneControls.getInstance().updateSelectionButtonIndicator();
                 } else {
                     // select procedure
                     applySelectStyle();
+                    CountdownPaneView.getInstance().addSelected(thisInstance);
                     CountdownPaneControls.getInstance().updateSelectionButtonIndicator();
                 }
                 selected = !selected;

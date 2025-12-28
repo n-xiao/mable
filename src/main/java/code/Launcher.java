@@ -3,12 +3,8 @@ package code;
 import code.backend.StorageHandler;
 import code.frontend.gui.MainContainer;
 import code.frontend.misc.Vals;
-import code.frontend.misc.Vals.Colour;
-import code.frontend.panels.CountdownPaneView;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Launcher extends Application {
@@ -28,13 +24,6 @@ public class Launcher extends Application {
         MainContainer root = MainContainer.getInstance();
         root.prefWidthProperty().bind(stage.widthProperty());
         root.prefHeightProperty().bind(stage.heightProperty());
-
-        // Pane root = new Pane();
-        // root.setBackground(Colour.createBG(Color.BLACK, 0, 0));
-        // CountdownPaneView view = CountdownPaneView.getInstance();
-        // view.relocate(20, 20);
-        // view.setPrefSize(400, 400);
-        // root.getChildren().add(view);
 
         Scene scene = new Scene(root);
         scene.setFill(Vals.Colour.BACKGROUND);

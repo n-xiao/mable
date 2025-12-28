@@ -11,6 +11,7 @@ import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -38,17 +39,17 @@ public class StorageHandler {
     }
 
     public static void save() {
-        try {
-            // if (!active) throw new IOException("Storage is inactive.");
-            FileOutputStream outputStream = new FileOutputStream(storagePath.toString());
-            ObjectOutputStream objOutputStream = new ObjectOutputStream(outputStream);
-            objOutputStream.writeObject(countdowns);
-            objOutputStream.flush();
-            objOutputStream.close();
-        } catch (Exception e) {
-            System.err.println("error while saving data!");
-            e.printStackTrace();
-        }
+        // try {
+        //     // if (!active) throw new IOException("Storage is inactive.");
+        //     FileOutputStream outputStream = new FileOutputStream(storagePath.toString());
+        //     ObjectOutputStream objOutputStream = new ObjectOutputStream(outputStream);
+        //     objOutputStream.writeObject(countdowns);
+        //     objOutputStream.flush();
+        //     objOutputStream.close();
+        // } catch (Exception e) {
+        //     System.err.println("error while saving data!");
+        //     e.printStackTrace();
+        // }
     }
 
     @SuppressWarnings("unchecked")
@@ -66,12 +67,22 @@ public class StorageHandler {
     }
 
     public static void setCountdownDone(Countdown c, boolean isDone) {
-        c.setDone(isDone);
+        countdowns.forEach(countdown -> {
+            if (countdown.ID.equals(c.ID)) {
+                countdown.setDone(isDone);
+                return;
+            }
+        });
     }
 
     public static void editCountdown(Countdown c, String name, LocalDate date) {
-        c.setName(name);
-        c.setDueDate(date);
+        countdowns.forEach(countdown -> {
+            if (countdown.ID.equals(c.ID)) {
+                countdown.setName(name);
+                countdown.setDueDate(date);
+                return;
+            }
+        });
     }
 
     public static void deleteCountdown(Countdown c) {
@@ -88,17 +99,13 @@ public class StorageHandler {
         countdowns.add(c);
     }
 
-    public static Countdown[] getCountdowns() {
-        return (Countdown[]) countdowns.toArray();
+    public static NavigableSet<Countdown> getAscendingCountdowns() {
+        NavigableSet<Countdown> ascendingSet = countdowns.descendingSet().reversed();
+        return ascendingSet;
     }
 
-    public static Countdown[] getAscendingCountdowns() {
-        Set<Countdown> ascendingSet = countdowns.descendingSet().reversed();
-        return (Countdown[]) ascendingSet.toArray();
-    }
-
-    public static Countdown[] getDescendingCountdowns() {
-        Set<Countdown> descendingSet = countdowns.descendingSet();
-        return (Countdown[]) descendingSet.toArray();
+    public static NavigableSet<Countdown> getDescendingCountdowns() {
+        NavigableSet<Countdown> descendingSet = countdowns.descendingSet();
+        return descendingSet;
     }
 }

@@ -4,6 +4,7 @@ import code.backend.Countdown;
 import code.frontend.foundation.CustomBox;
 import code.frontend.foundation.CustomLine;
 import code.frontend.misc.Vals;
+import code.frontend.misc.Vals.GraphicalUI;
 import java.time.LocalDate;
 import javafx.animation.FadeTransition;
 import javafx.event.EventHandler;
@@ -123,7 +124,7 @@ public class CountdownPane extends VBox {
         contentHBox.setPrefSize(WIDTH, CONTENT_HEIGHT);
         contentHBox.setFillHeight(true);
         // adds the border
-        this.border = new CustomBox();
+        this.border = new CustomBox(GraphicalUI.DRAW_THICKNESS, 0.02, 0.032, 0.25);
         CustomBox.applyCustomBorder(contentHBox, border);
         // adds the name display
         contentHBox.getChildren().add(createNameLabel(countdown));
@@ -147,7 +148,7 @@ public class CountdownPane extends VBox {
         nameLabel.setPrefWidth(NAME_WIDTH);
         nameLabel.prefHeightProperty().bind(this.heightProperty());
 
-        HBox.setMargin(nameLabel, new Insets(10, 5, 10, 10));
+        HBox.setMargin(nameLabel, new Insets(10, 5, 10, 5));
         HBox.setHgrow(nameLabel, Priority.ALWAYS);
         return nameLabel;
     }

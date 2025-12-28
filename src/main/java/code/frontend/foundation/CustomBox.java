@@ -1,7 +1,6 @@
 package code.frontend.foundation;
 
 import code.frontend.misc.Vals;
-
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
@@ -33,6 +32,7 @@ public class CustomBox extends ResizableCanvas {
         assert cornerOffset > cornerDeviation;
     }
 
+    // TODO: FIX THIS SO THAT REDRAW WITH EXACT PREV PATH IS POSSIBLE
     @Override
     protected void draw(GraphicsContext gc, boolean recompute) {
         gc.setLineWidth(this.thickness);

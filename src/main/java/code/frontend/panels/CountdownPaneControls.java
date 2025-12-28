@@ -115,7 +115,7 @@ public class CountdownPaneControls extends HBox {
         this.removeBtn.setTextLabel(REMOVE_DEFAULT_STR);
     }
 
-    private void deselectAll() {
+    public void deselectAll() {
         LinkedHashSet<CountdownPane> selectedPanes = view.getAllSelected();
         for (CountdownPane countdownPane : selectedPanes) {
             countdownPane.setSelected(false);

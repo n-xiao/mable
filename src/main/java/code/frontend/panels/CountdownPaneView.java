@@ -2,11 +2,16 @@ package code.frontend.panels;
 
 import code.backend.Countdown;
 import code.backend.StorageHandler;
+import code.frontend.gui.MainContainer;
 import code.frontend.misc.Vals.Colour;
 import code.frontend.panels.CountdownPaneControls.ControlMode;
+import java.awt.List;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.NavigableSet;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
@@ -24,10 +29,12 @@ public class CountdownPaneView extends ScrollPane {
     private FlowPane fp;
     private LinkedHashSet<CountdownPane> cdPanes;
     private DisplayOrder displayOrder;
+    private ArrayList<Region> paddingsInUse;
 
     private static CountdownPaneView cpv = null;
 
     private CountdownPaneView() {
+        this.paddingsInUse = new ArrayList<Region>();
         this.displayOrder = DisplayOrder.ASCENDING;
         this.cdPanes = new LinkedHashSet<>();
         this.fp = new FlowPane();
@@ -48,7 +55,15 @@ public class CountdownPaneView extends ScrollPane {
     }
 
     public static CountdownPaneView getInstance() {
-        cpv = (cpv == null) ? new CountdownPaneView() : cpv;
+        if (cpv == null) {
+            cpv = new CountdownPaneView();
+            cpv.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                cpv.addPaddingForAlignment();
+            }
+            });
+        }
         return cpv;
     }
 
@@ -71,6 +86,8 @@ public class CountdownPaneView extends ScrollPane {
     }
 
     private void addPaddingForAlignment() {
+        this.paddingsInUse.forEach(
+            padding -> CountdownPaneView.getInstance().getChildren().remove(padding));
         if (this.cdPanes.isEmpty())
             return;
         double cdWidth = CountdownPane.WIDTH;
@@ -86,6 +103,7 @@ public class CountdownPaneView extends ScrollPane {
             // padding.setBackground(Colour.createBG(Color.PINK, 0, 0));
             padding.setVisible(false);
             this.fp.getChildren().add(padding);
+            this.paddingsInUse.add(padding);
         }
     }
 

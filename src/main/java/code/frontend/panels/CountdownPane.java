@@ -25,11 +25,11 @@ import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
 public class CountdownPane extends VBox {
-    public final double WIDTH = 280;
-    public final double HEIGHT = 140;
-    public final double NAME_WIDTH = 150;
-    public final double DIV_WIDTH = 10;
-    public final double CONTENT_HEIGHT = 100;
+    public static final double WIDTH = 280;
+    public static final double HEIGHT = 140;
+    public static final double NAME_WIDTH = 150;
+    public static final double DIV_WIDTH = 10;
+    public static final double CONTENT_HEIGHT = 100;
 
     private HBox hoverHBox; // container
     private HBox contentHBox; // container
@@ -54,24 +54,24 @@ public class CountdownPane extends VBox {
 
     private void initHoverHBox() {
         int leftRightPadding = 16;
-        double height = this.HEIGHT - this.CONTENT_HEIGHT;
+        double height = HEIGHT - CONTENT_HEIGHT;
         this.hoverHBox = new HBox();
-        hoverHBox.setPrefSize(this.WIDTH, height);
+        hoverHBox.setPrefSize(WIDTH, height);
         Font font = Font.font(Vals.FontTools.FONT_FAM, FontWeight.MEDIUM, FontPosture.ITALIC, 14);
         statusLabel = new Label();
         statusLabel.setAlignment(Pos.BOTTOM_LEFT);
         statusLabel.setFont(font);
         statusLabel.setTextFill(Vals.Colour.TXT_GHOST);
-        statusLabel.setMaxSize(this.WIDTH / 2, height);
+        statusLabel.setMaxSize(WIDTH / 2, height);
         HBox.setMargin(statusLabel, new Insets(0, 0, 0, leftRightPadding));
         Pane spacer = new Pane();
-        spacer.setMaxSize(this.WIDTH, height);
+        spacer.setMaxSize(WIDTH, height);
         HBox.setHgrow(spacer, Priority.ALWAYS);
         endDateLabel = new Label();
         endDateLabel.setAlignment(Pos.BOTTOM_RIGHT);
         endDateLabel.setFont(font);
         endDateLabel.setTextFill(Vals.Colour.TXT_GHOST);
-        endDateLabel.setMaxSize(this.WIDTH / 2, height);
+        endDateLabel.setMaxSize(WIDTH / 2, height);
         HBox.setMargin(endDateLabel, new Insets(0, leftRightPadding, 0, 0));
         hoverHBox.setFillHeight(true);
         hoverHBox.getChildren().addAll(statusLabel, spacer, endDateLabel);
@@ -148,7 +148,7 @@ public class CountdownPane extends VBox {
         nameLabel.setPrefWidth(NAME_WIDTH);
         nameLabel.prefHeightProperty().bind(this.heightProperty());
 
-        HBox.setMargin(nameLabel, new Insets(10, 5, 10, 5));
+        HBox.setMargin(nameLabel, new Insets(10, -2, 10, 10));
         HBox.setHgrow(nameLabel, Priority.ALWAYS);
         return nameLabel;
     }

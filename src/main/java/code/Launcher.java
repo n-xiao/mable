@@ -1,6 +1,5 @@
 package code;
 
-import code.backend.StorageHandler;
 import code.frontend.gui.MainContainer;
 import code.frontend.misc.Vals;
 import javafx.application.Application;
@@ -16,8 +15,8 @@ public class Launcher extends Application {
 
     @Override
     public void start(Stage stage) {
-        stage.setMinWidth(Vals.GraphicalUI.MIN_WIDTH);
-        stage.setMinHeight(Vals.GraphicalUI.MIN_HEIGHT);
+        stage.setMinWidth(Vals.GraphicalUI.PREF_WIDTH);
+        stage.setMinHeight(Vals.GraphicalUI.PREF_HEIGHT);
         stage.setWidth(Vals.GraphicalUI.PREF_WIDTH);
         stage.setHeight(Vals.GraphicalUI.PREF_HEIGHT);
 

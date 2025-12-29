@@ -99,4 +99,14 @@ public class Countdown {
     protected void setDone(boolean isDone) {
         this.isDone = isDone;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Countdown))
+            return false;
+        else {
+            Countdown other = (Countdown) obj;
+            return other.ID.equals(this.ID);
+        }
+    }
 }

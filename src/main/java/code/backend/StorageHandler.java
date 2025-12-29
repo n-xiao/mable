@@ -11,7 +11,10 @@ import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.NavigableSet;
+import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -22,8 +25,8 @@ import java.util.TreeSet;
  */
 public class StorageHandler {
     public static Path storagePath;
-    private static TreeSet<Countdown> countdowns =
-        new TreeSet<Countdown>(new SortByRemainingDays());
+    private static PriorityQueue<Countdown> countdowns =
+        new PriorityQueue<Countdown>(new SortByRemainingDays());
 
     private StorageHandler() {}
 
@@ -58,7 +61,7 @@ public class StorageHandler {
             // if (!active) throw new IOException("Storage is inactive.");
             FileInputStream inputStream = new FileInputStream(storagePath.toString());
             ObjectInputStream objInputStream = new ObjectInputStream(inputStream);
-            countdowns = (TreeSet<Countdown>) objInputStream.readObject();
+            countdowns = (PriorityQueue<Countdown>) objInputStream.readObject();
             objInputStream.close();
         } catch (Exception e) {
             System.err.println("error while loading save data!");
@@ -99,13 +102,13 @@ public class StorageHandler {
         countdowns.add(c);
     }
 
-    public static NavigableSet<Countdown> getAscendingCountdowns() {
-        NavigableSet<Countdown> ascendingSet = countdowns.descendingSet().reversed();
-        return ascendingSet;
+    public static Countdown[] getAscendingCountdowns() {
+        return countdowns.toArray(new Countdown[0]);
     }
 
-    public static NavigableSet<Countdown> getDescendingCountdowns() {
-        NavigableSet<Countdown> descendingSet = countdowns.descendingSet();
-        return descendingSet;
+    public static Countdown[] getDescendingCountdowns() {
+        Countdown[] array = getAscendingCountdowns();
+        Collections.reverse(Arrays.asList(array));
+        return array;
     }
 }

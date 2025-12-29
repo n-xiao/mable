@@ -7,8 +7,11 @@ import code.frontend.panels.CountdownPaneControls.ControlMode;
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.NavigableSet;
+import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
 
 /**
  * This is the scrollable Pane that is responsible for displaying {@link CountdownPane}.
@@ -25,7 +28,7 @@ public class CountdownPaneView extends ScrollPane {
     private static CountdownPaneView cpv = null;
 
     private CountdownPaneView() {
-        this.displayOrder = DisplayOrder.DESCENDING;
+        this.displayOrder = DisplayOrder.ASCENDING;
         this.cdPanes = new LinkedHashSet<>();
         this.fp = new FlowPane();
         this.fp.prefWrapLengthProperty().bind(this.widthProperty());
@@ -33,6 +36,8 @@ public class CountdownPaneView extends ScrollPane {
         this.fp.minHeightProperty().bind(this.heightProperty().add(-2));
         this.fp.setMaxHeight(Double.MAX_VALUE);
         this.fp.setBackground(Colour.createBG(Colour.BACKGROUND, 0, 0));
+        // this.fp.setBackground(Colour.createBG(Color.BLUE, 0, 0));
+        this.fp.setAlignment(Pos.TOP_CENTER);
         this.fp.setHgap(HGAP_BETWEEN);
         this.fp.setVgap(VGAP_BETWEEN);
         this.setBackground(null);
@@ -48,7 +53,7 @@ public class CountdownPaneView extends ScrollPane {
     }
 
     public void repopulate(LocalDate now) {
-        NavigableSet<Countdown> countdowns;
+        Countdown[] countdowns;
         // this if-else is ok for now since there's only two DisplayOrders rn
         if (displayOrder.equals(DisplayOrder.ASCENDING))
             countdowns = StorageHandler.getAscendingCountdowns();
@@ -61,6 +66,26 @@ public class CountdownPaneView extends ScrollPane {
             CountdownPane countdownPane = new CountdownPane(c, now);
             fp.getChildren().add(countdownPane);
             this.cdPanes.add(countdownPane);
+        }
+        addPaddingForAlignment();
+    }
+
+    private void addPaddingForAlignment() {
+        if (this.cdPanes.isEmpty())
+            return;
+        double cdWidth = CountdownPane.WIDTH;
+        double cdHeight = CountdownPane.HEIGHT;
+        double width = this.fp.getWidth();
+        int columns = (int) Math.floor(width / cdWidth);
+        int panesOnLast = this.cdPanes.size() % columns;
+        int remainder = (panesOnLast > 0) ? columns - panesOnLast : 0;
+        for (int i = 0; i < remainder; i++) {
+            Region padding = new Region();
+            padding.setMinSize(cdWidth, cdHeight);
+            padding.setMaxSize(cdWidth, cdHeight);
+            // padding.setBackground(Colour.createBG(Color.PINK, 0, 0));
+            padding.setVisible(false);
+            this.fp.getChildren().add(padding);
         }
     }
 

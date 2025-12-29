@@ -214,18 +214,19 @@ public class CountdownPane extends VBox {
         contentHBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (selected) {
+                if (thisInstance.selected) {
                     // deselect procedure
                     applyDeselectStyle();
-                    CountdownPaneView.getInstance().removeSelected(thisInstance);
+                    thisInstance.selected = false;
+                    CountdownPaneView.getInstance().updateForDeselect(thisInstance);
                     CountdownPaneControls.getInstance().updateSelectionButtonIndicators();
                 } else {
                     // select procedure
                     applySelectStyle();
-                    CountdownPaneView.getInstance().addSelected(thisInstance);
+                    thisInstance.selected = true;
+                    CountdownPaneView.getInstance().updateForNewSelect(thisInstance);
                     CountdownPaneControls.getInstance().updateSelectionButtonIndicators();
                 }
-                selected = !selected;
             }
         });
     }

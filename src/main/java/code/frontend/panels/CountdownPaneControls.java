@@ -1,6 +1,7 @@
 package code.frontend.panels;
 
 import code.backend.StorageHandler;
+import code.frontend.misc.Vals.Colour;
 import code.frontend.windows.AddWindow;
 import code.frontend.windows.EditWindow;
 import java.time.LocalDate;
@@ -9,6 +10,7 @@ import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
+import javafx.scene.paint.Color;
 
 /**
  * Manages the logic for selecting, editing, creating and deleting {@link code.backend.Countdown}
@@ -89,6 +91,11 @@ public class CountdownPaneControls extends HBox {
         HBox.setHgrow(filler, Priority.ALWAYS);
         filler.maxHeightProperty().bind(instance.maxHeightProperty());
 
+        instance.addBtn.setColour(Colour.BTTN_CREATE);
+        instance.removeBtn.setColour(Colour.BTTN_REMOVE);
+        instance.editBtn.setColour(Colour.BTTN_EDIT);
+        instance.deselectBtn.setColour(Colour.BTTN_DESELECT);
+
         instance.getChildren().add(filler);
         instance.getChildren().addAll(buttons);
     }
@@ -130,9 +137,9 @@ public class CountdownPaneControls extends HBox {
         String newDeselectButtonLabel = DESELECT_DEFAULT_STR;
         String newRemoveButtonLabel = REMOVE_DEFAULT_STR;
         int numOfSelections = CountdownPaneView.getInstance().getAllSelected().size();
-        if (numOfSelections > 0) {
-            newDeselectButtonLabel += " (" + Integer.toString(numOfSelections + 1) + ")";
-            newRemoveButtonLabel += " (" + Integer.toString(numOfSelections + 1) + ")";
+        if (numOfSelections > 1) {
+            newDeselectButtonLabel += " (" + Integer.toString(numOfSelections) + ")";
+            newRemoveButtonLabel += " (" + Integer.toString(numOfSelections) + ")";
         }
         this.deselectBtn.setTextLabel(newDeselectButtonLabel);
         this.removeBtn.setTextLabel(newRemoveButtonLabel);

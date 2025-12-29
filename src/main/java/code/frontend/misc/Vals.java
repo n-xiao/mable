@@ -23,6 +23,10 @@ public class Vals {
         public static final Color SELECTED = Color.rgb(136, 175, 252);
         public static final Color ERROR = Color.rgb(250, 11, 11);
         public static final Color DISABLED = Color.rgb(100, 100, 100);
+        public static final Color BTTN_CREATE = Color.rgb(196, 252, 247);
+        public static final Color BTTN_EDIT = Color.rgb(215, 196, 252);
+        public static final Color BTTN_REMOVE = Color.rgb(252, 103, 105);
+        public static final Color BTTN_DESELECT = Color.rgb(206, 182, 173);
 
         public static Background createBG(Color c, double radius, double ins) {
             BackgroundFill bgFill = new BackgroundFill(c, new CornerRadii(radius), new Insets(ins));

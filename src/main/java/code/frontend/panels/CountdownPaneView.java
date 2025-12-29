@@ -2,21 +2,17 @@ package code.frontend.panels;
 
 import code.backend.Countdown;
 import code.backend.StorageHandler;
-import code.frontend.gui.MainContainer;
 import code.frontend.misc.Vals.Colour;
 import code.frontend.panels.CountdownPaneControls.ControlMode;
-import java.awt.List;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.NavigableSet;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
 
 /**
  * This is the scrollable Pane that is responsible for displaying {@link CountdownPane}.
@@ -116,22 +112,22 @@ public class CountdownPaneView extends ScrollPane {
         return selected;
     }
 
-    public void addSelected(CountdownPane pane) {
-        this.cdPanes.add(pane);
+    public void updateForNewSelect(CountdownPane pane) {
         CountdownPaneControls controls = CountdownPaneControls.getInstance();
-        if (this.cdPanes.size() == 1) {
+        int numOfSelected = this.getAllSelected().size();
+        if (numOfSelected == 1) {
             controls.setMode(ControlMode.SINGLE_SELECT);
-        } else if (this.cdPanes.size() > 1) {
+        } else if (numOfSelected > 1) {
             controls.setMode(ControlMode.MULTI_SELECT);
         }
     }
 
-    public void removeSelected(CountdownPane pane) {
-        this.cdPanes.remove(pane);
+    public void updateForDeselect(CountdownPane pane) {
         CountdownPaneControls controls = CountdownPaneControls.getInstance();
-        if (this.cdPanes.size() == 0) {
+        int numOfSelected = this.getAllSelected().size();
+        if (numOfSelected == 0) {
             controls.setMode(ControlMode.NO_SELECT);
-        } else if (this.cdPanes.size() == 1) {
+        } else if (numOfSelected == 1) {
             controls.setMode(ControlMode.SINGLE_SELECT);
         }
     }

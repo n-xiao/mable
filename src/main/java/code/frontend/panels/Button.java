@@ -22,6 +22,7 @@ public abstract class Button extends Pane {
     private Font labelFont = Vals.FontTools.getButtonFont();
     private double borderThickness = Vals.GraphicalUI.BTTN_THICKNESS;
     private Color feedbackColour = Vals.Colour.FEEDBACK;
+    private Color colour = Color.WHITE;
     private Pane animPane = new Pane();
     private FadeTransition ft = new FadeTransition();
     private Label label;
@@ -35,7 +36,7 @@ public abstract class Button extends Pane {
         CustomBox.applyCustomBorder(this, border);
 
         this.label = new Label(text);
-        this.label.setTextFill(border.getStrokeColour());
+        this.label.setTextFill(colour);
         this.label.setAlignment(Pos.CENTER);
         this.label.setFont(labelFont);
         this.label.prefWidthProperty().bind(this.widthProperty());
@@ -115,6 +116,11 @@ public abstract class Button extends Pane {
         this.feedbackColour = feedbackColour;
     }
 
+    public void setColour(Color colour) {
+        this.colour = colour;
+        this.border.setStrokeColour(colour);
+    }
+
     public void setBorderThickness(int borderThickness) {
         this.borderThickness = borderThickness;
     }
@@ -125,8 +131,8 @@ public abstract class Button extends Pane {
 
     public void setEnabled(boolean enabled) {
         if (enabled) {
-            this.border.setStrokeColour(Color.WHITE);
-            this.label.setTextFill(Color.WHITE);
+            this.border.setStrokeColour(colour);
+            this.label.setTextFill(colour);
         } else {
             this.border.setStrokeColour(Colour.DISABLED);
             this.label.setTextFill(Colour.DISABLED);

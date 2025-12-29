@@ -128,8 +128,8 @@ public class CountdownPaneControls extends HBox {
             countdownPane.setSelected(false);
             countdownPane.applyDeselectStyle();
         }
-        deselectBtn.setTextLabel(DESELECT_DEFAULT_STR);
         setMode(ControlMode.NO_SELECT);
+        updateSelectionButtonIndicators();
     }
 
     public void updateSelectionButtonIndicators() {

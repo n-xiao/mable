@@ -1,8 +1,8 @@
+# About
 > [!IMPORTANT]
 > Mable is still in an unreleased state and is only suitable for use by developers.
 >
 
-# About
 Mable is a simple, free and open source deadline manager for Windows and MacOS.
 It is built to make the management of many ongoing, concurrent deadlines easier. Mable allows you to see the
 number of days which remain for each deadline in a sorted list, automatically counting down the days. This makes
@@ -14,7 +14,7 @@ on iOS and the visual aesthetics of [Excalidraw](https://github.com/excalidraw/e
 TODO
 
 > [!WARNING]
-> The current version of Mable does not come with an update manager and **will not automatically update**.
+> The current version of Mable does not come with an update manager and **will not automatically update**.\
 > You are encouraged to check this repository periodically for any updates.
 >
 

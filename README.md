@@ -3,9 +3,8 @@
 > Mable is still in an unreleased state and is only suitable for use by developers.
 >
 
-Mable is a simple, free and open source deadline manager for Windows and MacOS.
-
 ## About
+Mable is a simple, free and open source deadline manager for Windows and MacOS.
 Mable is built to make the management of many ongoing, concurrent deadlines easier. Mable allows you to see the
 number of days which remain for each deadline in a sorted list, automatically counting down the days. This makes
 it easy for you to see which deadline is most (or least) urgent.

@@ -10,7 +10,6 @@ import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
-import javafx.scene.paint.Color;
 
 /**
  * Manages the logic for selecting, editing, creating and deleting {@link code.backend.Countdown}
@@ -30,9 +29,10 @@ public class CountdownPaneControls extends HBox {
     private static CountdownPaneControls instance = null;
 
     private Button addBtn; // add button
-    private Button editBtn; // edit button
-    private Button removeBtn; // remove button
+    // private Button editBtn; // edit button
+    // private Button removeBtn; // remove button
     private Button deselectBtn; // deselect
+    private ControlMode mode;
 
     protected static final String DESELECT_DEFAULT_STR = "deselect";
     protected static final String REMOVE_DEFAULT_STR = "remove";
@@ -54,26 +54,25 @@ public class CountdownPaneControls extends HBox {
                     instance.add();
                 }
             };
-            instance.editBtn = new Button("edit") {
-                @Override
-                public void executeOnClick() {
-                    instance.edit();
-                }
-            };
-            instance.removeBtn = new Button(REMOVE_DEFAULT_STR) {
-                @Override
-                public void executeOnClick() {
-                    instance.remove();
-                }
-            };
+            // instance.editBtn = new Button("edit") {
+            //     @Override
+            //     public void executeOnClick() {
+            //         instance.edit();
+            //     }
+            // };
+            // instance.removeBtn = new Button(REMOVE_DEFAULT_STR) {
+            //     @Override
+            //     public void executeOnClick() {
+            //         instance.remove();
+            //     }
+            // };
             instance.deselectBtn = new Button(DESELECT_DEFAULT_STR) {
                 @Override
                 public void executeOnClick() {
-                    instance.deselectAll();
+                    CountdownPaneView.getInstance().deselectAll();
                 }
             };
-            applyStyling(
-                instance.addBtn, instance.editBtn, instance.removeBtn, instance.deselectBtn);
+            applyStyling(instance.addBtn, instance.deselectBtn);
             instance.setMode(ControlMode.NO_SELECT); // sets mode on startup
         }
         return instance;
@@ -92,8 +91,8 @@ public class CountdownPaneControls extends HBox {
         filler.maxHeightProperty().bind(instance.maxHeightProperty());
 
         instance.addBtn.setColour(Colour.BTTN_CREATE);
-        instance.removeBtn.setColour(Colour.BTTN_REMOVE);
-        instance.editBtn.setColour(Colour.BTTN_EDIT);
+        // instance.removeBtn.setColour(Colour.BTTN_REMOVE);
+        // instance.editBtn.setColour(Colour.BTTN_EDIT);
         instance.deselectBtn.setColour(Colour.BTTN_DESELECT);
 
         instance.getChildren().add(filler);
@@ -112,57 +111,48 @@ public class CountdownPaneControls extends HBox {
         this.view.repopulate(LocalDate.now());
     }
 
-    private void remove() {
-        LinkedHashSet<CountdownPane> selectedPanes = view.getAllSelected();
-        for (CountdownPane countdownPane : selectedPanes)
-            StorageHandler.deleteCountdown(countdownPane.getCountdown());
-        deselectAll();
-        StorageHandler.save();
-        this.view.repopulate(LocalDate.now());
-        this.removeBtn.setTextLabel(REMOVE_DEFAULT_STR);
-    }
-
-    public void deselectAll() {
-        LinkedHashSet<CountdownPane> selectedPanes = view.getAllSelected();
-        for (CountdownPane countdownPane : selectedPanes) {
-            countdownPane.setSelected(false);
-            countdownPane.applyDeselectStyle();
-        }
-        setMode(ControlMode.NO_SELECT);
-        updateSelectionButtonIndicators();
-    }
+    // private void remove() {
+    //     LinkedHashSet<CountdownPane> selectedPanes = view.getAllSelected();
+    //     for (CountdownPane countdownPane : selectedPanes)
+    //         StorageHandler.deleteCountdown(countdownPane.getCountdown());
+    //     deselectAll();
+    //     StorageHandler.save();
+    //     this.view.repopulate(LocalDate.now());
+    //     // this.removeBtn.setTextLabel(REMOVE_DEFAULT_STR);
+    // }
 
     public void updateSelectionButtonIndicators() {
         // shows the user how many selections there are via the deselectButton
         String newDeselectButtonLabel = DESELECT_DEFAULT_STR;
-        String newRemoveButtonLabel = REMOVE_DEFAULT_STR;
+        // String newRemoveButtonLabel = REMOVE_DEFAULT_STR;
         int numOfSelections = CountdownPaneView.getInstance().getAllSelected().size();
         if (numOfSelections > 1) {
             newDeselectButtonLabel += " (" + Integer.toString(numOfSelections) + ")";
-            newRemoveButtonLabel += " (" + Integer.toString(numOfSelections) + ")";
+            // newRemoveButtonLabel += " (" + Integer.toString(numOfSelections) + ")";
         }
         this.deselectBtn.setTextLabel(newDeselectButtonLabel);
-        this.removeBtn.setTextLabel(newRemoveButtonLabel);
+        // this.removeBtn.setTextLabel(newRemoveButtonLabel);
     }
 
     public void setMode(ControlMode mode) {
+        this.mode = mode;
         switch (mode) {
             case NO_SELECT:
                 addBtn.setEnabled(true);
-                editBtn.setEnabled(false);
-                removeBtn.setEnabled(false);
+                // editBtn.setEnabled(false);
+                // removeBtn.setEnabled(false);
                 deselectBtn.setEnabled(false);
                 break;
             case SINGLE_SELECT:
                 addBtn.setEnabled(false);
-                editBtn.setEnabled(true);
-                removeBtn.setEnabled(true);
+                // editBtn.setEnabled(true);
+                // removeBtn.setEnabled(true);
                 deselectBtn.setEnabled(true);
                 break;
             case MULTI_SELECT:
                 addBtn.setEnabled(false);
-                editBtn.setEnabled(false);
-                removeBtn.setEnabled(true);
+                // editBtn.setEnabled(false);
+                // removeBtn.setEnabled(true);
                 deselectBtn.setEnabled(true);
                 break;
             default:

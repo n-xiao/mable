@@ -11,13 +11,13 @@ public class CustomLine extends ResizableCanvas {
     private Coordinate end;
     private Coordinate mid;
     private Coordinate midVar;
-    private int thickness;
+    private double thickness;
     private Type lineType;
     private double startPadding;
     private double endPadding;
     private final double DEVIATION; // determined using thickness
 
-    public CustomLine(int thickness, Type type) {
+    public CustomLine(double thickness, Type type) {
         this.DEVIATION = 0.5;
         this.thickness = thickness;
         this.lineType = type;

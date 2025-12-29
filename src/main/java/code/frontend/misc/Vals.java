@@ -14,6 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class Vals {
+    // no, i have never heard of css before. what is it?
     public final class Colour {
         public static final Color BACKGROUND = Color.rgb(20, 20, 30);
         public static final Color SIDE_BAR = Color.rgb(67, 67, 75);
@@ -27,6 +28,7 @@ public class Vals {
         public static final Color BTTN_EDIT = Color.rgb(215, 196, 252);
         public static final Color BTTN_REMOVE = Color.rgb(252, 103, 105);
         public static final Color BTTN_DESELECT = Color.rgb(206, 182, 173);
+        public static final Color BTTN_MARK_COMPLETE = Color.rgb(77, 171, 247);
 
         public static Background createBG(Color c, double radius, double ins) {
             BackgroundFill bgFill = new BackgroundFill(c, new CornerRadii(radius), new Insets(ins));

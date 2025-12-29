@@ -19,18 +19,28 @@ import javafx.util.Duration;
 
 public abstract class Button extends Pane {
     private final double HOVER_OPACITY = 0.2;
-    private Font labelFont = Vals.FontTools.getButtonFont();
-    private double borderThickness = Vals.GraphicalUI.BTTN_THICKNESS;
-    private Color feedbackColour = Vals.Colour.FEEDBACK;
-    private Color colour = Color.WHITE;
+
+    private Font labelFont;
+    private Color feedbackColour;
+    private Color colour;
+    private double borderThickness;
+
     private Pane animPane = new Pane();
     private FadeTransition ft = new FadeTransition();
+    private boolean animationsEnabled;
+
     private Label label;
-    private boolean enabled;
     private CustomBox border;
 
+    private boolean enabled;
+
     public Button(String text) {
+        this.labelFont = Vals.FontTools.getButtonFont();
+        this.feedbackColour = Vals.Colour.FEEDBACK;
+        this.colour = Color.WHITE;
+        this.borderThickness = Vals.GraphicalUI.BTTN_THICKNESS;
         this.enabled = true;
+        this.animationsEnabled = true;
 
         this.border = new CustomBox(borderThickness);
         CustomBox.applyCustomBorder(this, border);
@@ -89,6 +99,8 @@ public abstract class Button extends Pane {
     public abstract void executeOnClick();
 
     private void playClickAnim() {
+        if (!animationsEnabled)
+            return;
         this.ft.stop();
         this.ft.setDuration(Duration.millis(200));
         this.ft.setFromValue(0.8);
@@ -97,6 +109,10 @@ public abstract class Button extends Pane {
     }
 
     private void playMouseEnterAnim() {
+        if (!animationsEnabled) {
+            this.animPane.setOpacity(1);
+            return;
+        }
         this.ft.stop();
         this.ft.setDuration(Duration.millis(300));
         this.ft.setFromValue(0);
@@ -105,11 +121,19 @@ public abstract class Button extends Pane {
     }
 
     private void playMouseExitAnim() {
+        if (!animationsEnabled) {
+            this.animPane.setOpacity(0);
+            return;
+        }
         this.ft.stop();
         this.ft.setDuration(Duration.millis(300));
         this.ft.setFromValue(HOVER_OPACITY);
         this.ft.setToValue(0);
         this.ft.playFromStart();
+    }
+
+    public Label getLabel() {
+        return label;
     }
 
     public void setFeedbackColour(Color feedbackColour) {
@@ -138,5 +162,9 @@ public abstract class Button extends Pane {
             this.label.setTextFill(Colour.DISABLED);
         }
         this.enabled = enabled;
+    }
+
+    public void setAnimationsEnabled(boolean animationsEnabled) {
+        this.animationsEnabled = animationsEnabled;
     }
 }

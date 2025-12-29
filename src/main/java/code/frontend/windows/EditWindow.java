@@ -60,9 +60,10 @@ public class EditWindow extends ConfigWindowTemplate {
                 LocalDate newDue = getDateField().getLocalDateInput(false);
                 StorageHandler.editCountdown(countdown, newName, newDue);
                 StorageHandler.save();
+                CountdownPaneView cpv = CountdownPaneView.getInstance();
+                cpv.repopulate(LocalDate.now());
+                cpv.deselectAll();
                 window.close();
-                CountdownPaneView.getInstance().repopulate(LocalDate.now());
-                CountdownPaneControls.getInstance().deselectAll();
                 window = null;
             }
         };

@@ -3,6 +3,8 @@ package code.frontend.panels;
 import code.backend.Countdown;
 import code.frontend.foundation.CustomBox;
 import code.frontend.foundation.CustomLine;
+import code.frontend.gui.MainContainer;
+import code.frontend.gui.RightClickMenu;
 import code.frontend.misc.Vals;
 import code.frontend.misc.Vals.GraphicalUI;
 import java.time.LocalDate;
@@ -12,6 +14,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.OverrunStyle;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -194,6 +197,43 @@ public class CountdownPane extends VBox {
         return display;
     }
 
+    private void initSelectable(CountdownPane thisInstance) {
+        contentHBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                MouseButton mouseButton = event.getButton();
+                if (thisInstance.selected && mouseButton.equals(MouseButton.SECONDARY)) {
+                    thisInstance.onMouseSecondaryClick(event.getSceneX(), event.getSceneY());
+                } else {
+                    thisInstance.onMousePrimaryClick();
+                }
+            }
+        });
+    }
+
+    private void onMousePrimaryClick() {
+        if (this.selected) {
+            // deselect procedure
+            applyDeselectStyle();
+            this.selected = false;
+            CountdownPaneView.getInstance().updateForDeselect(this);
+            CountdownPaneControls.getInstance().updateSelectionButtonIndicators();
+        } else {
+            // select procedure
+            applySelectStyle();
+            this.selected = true;
+            CountdownPaneView.getInstance().updateForNewSelect(this);
+            CountdownPaneControls.getInstance().updateSelectionButtonIndicators();
+        }
+    }
+
+    private void onMouseSecondaryClick(double x, double y) {
+        MainContainer mc = MainContainer.getInstance();
+        RightClickMenu rcm = RightClickMenu.getInstance();
+        rcm.relocate(x, y);
+        mc.getChildren().addFirst(rcm);
+    }
+
     public void applyDeselectStyle() {
         ft.stop();
         hoverHBox.setOpacity(1);
@@ -208,27 +248,6 @@ public class CountdownPane extends VBox {
         border.setStrokeColour(Vals.Colour.SELECTED);
         statusLabel.setTextFill(Vals.Colour.SELECTED);
         endDateLabel.setTextFill(Vals.Colour.SELECTED);
-    }
-
-    private void initSelectable(CountdownPane thisInstance) {
-        contentHBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (thisInstance.selected) {
-                    // deselect procedure
-                    applyDeselectStyle();
-                    thisInstance.selected = false;
-                    CountdownPaneView.getInstance().updateForDeselect(thisInstance);
-                    CountdownPaneControls.getInstance().updateSelectionButtonIndicators();
-                } else {
-                    // select procedure
-                    applySelectStyle();
-                    thisInstance.selected = true;
-                    CountdownPaneView.getInstance().updateForNewSelect(thisInstance);
-                    CountdownPaneControls.getInstance().updateSelectionButtonIndicators();
-                }
-            }
-        });
     }
 
     public Countdown getCountdown() {

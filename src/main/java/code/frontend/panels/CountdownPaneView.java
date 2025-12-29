@@ -132,6 +132,16 @@ public class CountdownPaneView extends ScrollPane {
         }
     }
 
+    public void deselectAll() {
+        CountdownPaneControls cpc = CountdownPaneControls.getInstance();
+        for (CountdownPane countdownPane : cdPanes) {
+            countdownPane.setSelected(false);
+            countdownPane.applyDeselectStyle();
+        }
+        cpc.setMode(ControlMode.NO_SELECT);
+        cpc.updateSelectionButtonIndicators();
+    }
+
     public DisplayOrder getDisplayOrder() {
         return displayOrder;
     }

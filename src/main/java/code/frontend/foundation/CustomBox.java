@@ -11,10 +11,10 @@ public class CustomBox extends ResizableCanvas {
     private double cornerDeviation = Vals.GraphicalUI.CORNER_DEVIATION;
     private double cornerOffset = Vals.GraphicalUI.CORNER_OFFSET;
 
+    private Coordinate[] cornerCoords;
+    private QuadPathSaver saver;
+
     private double thickness;
-    private Coordinate[] controlCoords = null;
-    private Coordinate[] cornerCoords = null;
-    private Coordinate[] fixedCoords = null;
 
     public CustomBox() {
         this.thickness = Vals.GraphicalUI.DRAW_THICKNESS;
@@ -33,29 +33,38 @@ public class CustomBox extends ResizableCanvas {
     }
 
     // TODO: FIX THIS SO THAT REDRAW WITH EXACT PREV PATH IS POSSIBLE
+    // IDEA IS TO EXTEND gc class AND IMPLEMENT SOME KIND OF PATH LOGGER
     @Override
     protected void draw(GraphicsContext gc, boolean recompute) {
         gc.setLineWidth(this.thickness);
         gc.setLineCap(StrokeLineCap.ROUND);
         gc.setLineJoin(StrokeLineJoin.ROUND);
-        assembleBoxPath(gc, recompute);
-        assembleBoxPath(gc, recompute);
+        if (!recompute && this.saver != null)
+            restoreBoxPath(gc);
+        else
+            assembleBoxPath(gc);
+        gc.stroke();
     }
 
-    private void assembleBoxPath(GraphicsContext gc, boolean recompute) {
-        Coordinate[] fixed =
-            (!recompute && this.fixedCoords != null) ? this.fixedCoords : getFixedCoords();
-        Coordinate[] ctrl =
-            (!recompute && this.controlCoords != null) ? this.controlCoords : getControlCoords();
+    private void assembleBoxPath(GraphicsContext gc) {
+        Coordinate[] fixed = getFixedCoords();
         gc.beginPath();
         gc.moveTo(fixed[0].x, fixed[0].y);
-        for (int i = 0; i < ctrl.length; i++) {
-            int fixedIndex = (i == ctrl.length - 1) ? 0 : i + 1; // allows wrap-around
-            gc.quadraticCurveTo(ctrl[i].x, ctrl[i].y, fixed[fixedIndex].x, fixed[fixedIndex].y);
-            // System.out.println("x: " + fixed[fixedIndex].x + "y: " + fixed[fixedIndex].y);
+        this.saver = new QuadPathSaver(new Coordinate(fixed[0].x, fixed[0].y));
+        for (int loop = 0; loop < 2; loop++) {
+            Coordinate[] ctrl = getControlCoords();
+            for (int i = 0; i < ctrl.length; i++) {
+                int fixedIndex = (i == ctrl.length - 1) ? 0 : i + 1; // allows wrap-around
+                gc.quadraticCurveTo(ctrl[i].x, ctrl[i].y, fixed[fixedIndex].x, fixed[fixedIndex].y);
+                this.saver.logQuadPath(ctrl[i], fixed[fixedIndex]);
+                // System.out.println("x: " + fixed[fixedIndex].x + "y: " + fixed[fixedIndex].y);
+            }
         }
+        gc.closePath();
+    }
 
-        gc.stroke();
+    private void restoreBoxPath(GraphicsContext gc) {
+        this.saver.restorePath(gc);
     }
 
     /*
@@ -95,24 +104,24 @@ public class CustomBox extends ResizableCanvas {
     private Coordinate[] getFixedCoords() {
         // if (this.fixedCoords != null) return this.fixedCoords;
         Coordinate[] corners = getCornerCoords();
-        this.fixedCoords = new Coordinate[8];
+        Coordinate[] fixedCoords = new Coordinate[8];
         double width = getPaddedWidth();
         double height = getPaddedHeight();
         double offset = (Math.min(width, height) * cornerOffset);
-        // ew ugly code... but it's readable so sike
-        this.fixedCoords[0] = new Coordinate(corners[0].x, corners[0].y + offset);
-        this.fixedCoords[1] = new Coordinate(corners[0].x + offset, corners[0].y);
+        // ew ugly code... but it's readable so sike... maybe ill prettify it later
+        fixedCoords[0] = new Coordinate(corners[0].x, corners[0].y + offset);
+        fixedCoords[1] = new Coordinate(corners[0].x + offset, corners[0].y);
 
-        this.fixedCoords[2] = new Coordinate(corners[1].x - offset, corners[1].y);
-        this.fixedCoords[3] = new Coordinate(corners[1].x, corners[1].y + offset);
+        fixedCoords[2] = new Coordinate(corners[1].x - offset, corners[1].y);
+        fixedCoords[3] = new Coordinate(corners[1].x, corners[1].y + offset);
 
-        this.fixedCoords[4] = new Coordinate(corners[2].x, corners[2].y - offset);
-        this.fixedCoords[5] = new Coordinate(corners[2].x - offset, corners[2].y);
+        fixedCoords[4] = new Coordinate(corners[2].x, corners[2].y - offset);
+        fixedCoords[5] = new Coordinate(corners[2].x - offset, corners[2].y);
 
-        this.fixedCoords[6] = new Coordinate(corners[3].x + offset, corners[3].y);
-        this.fixedCoords[7] = new Coordinate(corners[3].x, corners[3].y - offset);
+        fixedCoords[6] = new Coordinate(corners[3].x + offset, corners[3].y);
+        fixedCoords[7] = new Coordinate(corners[3].x, corners[3].y - offset);
 
-        return this.fixedCoords;
+        return fixedCoords;
     }
 
     /*
@@ -165,8 +174,6 @@ public class CustomBox extends ResizableCanvas {
             controlCoords[i].y = controlCoords[i].getVarY();
             count++;
         }
-
-        this.controlCoords = controlCoords;
 
         return controlCoords;
     }

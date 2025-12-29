@@ -124,7 +124,7 @@ public class CountdownPane extends VBox {
         contentHBox.setPrefSize(WIDTH, CONTENT_HEIGHT);
         contentHBox.setFillHeight(true);
         // adds the border
-        this.border = new CustomBox(GraphicalUI.DRAW_THICKNESS, 0.02, 0.032, 0.25);
+        this.border = new CustomBox(GraphicalUI.DRAW_THICKNESS);
         CustomBox.applyCustomBorder(contentHBox, border);
         // adds the name display
         contentHBox.getChildren().add(createNameLabel(countdown));

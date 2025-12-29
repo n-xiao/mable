@@ -34,16 +34,30 @@ public class Coordinate {
     }
 
     public double getVarX() {
-        double min = (this.x < this.xDeviation) ? -this.x : -this.xDeviation;
+        // double min = (this.x < this.xDeviation) ? -this.x : -this.xDeviation;
+        double min = -this.xDeviation;
         double max = this.xDeviation;
         double deviation = min + (Math.random() * ((max - min) + 1));
         this.varX = this.x + deviation;
         return this.varX;
     }
 
+    public double getVarX(double min, double max) {
+        double deviation = min + (Math.random() * ((max - min) + 1));
+        this.varX = this.x + deviation;
+        return this.varX;
+    }
+
     public double getVarY() {
-        double min = (this.y < this.yDeviation) ? -this.y : -this.yDeviation;
+        // double min = (this.y < this.yDeviation) ? -this.y : -this.yDeviation;
+        double min = -this.yDeviation;
         double max = this.yDeviation;
+        double deviation = min + (Math.random() * ((max - min) + 1));
+        this.varY = this.y + deviation;
+        return this.varY;
+    }
+
+    public double getVarY(double min, double max) {
         double deviation = min + (Math.random() * ((max - min) + 1));
         this.varY = this.y + deviation;
         return this.varY;

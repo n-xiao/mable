@@ -33,8 +33,10 @@ public abstract class Button extends Pane {
     private CustomBox border;
 
     private boolean enabled;
+    private boolean consumeEvent;
 
     public Button(String text) {
+        this.consumeEvent = false;
         this.labelFont = Vals.FontTools.getButtonFont();
         this.feedbackColour = Vals.Colour.FEEDBACK;
         this.colour = Color.WHITE;
@@ -72,6 +74,8 @@ public abstract class Button extends Pane {
         this.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                if (consumeEvent)
+                    event.consume();
                 if (enabled) {
                     executeOnClick();
                     playClickAnim();
@@ -136,6 +140,10 @@ public abstract class Button extends Pane {
         return label;
     }
 
+    public CustomBox getCustomBorder() {
+        return border;
+    }
+
     public void setFeedbackColour(Color feedbackColour) {
         this.feedbackColour = feedbackColour;
     }
@@ -162,6 +170,10 @@ public abstract class Button extends Pane {
             this.label.setTextFill(Colour.DISABLED);
         }
         this.enabled = enabled;
+    }
+
+    public void setConsumeEvent(boolean consumeEvent) {
+        this.consumeEvent = consumeEvent;
     }
 
     public void setAnimationsEnabled(boolean animationsEnabled) {

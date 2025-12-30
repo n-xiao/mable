@@ -1,11 +1,8 @@
 package code.frontend.panels;
 
-import code.backend.StorageHandler;
 import code.frontend.misc.Vals.Colour;
+import code.frontend.panels.CountdownPaneView.ButtonMode;
 import code.frontend.windows.AddWindow;
-import code.frontend.windows.EditWindow;
-import java.time.LocalDate;
-import java.util.LinkedHashSet;
 import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -24,25 +21,17 @@ import javafx.scene.layout.Priority;
  * TBD: for 1 or greater selections, a tag button will be shown when the system is implemented.
  */
 public class CountdownPaneControls extends HBox {
-    enum ControlMode { NO_SELECT, SINGLE_SELECT, MULTI_SELECT }
-
     private static CountdownPaneControls instance = null;
-
-    private Button addBtn; // add button
-    // private Button editBtn; // edit button
-    // private Button removeBtn; // remove button
-    private Button deselectBtn; // deselect
-    private ControlMode mode;
 
     protected static final String DESELECT_DEFAULT_STR = "deselect";
     protected static final String REMOVE_DEFAULT_STR = "remove";
 
-    private CountdownPaneView view;
+    private Button addBtn; // add button
+    private Button deselectBtn; // deselect
 
     private CountdownPaneControls() {
         this.setBackground(null);
         this.setFillHeight(true);
-        this.view = CountdownPaneView.getInstance();
     }
 
     public static CountdownPaneControls getInstance() {
@@ -51,34 +40,22 @@ public class CountdownPaneControls extends HBox {
             instance.addBtn = new Button("create") {
                 @Override
                 public void executeOnClick() {
-                    instance.add();
+                    AddWindow.getInstance();
                 }
             };
-            // instance.editBtn = new Button("edit") {
-            //     @Override
-            //     public void executeOnClick() {
-            //         instance.edit();
-            //     }
-            // };
-            // instance.removeBtn = new Button(REMOVE_DEFAULT_STR) {
-            //     @Override
-            //     public void executeOnClick() {
-            //         instance.remove();
-            //     }
-            // };
             instance.deselectBtn = new Button(DESELECT_DEFAULT_STR) {
                 @Override
                 public void executeOnClick() {
                     CountdownPaneView.getInstance().deselectAll();
                 }
             };
-            applyStyling(instance.addBtn, instance.deselectBtn);
-            instance.setMode(ControlMode.NO_SELECT); // sets mode on startup
+            instance.applyStyling(instance.addBtn, instance.deselectBtn);
+            instance.setMode();
         }
         return instance;
     }
 
-    private static void applyStyling(Button... buttons) {
+    private void applyStyling(Button... buttons) {
         for (Button button : buttons) {
             HBox.setMargin(button, new Insets(5, 10, 5, 10));
             button.setMinWidth(130);
@@ -90,77 +67,34 @@ public class CountdownPaneControls extends HBox {
         HBox.setHgrow(filler, Priority.ALWAYS);
         filler.maxHeightProperty().bind(instance.maxHeightProperty());
 
-        instance.addBtn.setColour(Colour.BTTN_CREATE);
-        // instance.removeBtn.setColour(Colour.BTTN_REMOVE);
-        // instance.editBtn.setColour(Colour.BTTN_EDIT);
-        instance.deselectBtn.setColour(Colour.BTTN_DESELECT);
+        this.addBtn.setColour(Colour.BTTN_CREATE);
+        this.deselectBtn.setColour(Colour.BTTN_DESELECT);
 
-        instance.getChildren().add(filler);
-        instance.getChildren().addAll(buttons);
+        this.getChildren().add(filler);
+        this.getChildren().addAll(buttons);
     }
-
-    private void add() {
-        AddWindow.getInstance();
-    }
-
-    private void edit() {
-        LinkedHashSet<CountdownPane> selectedPanes = view.getAllSelected();
-        if (selectedPanes.isEmpty())
-            return;
-        EditWindow.getInstance(selectedPanes.getFirst().getCountdown());
-        this.view.repopulate(LocalDate.now());
-    }
-
-    // private void remove() {
-    //     LinkedHashSet<CountdownPane> selectedPanes = view.getAllSelected();
-    //     for (CountdownPane countdownPane : selectedPanes)
-    //         StorageHandler.deleteCountdown(countdownPane.getCountdown());
-    //     deselectAll();
-    //     StorageHandler.save();
-    //     this.view.repopulate(LocalDate.now());
-    //     // this.removeBtn.setTextLabel(REMOVE_DEFAULT_STR);
-    // }
 
     public void updateSelectionButtonIndicators() {
         // shows the user how many selections there are via the deselectButton
         String newDeselectButtonLabel = DESELECT_DEFAULT_STR;
-        // String newRemoveButtonLabel = REMOVE_DEFAULT_STR;
-        int numOfSelections = CountdownPaneView.getInstance().getAllSelected().size();
+        int numOfSelections = CountdownPaneView.getInstance().getNumOfSelections();
         if (numOfSelections > 1) {
             newDeselectButtonLabel += " (" + Integer.toString(numOfSelections) + ")";
-            // newRemoveButtonLabel += " (" + Integer.toString(numOfSelections) + ")";
         }
         this.deselectBtn.setTextLabel(newDeselectButtonLabel);
-        // this.removeBtn.setTextLabel(newRemoveButtonLabel);
     }
 
-    public void setMode(ControlMode mode) {
-        this.mode = mode;
+    public void setMode() {
+        ButtonMode mode = CountdownPaneView.getInstance().getMode();
         switch (mode) {
             case NO_SELECT:
                 addBtn.setEnabled(true);
-                // editBtn.setEnabled(false);
-                // removeBtn.setEnabled(false);
                 deselectBtn.setEnabled(false);
                 break;
-            case SINGLE_SELECT:
-                addBtn.setEnabled(false);
-                // editBtn.setEnabled(true);
-                // removeBtn.setEnabled(true);
-                deselectBtn.setEnabled(true);
-                break;
-            case MULTI_SELECT:
-                addBtn.setEnabled(false);
-                // editBtn.setEnabled(false);
-                // removeBtn.setEnabled(true);
-                deselectBtn.setEnabled(true);
-                break;
             default:
+                addBtn.setEnabled(false);
+                deselectBtn.setEnabled(true);
                 break;
         }
-    }
-
-    public Button getDeselectBtn() {
-        return deselectBtn;
     }
 }

@@ -1,16 +1,12 @@
 package code.frontend.gui;
 
-import code.backend.StorageHandler;
 import code.frontend.foundation.CustomBox;
 import code.frontend.foundation.CustomLine;
 import code.frontend.foundation.CustomLine.Type;
 import code.frontend.misc.Vals.Colour;
 import code.frontend.panels.Button;
-import code.frontend.panels.CountdownPane;
 import code.frontend.panels.CountdownPaneView;
-import code.frontend.windows.EditWindow;
-import java.time.LocalDate;
-import java.util.LinkedHashSet;
+import code.frontend.panels.CountdownPaneView.ButtonMode;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
@@ -24,6 +20,11 @@ import javafx.scene.layout.VBox;
  *
  * In order for it to show up anywhere, this VBox is set to unmanaged
  * and should be manually position based on the cursor position.
+ *
+ * It is imperative to note that this class uses a "lazy loading"
+ * concept, where the GUI is only created (and seen by the user)
+ * when the user right-clicks on something. Hence, the only calls
+ * to getInstance should be from right-click listeners.
  *
  */
 public class RightClickMenu extends VBox {
@@ -41,56 +42,40 @@ public class RightClickMenu extends VBox {
     private final String ADD_TO_FOLDER_STR = "Add to folder...";
     private final String DELETE_STR = "Delete";
 
+    private final ButtonMode MODE;
+
     private Button markAsComplete;
     private Button edit;
     private Button addToFolder;
     private Button delete;
 
     private RightClickMenu() {
+        this.MODE = CountdownPaneView.getInstance().getMode();
         this.markAsComplete = new Button(MARK_COMPLETE_STR) {
             @Override
             public void executeOnClick() {
-                CountdownPaneView cpv = CountdownPaneView.getInstance();
-                LinkedHashSet<CountdownPane> selectedPanes = cpv.getAllSelected();
-                for (CountdownPane countdownPane : selectedPanes) {
-                    countdownPane.getCountdown().setDone(true);
-                }
-
+                CountdownPaneView.getInstance().markSelectedAsComplete();
                 RightClickMenu.close();
             }
         };
         this.edit = new Button(EDIT_STR) {
             @Override
             public void executeOnClick() {
-                CountdownPaneView cpv = CountdownPaneView.getInstance();
-                LinkedHashSet<CountdownPane> selectedPanes = cpv.getAllSelected();
-                if (selectedPanes.isEmpty())
-                    return;
-                EditWindow.getInstance(selectedPanes.getFirst().getCountdown());
-
+                CountdownPaneView.getInstance().editSelected();
                 RightClickMenu.close();
             }
         };
         this.addToFolder = new Button(ADD_TO_FOLDER_STR) {
             @Override
             public void executeOnClick() {
-                // TODO
-
+                CountdownPaneView.getInstance().addSelectedToFolder();
                 RightClickMenu.close();
             }
         };
         this.delete = new Button(DELETE_STR) {
             @Override
             public void executeOnClick() {
-                CountdownPaneView cpv = CountdownPaneView.getInstance();
-                LinkedHashSet<CountdownPane> selectedPanes = cpv.getAllSelected();
-
-                for (CountdownPane countdownPane : selectedPanes) {
-                    StorageHandler.deleteCountdown(countdownPane.getCountdown());
-                }
-                StorageHandler.save();
-                cpv.repopulate(LocalDate.now());
-
+                CountdownPaneView.getInstance().deleteSelected();
                 RightClickMenu.close();
             }
         };
@@ -106,7 +91,9 @@ public class RightClickMenu extends VBox {
             instance.getChildren().addAll(instance.markAsComplete, instance.createDivider(),
                 instance.edit, instance.addToFolder, instance.createDivider(), instance.delete);
 
+            instance.setMode();
             instance.updateSelectionButtonIndicators();
+            // instance.setMode(CountdownPaneView.getInstance().getm);
         }
 
         return instance;
@@ -133,7 +120,9 @@ public class RightClickMenu extends VBox {
             button.setMinSize(WIDTH, BUTTON_HEIGHT);
             button.setMaxSize(WIDTH, BUTTON_HEIGHT);
             button.setAnimationsEnabled(false);
+            button.getCustomBorder().setVisible(false);
             button.getLabel().setAlignment(Pos.CENTER_LEFT);
+            button.setConsumeEvent(true);
         }
 
         this.markAsComplete.setFeedbackColour(Colour.BTTN_MARK_COMPLETE);
@@ -160,7 +149,7 @@ public class RightClickMenu extends VBox {
         String newMarkCompleteString = MARK_COMPLETE_STR;
         String newAddToFolderString = ADD_TO_FOLDER_STR;
         String newDeleteString = DELETE_STR;
-        int numOfSelections = CountdownPaneView.getInstance().getAllSelected().size();
+        int numOfSelections = CountdownPaneView.getInstance().getNumOfSelections();
         if (numOfSelections > 1) {
             appendNumOfSelections(newMarkCompleteString, newAddToFolderString, newDeleteString);
         }
@@ -170,9 +159,34 @@ public class RightClickMenu extends VBox {
     }
 
     private void appendNumOfSelections(String... strings) {
-        int selections = CountdownPaneView.getInstance().getAllSelected().size();
+        int selections = CountdownPaneView.getInstance().getNumOfSelections();
         for (int i = 0; i < strings.length; i++) {
             strings[i] += " (" + Integer.toString(selections) + ")";
+        }
+    }
+
+    private void setMode() {
+        switch (this.MODE) {
+            case NO_SELECT:
+                this.markAsComplete.setEnabled(false);
+                this.edit.setEnabled(false);
+                this.delete.setEnabled(false);
+                this.addToFolder.setEnabled(false);
+                break;
+            case SINGLE_SELECT:
+                this.markAsComplete.setEnabled(true);
+                this.edit.setEnabled(true);
+                this.delete.setEnabled(true);
+                this.addToFolder.setEnabled(true);
+                break;
+            case MULTI_SELECT:
+                this.markAsComplete.setEnabled(true);
+                this.edit.setEnabled(false);
+                this.delete.setEnabled(true);
+                this.addToFolder.setEnabled(true);
+                break;
+            default:
+                break;
         }
     }
 }

@@ -175,7 +175,6 @@ public class CountdownPaneView extends ScrollPane {
     }
 
     public void deselectAll() {
-        CountdownPaneControls cpc = CountdownPaneControls.getInstance();
         for (CountdownPane countdownPane : cdPanes) {
             countdownPane.setSelected(false);
             countdownPane.applyDeselectStyle();
@@ -404,7 +403,7 @@ public class CountdownPaneView extends ScrollPane {
             CountdownPaneView.getInstance().deselectAll();
             applySelectStyle();
             this.selected = true;
-            RightClickMenu.getInstance(x, y);
+            RightClickMenu.openAt(x, y);
         }
 
         public void applyDeselectStyle() {

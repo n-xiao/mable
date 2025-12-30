@@ -7,10 +7,12 @@ import code.frontend.misc.Vals.Colour;
 import code.frontend.panels.Button;
 import code.frontend.panels.CountdownPaneView;
 import code.frontend.panels.CountdownPaneView.ButtonMode;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 /**
  * man, i should really write more of these things called comments...
@@ -29,20 +31,26 @@ import javafx.scene.layout.VBox;
  */
 public class RightClickMenu extends VBox {
     private static RightClickMenu instance = null;
-    private static final double BG_RADIUS = 0.2;
+
+    private static final double BG_RADIUS = 12;
     private static final double BG_INSETS = 4;
 
-    private static final double WIDTH = 190;
-    private static final double HEIGHT = 300;
+    private static final double BORDER_CORNER_OFFSET = 0.12;
+    private static final double BORDER_DEV = 0;
+    private static final double BORDER_CORNER_DEV = 0.014;
+    private static final double BORDER_THICKNESS = 2;
 
-    private static final double BUTTON_HEIGHT = 60;
+    private static final int RIGHTLEFT_INSET = 15;
+
+    private static final double WIDTH = 190;
+    private static final double HEIGHT = 185;
+
+    private static final double BUTTON_HEIGHT = 40;
 
     private final String MARK_COMPLETE_STR = "Mark as complete";
     private final String EDIT_STR = "Edit...";
     private final String ADD_TO_FOLDER_STR = "Add to folder...";
     private final String DELETE_STR = "Delete";
-
-    private final ButtonMode MODE;
 
     private Button markAsComplete;
     private Button edit;
@@ -50,7 +58,6 @@ public class RightClickMenu extends VBox {
     private Button delete;
 
     private RightClickMenu() {
-        this.MODE = CountdownPaneView.getInstance().getMode();
         this.markAsComplete = new Button(MARK_COMPLETE_STR) {
             @Override
             public void executeOnClick() {
@@ -81,11 +88,10 @@ public class RightClickMenu extends VBox {
         };
     }
 
-    public static RightClickMenu getInstance(double x, double y) {
+    public static RightClickMenu openAt(double x, double y) {
         RightClickMenu.close();
 
         instance = new RightClickMenu();
-        instance.setViewOrder(-100);
         instance.initStyling();
 
         instance.initButtonStylings(
@@ -98,9 +104,8 @@ public class RightClickMenu extends VBox {
 
         MainContainer mc = MainContainer.getInstance();
         instance.relocate(x, y);
-        instance.setVisible(true);
-        instance.setOpacity(1);
-        mc.getChildren().addFirst(instance);
+        mc.getChildren().add(instance);
+        instance.setViewOrder(-100);
 
         return instance;
     }
@@ -114,23 +119,26 @@ public class RightClickMenu extends VBox {
     }
 
     private void initStyling() {
-        CustomBox border = new CustomBox();
+        CustomBox border =
+            new CustomBox(BORDER_THICKNESS, BORDER_DEV, BORDER_CORNER_DEV, BORDER_CORNER_OFFSET);
         CustomBox.applyCustomBorder(this, border);
-        this.setMinSize(WIDTH, HEIGHT);
-        this.setMaxSize(WIDTH, HEIGHT);
         this.setManaged(false);
         this.setBackground(Colour.createBG(Colour.BACKGROUND, BG_RADIUS, BG_INSETS));
         this.setFillWidth(true);
+        this.resize(WIDTH, HEIGHT);
+        this.setVisible(true);
+        this.setAlignment(Pos.CENTER);
     }
 
     private void initButtonStylings(Button... buttons) {
         for (Button button : buttons) {
-            button.setMinSize(WIDTH, BUTTON_HEIGHT);
+            button.setPrefSize(WIDTH, BUTTON_HEIGHT);
             button.setMaxSize(WIDTH, BUTTON_HEIGHT);
             button.setAnimationsEnabled(false);
             button.getCustomBorder().setVisible(false);
             button.getLabel().setAlignment(Pos.CENTER_LEFT);
             button.setConsumeEvent(true);
+            VBox.setMargin(button, new Insets(0, RIGHTLEFT_INSET, 0, RIGHTLEFT_INSET));
         }
 
         this.markAsComplete.setFeedbackColour(Colour.BTTN_MARK_COMPLETE);
@@ -140,13 +148,15 @@ public class RightClickMenu extends VBox {
     }
 
     private Region createDivider() {
-        final double DIVIDER_HEIGHT = 10;
+        final double DIVIDER_HEIGHT = 5;
         Pane divider = new Pane();
-        divider.setMinSize(RightClickMenu.WIDTH, DIVIDER_HEIGHT);
-        divider.setMaxSize(RightClickMenu.WIDTH, DIVIDER_HEIGHT);
+        divider.setPrefSize(WIDTH, DIVIDER_HEIGHT);
+        divider.setMaxSize(WIDTH, DIVIDER_HEIGHT);
         divider.setBackground(null);
         divider.setOpacity(0.3);
-        CustomLine line = new CustomLine(1.5, Type.HORIZONTAL_TYPE);
+        CustomLine line = new CustomLine(BORDER_THICKNESS, Type.HORIZONTAL_TYPE);
+        line.setPadding(RIGHTLEFT_INSET);
+        line.setStrokeColour(Color.WHITE);
         CustomLine.applyCustomBorder(divider, line);
 
         return divider;
@@ -174,24 +184,28 @@ public class RightClickMenu extends VBox {
     }
 
     private void setMode() {
-        switch (this.MODE) {
+        ButtonMode mode = CountdownPaneView.getInstance().getMode();
+        switch (mode) {
             case NO_SELECT:
                 this.markAsComplete.setEnabled(false);
                 this.edit.setEnabled(false);
                 this.delete.setEnabled(false);
                 this.addToFolder.setEnabled(false);
+                System.out.println("no");
                 break;
             case SINGLE_SELECT:
                 this.markAsComplete.setEnabled(true);
                 this.edit.setEnabled(true);
                 this.delete.setEnabled(true);
                 this.addToFolder.setEnabled(true);
+                System.out.println("single");
                 break;
             case MULTI_SELECT:
                 this.markAsComplete.setEnabled(true);
                 this.edit.setEnabled(false);
                 this.delete.setEnabled(true);
                 this.addToFolder.setEnabled(true);
+                System.out.println("multi");
                 break;
             default:
                 break;

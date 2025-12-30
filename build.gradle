@@ -15,3 +15,8 @@ javafx {
 application {
     mainClass = 'code.Launcher'
 }
+
+dependencies {
+    // Jackson license: https://github.com/FasterXML/jackson-databind/blob/3.x/LICENSE
+    implementation("tools.jackson.core:jackson-databind:3.0.3")
+}

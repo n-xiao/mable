@@ -14,7 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 /**
- *  no, i haven't heard about CSS before... and neither do you.
+ *  no, i haven't heard about CSS before... and neither have you.
  */
 public class Vals {
     public final class Colour {
@@ -102,7 +102,6 @@ public class Vals {
             InputStream stream =
                 Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
             Font.loadFont(stream, 12);
-            // System.out.println(f.getName());
             stream.close();
         }
     }

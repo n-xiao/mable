@@ -1,5 +1,8 @@
 package code.backend;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -8,10 +11,10 @@ import java.util.UUID;
 
 public class Countdown {
     private String name = null;
-    private ZonedDateTime dueDateTime;
     private boolean isDone = false;
+    private ZonedDateTime dueDateTime;
     public final UUID ID; // represents unique id
-    private static final String ZONE_ID_STR = "UTC";
+    @JsonIgnore private static final String ZONE_ID_STR = "UTC";
 
     // todo String parser
 
@@ -21,16 +24,23 @@ public class Countdown {
      * cause errors due to incompatible types (e.g integer over/under flow).
      */
     public Countdown(String name, int day, int month, int year) {
-        this.ID = UUID.randomUUID();
-        this.name = name;
         LocalDate dueDate = LocalDate.of(year, month, day);
-        this.dueDateTime = dueDate.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
+        this(name, dueDate);
     }
 
     public Countdown(String name, LocalDate dueDate) {
         this.ID = UUID.randomUUID();
         this.name = name;
         this.dueDateTime = dueDate.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
+    }
+
+    @JsonCreator
+    public Countdown(@JsonProperty("id") String id, @JsonProperty("name") String name,
+        @JsonProperty("isDone") boolean isDone, @JsonProperty("due") String due) {
+        this.ID = UUID.fromString(id);
+        this.name = name;
+        this.isDone = isDone;
+        this.dueDateTime = ZonedDateTime.parse(due);
     }
 
     public static int getDaysBetween(LocalDate date1, LocalDate date2) {
@@ -61,10 +71,22 @@ public class Countdown {
         return day + "/" + month + "/" + year; // uses the correct format
     }
 
+    @JsonProperty("name")
     public String getName() {
         return name;
     }
 
+    @JsonProperty("id")
+    public String getIdAsString() {
+        return this.ID.toString();
+    }
+
+    @JsonProperty("isDone")
+    public boolean isDone() {
+        return isDone;
+    }
+
+    @JsonProperty("due")
     public ZonedDateTime getDueDateTime() {
         return dueDateTime;
     }
@@ -98,10 +120,6 @@ public class Countdown {
 
     public void setDone(boolean isDone) {
         this.isDone = isDone;
-    }
-
-    public boolean isDone() {
-        return isDone;
     }
 
     @Override

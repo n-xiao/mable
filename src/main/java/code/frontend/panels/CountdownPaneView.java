@@ -384,10 +384,10 @@ public class CountdownPaneView extends ScrollPane {
             contentHBox.setOnMousePressed(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    if (event.getButton().equals(MouseButton.SECONDARY)) {
-                        thisInstance.onSecondaryMousePress(event.getSceneX(), event.getSceneY());
-                    } else {
+                    if (event.getButton() == MouseButton.PRIMARY) {
                         thisInstance.onPrimaryMousePress();
+                    } else {
+                        thisInstance.onSecondaryMousePress(event.getSceneX(), event.getSceneY());
                     }
                     event.consume();
                 }

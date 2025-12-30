@@ -5,18 +5,16 @@
 package code.backend;
 
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.NavigableSet;
 import java.util.PriorityQueue;
-import java.util.Set;
-import java.util.TreeSet;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  *  Handles all mutable file read/writing operations. Note that this does not handle resources
@@ -32,7 +30,8 @@ public class StorageHandler {
 
     public static void init() throws Exception {
         // btw, Path should automatically account for different OS path separators
-        storagePath = Path.of(System.getProperty("user.home") + "/mable_data/storage.mable");
+        storagePath =
+            Path.of(System.getProperty("user.home") + "/mable_data/mable_countdowns.json");
         if (!Files.exists(storagePath)) {
             Files.createDirectory(Path.of(System.getProperty("user.home") + "/mable_data"));
             Files.createFile(storagePath);
@@ -41,33 +40,23 @@ public class StorageHandler {
         }
     }
 
-    public static void save() {
-        // try {
-        //     // if (!active) throw new IOException("Storage is inactive.");
-        //     FileOutputStream outputStream = new FileOutputStream(storagePath.toString());
-        //     ObjectOutputStream objOutputStream = new ObjectOutputStream(outputStream);
-        //     objOutputStream.writeObject(countdowns);
-        //     objOutputStream.flush();
-        //     objOutputStream.close();
-        // } catch (Exception e) {
-        //     System.err.println("error while saving data!");
-        //     e.printStackTrace();
-        // }
+    public static void save() {}
+
+    public static void saveCountdown(Countdown c) {
+        ObjectMapper mapper = new ObjectMapper();
+        // ObjectNode root = mapper.createObjectNode();
+        // root.putPOJO(c.getIdAsString(), c);
+        // System.out.println(mapper.writeValueAsString(root));
+        PriorityQueue<Countdown> priorityQueue =
+            new PriorityQueue<Countdown>(new SortByRemainingDays());
+        priorityQueue.add(new Countdown("hello", 1, 1, 2026));
+        priorityQueue.add(new Countdown("hello", 1, 1, 2026));
+        priorityQueue.add(new Countdown("hello2", 1, 1, 2025));
+        String json = mapper.writeValueAsString(priorityQueue);
+        System.out.println(json);
     }
 
-    @SuppressWarnings("unchecked")
-    private static void load() {
-        try {
-            // if (!active) throw new IOException("Storage is inactive.");
-            FileInputStream inputStream = new FileInputStream(storagePath.toString());
-            ObjectInputStream objInputStream = new ObjectInputStream(inputStream);
-            countdowns = (PriorityQueue<Countdown>) objInputStream.readObject();
-            objInputStream.close();
-        } catch (Exception e) {
-            System.err.println("error while loading save data!");
-            e.printStackTrace();
-        }
-    }
+    private static void load() {}
 
     public static void setCountdownDone(Countdown c, boolean isDone) {
         countdowns.forEach(countdown -> {

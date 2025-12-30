@@ -1,5 +1,7 @@
 package code;
 
+import code.backend.Countdown;
+import code.backend.StorageHandler;
 import code.frontend.gui.MainContainer;
 import code.frontend.misc.Vals;
 import javafx.application.Application;
@@ -28,6 +30,8 @@ public class Launcher extends Application {
         scene.setFill(Vals.Colour.BACKGROUND);
         stage.setScene(scene);
         stage.show();
+
+        StorageHandler.saveCountdown(new Countdown("test", 1, 1, 2026));
     }
 
     public static void main(String[] args) {

@@ -44,16 +44,24 @@ public class StorageHandler {
 
     public static void saveCountdown(Countdown c) {
         ObjectMapper mapper = new ObjectMapper();
-        // ObjectNode root = mapper.createObjectNode();
-        // root.putPOJO(c.getIdAsString(), c);
-        // System.out.println(mapper.writeValueAsString(root));
         PriorityQueue<Countdown> priorityQueue =
             new PriorityQueue<Countdown>(new SortByRemainingDays());
         priorityQueue.add(new Countdown("hello", 1, 1, 2026));
         priorityQueue.add(new Countdown("hello", 1, 1, 2026));
         priorityQueue.add(new Countdown("hello2", 1, 1, 2025));
-        String json = mapper.writeValueAsString(priorityQueue);
-        System.out.println(json);
+        priorityQueue.add(c);
+        ObjectNode root = mapper.createObjectNode();
+        priorityQueue.forEach(countdown -> { root.putPOJO(countdown.getIdAsString(), countdown); });
+        System.out.println(mapper.writeValueAsString(root));
+        System.out.println();
+        root.remove(c.getIdAsString());
+        System.out.println(mapper.writeValueAsString(root));
+
+        priorityQueue.clear();
+        root.forEachEntry((k, v) -> {
+            Countdown countdown = mapper.treeToValue(v, Countdown.class);
+            System.out.println(countdown.getName());
+        });
     }
 
     private static void load() {}

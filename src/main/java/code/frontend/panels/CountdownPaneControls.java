@@ -86,15 +86,12 @@ public class CountdownPaneControls extends HBox {
 
     public void setMode() {
         ButtonMode mode = CountdownPaneView.getInstance().getMode();
-        switch (mode) {
-            case NO_SELECT:
-                addBtn.setEnabled(true);
-                deselectBtn.setEnabled(false);
-                break;
-            default:
-                addBtn.setEnabled(false);
-                deselectBtn.setEnabled(true);
-                break;
+        if (mode.equals(ButtonMode.NO_SELECT)) {
+            addBtn.setEnabled(true);
+            deselectBtn.setEnabled(false);
+        } else {
+            addBtn.setEnabled(false);
+            deselectBtn.setEnabled(true);
         }
     }
 }

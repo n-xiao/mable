@@ -193,6 +193,10 @@ public class CountdownPaneView extends ScrollPane {
         return mode;
     }
 
+    private void updateMode() {
+        // TODO
+    }
+
     private class CountdownPane extends VBox {
         public static final double WIDTH = 280;
         public static final double HEIGHT = 140;

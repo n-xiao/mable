@@ -368,10 +368,7 @@ public class CountdownPaneView extends ScrollPane {
                 public void handle(MouseEvent event) {
                     MouseButton mouseButton = event.getButton();
                     if (mouseButton.equals(MouseButton.SECONDARY)) {
-                        CountdownPaneView.getInstance().deselectAll();
-                        applySelectStyle();
-                        thisInstance.selected = true;
-                        CountdownPaneControls.getInstance().updateSelectionButtonIndicators();
+                        thisInstance.onSecondaryMouseClick();
                         RightClickMenu.getInstance(event.getSceneX(), event.getSceneY());
                     } else {
                         thisInstance.onMousePrimaryClick();
@@ -388,6 +385,15 @@ public class CountdownPaneView extends ScrollPane {
             }
             this.selected = !this.selected;
             CountdownPaneControls.getInstance().updateSelectionButtonIndicators();
+            CountdownPaneControls.getInstance().setMode();
+        }
+
+        private void onSecondaryMouseClick() {
+            CountdownPaneView.getInstance().deselectAll();
+            applySelectStyle();
+            this.selected = true;
+            CountdownPaneControls.getInstance().updateSelectionButtonIndicators();
+            CountdownPaneControls.getInstance().setMode();
         }
 
         public void applyDeselectStyle() {

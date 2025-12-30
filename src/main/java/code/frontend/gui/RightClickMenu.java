@@ -97,6 +97,8 @@ public class RightClickMenu extends VBox {
 
         MainContainer mc = MainContainer.getInstance();
         instance.relocate(x, y);
+        instance.setVisible(true);
+        instance.setViewOrder(-100);
         mc.getChildren().addFirst(instance);
 
         return instance;

@@ -400,7 +400,8 @@ public class CountdownPaneView extends ScrollPane {
         }
 
         private void onSecondaryMousePress(double x, double y) {
-            CountdownPaneView.getInstance().deselectAll();
+            if (!this.selected)
+                CountdownPaneView.getInstance().deselectAll();
             applySelectStyle();
             this.selected = true;
             updateMode(); // needs to be called before RightClickMenu opens

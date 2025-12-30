@@ -204,21 +204,18 @@ public class RightClickMenu extends VBox {
                 this.edit.setEnabled(false);
                 this.delete.setEnabled(false);
                 this.addToFolder.setEnabled(false);
-                System.out.println("no");
                 break;
             case SINGLE_SELECT:
                 this.markAsComplete.setEnabled(true);
                 this.edit.setEnabled(true);
                 this.delete.setEnabled(true);
                 this.addToFolder.setEnabled(true);
-                System.out.println("single");
                 break;
             case MULTI_SELECT:
                 this.markAsComplete.setEnabled(true);
                 this.edit.setEnabled(false);
                 this.delete.setEnabled(true);
                 this.addToFolder.setEnabled(true);
-                System.out.println("multi");
                 break;
             default:
                 break;

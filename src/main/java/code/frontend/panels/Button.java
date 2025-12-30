@@ -54,7 +54,7 @@ public abstract class Button extends Pane {
         this.label.prefWidthProperty().bind(this.widthProperty());
         this.label.prefHeightProperty().bind(this.heightProperty());
         this.label.relocate(0, 0);
-        this.label.setViewOrder(2);
+        this.label.setViewOrder(0);
 
         double vertiInset = border.getVertiPadding() + 3;
         double horizInset = border.getHorizPadding() + 4;
@@ -146,6 +146,10 @@ public abstract class Button extends Pane {
 
     public void setFeedbackColour(Color feedbackColour) {
         this.feedbackColour = feedbackColour;
+    }
+
+    public void setFeedbackBackground(Background bg) {
+        this.animPane.setBackground(bg);
     }
 
     public void setColour(Color colour) {

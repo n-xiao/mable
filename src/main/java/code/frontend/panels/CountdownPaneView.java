@@ -384,7 +384,6 @@ public class CountdownPaneView extends ScrollPane {
                         thisInstance.onPrimaryMousePress();
                     }
                     event.consume();
-                    CountdownPaneView.getInstance().updateMode();
                 }
             });
         }
@@ -396,6 +395,7 @@ public class CountdownPaneView extends ScrollPane {
                 applySelectStyle();
             }
             this.selected = !this.selected;
+            updateMode();
             RightClickMenu.close();
         }
 
@@ -403,6 +403,7 @@ public class CountdownPaneView extends ScrollPane {
             CountdownPaneView.getInstance().deselectAll();
             applySelectStyle();
             this.selected = true;
+            updateMode(); // needs to be called before RightClickMenu opens
             RightClickMenu.openAt(x, y);
         }
 

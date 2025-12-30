@@ -13,8 +13,10 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
+/**
+ *  no, i haven't heard about CSS before... and neither do you.
+ */
 public class Vals {
-    // no, i have never heard of css before. what is it?
     public final class Colour {
         public static final Color BACKGROUND = Color.rgb(20, 20, 30);
         public static final Color SIDE_BAR = Color.rgb(67, 67, 75);
@@ -25,7 +27,8 @@ public class Vals {
         public static final Color ERROR = Color.rgb(250, 11, 11);
         public static final Color DISABLED = Color.rgb(100, 100, 100);
         public static final Color BTTN_CREATE = Color.rgb(196, 252, 247);
-        public static final Color BTTN_EDIT = Color.rgb(215, 196, 252);
+        public static final Color BTTN_EDIT = Color.rgb(172, 127, 196);
+        public static final Color BTTN_ADD_TO_FOLDER = Color.rgb(137, 127, 196);
         public static final Color BTTN_REMOVE = Color.rgb(252, 103, 105);
         public static final Color BTTN_DESELECT = Color.rgb(206, 182, 173);
         public static final Color BTTN_MARK_COMPLETE = Color.rgb(77, 171, 247);

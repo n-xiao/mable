@@ -9,6 +9,9 @@ import code.frontend.panels.CountdownPaneView;
 import code.frontend.panels.CountdownPaneView.ButtonMode;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -141,10 +144,20 @@ public class RightClickMenu extends VBox {
             VBox.setMargin(button, new Insets(0, RIGHTLEFT_INSET, 0, RIGHTLEFT_INSET));
         }
 
-        this.markAsComplete.setFeedbackColour(Colour.BTTN_MARK_COMPLETE);
-        this.edit.setFeedbackColour(Colour.BTTN_EDIT);
-        this.addToFolder.setFeedbackColour(Colour.BTTN_EDIT);
-        this.delete.setFeedbackColour(Colour.BTTN_REMOVE);
+        final int RADIUS = 8;
+        BackgroundFill markFill = new BackgroundFill(
+            Colour.BTTN_MARK_COMPLETE, new CornerRadii(RADIUS), new Insets(5, -5, 5, -5));
+        BackgroundFill editFill =
+            new BackgroundFill(Colour.BTTN_EDIT, new CornerRadii(RADIUS), new Insets(5, -5, 5, -5));
+        BackgroundFill addToFolderFill = new BackgroundFill(
+            Colour.BTTN_ADD_TO_FOLDER, new CornerRadii(RADIUS), new Insets(5, -5, 5, -5));
+        BackgroundFill deleteFill = new BackgroundFill(
+            Colour.BTTN_REMOVE, new CornerRadii(RADIUS), new Insets(5, -5, 5, -5));
+
+        this.markAsComplete.setFeedbackBackground(new Background(markFill));
+        this.edit.setFeedbackBackground(new Background(editFill));
+        this.addToFolder.setFeedbackBackground(new Background(addToFolderFill));
+        this.delete.setFeedbackBackground(new Background(deleteFill));
     }
 
     private Region createDivider() {

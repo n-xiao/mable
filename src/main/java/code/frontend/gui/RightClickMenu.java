@@ -103,7 +103,6 @@ public class RightClickMenu extends VBox {
             instance.edit, instance.addToFolder, instance.createDivider(), instance.delete);
 
         instance.setMode();
-        instance.updateSelectionButtonIndicators();
 
         MainContainer mc = MainContainer.getInstance();
         instance.relocate(x, y);
@@ -173,27 +172,6 @@ public class RightClickMenu extends VBox {
         CustomLine.applyCustomBorder(divider, line);
 
         return divider;
-    }
-
-    public void updateSelectionButtonIndicators() {
-        // shows the user how many selections there are via the deselectButton
-        String newMarkCompleteString = MARK_COMPLETE_STR;
-        String newAddToFolderString = ADD_TO_FOLDER_STR;
-        String newDeleteString = DELETE_STR;
-        int numOfSelections = CountdownPaneView.getInstance().getNumOfSelections();
-        if (numOfSelections > 1) {
-            appendNumOfSelections(newMarkCompleteString, newAddToFolderString, newDeleteString);
-        }
-        this.markAsComplete.setTextLabel(newMarkCompleteString);
-        this.addToFolder.setTextLabel(newAddToFolderString);
-        this.delete.setTextLabel(newDeleteString);
-    }
-
-    private void appendNumOfSelections(String... strings) {
-        int selections = CountdownPaneView.getInstance().getNumOfSelections();
-        for (int i = 0; i < strings.length; i++) {
-            strings[i] += " (" + Integer.toString(selections) + ")";
-        }
     }
 
     private void setMode() {

@@ -85,6 +85,7 @@ public class RightClickMenu extends VBox {
         RightClickMenu.close();
 
         instance = new RightClickMenu();
+        instance.setViewOrder(-100);
         instance.initStyling();
 
         instance.initButtonStylings(
@@ -98,13 +99,13 @@ public class RightClickMenu extends VBox {
         MainContainer mc = MainContainer.getInstance();
         instance.relocate(x, y);
         instance.setVisible(true);
-        instance.setViewOrder(-100);
+        instance.setOpacity(1);
         mc.getChildren().addFirst(instance);
 
         return instance;
     }
 
-    private static void close() {
+    public static void close() {
         if (instance == null)
             return;
         instance.setVisible(false);

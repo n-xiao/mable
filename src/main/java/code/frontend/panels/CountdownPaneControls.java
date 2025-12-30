@@ -74,7 +74,7 @@ public class CountdownPaneControls extends HBox {
         this.getChildren().addAll(buttons);
     }
 
-    public void updateSelectionButtonIndicators() {
+    private void updateSelectionButtonIndicators() {
         // shows the user how many selections there are via the deselectButton
         String newDeselectButtonLabel = DESELECT_DEFAULT_STR;
         int numOfSelections = CountdownPaneView.getInstance().getNumOfSelections();
@@ -93,5 +93,6 @@ public class CountdownPaneControls extends HBox {
             addBtn.setEnabled(false);
             deselectBtn.setEnabled(true);
         }
+        updateSelectionButtonIndicators();
     }
 }

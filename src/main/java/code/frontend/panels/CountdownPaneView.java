@@ -74,6 +74,7 @@ public class CountdownPaneView extends ScrollPane {
         this.setFitToWidth(true);
         this.setHbarPolicy(ScrollBarPolicy.NEVER);
         this.setVbarPolicy(ScrollBarPolicy.NEVER);
+        this.fp.setOnMousePressed(event -> { RightClickMenu.close(); });
         this.setContent(this.fp);
     }
 
@@ -127,6 +128,7 @@ public class CountdownPaneView extends ScrollPane {
             this.cdPanes.add(countdownPane);
         }
         addPaddingForAlignment();
+        updateMode();
     }
 
     public int getNumOfSelections() {
@@ -178,7 +180,7 @@ public class CountdownPaneView extends ScrollPane {
             countdownPane.setSelected(false);
             countdownPane.applyDeselectStyle();
         }
-        cpc.updateSelectionButtonIndicators();
+        updateMode();
     }
 
     public DisplayOrder getDisplayOrder() {
@@ -194,7 +196,14 @@ public class CountdownPaneView extends ScrollPane {
     }
 
     private void updateMode() {
-        // TODO
+        int selections = getNumOfSelections();
+        if (selections == 0)
+            this.mode = ButtonMode.NO_SELECT;
+        else if (selections == 1)
+            this.mode = ButtonMode.SINGLE_SELECT;
+        else
+            this.mode = ButtonMode.MULTI_SELECT;
+        CountdownPaneControls.getInstance().setMode();
     }
 
     private class CountdownPane extends VBox {
@@ -367,37 +376,35 @@ public class CountdownPaneView extends ScrollPane {
         }
 
         private void initSelectable(CountdownPane thisInstance) {
-            contentHBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            contentHBox.setOnMousePressed(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    MouseButton mouseButton = event.getButton();
-                    if (mouseButton.equals(MouseButton.SECONDARY)) {
-                        thisInstance.onSecondaryMouseClick();
-                        RightClickMenu.getInstance(event.getSceneX(), event.getSceneY());
+                    if (event.getButton().equals(MouseButton.SECONDARY)) {
+                        thisInstance.onSecondaryMousePress(event.getSceneX(), event.getSceneY());
                     } else {
-                        thisInstance.onMousePrimaryClick();
+                        thisInstance.onPrimaryMousePress();
                     }
+                    event.consume();
+                    CountdownPaneView.getInstance().updateMode();
                 }
             });
         }
 
-        private void onMousePrimaryClick() {
+        private void onPrimaryMousePress() {
             if (this.selected) {
                 applyDeselectStyle();
             } else {
                 applySelectStyle();
             }
             this.selected = !this.selected;
-            CountdownPaneControls.getInstance().updateSelectionButtonIndicators();
-            CountdownPaneControls.getInstance().setMode();
+            RightClickMenu.close();
         }
 
-        private void onSecondaryMouseClick() {
+        private void onSecondaryMousePress(double x, double y) {
             CountdownPaneView.getInstance().deselectAll();
             applySelectStyle();
             this.selected = true;
-            CountdownPaneControls.getInstance().updateSelectionButtonIndicators();
-            CountdownPaneControls.getInstance().setMode();
+            RightClickMenu.getInstance(x, y);
         }
 
         public void applyDeselectStyle() {
@@ -426,6 +433,7 @@ public class CountdownPaneView extends ScrollPane {
 
         public void setSelected(boolean selected) {
             this.selected = selected;
+            CountdownPaneView.getInstance().updateMode();
         }
     }
 }

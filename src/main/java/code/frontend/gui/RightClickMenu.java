@@ -81,25 +81,30 @@ public class RightClickMenu extends VBox {
         };
     }
 
-    public static RightClickMenu getInstance() {
-        if (instance == null) {
-            instance = new RightClickMenu();
-            instance.initStyling();
+    public static RightClickMenu getInstance(double x, double y) {
+        RightClickMenu.close();
 
-            instance.initButtonStylings(
-                instance.markAsComplete, instance.edit, instance.addToFolder, instance.delete);
-            instance.getChildren().addAll(instance.markAsComplete, instance.createDivider(),
-                instance.edit, instance.addToFolder, instance.createDivider(), instance.delete);
+        instance = new RightClickMenu();
+        instance.initStyling();
 
-            instance.setMode();
-            instance.updateSelectionButtonIndicators();
-            // instance.setMode(CountdownPaneView.getInstance().getm);
-        }
+        instance.initButtonStylings(
+            instance.markAsComplete, instance.edit, instance.addToFolder, instance.delete);
+        instance.getChildren().addAll(instance.markAsComplete, instance.createDivider(),
+            instance.edit, instance.addToFolder, instance.createDivider(), instance.delete);
+
+        instance.setMode();
+        instance.updateSelectionButtonIndicators();
+
+        MainContainer mc = MainContainer.getInstance();
+        instance.relocate(x, y);
+        mc.getChildren().addFirst(instance);
 
         return instance;
     }
 
     private static void close() {
+        if (instance == null)
+            return;
         instance.setVisible(false);
         MainContainer.getInstance().getChildren().remove(instance);
         instance = null;

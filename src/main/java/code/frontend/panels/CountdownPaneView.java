@@ -373,8 +373,12 @@ public class CountdownPaneView extends ScrollPane {
                 @Override
                 public void handle(MouseEvent event) {
                     MouseButton mouseButton = event.getButton();
-                    if (thisInstance.selected && mouseButton.equals(MouseButton.SECONDARY)) {
-                        thisInstance.onMouseSecondaryClick(event.getSceneX(), event.getSceneY());
+                    if (mouseButton.equals(MouseButton.SECONDARY)) {
+                        CountdownPaneView.getInstance().deselectAll();
+                        applySelectStyle();
+                        thisInstance.selected = true;
+                        CountdownPaneControls.getInstance().updateSelectionButtonIndicators();
+                        RightClickMenu.getInstance(event.getSceneX(), event.getSceneY());
                     } else {
                         thisInstance.onMousePrimaryClick();
                     }
@@ -394,13 +398,6 @@ public class CountdownPaneView extends ScrollPane {
                 // CountdownPaneView.getInstance().updateForNewSelect(this);
                 CountdownPaneControls.getInstance().updateSelectionButtonIndicators();
             }
-        }
-
-        private void onMouseSecondaryClick(double x, double y) {
-            MainContainer mc = MainContainer.getInstance();
-            RightClickMenu rcm = RightClickMenu.getInstance();
-            rcm.relocate(x, y);
-            mc.getChildren().addFirst(rcm);
         }
 
         public void applyDeselectStyle() {

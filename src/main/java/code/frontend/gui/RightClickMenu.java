@@ -45,15 +45,17 @@ public class RightClickMenu extends VBox {
 
     private static final int RIGHTLEFT_INSET = 15;
 
-    private static final double WIDTH = 190;
+    private static final double WIDTH = 200;
     private static final double HEIGHT = 185;
 
     private static final double BUTTON_HEIGHT = 40;
 
-    private final String MARK_COMPLETE_STR = "Mark as complete";
-    private final String EDIT_STR = "Edit...";
-    private final String ADD_TO_FOLDER_STR = "Add to folder...";
-    private final String DELETE_STR = "Delete";
+    private final String MARK_COMPLETE_STR;
+    private final String EDIT_STR;
+    private final String ADD_TO_FOLDER_STR;
+    private final String DELETE_STR;
+
+    private final boolean SELECTED_ARE_COMPLETED;
 
     private Button markAsComplete;
     private Button edit;
@@ -61,10 +63,16 @@ public class RightClickMenu extends VBox {
     private Button delete;
 
     private RightClickMenu() {
+        SELECTED_ARE_COMPLETED = CountdownPaneView.getInstance().allSelectedAreCompleted();
+        MARK_COMPLETE_STR = SELECTED_ARE_COMPLETED ? "Mark as incomplete" : "Mark as complete";
+        EDIT_STR = "Edit...";
+        ADD_TO_FOLDER_STR = "Add to folder...";
+        DELETE_STR = "Delete";
+
         this.markAsComplete = new Button(MARK_COMPLETE_STR) {
             @Override
             public void executeOnClick() {
-                CountdownPaneView.getInstance().markSelectedAsComplete();
+                CountdownPaneView.getInstance().markSelectedAsComplete(!SELECTED_ARE_COMPLETED);
                 RightClickMenu.close();
             }
         };

@@ -100,6 +100,10 @@ public class Countdown {
         this.isDone = isDone;
     }
 
+    public boolean isDone() {
+        return isDone;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Countdown))

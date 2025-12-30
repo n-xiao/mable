@@ -140,10 +140,10 @@ public class CountdownPaneView extends ScrollPane {
         return selections;
     }
 
-    public void markSelectedAsComplete() {
+    public void markSelectedAsComplete(boolean isDone) {
         cdPanes.forEach(pane -> {
             if (pane.isSelected()) {
-                pane.getCountdown().setDone(true);
+                pane.getCountdown().setDone(isDone);
             }
         });
         deselectAll();
@@ -180,6 +180,15 @@ public class CountdownPaneView extends ScrollPane {
             countdownPane.applyDeselectStyle();
         }
         updateMode();
+    }
+
+    public boolean allSelectedAreCompleted() {
+        for (CountdownPane countdownPane : cdPanes) {
+            if (countdownPane.isSelected() && !countdownPane.getCountdown().isDone()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public DisplayOrder getDisplayOrder() {
@@ -311,9 +320,6 @@ public class CountdownPaneView extends ScrollPane {
             contentHBox.getChildren().add(createVerticalDivider());
             // adds the day countdown pane
             contentHBox.getChildren().add(createCountdownDisplay(countdown, now));
-
-            // contentHBox.setBackground(new Background(new BackgroundFill(Color.GRAY, null,
-            // null)));
         }
 
         private Label createNameLabel(Countdown cd) {

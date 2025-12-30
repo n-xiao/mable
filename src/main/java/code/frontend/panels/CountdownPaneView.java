@@ -4,7 +4,6 @@ import code.backend.Countdown;
 import code.backend.StorageHandler;
 import code.frontend.foundation.CustomBox;
 import code.frontend.foundation.CustomLine;
-import code.frontend.gui.MainContainer;
 import code.frontend.gui.RightClickMenu;
 import code.frontend.misc.Vals;
 import code.frontend.misc.Vals.Colour;
@@ -106,7 +105,6 @@ public class CountdownPaneView extends ScrollPane {
             Region padding = new Region();
             padding.setMinSize(cdWidth, cdHeight);
             padding.setMaxSize(cdWidth, cdHeight);
-            // padding.setBackground(Colour.createBG(Color.PINK, 0, 0));
             padding.setVisible(false);
             this.fp.getChildren().add(padding);
             this.paddingsInUse.add(padding);
@@ -142,8 +140,9 @@ public class CountdownPaneView extends ScrollPane {
 
     public void markSelectedAsComplete() {
         cdPanes.forEach(pane -> {
-            if (pane.isSelected())
+            if (pane.isSelected()) {
                 pane.getCountdown().setDone(true);
+            }
         });
         deselectAll();
         repopulate(LocalDate.now());
@@ -179,7 +178,6 @@ public class CountdownPaneView extends ScrollPane {
             countdownPane.setSelected(false);
             countdownPane.applyDeselectStyle();
         }
-        // cpc.setMode(ButtonMode.NO_SELECT);
         cpc.updateSelectionButtonIndicators();
     }
 
@@ -210,10 +208,9 @@ public class CountdownPaneView extends ScrollPane {
         private Countdown countdown; // points to the backend object
         private CustomBox border; // for selection ui indication
         private boolean selected; // for selection detection
-        private CountdownPane prev; // for multi-select functionality
+        // TODO private CountdownPane prev; // for multi-select functionality
 
         public CountdownPane(Countdown cd, LocalDate now) {
-            this.prev = null;
             this.countdown = cd;
             this.selected = false;
             this.setAlignment(Pos.CENTER);
@@ -227,32 +224,29 @@ public class CountdownPaneView extends ScrollPane {
             int leftRightPadding = 16;
             double height = HEIGHT - CONTENT_HEIGHT;
             this.hoverHBox = new HBox();
-            hoverHBox.setPrefSize(WIDTH, height);
+            this.hoverHBox.setPrefSize(WIDTH, height);
             Font font =
                 Font.font(Vals.FontTools.FONT_FAM, FontWeight.MEDIUM, FontPosture.ITALIC, 14);
-            statusLabel = new Label();
-            statusLabel.setAlignment(Pos.BOTTOM_LEFT);
-            statusLabel.setFont(font);
-            statusLabel.setTextFill(Vals.Colour.TXT_GHOST);
-            statusLabel.setMaxSize(WIDTH / 2, height);
-            HBox.setMargin(statusLabel, new Insets(0, 0, 0, leftRightPadding));
+            this.statusLabel = new Label();
+            this.statusLabel.setAlignment(Pos.BOTTOM_LEFT);
+            this.statusLabel.setFont(font);
+            this.statusLabel.setTextFill(Vals.Colour.TXT_GHOST);
+            this.statusLabel.setMaxSize(WIDTH / 2, height);
+            HBox.setMargin(this.statusLabel, new Insets(0, 0, 0, leftRightPadding));
             Pane spacer = new Pane();
             spacer.setMaxSize(WIDTH, height);
             HBox.setHgrow(spacer, Priority.ALWAYS);
-            endDateLabel = new Label();
-            endDateLabel.setAlignment(Pos.BOTTOM_RIGHT);
-            endDateLabel.setFont(font);
-            endDateLabel.setTextFill(Vals.Colour.TXT_GHOST);
-            endDateLabel.setMaxSize(WIDTH / 2, height);
-            HBox.setMargin(endDateLabel, new Insets(0, leftRightPadding, 0, 0));
-            hoverHBox.setFillHeight(true);
-            hoverHBox.getChildren().addAll(statusLabel, spacer, endDateLabel);
+            this.endDateLabel = new Label();
+            this.endDateLabel.setAlignment(Pos.BOTTOM_RIGHT);
+            this.endDateLabel.setFont(font);
+            this.endDateLabel.setTextFill(Vals.Colour.TXT_GHOST);
+            this.endDateLabel.setMaxSize(WIDTH / 2, height);
+            HBox.setMargin(this.endDateLabel, new Insets(0, leftRightPadding, 0, 0));
+            this.hoverHBox.setFillHeight(true);
+            this.hoverHBox.getChildren().addAll(this.statusLabel, spacer, this.endDateLabel);
 
             ft = new FadeTransition(Duration.millis(300), hoverHBox);
-            // hoverHBox.setBackground(new Background(new BackgroundFill(Color.VIOLET, null,
-            // null)));
 
-            // todo mouse listener stuff
             contentHBox.setOnMouseEntered(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
@@ -260,7 +254,7 @@ public class CountdownPaneView extends ScrollPane {
                     if (selected)
                         return; // do nothing if selected
                     setMouseEnterAnim(ft);
-                    // TODO: put this in its own update method later, to be called by a watchdog
+                    // TODO: copy this in its own update method later, to be called by a watchdog
                     LocalDate now = LocalDate.now();
                     String status = countdown.getStatusString(now);
                     String end = countdown.getStringDueDate(now);
@@ -388,16 +382,12 @@ public class CountdownPaneView extends ScrollPane {
 
         private void onMousePrimaryClick() {
             if (this.selected) {
-                // deselect procedure
                 applyDeselectStyle();
-                this.selected = false;
-                CountdownPaneControls.getInstance().updateSelectionButtonIndicators();
             } else {
                 applySelectStyle();
-                this.selected = true;
-                // CountdownPaneView.getInstance().updateForNewSelect(this);
-                CountdownPaneControls.getInstance().updateSelectionButtonIndicators();
             }
+            this.selected = !this.selected;
+            CountdownPaneControls.getInstance().updateSelectionButtonIndicators();
         }
 
         public void applyDeselectStyle() {

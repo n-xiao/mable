@@ -3,10 +3,7 @@ package code.frontend.windows;
 import code.backend.Countdown;
 import code.backend.StorageHandler;
 import code.frontend.panels.Button;
-import code.frontend.panels.CountdownPaneControls;
 import code.frontend.panels.CountdownPaneView;
-import code.frontend.panels.DateInputField;
-import code.frontend.panels.InputField;
 import java.time.LocalDate;
 import javafx.stage.Stage;
 
@@ -39,7 +36,7 @@ public class AddWindow extends ConfigWindowTemplate {
                 StorageHandler.addCountdown(new Countdown(name, due));
                 CountdownPaneView.getInstance().repopulate(LocalDate.now());
                 StorageHandler.save();
-                CountdownPaneControls.getInstance().deselectAll();
+                CountdownPaneView.getInstance().deselectAll();
                 window.close();
                 window = null;
             }

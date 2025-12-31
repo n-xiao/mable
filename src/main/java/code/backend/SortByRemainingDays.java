@@ -9,6 +9,8 @@ public class SortByRemainingDays implements Comparator<Countdown> {
         LocalDate now = LocalDate.now();
         int dist1 = c1.daysUntilDue(now);
         int dist2 = c2.daysUntilDue(now);
-        return dist1 - dist2;
+        int dateDiff = dist1 - dist2;
+        int idDiff = c1.ID.compareTo(c2.ID); // enforces uniqueness for sets
+        return (dateDiff == 0) ? idDiff : dateDiff;
     }
 }

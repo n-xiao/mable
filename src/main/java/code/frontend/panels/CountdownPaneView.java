@@ -11,7 +11,9 @@ import code.frontend.misc.Vals.GraphicalUI;
 import code.frontend.windows.EditWindow;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.NavigableSet;
 import javafx.animation.FadeTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -113,20 +115,31 @@ public class CountdownPaneView extends ScrollPane {
     }
 
     public void repopulate(LocalDate now) {
-        Countdown[] countdowns;
+        NavigableSet<Countdown> countdowns;
         // this if-else is ok for now since there's only two DisplayOrders rn
         if (displayOrder.equals(DisplayOrder.ASCENDING))
             countdowns = StorageHandler.getAscendingCountdowns();
         else
             countdowns = StorageHandler.getDescendingCountdowns();
 
-        fp.getChildren().clear();
-        this.cdPanes.clear();
-        for (Countdown c : countdowns) {
-            CountdownPane countdownPane = new CountdownPane(c, now);
+        Iterator<Countdown> countdownIterator = countdowns.iterator();
+        Iterator<CountdownPane> paneIterator = this.cdPanes.iterator();
+
+        while (paneIterator.hasNext() && countdownIterator.hasNext()) {
+            CountdownPane pane = paneIterator.next();
+            Countdown countdown = countdownIterator.next();
+            pane.setCountdown(countdown);
+        }
+
+        paneIterator.forEachRemaining(pane -> { pane.setCountdown(null); });
+        this.cdPanes.removeIf(pane -> pane.getCountdown() == null);
+
+        countdownIterator.forEachRemaining(countdown -> {
+            CountdownPane countdownPane = new CountdownPane(countdown, now);
             fp.getChildren().add(countdownPane);
             this.cdPanes.add(countdownPane);
-        }
+        });
+
         addPaddingForAlignment();
         updateMode();
     }
@@ -165,12 +178,12 @@ public class CountdownPaneView extends ScrollPane {
     }
 
     public void deleteSelected() {
-        for (CountdownPane countdownPane : cdPanes) {
-            if (countdownPane.isSelected()) {
-                StorageHandler.deleteCountdown(countdownPane.getCountdown());
-            }
-        }
-        StorageHandler.save();
+        ArrayList<Countdown> selected = new ArrayList<Countdown>();
+        cdPanes.forEach(pane -> {
+            if (pane.isSelected())
+                selected.add(pane.getCountdown());
+        });
+        StorageHandler.deleteCountdowns(selected);
         repopulate(LocalDate.now());
     }
 
@@ -430,6 +443,13 @@ public class CountdownPaneView extends ScrollPane {
             endDateLabel.setTextFill(Vals.Colour.SELECTED);
         }
 
+        protected void setCountdown(Countdown countdown) {
+            if (countdown == null)
+                return;
+            this.countdown = countdown;
+            refreshContent();
+        }
+
         public Countdown getCountdown() {
             return countdown;
         }
@@ -441,6 +461,26 @@ public class CountdownPaneView extends ScrollPane {
         public void setSelected(boolean selected) {
             this.selected = selected;
             CountdownPaneView.getInstance().updateMode();
+        }
+
+        /**
+         * Instead of destroying CountdownPanes, use this to reuse old
+         * panes and forego unnecessary redrawing of graphics.
+         */
+        protected void refreshContent() {
+            LocalDate now = LocalDate.now();
+            String status = this.countdown.getStatusString(now);
+            String end = this.countdown.getStringDueDate(now);
+            statusLabel.setText(status);
+            endDateLabel.setText("Due: " + end);
+            // removes everything except the unmanaged border
+            this.contentHBox.getChildren().removeIf(child -> child.isManaged());
+            // adds the name display
+            this.contentHBox.getChildren().add(createNameLabel(this.countdown));
+            // adds the divider
+            this.contentHBox.getChildren().add(createVerticalDivider());
+            // adds the day countdown pane
+            this.contentHBox.getChildren().add(createCountdownDisplay(this.countdown, now));
         }
     }
 }

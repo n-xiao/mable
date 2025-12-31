@@ -35,6 +35,11 @@ public class Launcher extends Application {
         CountdownPaneView.getInstance().repopulate(LocalDate.now());
     }
 
+    @Override
+    public void stop() throws Exception {
+        StorageHandler.save(); // saves on app close
+    }
+
     public static void main(String[] args) {
         launch();
     }

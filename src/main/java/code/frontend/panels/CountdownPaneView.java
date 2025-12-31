@@ -52,9 +52,6 @@ public class CountdownPaneView extends ScrollPane {
     private final LinkedHashSet<CountdownPane> COUNTDOWN_PANES;
     private final ArrayList<Region> PADDINGS_IN_USE;
 
-    private final Label CD_DESC_LABEL;
-    private final Label CD_DAYS_LABEL;
-
     private ButtonMode mode;
     private DisplayOrder displayOrder;
 
@@ -66,8 +63,6 @@ public class CountdownPaneView extends ScrollPane {
         this.displayOrder = DisplayOrder.ASCENDING;
         this.COUNTDOWN_PANES = new LinkedHashSet<>();
         this.FLOW_PANE = new FlowPane();
-        this.CD_DESC_LABEL = new Label();
-        this.CD_DAYS_LABEL = new Label();
         this.FLOW_PANE.prefWrapLengthProperty().bind(this.widthProperty());
         // the -2 below is needed to correct a small offset when at minHeight
         this.FLOW_PANE.minHeightProperty().bind(this.heightProperty().add(-2));
@@ -99,8 +94,7 @@ public class CountdownPaneView extends ScrollPane {
     }
 
     private void addPaddingForAlignment() {
-        this.PADDINGS_IN_USE.forEach(
-            padding -> CountdownPaneView.getInstance().getChildren().remove(padding));
+        this.PADDINGS_IN_USE.forEach(padding -> FLOW_PANE.getChildren().remove(padding));
         if (this.COUNTDOWN_PANES.isEmpty())
             return;
         double cdWidth = CountdownPane.WIDTH;
@@ -192,6 +186,7 @@ public class CountdownPaneView extends ScrollPane {
                 selected.add(pane.getCountdown());
         });
         StorageHandler.deleteCountdowns(selected);
+        deselectAll();
         repopulate(LocalDate.now());
     }
 
@@ -242,6 +237,9 @@ public class CountdownPaneView extends ScrollPane {
         public static final double DIV_WIDTH = 10;
         public static final double CONTENT_HEIGHT = 100;
 
+        private final Label CD_DESC_LABEL;
+        private final Label CD_DAYS_LABEL;
+
         private HBox hoverHBox; // container
         private HBox contentHBox; // container
         private Label statusLabel; // for displaying the status on mouse hover
@@ -253,6 +251,8 @@ public class CountdownPaneView extends ScrollPane {
         // TODO private CountdownPane prev; // for multi-select functionality
 
         public CountdownPane(Countdown cd, LocalDate now) {
+            this.CD_DESC_LABEL = new Label();
+            this.CD_DAYS_LABEL = new Label();
             this.countdown = cd;
             this.selected = false;
             this.setAlignment(Pos.CENTER);

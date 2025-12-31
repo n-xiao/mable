@@ -1,11 +1,5 @@
-// FIX REQUIRED: SAVE & RESTORE IS PROBABLY NOT BACKWARDS COMPATIBLE AT ALL.
-// ANY CHANGE TO THE Countdown CLASS IN FUTURE UPDATES COULD BREAK LOAD OPS.
-// WILL NEED TO IMPLEMENT Json or smthing
-
 package code.backend;
 
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
@@ -22,57 +16,39 @@ import tools.jackson.databind.node.ObjectNode;
  *  immutable by a user.
  */
 public class StorageHandler {
-    public static Path storagePath;
-    private static PriorityQueue<Countdown> countdowns =
+    private static final Path STORAGE_PATH =
+        Path.of(System.getProperty("user.home") + "/mable_data/mable_countdowns.json");
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final PriorityQueue<Countdown> COUNTDOWN_PQ =
         new PriorityQueue<Countdown>(new SortByRemainingDays());
 
     private StorageHandler() {}
 
     public static void init() throws Exception {
-        // btw, Path should automatically account for different OS path separators
-        storagePath =
-            Path.of(System.getProperty("user.home") + "/mable_data/mable_countdowns.json");
-        if (!Files.exists(storagePath)) {
+        if (!Files.exists(STORAGE_PATH)) {
             Files.createDirectory(Path.of(System.getProperty("user.home") + "/mable_data"));
-            Files.createFile(storagePath);
+            Files.createFile(STORAGE_PATH);
         } else {
             load();
         }
     }
 
-    public static void save() {}
+    public static void save() {
+        final ObjectNode OBJ_ROOT = (ObjectNode) MAPPER.readTree(STORAGE_PATH);
+        COUNTDOWN_PQ.forEach(cd -> { OBJ_ROOT.putPOJO(cd.getIdAsString(), cd); });
+    }
 
-    public static void saveCountdown(Countdown c) {
-        ObjectMapper mapper = new ObjectMapper();
-        PriorityQueue<Countdown> priorityQueue =
-            new PriorityQueue<Countdown>(new SortByRemainingDays());
-        priorityQueue.add(new Countdown("hello", 1, 1, 2026));
-        priorityQueue.add(new Countdown("hello", 1, 1, 2026));
-        priorityQueue.add(new Countdown("hello2", 1, 1, 2025));
-        priorityQueue.add(c);
-        ObjectNode root = mapper.createObjectNode();
-        priorityQueue.forEach(countdown -> { root.putPOJO(countdown.getIdAsString(), countdown); });
-        System.out.println(mapper.writeValueAsString(root));
-        System.out.println();
-        root.forEachEntry((k, v) -> {
-            Countdown countdown = mapper.treeToValue(v, Countdown.class);
-            System.out.println(countdown.getName());
-        });
-        c.setName("the name changed!");
-        root.putPOJO(c.getIdAsString(), c);
-        System.out.println(mapper.writeValueAsString(root));
-
-        priorityQueue.clear();
-        root.forEachEntry((k, v) -> {
-            Countdown countdown = mapper.treeToValue(v, Countdown.class);
-            System.out.println(countdown.getName());
+    private static void load() {
+        assert COUNTDOWN_PQ.isEmpty();
+        final JsonNode JSON_ROOT = MAPPER.readTree(STORAGE_PATH);
+        JSON_ROOT.forEachEntry((_k, v) -> {
+            Countdown cd = MAPPER.treeToValue(v, Countdown.class);
+            COUNTDOWN_PQ.add(cd);
         });
     }
 
-    private static void load() {}
-
     public static void setCountdownDone(Countdown c, boolean isDone) {
-        countdowns.forEach(countdown -> {
+        COUNTDOWN_PQ.forEach(countdown -> {
             if (countdown.ID.equals(c.ID)) {
                 countdown.setDone(isDone);
                 return;
@@ -81,7 +57,7 @@ public class StorageHandler {
     }
 
     public static void editCountdown(Countdown c, String name, LocalDate date) {
-        countdowns.forEach(countdown -> {
+        COUNTDOWN_PQ.forEach(countdown -> {
             if (countdown.ID.equals(c.ID)) {
                 countdown.setName(name);
                 countdown.setDueDate(date);
@@ -91,21 +67,21 @@ public class StorageHandler {
     }
 
     public static void deleteCountdown(Countdown c) {
-        countdowns.remove(c);
+        COUNTDOWN_PQ.remove(c);
     }
 
     public static void deleteCountdowns(Countdown... cs) {
         for (Countdown countdown : cs) {
-            countdowns.remove(countdown);
+            COUNTDOWN_PQ.remove(countdown);
         }
     }
 
     public static void addCountdown(Countdown c) {
-        countdowns.add(c);
+        COUNTDOWN_PQ.add(c);
     }
 
     public static Countdown[] getAscendingCountdowns() {
-        return countdowns.toArray(new Countdown[0]);
+        return COUNTDOWN_PQ.toArray(new Countdown[0]);
     }
 
     public static Countdown[] getDescendingCountdowns() {

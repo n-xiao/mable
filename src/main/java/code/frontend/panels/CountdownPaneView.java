@@ -133,11 +133,11 @@ public class CountdownPaneView extends ScrollPane {
         while (paneIterator.hasNext() && countdownIterator.hasNext()) {
             CountdownPane pane = paneIterator.next();
             Countdown countdown = countdownIterator.next();
-            pane.setCountdown(countdown);
+            pane.setCountdownAndRefresh(countdown);
         }
         // removes each extra/unused CountdownPanes safely
         paneIterator.forEachRemaining(pane -> {
-            pane.setCountdown(null);
+            pane.setCountdownAndRefresh(null);
             FLOW_PANE.getChildren().remove(pane);
         });
         this.COUNTDOWN_PANES.removeIf(pane -> pane.getCountdown() == null);
@@ -456,7 +456,7 @@ public class CountdownPaneView extends ScrollPane {
             endDateLabel.setTextFill(Vals.Colour.SELECTED);
         }
 
-        protected void setCountdown(Countdown countdown) {
+        protected void setCountdownAndRefresh(Countdown countdown) {
             if (countdown == null)
                 return;
             this.countdown = countdown;

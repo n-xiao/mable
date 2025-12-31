@@ -3,7 +3,6 @@ package code.backend;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.NavigableSet;
 import java.util.Stack;
 import java.util.TreeSet;
@@ -41,7 +40,7 @@ public class StorageHandler {
         }
     }
 
-    private static void save() {
+    public static void save() {
         final JsonNode JSON_ROOT = MAPPER.readTree(STORAGE_PATH);
 
         final ObjectNode OBJ_ROOT = JSON_ROOT.isObject() ? ((ObjectNode) JSON_ROOT)

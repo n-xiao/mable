@@ -59,7 +59,6 @@ public class EditWindow extends ConfigWindowTemplate {
                 String newName = getNameField().getTextField().getText();
                 LocalDate newDue = getDateField().getLocalDateInput(false);
                 StorageHandler.editCountdown(countdown, newName, newDue);
-                StorageHandler.save();
                 CountdownPaneView cpv = CountdownPaneView.getInstance();
                 cpv.repopulate(LocalDate.now());
                 cpv.deselectAll();

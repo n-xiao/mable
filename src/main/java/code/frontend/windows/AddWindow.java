@@ -35,7 +35,6 @@ public class AddWindow extends ConfigWindowTemplate {
                     return;
                 StorageHandler.addCountdown(new Countdown(name, due));
                 CountdownPaneView.getInstance().repopulate(LocalDate.now());
-                StorageHandler.save();
                 CountdownPaneView.getInstance().deselectAll();
                 window.close();
                 window = null;

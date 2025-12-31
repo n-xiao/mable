@@ -1,9 +1,10 @@
 package code;
 
-import code.backend.Countdown;
 import code.backend.StorageHandler;
 import code.frontend.gui.MainContainer;
 import code.frontend.misc.Vals;
+import code.frontend.panels.CountdownPaneView;
+import java.time.LocalDate;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -12,7 +13,7 @@ public class Launcher extends Application {
     @Override
     public void init() throws Exception {
         Vals.FontTools.initFonts();
-        // StorageHandler.init();
+        StorageHandler.init();
     }
 
     @Override
@@ -30,6 +31,8 @@ public class Launcher extends Application {
         scene.setFill(Vals.Colour.BACKGROUND);
         stage.setScene(scene);
         stage.show();
+
+        CountdownPaneView.getInstance().repopulate(LocalDate.now());
     }
 
     public static void main(String[] args) {

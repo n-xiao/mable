@@ -110,6 +110,12 @@ public class CountdownPaneView extends ScrollPane {
         return cpv;
     }
 
+    /**
+     * This allows for left to right listing of CountdownPanes in a FlowPane. By
+     * adding invisible Regions that act as "spacers" or "paddings", an incomplete
+     * row of a FlowPane will be aligned to the left when all children of the
+     * FlowPane are centered.
+     */
     private void addPaddingForAlignment() {
         this.PADDINGS_IN_USE.forEach(padding -> FLOW_PANE.getChildren().remove(padding));
         this.PADDINGS_IN_USE.clear();
@@ -120,7 +126,7 @@ public class CountdownPaneView extends ScrollPane {
         double width = this.FLOW_PANE.getPrefWrapLength();
         int numOfCountdowns = StorageHandler.getDescendingCountdowns().size();
         if (width < cdWidth)
-            width = cdWidth * numOfCountdowns;
+            width = cdWidth * numOfCountdowns; // guess
         int columns = (int) Math.round(width / cdWidth);
         int panesOnLast = (int) (numOfCountdowns % columns);
         int remainder = (panesOnLast > 0) ? columns - panesOnLast : 0;

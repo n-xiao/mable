@@ -108,8 +108,8 @@ public class CountdownPaneView extends ScrollPane {
             Region padding = new Region();
             padding.setMinSize(cdWidth, cdHeight);
             padding.setMaxSize(cdWidth, cdHeight);
-            padding.setVisible(true);
-            padding.setBackground(Colour.createBG(Color.PINK, 0, 0));
+            padding.setVisible(false);
+            // padding.setBackground(Colour.createBG(Color.PINK, 0, 0));
             this.FLOW_PANE.getChildren().add(padding);
             this.PADDINGS_IN_USE.add(padding);
         }

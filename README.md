@@ -42,4 +42,4 @@ Mable is distributed in the hope that it will be useful, but WITHOUT ANY WARRANT
 
 You should have received a copy of the GNU General Public License along with Mable. If not, see <https://www.gnu.org/licenses/>.
 
-<sub>Copyright © 2026 Nicholas Siow</sub>
+<sub>Copyright © 2026 Nicholas Siow  <nxiao.dev@protonmail.com> </sub>

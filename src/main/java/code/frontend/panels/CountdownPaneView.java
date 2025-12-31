@@ -115,9 +115,9 @@ public class CountdownPaneView extends ScrollPane {
         this.PADDINGS_IN_USE.clear();
         if (this.COUNTDOWN_PANES.isEmpty())
             return;
-        double cdWidth = CountdownPane.WIDTH;
+        double cdWidth = CountdownPane.WIDTH + HGAP_BETWEEN;
         double cdHeight = CountdownPane.HEIGHT;
-        double width = this.FLOW_PANE.getWidth();
+        double width = this.FLOW_PANE.getPrefWrapLength();
         int columns = (int) Math.floor(width / cdWidth);
         int panesOnLast = this.COUNTDOWN_PANES.size() % columns;
         int remainder = (panesOnLast > 0) ? columns - panesOnLast : 0;

@@ -36,7 +36,7 @@ import javafx.scene.text.Font;
 public class Vals {
     public final class Colour {
         public static final Color BACKGROUND = Color.rgb(20, 20, 30);
-        public static final Color SIDE_BAR = Color.rgb(67, 67, 75);
+        public static final Color SIDE_BAR = Color.rgb(10, 2, 22);
         public static final Color VIEW_PICKER = Color.rgb(44, 44, 53);
         public static final Color FEEDBACK = Color.rgb(75, 148, 174);
         public static final Color TXT_GHOST = Color.rgb(200, 200, 230);
@@ -62,8 +62,8 @@ public class Vals {
         public static final double INPUT_BORDER_WIDTH = 2;
         public static final int PREF_WIDTH = 1120;
         public static final int PREF_HEIGHT = 730;
-        public static final int MIN_WIDTH = 620;
-        public static final int MIN_HEIGHT = 430;
+        public static final int MIN_WIDTH = 920;
+        public static final int MIN_HEIGHT = 630;
         public static final int INPUT_MIN_HEIGHT = 50;
         // CORNER_OFFSET > CORNER_DEVIATION
         public static final double DEVIATION = 0.018;

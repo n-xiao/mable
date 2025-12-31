@@ -32,7 +32,7 @@ public class MainContainer extends HBox {
         this.content = Content.getInstance();
         this.setBackground(null);
         this.setFillHeight(true);
-        this.sidebar.setMinWidth(200);
+        this.sidebar.setMinWidth(230);
         HBox.setMargin(this.sidebar, new Insets(0, 5, 0, 0));
         HBox.setHgrow(this.content, Priority.ALWAYS);
         this.getChildren().addAll(this.sidebar, this.content);

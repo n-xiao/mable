@@ -1,7 +1,7 @@
 package code.backend;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -9,12 +9,13 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE)
 public class Countdown {
     private String name = null;
     private boolean isDone = false;
     private ZonedDateTime dueDateTime;
     public final UUID ID; // represents unique id
-    @JsonIgnore private static final String ZONE_ID_STR = "UTC";
+    private static final String ZONE_ID_STR = "UTC";
 
     // todo String parser
 

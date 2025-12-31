@@ -54,7 +54,12 @@ public class StorageHandler {
         priorityQueue.forEach(countdown -> { root.putPOJO(countdown.getIdAsString(), countdown); });
         System.out.println(mapper.writeValueAsString(root));
         System.out.println();
-        root.remove(c.getIdAsString());
+        root.forEachEntry((k, v) -> {
+            Countdown countdown = mapper.treeToValue(v, Countdown.class);
+            System.out.println(countdown.getName());
+        });
+        c.setName("the name changed!");
+        root.putPOJO(c.getIdAsString(), c);
         System.out.println(mapper.writeValueAsString(root));
 
         priorityQueue.clear();

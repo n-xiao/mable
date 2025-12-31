@@ -106,16 +106,16 @@ public class Countdown {
         return dueDateTime.isBefore(nowDateTime) && !isDone;
     }
 
-    protected void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    protected void setDueDate(int day, int month, int year) {
+    public void setDueDate(int day, int month, int year) {
         LocalDate dueDate = LocalDate.of(year, month, day);
         this.dueDateTime = dueDate.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
     }
 
-    protected void setDueDate(LocalDate dueDate) {
+    public void setDueDate(LocalDate dueDate) {
         this.dueDateTime = dueDate.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
     }
 

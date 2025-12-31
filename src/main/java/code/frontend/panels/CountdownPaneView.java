@@ -48,36 +48,41 @@ public class CountdownPaneView extends ScrollPane {
 
     private final double HGAP_BETWEEN = 20;
     private final double VGAP_BETWEEN = -5;
-    private FlowPane fp;
-    private LinkedHashSet<CountdownPane> cdPanes;
-    private DisplayOrder displayOrder;
-    private ArrayList<Region> paddingsInUse;
+    private final FlowPane FLOW_PANE;
+    private final LinkedHashSet<CountdownPane> COUNTDOWN_PANES;
+    private final ArrayList<Region> PADDINGS_IN_USE;
+
+    private final Label CD_DESC_LABEL;
+    private final Label CD_DAYS_LABEL;
 
     private ButtonMode mode;
+    private DisplayOrder displayOrder;
 
     private static CountdownPaneView cpv = null;
 
     private CountdownPaneView() {
         this.mode = ButtonMode.NO_SELECT;
-        this.paddingsInUse = new ArrayList<Region>();
+        this.PADDINGS_IN_USE = new ArrayList<Region>();
         this.displayOrder = DisplayOrder.ASCENDING;
-        this.cdPanes = new LinkedHashSet<>();
-        this.fp = new FlowPane();
-        this.fp.prefWrapLengthProperty().bind(this.widthProperty());
+        this.COUNTDOWN_PANES = new LinkedHashSet<>();
+        this.FLOW_PANE = new FlowPane();
+        this.CD_DESC_LABEL = new Label();
+        this.CD_DAYS_LABEL = new Label();
+        this.FLOW_PANE.prefWrapLengthProperty().bind(this.widthProperty());
         // the -2 below is needed to correct a small offset when at minHeight
-        this.fp.minHeightProperty().bind(this.heightProperty().add(-2));
-        this.fp.setMaxHeight(Double.MAX_VALUE);
-        this.fp.setBackground(Colour.createBG(Colour.BACKGROUND, 0, 0));
+        this.FLOW_PANE.minHeightProperty().bind(this.heightProperty().add(-2));
+        this.FLOW_PANE.setMaxHeight(Double.MAX_VALUE);
+        this.FLOW_PANE.setBackground(Colour.createBG(Colour.BACKGROUND, 0, 0));
         // this.fp.setBackground(Colour.createBG(Color.BLUE, 0, 0));
-        this.fp.setAlignment(Pos.TOP_CENTER);
-        this.fp.setHgap(HGAP_BETWEEN);
-        this.fp.setVgap(VGAP_BETWEEN);
+        this.FLOW_PANE.setAlignment(Pos.TOP_CENTER);
+        this.FLOW_PANE.setHgap(HGAP_BETWEEN);
+        this.FLOW_PANE.setVgap(VGAP_BETWEEN);
         this.setBackground(null);
         this.setFitToWidth(true);
         this.setHbarPolicy(ScrollBarPolicy.NEVER);
         this.setVbarPolicy(ScrollBarPolicy.NEVER);
-        this.fp.setOnMousePressed(event -> { RightClickMenu.close(); });
-        this.setContent(this.fp);
+        this.FLOW_PANE.setOnMousePressed(event -> { RightClickMenu.close(); });
+        this.setContent(this.FLOW_PANE);
     }
 
     public static CountdownPaneView getInstance() {
@@ -94,23 +99,23 @@ public class CountdownPaneView extends ScrollPane {
     }
 
     private void addPaddingForAlignment() {
-        this.paddingsInUse.forEach(
+        this.PADDINGS_IN_USE.forEach(
             padding -> CountdownPaneView.getInstance().getChildren().remove(padding));
-        if (this.cdPanes.isEmpty())
+        if (this.COUNTDOWN_PANES.isEmpty())
             return;
         double cdWidth = CountdownPane.WIDTH;
         double cdHeight = CountdownPane.HEIGHT;
-        double width = this.fp.getWidth();
+        double width = this.FLOW_PANE.getWidth();
         int columns = (int) Math.floor(width / cdWidth);
-        int panesOnLast = this.cdPanes.size() % columns;
+        int panesOnLast = this.COUNTDOWN_PANES.size() % columns;
         int remainder = (panesOnLast > 0) ? columns - panesOnLast : 0;
         for (int i = 0; i < remainder; i++) {
             Region padding = new Region();
             padding.setMinSize(cdWidth, cdHeight);
             padding.setMaxSize(cdWidth, cdHeight);
             padding.setVisible(false);
-            this.fp.getChildren().add(padding);
-            this.paddingsInUse.add(padding);
+            this.FLOW_PANE.getChildren().add(padding);
+            this.PADDINGS_IN_USE.add(padding);
         }
     }
 
@@ -123,21 +128,24 @@ public class CountdownPaneView extends ScrollPane {
             countdowns = StorageHandler.getDescendingCountdowns();
 
         Iterator<Countdown> countdownIterator = countdowns.iterator();
-        Iterator<CountdownPane> paneIterator = this.cdPanes.iterator();
-
+        Iterator<CountdownPane> paneIterator = this.COUNTDOWN_PANES.iterator();
+        // reuses existing CountdownPanes
         while (paneIterator.hasNext() && countdownIterator.hasNext()) {
             CountdownPane pane = paneIterator.next();
             Countdown countdown = countdownIterator.next();
             pane.setCountdown(countdown);
         }
-
-        paneIterator.forEachRemaining(pane -> { pane.setCountdown(null); });
-        this.cdPanes.removeIf(pane -> pane.getCountdown() == null);
-
+        // removes each extra/unused CountdownPanes safely
+        paneIterator.forEachRemaining(pane -> {
+            pane.setCountdown(null);
+            FLOW_PANE.getChildren().remove(pane);
+        });
+        this.COUNTDOWN_PANES.removeIf(pane -> pane.getCountdown() == null);
+        // creates new CountdownPanes for extra Countdowns
         countdownIterator.forEachRemaining(countdown -> {
             CountdownPane countdownPane = new CountdownPane(countdown, now);
-            fp.getChildren().add(countdownPane);
-            this.cdPanes.add(countdownPane);
+            FLOW_PANE.getChildren().add(countdownPane);
+            this.COUNTDOWN_PANES.add(countdownPane);
         });
 
         addPaddingForAlignment();
@@ -146,7 +154,7 @@ public class CountdownPaneView extends ScrollPane {
 
     public int getNumOfSelections() {
         int selections = 0;
-        for (CountdownPane countdownPane : cdPanes) {
+        for (CountdownPane countdownPane : COUNTDOWN_PANES) {
             if (countdownPane.isSelected())
                 selections++;
         }
@@ -154,7 +162,7 @@ public class CountdownPaneView extends ScrollPane {
     }
 
     public void markSelectedAsComplete(boolean isDone) {
-        cdPanes.forEach(pane -> {
+        COUNTDOWN_PANES.forEach(pane -> {
             if (pane.isSelected()) {
                 pane.getCountdown().setDone(isDone);
             }
@@ -165,7 +173,7 @@ public class CountdownPaneView extends ScrollPane {
 
     public void editSelected() {
         // gets first selected
-        for (CountdownPane countdownPane : cdPanes) {
+        for (CountdownPane countdownPane : COUNTDOWN_PANES) {
             if (countdownPane.isSelected()) {
                 EditWindow.getInstance(countdownPane.getCountdown());
                 return;
@@ -179,7 +187,7 @@ public class CountdownPaneView extends ScrollPane {
 
     public void deleteSelected() {
         ArrayList<Countdown> selected = new ArrayList<Countdown>();
-        cdPanes.forEach(pane -> {
+        COUNTDOWN_PANES.forEach(pane -> {
             if (pane.isSelected())
                 selected.add(pane.getCountdown());
         });
@@ -188,7 +196,7 @@ public class CountdownPaneView extends ScrollPane {
     }
 
     public void deselectAll() {
-        for (CountdownPane countdownPane : cdPanes) {
+        for (CountdownPane countdownPane : COUNTDOWN_PANES) {
             countdownPane.setSelected(false);
             countdownPane.applyDeselectStyle();
         }
@@ -196,7 +204,7 @@ public class CountdownPaneView extends ScrollPane {
     }
 
     public boolean allSelectedAreCompleted() {
-        for (CountdownPane countdownPane : cdPanes) {
+        for (CountdownPane countdownPane : COUNTDOWN_PANES) {
             if (countdownPane.isSelected() && !countdownPane.getCountdown().isDone()) {
                 return false;
             }
@@ -365,32 +373,37 @@ public class CountdownPaneView extends ScrollPane {
 
         private VBox createCountdownDisplay(Countdown cd, LocalDate now) {
             VBox display = new VBox();
-            int daysLeft = Math.abs(cd.daysUntilDue(now));
 
-            Label numLabel = new Label(Vals.GraphicalUI.intToString(daysLeft));
             Font numFont =
                 Font.font(Vals.FontTools.FONT_FAM, FontWeight.BOLD, FontPosture.ITALIC, 30);
-            numLabel.setAlignment(Pos.CENTER);
-            numLabel.setTextAlignment(TextAlignment.CENTER);
-            numLabel.setFont(numFont);
-            numLabel.setTextFill(Color.WHITE);
-            numLabel.prefWidthProperty().bind(display.widthProperty());
-            display.getChildren().add(numLabel);
+            CD_DAYS_LABEL.setAlignment(Pos.CENTER);
+            CD_DAYS_LABEL.setTextAlignment(TextAlignment.CENTER);
+            CD_DAYS_LABEL.setFont(numFont);
+            CD_DAYS_LABEL.setTextFill(Color.WHITE);
+            CD_DAYS_LABEL.prefWidthProperty().bind(display.widthProperty());
 
             Font textFont =
                 Font.font(Vals.FontTools.FONT_FAM, FontWeight.BOLD, FontPosture.ITALIC, 13);
-            String textNoun = (daysLeft != 1) ? "DAYS" : "DAY";
-            String textAdverb = (cd.isOverdue(now)) ? "AGO" : "LEFT";
-            Label textLabel = new Label(textNoun + "\n" + textAdverb);
-            textLabel.setAlignment(Pos.CENTER);
-            textLabel.setTextAlignment(TextAlignment.CENTER);
-            textLabel.setFont(textFont);
-            textLabel.setTextFill(Color.WHITE);
-            textLabel.prefWidthProperty().bind(display.widthProperty());
-            display.getChildren().add(textLabel);
+            CD_DESC_LABEL.setAlignment(Pos.CENTER);
+            CD_DESC_LABEL.setTextAlignment(TextAlignment.CENTER);
+            CD_DESC_LABEL.setFont(textFont);
+            CD_DESC_LABEL.setTextFill(Color.WHITE);
+            CD_DESC_LABEL.prefWidthProperty().bind(display.widthProperty());
+
+            configureCountdownLabelsText(countdown, now);
+
+            display.getChildren().addAll(CD_DAYS_LABEL, CD_DESC_LABEL);
             HBox.setMargin(display, new Insets(10, 10, 10, 0));
             HBox.setHgrow(display, Priority.ALWAYS);
             return display;
+        }
+
+        private void configureCountdownLabelsText(Countdown countdown, LocalDate now) {
+            int daysLeft = Math.abs(countdown.daysUntilDue(now));
+            CD_DAYS_LABEL.setText(Vals.GraphicalUI.intToString(daysLeft));
+            String textNoun = (daysLeft != 1) ? "DAYS" : "DAY";
+            String textAdverb = (countdown.isOverdue(now)) ? "AGO" : "LEFT";
+            CD_DESC_LABEL.setText(textNoun + "\n" + textAdverb);
         }
 
         private void initSelectable(CountdownPane thisInstance) {
@@ -473,14 +486,7 @@ public class CountdownPaneView extends ScrollPane {
             String end = this.countdown.getStringDueDate(now);
             statusLabel.setText(status);
             endDateLabel.setText("Due: " + end);
-            // removes everything except the unmanaged border
-            this.contentHBox.getChildren().removeIf(child -> child.isManaged());
-            // adds the name display
-            this.contentHBox.getChildren().add(createNameLabel(this.countdown));
-            // adds the divider
-            this.contentHBox.getChildren().add(createVerticalDivider());
-            // adds the day countdown pane
-            this.contentHBox.getChildren().add(createCountdownDisplay(this.countdown, now));
+            configureCountdownLabelsText(this.countdown, now);
         }
     }
 }

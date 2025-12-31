@@ -1,9 +1,7 @@
 package code.frontend.windows;
 
 import code.backend.Countdown;
-import code.backend.StorageHandler;
 import code.frontend.panels.Button;
-import code.frontend.panels.CountdownPaneControls;
 import code.frontend.panels.CountdownPaneView;
 import code.frontend.panels.DateInputField;
 import code.frontend.panels.InputField;
@@ -58,7 +56,8 @@ public class EditWindow extends ConfigWindowTemplate {
             public void executeOnClick() {
                 String newName = getNameField().getTextField().getText();
                 LocalDate newDue = getDateField().getLocalDateInput(false);
-                StorageHandler.editCountdown(countdown, newName, newDue);
+                countdown.setName(newName);
+                countdown.setDueDate(newDue);
                 CountdownPaneView cpv = CountdownPaneView.getInstance();
                 cpv.repopulate(LocalDate.now());
                 cpv.deselectAll();

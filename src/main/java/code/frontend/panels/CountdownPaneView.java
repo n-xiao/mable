@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.NavigableSet;
+import java.util.concurrent.locks.ReentrantLock;
 import javafx.animation.FadeTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -68,6 +69,8 @@ public class CountdownPaneView extends ScrollPane {
     private final FlowPane FLOW_PANE;
     private final LinkedHashSet<CountdownPane> COUNTDOWN_PANES;
     private final ArrayList<Region> PADDINGS_IN_USE;
+
+    private final ReentrantLock LOCK = new ReentrantLock();
 
     private ButtonMode mode;
     private DisplayOrder displayOrder;
@@ -114,7 +117,8 @@ public class CountdownPaneView extends ScrollPane {
      * This allows for left to right listing of CountdownPanes in a FlowPane. By
      * adding invisible Regions that act as "spacers" or "paddings", an incomplete
      * row of a FlowPane will be aligned to the left when all children of the
-     * FlowPane are centered.
+     * FlowPane are centered. It is attached to a listener for when the window
+     * is resized.
      */
     private void addPaddingForAlignment() {
         this.PADDINGS_IN_USE.forEach(padding -> FLOW_PANE.getChildren().remove(padding));
@@ -125,8 +129,8 @@ public class CountdownPaneView extends ScrollPane {
         double cdHeight = CountdownPane.HEIGHT;
         double width = this.FLOW_PANE.getPrefWrapLength();
         int numOfCountdowns = StorageHandler.getDescendingCountdowns().size();
-        if (width < cdWidth)
-            width = cdWidth * numOfCountdowns; // guess
+        if (width < cdWidth) // occurs when FLOW_PANE bounds has not been init by its parent Node
+            width = cdWidth * numOfCountdowns; // so, just make an educated guess
         int columns = (int) Math.round(width / cdWidth);
         int panesOnLast = (int) (numOfCountdowns % columns);
         int remainder = (panesOnLast > 0) ? columns - panesOnLast : 0;
@@ -142,36 +146,41 @@ public class CountdownPaneView extends ScrollPane {
     }
 
     public void repopulate(LocalDate now) {
-        NavigableSet<Countdown> countdowns;
-        // this if-else is ok for now since there's only two DisplayOrders rn
-        if (displayOrder.equals(DisplayOrder.ASCENDING))
-            countdowns = StorageHandler.getAscendingCountdowns();
-        else
-            countdowns = StorageHandler.getDescendingCountdowns();
+        LOCK.lock();
+        try {
+            NavigableSet<Countdown> countdowns;
+            // this if-else is ok for now since there's only two DisplayOrders rn
+            if (displayOrder.equals(DisplayOrder.ASCENDING))
+                countdowns = StorageHandler.getAscendingCountdowns();
+            else
+                countdowns = StorageHandler.getDescendingCountdowns();
 
-        Iterator<Countdown> countdownIterator = countdowns.iterator();
-        Iterator<CountdownPane> paneIterator = this.COUNTDOWN_PANES.iterator();
-        // reuses existing CountdownPanes
-        while (paneIterator.hasNext() && countdownIterator.hasNext()) {
-            CountdownPane pane = paneIterator.next();
-            Countdown countdown = countdownIterator.next();
-            pane.setCountdownAndRefresh(countdown);
+            Iterator<Countdown> countdownIterator = countdowns.iterator();
+            Iterator<CountdownPane> paneIterator = this.COUNTDOWN_PANES.iterator();
+            // reuses existing CountdownPanes
+            while (paneIterator.hasNext() && countdownIterator.hasNext()) {
+                CountdownPane pane = paneIterator.next();
+                Countdown countdown = countdownIterator.next();
+                pane.setCountdownAndRefresh(countdown);
+            }
+            // removes each extra/unused CountdownPanes safely
+            paneIterator.forEachRemaining(pane -> {
+                pane.setCountdownAndRefresh(null);
+                FLOW_PANE.getChildren().remove(pane);
+            });
+            this.COUNTDOWN_PANES.removeIf(pane -> pane.getCountdown() == null);
+            // creates new CountdownPanes for extra Countdowns
+            countdownIterator.forEachRemaining(countdown -> {
+                CountdownPane countdownPane = new CountdownPane(countdown, now);
+                FLOW_PANE.getChildren().add(countdownPane);
+                this.COUNTDOWN_PANES.add(countdownPane);
+            });
+
+            addPaddingForAlignment();
+            updateMode();
+        } finally {
+            LOCK.unlock();
         }
-        // removes each extra/unused CountdownPanes safely
-        paneIterator.forEachRemaining(pane -> {
-            pane.setCountdownAndRefresh(null);
-            FLOW_PANE.getChildren().remove(pane);
-        });
-        this.COUNTDOWN_PANES.removeIf(pane -> pane.getCountdown() == null);
-        // creates new CountdownPanes for extra Countdowns
-        countdownIterator.forEachRemaining(countdown -> {
-            CountdownPane countdownPane = new CountdownPane(countdown, now);
-            FLOW_PANE.getChildren().add(countdownPane);
-            this.COUNTDOWN_PANES.add(countdownPane);
-        });
-
-        addPaddingForAlignment();
-        updateMode();
     }
 
     public int getNumOfSelections() {
@@ -248,6 +257,10 @@ public class CountdownPaneView extends ScrollPane {
 
     public ButtonMode getMode() {
         return mode;
+    }
+
+    public ReentrantLock getLock() {
+        return LOCK;
     }
 
     private void updateMode() {

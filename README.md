@@ -12,7 +12,7 @@ Mable is inspired by the [Bears Countdown App](https://apps.apple.com/us/app/bea
 and the visual aesthetics of [Excalidraw](https://github.com/excalidraw/excalidraw).
 
 ## Installation Guide
-For developers,\
+For developers,
  - Clone the repository and run `./gradlew build` followed by `./gradlew run` in the project root directory.
  - Mable will store all data in JSON format in the folder `mable_data`,
    located within your HOME directory ( `System.getProperty("user.home")` ).
@@ -28,9 +28,9 @@ For developers,\
 // TODO
 
 ## Acknowledgements
-Mable uses [JavaFX](https://github.com/openjdk/jfx/tree/master) as a Gradle dependency. You can find a copy of their
-License [here](https://github.com/openjdk/jfx/blob/master/LICENSE).\
-Mable uses [Jackson](https://github.com/FasterXML/jackson) as a Gradle dependency. You can find a copy of their
+- Mable uses [JavaFX](https://github.com/openjdk/jfx/tree/master) as a Gradle dependency. You can find a copy of their
+License [here](https://github.com/openjdk/jfx/blob/master/LICENSE).
+- Mable uses [Jackson](https://github.com/FasterXML/jackson) as a Gradle dependency. You can find a copy of their
 License [here](https://github.com/FasterXML/jackson-core/blob/3.x/LICENSE).
 
 ## License

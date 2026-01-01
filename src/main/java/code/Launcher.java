@@ -20,8 +20,7 @@ package code;
 import code.backend.StorageHandler;
 import code.frontend.gui.MainContainer;
 import code.frontend.misc.Vals;
-import code.frontend.panels.CountdownPaneView;
-import java.time.LocalDate;
+import code.frontend.misc.Watchdog;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -49,7 +48,7 @@ public class Launcher extends Application {
         stage.setScene(scene);
         stage.show();
 
-        CountdownPaneView.getInstance().repopulate(LocalDate.now());
+        Watchdog.startWatchdog();
     }
 
     @Override

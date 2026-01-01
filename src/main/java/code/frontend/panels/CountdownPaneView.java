@@ -127,11 +127,11 @@ public class CountdownPaneView extends ScrollPane {
             return;
         double cdWidth = CountdownPane.WIDTH + HGAP_BETWEEN;
         double cdHeight = CountdownPane.HEIGHT;
-        double width = this.getWidth();
+        double width = this.FLOW_PANE.getWidth();
         int numOfCountdowns = StorageHandler.getDescendingCountdowns().size();
         int columns = (int) Math.floor(width / cdWidth);
         int panesOnLast = (int) (numOfCountdowns % columns);
-        int remainder = (panesOnLast > 0) ? columns - panesOnLast : 0;
+        int remainder = columns - panesOnLast;
         for (int i = 0; i < remainder; i++) {
             Region padding = new Region();
             padding.setMinSize(CountdownPane.WIDTH, cdHeight);
@@ -228,7 +228,7 @@ public class CountdownPaneView extends ScrollPane {
     public void deselectAll() {
         for (CountdownPane countdownPane : COUNTDOWN_PANES) {
             countdownPane.setSelected(false);
-            countdownPane.applyDeselectStyle();
+            countdownPane.applyDeselectStyle(true);
         }
         updateMode();
     }
@@ -487,7 +487,7 @@ public class CountdownPaneView extends ScrollPane {
 
         private void onPrimaryMousePress() {
             if (this.selected) {
-                applyDeselectStyle();
+                applyDeselectStyle(false);
             } else {
                 applySelectStyle();
             }
@@ -505,9 +505,9 @@ public class CountdownPaneView extends ScrollPane {
             RightClickMenu.openAt(x, y);
         }
 
-        public void applyDeselectStyle() {
-            FADE_TR.stop();
-            if (HOVER_HBOX.getOpacity() > 0) {
+        public void applyDeselectStyle(boolean withFadeOut) {
+            if (withFadeOut) {
+                FADE_TR.stop();
                 FADE_TR.setToValue(0);
                 FADE_TR.setFromValue(HOVER_HBOX.getOpacity());
                 FADE_TR.playFromStart();
@@ -553,6 +553,8 @@ public class CountdownPaneView extends ScrollPane {
         }
 
         private void setPriorityColour(Color colour) {
+            NAME_LABEL.setTextFill(colour);
+            VERTICAL_DIVIDER.setStrokeColour(colour);
             CD_DAYS_LABEL.setTextFill(colour);
             CD_DESC_LABEL.setTextFill(colour);
         }

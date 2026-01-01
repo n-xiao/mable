@@ -18,9 +18,11 @@
 package code.frontend.panels;
 
 import code.backend.Countdown;
+import code.backend.Countdown.Urgency;
 import code.backend.StorageHandler;
 import code.frontend.foundation.CustomBox;
 import code.frontend.foundation.CustomLine;
+import code.frontend.foundation.CustomLine.Type;
 import code.frontend.gui.RightClickMenu;
 import code.frontend.misc.Vals;
 import code.frontend.misc.Vals.Colour;
@@ -31,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.NavigableSet;
+import javafx.animation.Animation.Status;
 import javafx.animation.FadeTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -275,34 +278,40 @@ public class CountdownPaneView extends ScrollPane {
         private final Label END_DATE_LABEL; // for displaying the due date on mouse hover
         private final Label NAME_LABEL;
 
-        private HBox hoverHBox; // container
-        private HBox contentHBox; // container
-        private FadeTransition ft; // for ui hover animation
+        private final CustomLine VERTICAL_DIVIDER;
+        private final HBox HOVER_HBOX; // container
+        private final HBox CONTENT_HBOX; // container
+        private final FadeTransition FADE_TR; // for ui hover animation
+        private final CustomBox CUSTOM_BORDER; // for selection ui indication
+
         private Countdown countdown; // points to the backend object
-        private CustomBox border; // for selection ui indication
         private boolean selected; // for selection detection
         // TODO private CountdownPane prev; // for multi-select functionality
 
         public CountdownPane(Countdown cd, LocalDate now) {
+            this.HOVER_HBOX = new HBox();
+            this.CONTENT_HBOX = new HBox();
+            this.VERTICAL_DIVIDER = new CustomLine(2, Type.VERTICAL_TYPE);
             this.CD_DESC_LABEL = new Label();
             this.CD_DAYS_LABEL = new Label();
             this.STATUS_LABEL = new Label();
             this.END_DATE_LABEL = new Label();
             this.NAME_LABEL = new Label();
+            this.CUSTOM_BORDER = new CustomBox(GraphicalUI.DRAW_THICKNESS);
+            this.FADE_TR = new FadeTransition(Duration.millis(300), HOVER_HBOX);
             this.countdown = cd;
             this.selected = false;
             this.setAlignment(Pos.CENTER);
             initContentHBox(now);
             initHoverHBox();
             initSelectable(this);
-            this.getChildren().addAll(this.hoverHBox, this.contentHBox);
+            this.getChildren().addAll(this.HOVER_HBOX, this.CONTENT_HBOX);
         }
 
         private void initHoverHBox() {
             int leftRightPadding = 16;
             double height = HEIGHT - CONTENT_HEIGHT;
-            this.hoverHBox = new HBox();
-            this.hoverHBox.setPrefSize(WIDTH, height);
+            this.HOVER_HBOX.setPrefSize(WIDTH, height);
             Font font =
                 Font.font(Vals.FontTools.FONT_FAM, FontWeight.MEDIUM, FontPosture.ITALIC, 14);
             this.STATUS_LABEL.setAlignment(Pos.BOTTOM_LEFT);
@@ -318,37 +327,32 @@ public class CountdownPaneView extends ScrollPane {
             this.END_DATE_LABEL.setTextFill(Vals.Colour.TXT_GHOST);
             this.END_DATE_LABEL.setMaxSize(WIDTH / 2, height);
             HBox.setMargin(this.END_DATE_LABEL, new Insets(0, leftRightPadding, 0, 0));
-            this.hoverHBox.setFillHeight(true);
-            this.hoverHBox.getChildren().addAll(this.STATUS_LABEL, spacer, this.END_DATE_LABEL);
-            this.hoverHBox.setOpacity(0);
+            this.HOVER_HBOX.setFillHeight(true);
+            this.HOVER_HBOX.getChildren().addAll(this.STATUS_LABEL, spacer, this.END_DATE_LABEL);
+            this.HOVER_HBOX.setOpacity(0);
 
-            ft = new FadeTransition(Duration.millis(300), hoverHBox);
-
-            contentHBox.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            CONTENT_HBOX.setOnMouseEntered(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    ft.stop();
                     if (selected)
                         return; // do nothing if selected
-                    setMouseEnterAnim(ft);
-                    // TODO: copy this in its own update method later, to be called by a watchdog
-                    LocalDate now = LocalDate.now();
-                    String status = countdown.getStatusString(now);
-                    String end = countdown.getStringDueDate(now);
-                    STATUS_LABEL.setText(status);
-                    END_DATE_LABEL.setText("Due: " + end);
-                    ft.playFromStart();
+                    FADE_TR.stop();
+                    setMouseEnterAnim(FADE_TR);
+                    FADE_TR.playFromStart();
                 }
             });
 
-            contentHBox.setOnMouseExited(new EventHandler<MouseEvent>() {
+            CONTENT_HBOX.setOnMouseExited(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    if (selected)
+                    final boolean ALREADY_RUNNING =
+                        FADE_TR.getStatus() == Status.RUNNING && FADE_TR.getToValue() == 0
+                        || HOVER_HBOX.getOpacity() == 0;
+                    if (selected || ALREADY_RUNNING)
                         return; // do nothing if selected
-                    ft.stop();
-                    setMouseExitAnim(ft);
-                    ft.playFromStart();
+                    FADE_TR.stop();
+                    setMouseExitAnim(FADE_TR);
+                    FADE_TR.playFromStart();
                 }
             });
         }
@@ -364,18 +368,16 @@ public class CountdownPaneView extends ScrollPane {
         }
 
         private void initContentHBox(LocalDate now) {
-            this.contentHBox = new HBox();
-            contentHBox.setPrefSize(WIDTH, CONTENT_HEIGHT);
-            contentHBox.setFillHeight(true);
+            CONTENT_HBOX.setPrefSize(WIDTH, CONTENT_HEIGHT);
+            CONTENT_HBOX.setFillHeight(true);
             // adds the border
-            this.border = new CustomBox(GraphicalUI.DRAW_THICKNESS);
-            CustomBox.applyCustomBorder(contentHBox, border);
+            CustomBox.applyCustomBorder(CONTENT_HBOX, CUSTOM_BORDER);
             // adds the name display
-            contentHBox.getChildren().add(createNameLabel(countdown));
+            CONTENT_HBOX.getChildren().add(createNameLabel(countdown));
             // adds the divider
-            contentHBox.getChildren().add(createVerticalDivider());
+            CONTENT_HBOX.getChildren().add(createVerticalDivider());
             // adds the day countdown pane
-            contentHBox.getChildren().add(createCountdownDisplay(countdown, now));
+            CONTENT_HBOX.getChildren().add(createCountdownDisplay(countdown, now));
         }
 
         private Label createNameLabel(Countdown cd) {
@@ -397,12 +399,11 @@ public class CountdownPaneView extends ScrollPane {
 
         private Pane createVerticalDivider() {
             Pane pane = new Pane();
-            Color colour = Color.rgb(255, 255, 255, 0.3);
-            CustomLine separator = new CustomLine(2, CustomLine.Type.VERTICAL_TYPE);
             pane.setPrefSize(DIV_WIDTH, HEIGHT);
-            separator.setStrokeColour(colour);
-            separator.setPadding(20);
-            CustomLine.applyCustomBorder(pane, separator);
+            VERTICAL_DIVIDER.setStrokeColour(Color.WHITE);
+            VERTICAL_DIVIDER.setOpacity(0.4);
+            VERTICAL_DIVIDER.setPadding(20);
+            CustomLine.applyCustomBorder(pane, VERTICAL_DIVIDER);
             return pane;
         }
 
@@ -433,6 +434,35 @@ public class CountdownPaneView extends ScrollPane {
             return display;
         }
 
+        private void configureLabelsForUrgency(Countdown countdown, LocalDate now) {
+            String statusString = "Ongoing";
+            String dateString = "Due: " + countdown.getStringDueDate(now);
+            Color colour = Color.WHITE;
+            final Urgency URGENCY = countdown.getUrgency(now);
+            switch (URGENCY) {
+                case OVERDUE:
+                    statusString = "Overdue";
+                    colour = Colour.CD_OVERDUE;
+                    break;
+                case TODAY:
+                    statusString = "Due today";
+                    colour = Colour.CD_TODAY;
+                    break;
+                case TOMORROW:
+                    statusString = "Due tomorrow";
+                    colour = Colour.CD_TOMORROW;
+                    break;
+                case COMPLETED:
+                    statusString = "Completed";
+                    dateString = "Ended: " + countdown.getStringDueDate(now);
+                default:
+                    break;
+            }
+            this.STATUS_LABEL.setText(statusString);
+            this.END_DATE_LABEL.setText(dateString);
+            this.setPriorityColour(colour);
+        }
+
         private void configureCountdownLabelsText(Countdown countdown, LocalDate now) {
             int daysLeft = Math.abs(countdown.daysUntilDue(now));
             CD_DAYS_LABEL.setText(Vals.GraphicalUI.intToString(daysLeft));
@@ -442,7 +472,7 @@ public class CountdownPaneView extends ScrollPane {
         }
 
         private void initSelectable(CountdownPane thisInstance) {
-            contentHBox.setOnMousePressed(new EventHandler<MouseEvent>() {
+            CONTENT_HBOX.setOnMousePressed(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
                     if (event.getButton() == MouseButton.PRIMARY) {
@@ -476,17 +506,21 @@ public class CountdownPaneView extends ScrollPane {
         }
 
         public void applyDeselectStyle() {
-            ft.stop();
-            hoverHBox.setOpacity(0);
-            border.setStrokeColour(Color.WHITE);
+            FADE_TR.stop();
+            if (HOVER_HBOX.getOpacity() > 0) {
+                FADE_TR.setToValue(0);
+                FADE_TR.setFromValue(HOVER_HBOX.getOpacity());
+                FADE_TR.playFromStart();
+            }
+            CUSTOM_BORDER.setStrokeColour(Color.WHITE);
             STATUS_LABEL.setTextFill(Vals.Colour.TXT_GHOST);
             END_DATE_LABEL.setTextFill(Vals.Colour.TXT_GHOST);
         }
 
         public void applySelectStyle() {
-            ft.stop();
-            hoverHBox.setOpacity(1);
-            border.setStrokeColour(Vals.Colour.SELECTED);
+            FADE_TR.stop();
+            HOVER_HBOX.setOpacity(1);
+            CUSTOM_BORDER.setStrokeColour(Vals.Colour.SELECTED);
             STATUS_LABEL.setTextFill(Vals.Colour.SELECTED);
             END_DATE_LABEL.setTextFill(Vals.Colour.SELECTED);
         }
@@ -511,18 +545,16 @@ public class CountdownPaneView extends ScrollPane {
             CountdownPaneView.getInstance().updateMode();
         }
 
-        /**
-         * Instead of destroying CountdownPanes, use this to reuse old
-         * panes and forego unnecessary redrawing of graphics.
-         */
         protected void refreshContent() {
             LocalDate now = LocalDate.now();
-            String status = this.countdown.getStatusString(now);
-            String end = this.countdown.getStringDueDate(now);
-            STATUS_LABEL.setText(status);
-            END_DATE_LABEL.setText("Due: " + end);
-            configureCountdownLabelsText(this.countdown, now);
             NAME_LABEL.setText(this.countdown.getName());
+            configureCountdownLabelsText(this.countdown, now);
+            configureLabelsForUrgency(this.countdown, now);
+        }
+
+        private void setPriorityColour(Color colour) {
+            CD_DAYS_LABEL.setTextFill(colour);
+            CD_DESC_LABEL.setTextFill(colour);
         }
     }
 }

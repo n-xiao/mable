@@ -49,6 +49,10 @@ public class Vals {
         public static final Color BTTN_REMOVE = Color.rgb(252, 103, 105);
         public static final Color BTTN_DESELECT = Color.rgb(206, 182, 173);
         public static final Color BTTN_MARK_COMPLETE = Color.rgb(67, 161, 237);
+        public static final Color CD_OVERDUE = Color.rgb(254, 131, 132);
+        public static final Color CD_TODAY = Color.rgb(240, 139, 255);
+        public static final Color CD_TOMORROW = Color.rgb(80, 169, 250);
+        public static final Color CD_COMPLETED = Color.rgb(40, 40, 60);
 
         public static Background createBG(Color c, double radius, double ins) {
             BackgroundFill bgFill = new BackgroundFill(c, new CornerRadii(radius), new Insets(ins));

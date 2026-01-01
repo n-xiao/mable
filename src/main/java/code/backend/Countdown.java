@@ -28,6 +28,7 @@ import java.util.UUID;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE)
 public class Countdown {
+    public enum Urgency { OVERDUE, TODAY, TOMORROW, ONGOING, COMPLETED }
     private String name = null;
     private boolean isDone = false;
     private ZonedDateTime dueDateTime;
@@ -109,6 +110,7 @@ public class Countdown {
         return dueDateTime;
     }
 
+    @Deprecated
     public String getStatusString(LocalDate now) {
         if (isOverdue(now))
             return "Overdue";
@@ -118,9 +120,36 @@ public class Countdown {
             return "Ongoing";
     }
 
+    public Urgency getUrgency(LocalDate now) {
+        if (isOverdue(now))
+            return Urgency.OVERDUE;
+        else if (isDueToday(now))
+            return Urgency.TODAY;
+        else if (isDueTomorrow(now))
+            return Urgency.TOMORROW;
+        else if (isDone)
+            return Urgency.COMPLETED;
+        else
+            return Urgency.ONGOING;
+    }
+
     public boolean isOverdue(LocalDate now) {
-        ZonedDateTime nowDateTime = now.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
+        ZonedDateTime nowDateTime = convertLocalDate(now);
         return dueDateTime.isBefore(nowDateTime) && !isDone;
+    }
+
+    public boolean isDueToday(LocalDate now) {
+        ZonedDateTime nowDateTime = convertLocalDate(now);
+        return dueDateTime.isEqual(nowDateTime) && !isDone;
+    }
+
+    public boolean isDueTomorrow(LocalDate now) {
+        ZonedDateTime nowDateTime = convertLocalDate(now);
+        return dueDateTime.isEqual(nowDateTime.plusDays(1)) && !isDone;
+    }
+
+    private ZonedDateTime convertLocalDate(LocalDate date) {
+        return date.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
     }
 
     public void setName(String name) {

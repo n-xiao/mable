@@ -18,12 +18,21 @@
 package code.frontend.gui;
 
 import code.frontend.misc.Vals.Colour;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 
 public class Sidebar extends VBox {
     private static Sidebar instance = null;
 
+    private final FlowPane PAGE_SELECTOR;
+    private final VBox STATS;
+    private final ScrollPane FOLDER_SELECTOR;
+
     private Sidebar() {
+        PAGE_SELECTOR = null;
+        STATS = null;
+        FOLDER_SELECTOR = null;
         // todo
         this.setBackground(Colour.createBG(Colour.SIDE_BAR, 0, 0));
     }

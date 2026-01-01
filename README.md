@@ -15,7 +15,7 @@ and the visual aesthetics of [Excalidraw](https://github.com/excalidraw/excalidr
 For developers,
  - Clone the repository and run `./gradlew build` followed by `./gradlew run` in the project root directory.
  - Mable will store all data in JSON format in the folder `mable_data`,
-   located within your HOME directory ( `System.getProperty("user.home")` ).
+   located within your `HOME` directory aka Java's `System.getProperty("user.home")`.
    Please ensure that your development environment is configured for read and write operations.
 
 

@@ -396,7 +396,7 @@ public class CountdownPaneView extends ScrollPane {
         private Label createNameLabel(Countdown cd) {
             String name = cd.getName();
             NAME_LABEL.setText(name);
-            Font nameFont = Font.font(Vals.FontTools.FONT_FAM, FontWeight.SEMI_BOLD, 17);
+            Font nameFont = Font.font(Vals.FontTools.FONT_FAM, FontWeight.SEMI_BOLD, 16);
             NAME_LABEL.setAlignment(Pos.CENTER);
             NAME_LABEL.setTextAlignment(TextAlignment.JUSTIFY);
             NAME_LABEL.setTextOverrun(OverrunStyle.ELLIPSIS);

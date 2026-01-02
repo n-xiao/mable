@@ -21,6 +21,9 @@ import javafx.scene.text.Font;
 public class SidebarStatsPane extends VBox {
     private static SidebarStatsPane instance = null;
 
+    private static final int LEFTRIGHT_SPACE = 15;
+    private static final int TOPBOTTOM_SPACE = 10;
+
     public static SidebarStatsPane getInstance() {
         if (instance == null)
             instance = new SidebarStatsPane();
@@ -34,7 +37,7 @@ public class SidebarStatsPane extends VBox {
     private SidebarStatsPane() {
         final CustomBox BORDER = new CustomBox(2, 0, 0, 0);
         CustomBox.applyCustomBorder(this, BORDER);
-        BORDER.setStrokeColour(Colour.TXT_GHOST);
+        BORDER.setStrokeColour(Colour.GHOST);
 
         this.OVERDUE_STAT = new StatPane(Urgency.OVERDUE);
         this.TODAY_STAT = new StatPane(Urgency.TODAY);
@@ -42,6 +45,11 @@ public class SidebarStatsPane extends VBox {
         this.setAlignment(Pos.CENTER);
         this.setBackground(Colour.createBG(Color.BLACK, 13, 8));
         this.getChildren().addAll(this.OVERDUE_STAT, this.TODAY_STAT, this.TOMORROW_STAT);
+        VBox.setMargin(
+            this.OVERDUE_STAT, new Insets(TOPBOTTOM_SPACE, LEFTRIGHT_SPACE, 0, LEFTRIGHT_SPACE));
+        VBox.setMargin(this.TODAY_STAT, new Insets(0, LEFTRIGHT_SPACE, 0, LEFTRIGHT_SPACE));
+        VBox.setMargin(
+            this.TOMORROW_STAT, new Insets(0, LEFTRIGHT_SPACE, TOPBOTTOM_SPACE, LEFTRIGHT_SPACE));
     }
 
     public void refreshContent() {
@@ -88,18 +96,16 @@ public class SidebarStatsPane extends VBox {
             this.setBackground(null);
             this.setFillHeight(true);
             this.setMinHeight(25);
-            this.maxWidthProperty().bind(SidebarStatsPane.getInstance().widthProperty());
             this.setAlignment(Pos.CENTER);
 
             initNameLabel();
             initCounterLabel();
             this.getChildren().addAll(this.NAME_LABEL, createLine(), this.COUNTER_LABEL);
-            VBox.setMargin(this, new Insets(5));
         }
 
         private void initLabel(Label label) {
             label.setTextFill(this.COLOUR);
-            label.setFont(Font.font(FontTools.FONT_FAM, 12));
+            label.setFont(Font.font(FontTools.FONT_FAM, 14));
             label.setAlignment(Pos.CENTER);
         }
 
@@ -134,8 +140,10 @@ public class SidebarStatsPane extends VBox {
             this.COUNTER_LABEL.setText(GraphicalUI.intToString(this.count));
             if (this.count == 0) {
                 this.setOverallColour(Colour.TXT_GHOST);
+                this.setOpacity(0.5);
             } else {
                 this.setOverallColour(this.COLOUR);
+                this.setOpacity(1);
             }
         }
     }

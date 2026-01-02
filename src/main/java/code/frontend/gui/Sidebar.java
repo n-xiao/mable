@@ -18,20 +18,23 @@
 package code.frontend.gui;
 
 import code.frontend.misc.Vals.Colour;
+import code.frontend.panels.SidebarStatsPane;
+import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 
 public class Sidebar extends VBox {
     private static Sidebar instance = null;
 
-    private final VBox STATS;
+    private final SidebarStatsPane STATS;
     private final ScrollPane FOLDER_SELECTOR;
 
     private Sidebar() {
-        STATS = null;
-        FOLDER_SELECTOR = null;
-        // todo
+        this.STATS = SidebarStatsPane.getInstance();
+        this.FOLDER_SELECTOR = null;
         this.setBackground(Colour.createBG(Colour.SIDE_BAR, 0, 0));
+        this.getChildren().add(this.STATS);
+        VBox.setMargin(this.STATS, new Insets(10));
     }
 
     public static Sidebar getInstance() {

@@ -196,7 +196,8 @@ public class RightClickMenu extends VBox {
         final Insets INSETS = new Insets(5, -5, 5, -5);
 
         BackgroundFill createFill = new BackgroundFill(Colour.BTTN_CREATE, CORNER_RADII, INSETS);
-        BackgroundFill selectorFill = new BackgroundFill(Colour.BTTN_CREATE, CORNER_RADII, INSETS);
+        BackgroundFill selectorFill =
+            new BackgroundFill(Colour.BTTN_DESELECT, CORNER_RADII, INSETS);
         BackgroundFill markFill =
             new BackgroundFill(Colour.BTTN_MARK_COMPLETE, CORNER_RADII, INSETS);
         BackgroundFill editFill = new BackgroundFill(Colour.BTTN_EDIT, CORNER_RADII, INSETS);

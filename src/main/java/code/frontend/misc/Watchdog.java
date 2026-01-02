@@ -1,6 +1,7 @@
 package code.frontend.misc;
 
 import code.frontend.panels.CountdownPaneView;
+import code.frontend.panels.SidebarStatsPane;
 import java.time.LocalDate;
 import javafx.application.Platform;
 import javafx.concurrent.ScheduledService;
@@ -26,7 +27,11 @@ public class Watchdog extends ScheduledService<Void> {
             @Override
             protected Void call() throws Exception {
                 final CountdownPaneView CPV = CountdownPaneView.getInstance();
-                Platform.runLater(() -> { CPV.repopulate(LocalDate.now()); });
+                final SidebarStatsPane SSP = SidebarStatsPane.getInstance();
+                Platform.runLater(() -> {
+                    CPV.repopulate(LocalDate.now());
+                    SSP.refreshContent();
+                });
                 return null;
             }
         };

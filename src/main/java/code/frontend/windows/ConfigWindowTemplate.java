@@ -55,7 +55,7 @@ public abstract class ConfigWindowTemplate extends Stage {
 
     protected void setStageStyling() {
         this.setResizable(false);
-        this.initStyle(StageStyle.UTILITY);
+        this.initStyle(StageStyle.DECORATED);
         this.setMinWidth(UtilityUI.WIDTH);
         this.setMaxWidth(UtilityUI.WIDTH);
         this.setMinHeight(UtilityUI.HEIGHT);

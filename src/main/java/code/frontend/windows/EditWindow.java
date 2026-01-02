@@ -37,9 +37,7 @@ public class EditWindow extends ConfigWindowTemplate {
 
     public static Stage getInstance(Countdown countdownToEdit) {
         EditWindow.countdown = countdownToEdit;
-        if (window == null) {
-            window = new EditWindow();
-        }
+        window = new EditWindow();
         window.show();
         window.toFront();
         return window;

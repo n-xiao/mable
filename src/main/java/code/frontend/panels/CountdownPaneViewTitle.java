@@ -19,7 +19,6 @@ package code.frontend.panels;
 
 import code.frontend.misc.Vals.Colour;
 import code.frontend.panels.CountdownPaneView.ButtonMode;
-import code.frontend.windows.AddWindow;
 import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;

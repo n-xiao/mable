@@ -148,8 +148,9 @@ public class RightClickMenu extends VBox {
         instance.initButtonStylings(instance.create, instance.selector, instance.markAsComplete,
             instance.edit, instance.delete);
 
-        instance.getChildren().addAll(instance.create, instance.selector, instance.markAsComplete,
-            instance.createDivider(), instance.edit, instance.createDivider(), instance.delete);
+        instance.getChildren().addAll(instance.create, instance.edit, instance.delete,
+            instance.createDivider(), instance.markAsComplete, instance.createDivider(),
+            instance.selector);
 
         instance.setMode();
 

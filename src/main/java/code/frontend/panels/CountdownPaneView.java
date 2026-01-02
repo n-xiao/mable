@@ -481,7 +481,7 @@ public class CountdownPaneView extends ScrollPane {
             int daysLeft = Math.abs(countdown.daysUntilDue(now));
             CD_DAYS_LABEL.setText(Vals.GraphicalUI.intToString(daysLeft));
             String textNoun = (daysLeft != 1) ? "DAYS" : "DAY";
-            String textAdverb = (countdown.isOverdue(now)) ? "AGO" : "LEFT";
+            String textAdverb = (countdown.isOverdue(now)) ? "SINCE DUE" : "LEFT";
             CD_DESC_LABEL.setText(textNoun + "\n" + textAdverb);
         }
 

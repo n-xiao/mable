@@ -45,7 +45,7 @@ public class CustomBox extends ResizableCanvas {
         this.thickness = thickness;
         this.deviation = (dev >= 0) ? dev : Vals.GraphicalUI.DEVIATION;
         this.cornerDeviation = (cornerDev >= 0) ? cornerDev : Vals.GraphicalUI.CORNER_DEVIATION;
-        this.cornerOffset = (cornerOffset >= 0) ? cornerOffset : Vals.GraphicalUI.CORNER_OFFSET;
+        this.cornerOffset = (cornerOffset > 0) ? cornerOffset : Vals.GraphicalUI.CORNER_OFFSET;
         assert cornerOffset > cornerDeviation;
     }
 

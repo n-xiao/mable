@@ -17,8 +17,10 @@
 
 package code.backend;
 
+import code.backend.Countdown.Urgency;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.NavigableSet;
 import java.util.Stack;
@@ -100,5 +102,34 @@ public class StorageHandler {
 
     public static boolean isCountdownRemoved(Countdown countdown) {
         return DELETED_COUNTDOWNS.contains(countdown);
+    }
+
+    public static int getStatistic(Urgency urgency) {
+        LocalDate now = LocalDate.now();
+        int stat = 0;
+        for (Countdown countdown : COUNTDOWNS) {
+            switch (urgency) {
+                case OVERDUE:
+                    if (countdown.isOverdue(now))
+                        stat++;
+                    break;
+                case TODAY:
+                    if (countdown.isDueToday(now))
+                        stat++;
+                    break;
+                case TOMORROW:
+                    if (countdown.isDueTomorrow(now))
+                        stat++;
+                    break;
+                case COMPLETED:
+                    if (countdown.isDone())
+                        stat++;
+                    break;
+                default:
+                    stat++;
+                    break;
+            }
+        }
+        return stat;
     }
 }

@@ -29,13 +29,13 @@ import java.util.UUID;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE)
 public class Countdown {
     public enum Urgency { OVERDUE, TODAY, TOMORROW, ONGOING, COMPLETED }
-    private String name = null;
-    private boolean isDone = false;
+
+    private String name;
+    private boolean isDone;
     private ZonedDateTime dueDateTime;
+
     public final UUID ID; // represents unique id
     private static final String ZONE_ID_STR = "UTC";
-
-    // todo String parser
 
     /**
      * Creates a Countdown object. The responsibility for sanitising inputs is handed to

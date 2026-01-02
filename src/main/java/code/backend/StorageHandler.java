@@ -88,10 +88,12 @@ public class StorageHandler {
         DELETED_COUNTDOWNS.addAll(countdowns);
     }
 
+    @Deprecated
     public static NavigableSet<Countdown> getDescendingCountdowns() {
         return COUNTDOWNS.descendingSet();
     }
 
+    @Deprecated
     public static NavigableSet<Countdown> getAscendingCountdowns() {
         return COUNTDOWNS.descendingSet().reversed();
     }

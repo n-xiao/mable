@@ -296,6 +296,7 @@ public class CountdownPaneView extends ScrollPane {
         private final CustomBox CUSTOM_BORDER; // for selection ui indication
 
         private Countdown countdown; // points to the backend object
+        private boolean isUrgent;
         private boolean selected; // for selection detection
         // TODO private CountdownPane prev; // for multi-select functionality
 
@@ -311,6 +312,7 @@ public class CountdownPaneView extends ScrollPane {
             this.CUSTOM_BORDER = new CustomBox(GraphicalUI.DRAW_THICKNESS);
             this.FADE_TR = new FadeTransition(Duration.millis(300), HOVER_HBOX);
             this.countdown = cd;
+            this.isUrgent = false;
             this.selected = false;
             this.setAlignment(Pos.CENTER);
             initContentHBox(now);
@@ -450,6 +452,7 @@ public class CountdownPaneView extends ScrollPane {
             String dateString = "Due: " + countdown.getStringDueDate(now);
             Color colour = Color.WHITE;
             final Urgency URGENCY = countdown.getUrgency(now);
+            this.isUrgent = true;
             switch (URGENCY) {
                 case OVERDUE:
                     statusString = "Overdue";
@@ -465,8 +468,8 @@ public class CountdownPaneView extends ScrollPane {
                     break;
                 case COMPLETED:
                     statusString = "Completed";
-                    dateString = "Ended: " + countdown.getStringDueDate(now);
                 default:
+                    this.isUrgent = false;
                     break;
             }
             this.STATUS_LABEL.setText(statusString);
@@ -564,10 +567,11 @@ public class CountdownPaneView extends ScrollPane {
         }
 
         private void setPriorityColour(Color colour) {
-            NAME_LABEL.setTextFill(colour);
-            VERTICAL_DIVIDER.setStrokeColour(colour);
-            CD_DAYS_LABEL.setTextFill(colour);
-            CD_DESC_LABEL.setTextFill(colour);
+            if (this.isUrgent)
+                CONTENT_HBOX.setBackground(
+                    Colour.createBG(Colour.adjustOpacity(colour, 0.2), 14, 6));
+            else
+                CONTENT_HBOX.setBackground(null);
         }
     }
 }

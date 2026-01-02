@@ -58,6 +58,11 @@ public class Vals {
             BackgroundFill bgFill = new BackgroundFill(c, new CornerRadii(radius), new Insets(ins));
             return new Background(bgFill);
         }
+
+        public static Color adjustOpacity(Color color, double opacity) {
+            Color adjusted = new Color(color.getRed(), color.getGreen(), color.getBlue(), opacity);
+            return adjusted;
+        }
     }
 
     public final class GraphicalUI {

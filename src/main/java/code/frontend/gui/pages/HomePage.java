@@ -18,18 +18,18 @@
 package code.frontend.gui.pages;
 
 import code.frontend.misc.Vals.Colour;
-import code.frontend.panels.CountdownPaneControls;
 import code.frontend.panels.CountdownPaneView;
+import code.frontend.panels.CountdownPaneViewTitle;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 public class HomePage extends VBox {
     private static HomePage instance = null;
-    private CountdownPaneControls controls;
+    private CountdownPaneViewTitle controls;
     private CountdownPaneView view;
 
     private HomePage() {
-        this.controls = CountdownPaneControls.getInstance();
+        this.controls = CountdownPaneViewTitle.getInstance();
         this.view = CountdownPaneView.getInstance();
         this.setFillWidth(true);
         VBox.setVgrow(this.view, Priority.ALWAYS);

@@ -37,37 +37,23 @@ import javafx.scene.layout.Priority;
  *
  * TBD: for 1 or greater selections, a tag button will be shown when the system is implemented.
  */
-public class CountdownPaneControls extends HBox {
-    private static CountdownPaneControls instance = null;
+public class CountdownPaneViewTitle extends HBox {
+    private static CountdownPaneViewTitle instance = null;
 
-    protected static final String DESELECT_DEFAULT_STR = "deselect";
+    protected static final String DESELECT_DEFAULT_STR = "select all";
     protected static final String REMOVE_DEFAULT_STR = "remove";
 
     private Button addBtn; // add button
     private Button deselectBtn; // deselect
 
-    private CountdownPaneControls() {
+    private CountdownPaneViewTitle() {
         this.setBackground(null);
         this.setFillHeight(true);
     }
 
-    public static CountdownPaneControls getInstance() {
+    public static CountdownPaneViewTitle getInstance() {
         if (instance == null) {
-            instance = new CountdownPaneControls();
-            instance.addBtn = new Button("create") {
-                @Override
-                public void executeOnClick() {
-                    AddWindow.getInstance();
-                }
-            };
-            instance.deselectBtn = new Button(DESELECT_DEFAULT_STR) {
-                @Override
-                public void executeOnClick() {
-                    CountdownPaneView.getInstance().deselectAll();
-                }
-            };
-            instance.applyStyling(instance.addBtn, instance.deselectBtn);
-            instance.setMode();
+            instance = new CountdownPaneViewTitle();
         }
         return instance;
     }
@@ -96,11 +82,13 @@ public class CountdownPaneControls extends HBox {
         String newDeselectButtonLabel = DESELECT_DEFAULT_STR;
         int numOfSelections = CountdownPaneView.getInstance().getNumOfSelections();
         if (numOfSelections > 1) {
-            newDeselectButtonLabel += " (" + Integer.toString(numOfSelections) + ")";
+            newDeselectButtonLabel = "deselect "
+                + " (" + Integer.toString(numOfSelections) + ")";
         }
         this.deselectBtn.setTextLabel(newDeselectButtonLabel);
     }
 
+    @Deprecated
     public void setMode() {
         ButtonMode mode = CountdownPaneView.getInstance().getMode();
         if (mode.equals(ButtonMode.NO_SELECT)) {

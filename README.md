@@ -8,7 +8,7 @@ Mable is a simple, free and open source deadline manager for Windows and MacOS.
 Mable is built to make the management of many ongoing, concurrent deadlines easier by allowing you to see the
 number of days that remain for each deadline in a sorted layout. This makes
 it easy for you to see which deadline is most (or least) urgent.
-Mable is inspired by the [Bears Countdown App](https://apps.apple.com/us/app/bears-countdown/id1536711520)
+Mable is partially inspired by the [Bears Countdown App](https://apps.apple.com/us/app/bears-countdown/id1536711520)
 and the visual aesthetics of [Excalidraw](https://github.com/excalidraw/excalidraw).
 
 ## Installation Guide

@@ -96,7 +96,11 @@ public class CountdownPaneView extends ScrollPane {
         this.setFitToWidth(true);
         this.setHbarPolicy(ScrollBarPolicy.NEVER);
         this.setVbarPolicy(ScrollBarPolicy.NEVER);
-        this.FLOW_PANE.setOnMousePressed(event -> { RightClickMenu.close(); });
+        this.FLOW_PANE.setOnMousePressed(event -> {
+            RightClickMenu.close();
+            if (event.getButton() == MouseButton.SECONDARY)
+                RightClickMenu.openAt(event.getSceneX(), event.getSceneY());
+        });
         this.setContent(this.FLOW_PANE);
     }
 
@@ -233,6 +237,14 @@ public class CountdownPaneView extends ScrollPane {
         updateMode();
     }
 
+    public void selectAll() {
+        COUNTDOWN_PANES.forEach(pane -> {
+            pane.setSelected(true);
+            pane.applySelectStyle();
+        });
+        updateMode();
+    }
+
     public boolean allSelectedAreCompleted() {
         for (CountdownPane countdownPane : COUNTDOWN_PANES) {
             if (countdownPane.isSelected() && !countdownPane.getCountdown().isDone()) {
@@ -262,7 +274,6 @@ public class CountdownPaneView extends ScrollPane {
             this.mode = ButtonMode.SINGLE_SELECT;
         else
             this.mode = ButtonMode.MULTI_SELECT;
-        CountdownPaneControls.getInstance().setMode();
     }
 
     private class CountdownPane extends VBox {

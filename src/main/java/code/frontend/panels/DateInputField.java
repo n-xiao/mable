@@ -19,6 +19,7 @@ package code.frontend.panels;
 
 import code.frontend.foundation.CustomBox;
 import code.frontend.misc.Vals;
+import code.frontend.misc.Vals.Colour;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -47,10 +48,9 @@ public class DateInputField extends VBox {
         contents = new HBox();
         contents.setFillHeight(true);
         contents.prefWidthProperty().bind(this.widthProperty());
-        contents.setMaxHeight(Vals.GraphicalUI.INPUT_MIN_HEIGHT);
         this.setFillWidth(true);
         format = "dd-MM-yyyy"; // to be made configurable later, for the USA peeps
-        hintLabel = new Label("please use this format: " + format.toLowerCase());
+        hintLabel = new Label();
         hintLabel.setTextFill(Vals.Colour.ERROR);
         hintLabel.setOpacity(0);
         hintLabel.setFont(Font.font(Vals.FontTools.FONT_FAM + " Medium Italic", 13));
@@ -58,11 +58,63 @@ public class DateInputField extends VBox {
         hintLabel.maxWidthProperty().bind(this.widthProperty());
         border = new CustomBox(Vals.GraphicalUI.INPUT_BORDER_WIDTH);
         CustomBox.applyToPane(contents, border);
-        dayInput = new InputField();
-        monthInput = new InputField();
-        yearInput = new InputField();
+        dayInput = new InputField() {
+            @Override
+            protected void applyFocusLogic() {
+                this.getTextField().focusedProperty().addListener(
+                    ((observable, oldValue, newValue) -> {
+                        if (newValue) {
+                            hintLabel.setText("day");
+                            hintLabel.setAlignment(Pos.TOP_CENTER);
+                            hintLabel.setTextFill(Colour.SELECTED);
+                            hintLabel.setOpacity(1);
+                            border.setStrokeColour(Colour.SELECTED);
+                        } else {
+                            hintLabel.setOpacity(0);
+                            border.setStrokeColour(Color.WHITE);
+                        }
+                    }));
+            }
+        };
+        monthInput = new InputField() {
+            @Override
+            protected void applyFocusLogic() {
+                this.getTextField().focusedProperty().addListener(
+                    ((observable, oldValue, newValue) -> {
+                        if (newValue) {
+                            hintLabel.setText("month");
+                            hintLabel.setAlignment(Pos.TOP_CENTER);
+                            hintLabel.setTextFill(Colour.SELECTED);
+                            hintLabel.setOpacity(1);
+                            border.setStrokeColour(Colour.SELECTED);
+                        } else {
+                            hintLabel.setOpacity(0);
+                            border.setStrokeColour(Color.WHITE);
+                        }
+                    }));
+            }
+        };
+        ;
+        yearInput = new InputField() {
+            @Override
+            protected void applyFocusLogic() {
+                this.getTextField().focusedProperty().addListener(
+                    ((observable, oldValue, newValue) -> {
+                        if (newValue) {
+                            hintLabel.setText("year");
+                            hintLabel.setAlignment(Pos.TOP_CENTER);
+                            hintLabel.setTextFill(Colour.SELECTED);
+                            hintLabel.setOpacity(1);
+                            border.setStrokeColour(Colour.SELECTED);
+                        } else {
+                            hintLabel.setOpacity(0);
+                            border.setStrokeColour(Color.WHITE);
+                        }
+                    }));
+            }
+        };
+        ;
         configInputs(dayInput, monthInput, yearInput);
-        yearInput.setPrefWidth(110);
         yearInput.setTextLimit(4);
         ft = new FadeTransition();
         ft.setNode(hintLabel);
@@ -77,13 +129,9 @@ public class DateInputField extends VBox {
         for (InputField input : inputs) {
             input.setBorderColour(Color.rgb(0, 0, 0, 0));
             input.setNumInputOnly(true);
-            input.setPrefWidth(80);
-            input.prefHeightProperty().bind(contents.heightProperty());
             input.setTextLimit(2);
-            input.setMinHeight(Vals.GraphicalUI.INPUT_MIN_HEIGHT);
-            input.setMinWidth(70);
+            // input.setMinHeight(Vals.GraphicalUI.INPUT_MIN_HEIGHT);
             input.getTextField().setAlignment(Pos.CENTER);
-            HBox.setMargin(input, new Insets(3, 8, 3, 8));
         }
     }
 
@@ -97,6 +145,7 @@ public class DateInputField extends VBox {
     }
 
     private void triggerFormatHint() {
+        hintLabel.setText("please use this format: " + format.toLowerCase());
         ft.stop();
         ft.setDuration(Duration.millis(200));
         ft.setCycleCount(3);

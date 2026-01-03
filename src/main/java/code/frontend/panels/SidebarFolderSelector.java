@@ -22,7 +22,6 @@ import code.backend.StorageHandler;
 import code.frontend.foundation.CustomBox;
 import code.frontend.foundation.CustomLine;
 import code.frontend.foundation.CustomLine.Type;
-import code.frontend.gui.MainContainer;
 import code.frontend.misc.Vals.Colour;
 import code.frontend.misc.Vals.FontTools;
 import java.util.Comparator;
@@ -31,7 +30,6 @@ import java.util.TreeSet;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -45,7 +43,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 
 public class SidebarFolderSelector extends VBox {
-    private static final int PREF_HEIGHT = 400;
+    private static final int PREF_HEIGHT = 600;
     private static final int MIN_HEIGHT = 300;
 
     private static SidebarFolderSelector instance = null;
@@ -81,18 +79,13 @@ public class SidebarFolderSelector extends VBox {
 
     private final FolderPane COMPLETED_FOLDER_PANE;
     private final FolderPane INCOMPLETED_FOLDER_PANE;
-    private Group scrollPaneWrapper;
+    private Pane scrollPaneWrapper;
 
     private SidebarFolderSelector() {
+        this.scrollPaneWrapper = new Pane();
         // need to make sure searchfield is not stuck on selected
         this.SEARCH_FIELD = new InputField();
         this.configureSearchFieldStyle();
-
-        this.SCROLL_PANE = new ScrollPane();
-        this.configureScrollPaneStyle();
-
-        this.SCROLL_PANE_CONTENT = new VBox();
-        this.configureScrollPaneContentStyle();
 
         this.FOLDER_PANES = new LinkedList<FolderPane>();
         this.refreshFolderPaneData();
@@ -100,44 +93,54 @@ public class SidebarFolderSelector extends VBox {
         this.NEW_FOLDER_BTTN = new Label();
         this.configureNewFolderButtonStyle();
 
+        this.SCROLL_PANE = new ScrollPane();
+        this.configureScrollPaneStyle();
+
+        this.SCROLL_PANE_CONTENT = new VBox();
+        this.configureScrollPaneContentStyle();
+
         this.setMinHeight(MIN_HEIGHT);
         this.setPrefHeight(PREF_HEIGHT);
         this.setFillWidth(true);
-        this.setBackground(Colour.createBG(Color.BLACK, 13, 8));
-        VBox.setMargin(this, new Insets(15)); // TODO set 15 to a sidebar-global constant
+        this.setBackground(Colour.createBG(Color.BLUE, 13, 8));
 
         this.COMPLETED_FOLDER_PANE = new FolderPane(StorageHandler.getCompletedFolder());
         this.INCOMPLETED_FOLDER_PANE = new FolderPane(StorageHandler.getIncompletedFolder());
 
         this.getChildren().addAll(this.SEARCH_FIELD, this.scrollPaneWrapper);
+        this.setPadding(new Insets(30, 8, 20, 8));
         this.repopulate();
     }
 
     private void configureSearchFieldStyle() {
-        this.SEARCH_FIELD.getTextField().selectEnd();
-        this.SEARCH_FIELD.getTextField().cancelEdit();
         this.SEARCH_FIELD.getTextField().setPromptText("Search...");
+        this.SEARCH_FIELD.setCustomBorder(new CustomBox(2, 0, 0, 0.32));
+        this.SEARCH_FIELD.enableManualActivation();
+        VBox.setMargin(this.SEARCH_FIELD, new Insets(0, 0, 10, 0));
     }
 
     private void configureScrollPaneStyle() {
-        final CustomBox BORDER = new CustomBox(2, 0, 0, 0.2);
+        final CustomBox BORDER = new CustomBox(2, 0, 0, 0.13);
         BORDER.setStrokeColour(Color.WHITE);
-        this.scrollPaneWrapper = CustomBox.applyToControl(this.SCROLL_PANE, BORDER);
+        CustomBox.applyToPane(this.scrollPaneWrapper, BORDER);
+        this.scrollPaneWrapper.maxWidthProperty().bind(this.widthProperty());
         this.SCROLL_PANE.setFitToWidth(true);
         this.SCROLL_PANE.setHbarPolicy(ScrollBarPolicy.NEVER);
         this.SCROLL_PANE.setVbarPolicy(ScrollBarPolicy.NEVER);
         this.SCROLL_PANE.setBackground(null);
         this.SCROLL_PANE.setMinHeight(200);
-        this.SCROLL_PANE.prefWidthProperty().bind(this.widthProperty());
-        this.SCROLL_PANE.setStyle("-fx-background: transparent;"); // YAY OMG I FOUND A FIX STUPUD
-                                                                   // THING
+        this.SCROLL_PANE.prefWidthProperty().bind(this.scrollPaneWrapper.widthProperty());
+        this.SCROLL_PANE.prefHeightProperty().bind(this.scrollPaneWrapper.heightProperty());
+        this.SCROLL_PANE.setStyle("-fx-background: transparent;"); // YAY OMG I FOUND A FIX
+        this.scrollPaneWrapper.getChildren().add(this.SCROLL_PANE);
         VBox.setVgrow(this.scrollPaneWrapper, Priority.ALWAYS);
     }
 
     private void configureScrollPaneContentStyle() {
         this.SCROLL_PANE_CONTENT.setBackground(Colour.createBG(Color.BLACK, 13, 8));
         this.SCROLL_PANE_CONTENT.setFillWidth(true);
-        this.SCROLL_PANE_CONTENT.minHeightProperty().bind(this.heightProperty().add(-2));
+        this.SCROLL_PANE_CONTENT.minHeightProperty().bind(
+            this.SCROLL_PANE.heightProperty().add(-2));
         this.SCROLL_PANE.setContent(SCROLL_PANE_CONTENT); // dont move this; don't even think
     }
 
@@ -152,7 +155,6 @@ public class SidebarFolderSelector extends VBox {
         for (CountdownFolder countdownFolder : folders) {
             FolderPane pane = new FolderPane(countdownFolder);
             this.FOLDER_PANES.add(pane);
-            VBox.setMargin(pane, new Insets(5));
         }
     }
 
@@ -209,6 +211,7 @@ public class SidebarFolderSelector extends VBox {
         this.NEW_FOLDER_BTTN.setTextFill(Color.WHITE);
         this.NEW_FOLDER_BTTN.setAlignment(Pos.CENTER);
         this.NEW_FOLDER_BTTN.setMinHeight(20);
+        this.NEW_FOLDER_BTTN.maxWidthProperty().bind(this.widthProperty());
     }
 
     private class FolderPane extends ToggleButton {
@@ -219,6 +222,9 @@ public class SidebarFolderSelector extends VBox {
             this.FOLDER = folder;
             this.setFeedbackColour(Colour.BTTN_CREATE); // todo use another colour if needed
             this.getLabel().setAlignment(Pos.CENTER_LEFT);
+            this.setMinHeight(40);
+            this.getLabel().setFont(Font.font(FontTools.FONT_FAM, 13));
+            VBox.setMargin(this, new Insets(10, 0, 0, 0));
         }
 
         @Override

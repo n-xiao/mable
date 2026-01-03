@@ -55,11 +55,17 @@ public class InputField extends BorderPane {
         textField.setTextFormatter(tf);
 
         BorderPane.setAlignment(textField, Pos.CENTER);
-        BorderPane.setMargin(textField, new Insets(10, 12, 10, 12));
+        BorderPane.setMargin(textField, new Insets(8, 12, 8, 12));
         this.setCenter(textField);
     }
 
-    private void applyFocusLogic() {
+    public void enableManualActivation() {
+        this.textField.setFocusTraversable(false);
+        this.setFocusTraversable(false);
+        this.setOnMousePressed(event -> { textField.requestFocus(); });
+    }
+
+    protected void applyFocusLogic() {
         textField.focusedProperty().addListener(((observable, oldValue, newValue) -> {
             if (newValue) {
                 borderColour = border.getStrokeColour();
@@ -89,6 +95,14 @@ public class InputField extends BorderPane {
     public void setBorderColour(Color borderColour) {
         this.borderColour = borderColour;
         border.setStrokeColour(borderColour);
+    }
+
+    public void setCustomBorder(CustomBox border) {
+        this.getChildren().remove(this.border);
+        this.border.widthProperty().unbind();
+        this.border.heightProperty().unbind();
+        this.border = border;
+        CustomBox.applyToPane(this, this.border);
     }
 
     /**

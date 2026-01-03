@@ -141,8 +141,8 @@ public abstract class ConfigWindowTemplate extends Stage {
         daysLabel.setTextFill(Color.WHITE);
         daysField.setNumInputOnly(true);
         daysField.setTextLimit(7);
-        daysField.setMaxWidth(150);
-        daysField.setMinWidth(150);
+        daysField.setMaxWidth(130);
+        daysField.setMinWidth(130);
         daysField.getTextField().setAlignment(Pos.CENTER);
         // VBox.setMargin(daysLabel, new Insets(3, 5, 0, 5));
         // VBox.setMargin(daysField, new Insets(-3, 0, 0, 0));

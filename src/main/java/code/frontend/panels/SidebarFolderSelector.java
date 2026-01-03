@@ -100,9 +100,6 @@ public class SidebarFolderSelector extends VBox {
         this.NEW_FOLDER_BTTN = new Label();
         this.configureNewFolderButtonStyle();
 
-        final CustomBox BORDER = new CustomBox(2, 0, 0, 0);
-        BORDER.setStrokeColour(Colour.GHOST);
-        CustomBox.applyToPane(this, BORDER);
         this.setMinHeight(MIN_HEIGHT);
         this.setPrefHeight(PREF_HEIGHT);
         this.setFillWidth(true);
@@ -123,22 +120,24 @@ public class SidebarFolderSelector extends VBox {
     }
 
     private void configureScrollPaneStyle() {
-        final CustomBox BORDER = new CustomBox();
+        final CustomBox BORDER = new CustomBox(2, 0, 0, 0.2);
+        BORDER.setStrokeColour(Color.WHITE);
         this.scrollPaneWrapper = CustomBox.applyToControl(this.SCROLL_PANE, BORDER);
         this.SCROLL_PANE.setFitToWidth(true);
         this.SCROLL_PANE.setHbarPolicy(ScrollBarPolicy.NEVER);
         this.SCROLL_PANE.setVbarPolicy(ScrollBarPolicy.NEVER);
         this.SCROLL_PANE.setBackground(null);
-        this.SCROLL_PANE.setContent(SCROLL_PANE_CONTENT);
         this.SCROLL_PANE.setMinHeight(200);
+        this.SCROLL_PANE.prefWidthProperty().bind(this.widthProperty());
+        this.SCROLL_PANE.setStyle("-fx-background: none;"); // YAY OMG I FOUND A FIX STUPUD THING
         VBox.setVgrow(this.scrollPaneWrapper, Priority.ALWAYS);
     }
 
     private void configureScrollPaneContentStyle() {
-        this.SCROLL_PANE_CONTENT.setBackground(null);
+        this.SCROLL_PANE_CONTENT.setBackground(Colour.createBG(Color.BLACK, 13, 8));
         this.SCROLL_PANE_CONTENT.setFillWidth(true);
-        this.SCROLL_PANE_CONTENT.setPadding(new Insets(5));
         this.SCROLL_PANE_CONTENT.minHeightProperty().bind(this.heightProperty().add(-2));
+        this.SCROLL_PANE.setContent(SCROLL_PANE_CONTENT); // dont move this; don't even think
     }
 
     /**
@@ -194,10 +193,12 @@ public class SidebarFolderSelector extends VBox {
         double viewable = this.SCROLL_PANE_CONTENT.getHeight();
         if (viewport >= viewable) {
             this.getChildren().remove(this.NEW_FOLDER_BTTN);
-            this.SCROLL_PANE_CONTENT.getChildren().add(this.NEW_FOLDER_BTTN);
+            if (!this.SCROLL_PANE_CONTENT.getChildren().contains(this.NEW_FOLDER_BTTN))
+                this.SCROLL_PANE_CONTENT.getChildren().add(this.NEW_FOLDER_BTTN);
         } else {
             this.SCROLL_PANE_CONTENT.getChildren().remove(this.NEW_FOLDER_BTTN);
-            this.getChildren().add(this.NEW_FOLDER_BTTN);
+            if (!this.getChildren().contains(this.NEW_FOLDER_BTTN))
+                this.getChildren().add(this.NEW_FOLDER_BTTN);
         }
     }
 

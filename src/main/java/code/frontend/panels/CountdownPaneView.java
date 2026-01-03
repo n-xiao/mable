@@ -94,6 +94,7 @@ public class CountdownPaneView extends ScrollPane {
         this.FLOW_PANE.setVgap(VGAP_BETWEEN);
         this.setBackground(null);
         this.setFitToWidth(true);
+        this.setStyle("-fx-background: none;"); // important: removes the stupid background
         this.setHbarPolicy(ScrollBarPolicy.NEVER);
         this.setVbarPolicy(ScrollBarPolicy.NEVER);
         this.FLOW_PANE.setOnMousePressed(event -> {

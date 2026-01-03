@@ -19,7 +19,7 @@ For developers,
    Please ensure that your development environment is configured for read and write operations.
 
 
-> [!WARNING]
+> [!NOTE]
 > The current version of Mable **cannot automatically update**.
 >
 

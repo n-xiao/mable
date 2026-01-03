@@ -35,6 +35,7 @@ public class AddWindow extends ConfigWindowTemplate {
     public static Stage getInstance() {
         if (window == null) {
             window = new AddWindow();
+            window.setOnHidden(event -> { window = null; });
         }
         window.show();
         window.toFront();

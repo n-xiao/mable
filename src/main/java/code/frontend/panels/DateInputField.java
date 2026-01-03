@@ -83,7 +83,7 @@ public class DateInputField extends VBox {
             input.setMinHeight(Vals.GraphicalUI.INPUT_MIN_HEIGHT);
             input.setMinWidth(70);
             input.getTextField().setAlignment(Pos.CENTER);
-            HBox.setMargin(input, new Insets(5, 8, 5, 8));
+            HBox.setMargin(input, new Insets(3, 8, 3, 8));
         }
     }
 

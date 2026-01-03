@@ -55,7 +55,7 @@ public class InputField extends BorderPane {
         textField.setTextFormatter(tf);
 
         BorderPane.setAlignment(textField, Pos.CENTER);
-        BorderPane.setMargin(textField, new Insets(12, 12, 12, 12));
+        BorderPane.setMargin(textField, new Insets(10, 12, 10, 12));
         this.setCenter(textField);
     }
 

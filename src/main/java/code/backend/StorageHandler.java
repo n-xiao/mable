@@ -18,10 +18,13 @@
 package code.backend;
 
 import code.backend.Countdown.Urgency;
+import code.backend.CountdownFolder.SpecialType;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.NavigableSet;
 import java.util.Stack;
 import java.util.TreeSet;
@@ -39,6 +42,7 @@ import tools.jackson.databind.node.ObjectNode;
 public class StorageHandler {
     private static final Path DATA_DIR = Path.of(System.getProperty("user.home") + "/mable_data");
     private static final Path STORAGE_PATH = Path.of(DATA_DIR.toString() + "/countdowns.json");
+    private static final Path FOLDER_PATH = Path.of(DATA_DIR.toString() + "/folders.json");
     private static final ObjectMapper MAPPER =
         JsonMapper.builder().enable(SerializationFeature.INDENT_OUTPUT).build();
 
@@ -46,38 +50,64 @@ public class StorageHandler {
         new TreeSet<Countdown>(new SortByRemainingDays());
     private static final Stack<Countdown> DELETED_COUNTDOWNS = new Stack<Countdown>();
 
+    private static final TreeSet<CountdownFolder> FOLDERS =
+        new TreeSet<CountdownFolder>(new Comparator<CountdownFolder>() {
+            public int compare(CountdownFolder o1, CountdownFolder o2) {
+                return o1.getName().compareTo(o2.getName());
+            };
+        });
+    private static final Stack<CountdownFolder> DELETED_FOLDERS = new Stack<CountdownFolder>();
+
+    private static final CountdownFolder INCOMPLETED_FOLDER =
+        new CountdownFolder(SpecialType.ALL_INCOMPLETE);
+    private static final CountdownFolder COMPLETED_FOLDER =
+        new CountdownFolder(SpecialType.ALL_COMPLETE);
+
+    private static CountdownFolder currentlySelectedFolder = INCOMPLETED_FOLDER;
+
     private StorageHandler() {}
 
     public static void init() throws Exception {
-        final boolean LOADABLE = Files.exists(STORAGE_PATH);
+        final boolean LOADABLE = Files.exists(STORAGE_PATH) && Files.exists(FOLDER_PATH);
         if (LOADABLE) {
             load();
         } else {
             Files.createDirectories(DATA_DIR);
+
             if (Files.notExists(STORAGE_PATH))
                 Files.createFile(STORAGE_PATH);
+
+            if (Files.notExists(FOLDER_PATH))
+                Files.createFile(FOLDER_PATH);
         }
     }
 
     public static void save() {
-        final JsonNode JSON_ROOT = MAPPER.readTree(STORAGE_PATH);
-
-        final ObjectNode OBJ_ROOT = JSON_ROOT.isObject() ? ((ObjectNode) JSON_ROOT)
-                                                         : MAPPER.createObjectNode().putObject("");
-
-        COUNTDOWNS.forEach(cd -> { OBJ_ROOT.putPOJO(cd.getIdAsString(), cd); });
-        DELETED_COUNTDOWNS.forEach(cd -> { OBJ_ROOT.remove(cd.getIdAsString()); });
-
-        MAPPER.writeValue(STORAGE_PATH, OBJ_ROOT);
+        saveCountdowns();
+        saveFolders();
     }
 
     private static void load() {
+        loadCountdowns(); // ALWAYS LOAD COUNTDOWNS FIRST
+        loadFolders();
+    }
+
+    private static void loadCountdowns() {
         assert COUNTDOWNS.isEmpty();
         final JsonNode JSON_ROOT = MAPPER.readTree(STORAGE_PATH);
         JSON_ROOT.forEachEntry((_k, v) -> {
             Countdown cd = MAPPER.treeToValue(v, Countdown.class);
             COUNTDOWNS.add(cd);
         });
+    }
+
+    private static void saveCountdowns() {
+        final JsonNode JSON_ROOT = MAPPER.readTree(STORAGE_PATH);
+        final ObjectNode OBJ_ROOT = JSON_ROOT.isObject() ? ((ObjectNode) JSON_ROOT)
+                                                         : MAPPER.createObjectNode().putObject("");
+        COUNTDOWNS.forEach(cd -> { OBJ_ROOT.putPOJO(cd.getIdAsString(), cd); });
+        DELETED_COUNTDOWNS.forEach(cd -> { OBJ_ROOT.remove(cd.getIdAsString()); });
+        MAPPER.writeValue(STORAGE_PATH, OBJ_ROOT);
     }
 
     public static void addCountdown(Countdown c) {
@@ -88,6 +118,14 @@ public class StorageHandler {
     public static void deleteCountdowns(Collection<Countdown> countdowns) {
         COUNTDOWNS.removeAll(countdowns);
         DELETED_COUNTDOWNS.addAll(countdowns);
+    }
+
+    public static Countdown getCountdownByID(String id) {
+        for (Countdown countdown : COUNTDOWNS) {
+            if (countdown.getIdAsString().equals(id))
+                return countdown;
+        }
+        return null;
     }
 
     @Deprecated
@@ -131,5 +169,76 @@ public class StorageHandler {
             }
         }
         return stat;
+    }
+
+    private static void loadFolders() {
+        assert FOLDERS.isEmpty();
+        final JsonNode JSON_ROOT = MAPPER.readTree(FOLDER_PATH);
+        JSON_ROOT.forEachEntry((_k, v) -> {
+            CountdownFolder cdf = MAPPER.treeToValue(v, CountdownFolder.class);
+            FOLDERS.add(cdf);
+        });
+
+        for (Countdown countdown : COUNTDOWNS) {
+            if (countdown.isDone()) {
+                COMPLETED_FOLDER.getContents().add(countdown);
+            } else {
+                INCOMPLETED_FOLDER.getContents().add(countdown);
+            }
+        }
+    }
+
+    private static void saveFolders() {
+        final JsonNode JSON_ROOT = MAPPER.readTree(FOLDER_PATH);
+        final ObjectNode OBJ_ROOT = JSON_ROOT.isObject() ? ((ObjectNode) JSON_ROOT)
+                                                         : MAPPER.createObjectNode().putObject("");
+        FOLDERS.forEach(folder -> { OBJ_ROOT.putPOJO(folder.getName(), folder); });
+        DELETED_FOLDERS.forEach(deletedFolder -> { OBJ_ROOT.remove(deletedFolder.getName()); });
+        MAPPER.writeValue(FOLDER_PATH, OBJ_ROOT);
+    }
+
+    public static boolean folderExists(String name) {
+        for (CountdownFolder folder : FOLDERS) {
+            if (folder.getName().equals(name))
+                return true;
+        }
+        return false;
+    }
+
+    public static boolean createFolder(String name) {
+        if (folderExists(name))
+            return false;
+        FOLDERS.add(new CountdownFolder(name));
+        return true;
+    }
+
+    public static void removeFolder(String name) {
+        for (CountdownFolder folder : FOLDERS) {
+            if (folder.getName().equals(name)) {
+                DELETED_FOLDERS.add(folder);
+                FOLDERS.remove(folder);
+                return;
+            }
+        }
+    }
+
+    public static TreeSet<CountdownFolder> getFolders() {
+        return FOLDERS;
+    }
+
+    public static LinkedList<String> getFolderNames() {
+        LinkedList<String> names = new LinkedList<String>();
+        for (CountdownFolder folder : FOLDERS) {
+            names.add(folder.getName());
+        }
+        return names;
+    }
+
+    public static CountdownFolder getCurrentlySelectedFolder() {
+        return currentlySelectedFolder;
+    }
+
+    public static void setCurrentlySelectedFolder(CountdownFolder currentlySelectedFolder) {
+        StorageHandler.currentlySelectedFolder = currentlySelectedFolder;
     }
 }

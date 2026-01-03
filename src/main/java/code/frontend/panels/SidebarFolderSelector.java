@@ -129,7 +129,8 @@ public class SidebarFolderSelector extends VBox {
         this.SCROLL_PANE.setBackground(null);
         this.SCROLL_PANE.setMinHeight(200);
         this.SCROLL_PANE.prefWidthProperty().bind(this.widthProperty());
-        this.SCROLL_PANE.setStyle("-fx-background: none;"); // YAY OMG I FOUND A FIX STUPUD THING
+        this.SCROLL_PANE.setStyle("-fx-background: transparent;"); // YAY OMG I FOUND A FIX STUPUD
+                                                                   // THING
         VBox.setVgrow(this.scrollPaneWrapper, Priority.ALWAYS);
     }
 

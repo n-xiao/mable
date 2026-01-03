@@ -1,6 +1,6 @@
 # Mable
 > [!IMPORTANT]
-> Mable is still in an unreleased state, and is only suitable for use by developers.
+> Mable is in an open-beta stage, and is only suitable for use by testers/developers.
 >
 
 ## About
@@ -15,13 +15,13 @@ and the visual aesthetics of [Excalidraw](https://github.com/excalidraw/excalidr
 For developers,
  - Clone the repository and run `./gradlew build` followed by `./gradlew run` in the project root directory.
  - Mable will store all data in JSON format in the folder `mable_data`,
-   located within your `HOME` directory aka Java's `System.getProperty("user.home")`.
+   located within your `HOME` directory aka the output of Java's `System.getProperty("user.home")`.
    Please ensure that your development environment is configured for read and write operations.
 
 
 > [!WARNING]
-> The current version of Mable does not come with an update manager and **will not automatically update**.\
-> You are encouraged to check this repository periodically for any updates.
+> The current version of Mable **cannot automatically update**.\
+> You will have to download new versions of Mable yourself.
 >
 
 ## Contributing

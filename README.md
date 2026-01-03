@@ -1,6 +1,6 @@
 # Mable
 > [!IMPORTANT]
-> Mable is in an open-beta stage, and is only suitable for use by testers/developers.
+> Mable is in an open-beta stage and is only suitable for use by testers/developers.
 >
 
 ## About
@@ -20,8 +20,7 @@ For developers,
 
 
 > [!WARNING]
-> The current version of Mable **cannot automatically update**.\
-> You will have to download new versions of Mable yourself.
+> The current version of Mable **cannot automatically update**.
 >
 
 ## Contributing

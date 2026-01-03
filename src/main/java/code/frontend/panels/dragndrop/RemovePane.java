@@ -37,7 +37,7 @@ public class RemovePane extends Pane {
         BORDER = new CustomBox();
         LABEL = new Label();
         CONTAINER = new BorderPane();
-        CustomBox.applyCustomBorder(this, BORDER);
+        CustomBox.applyToPane(this, BORDER);
         configureStyling();
     }
 

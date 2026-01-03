@@ -53,7 +53,7 @@ public class SidebarStatsPane extends VBox {
 
     private SidebarStatsPane() {
         final CustomBox BORDER = new CustomBox(2, 0, 0, 0);
-        CustomBox.applyCustomBorder(this, BORDER);
+        CustomBox.applyToPane(this, BORDER);
         BORDER.setStrokeColour(Colour.GHOST);
 
         this.OVERDUE_STAT = new StatPane(Urgency.OVERDUE);
@@ -133,7 +133,7 @@ public class SidebarStatsPane extends VBox {
 
         private Pane createLine() {
             final Pane PANE = new Pane();
-            CustomLine.applyCustomBorder(PANE, this.LINE);
+            CustomLine.applyToPane(PANE, this.LINE);
             this.LINE.setStrokeColour(this.COLOUR);
             this.LINE.setPadding(6);
             PANE.setBackground(null);

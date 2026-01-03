@@ -66,6 +66,14 @@ public class StorageHandler {
 
     private static CountdownFolder currentlySelectedFolder = INCOMPLETED_FOLDER;
 
+    public static CountdownFolder getIncompletedFolder() {
+        return INCOMPLETED_FOLDER;
+    }
+
+    public static CountdownFolder getCompletedFolder() {
+        return COMPLETED_FOLDER;
+    }
+
     private StorageHandler() {}
 
     public static void init() throws Exception {

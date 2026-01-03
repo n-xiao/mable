@@ -40,7 +40,7 @@ public class InputField extends BorderPane {
     public InputField() {
         borderColour = Color.WHITE;
         border = new CustomBox(Vals.GraphicalUI.INPUT_BORDER_WIDTH);
-        CustomBox.applyCustomBorder(this, border);
+        CustomBox.applyToPane(this, border);
         textField = new TextField();
         textField.setBackground(null);
         textField.setBorder(null);

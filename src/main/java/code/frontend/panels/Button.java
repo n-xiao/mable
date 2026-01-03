@@ -62,7 +62,7 @@ public abstract class Button extends Pane {
         this.animationsEnabled = true;
 
         this.border = new CustomBox(borderThickness);
-        CustomBox.applyCustomBorder(this, border);
+        CustomBox.applyToPane(this, border);
 
         this.label = new Label(text);
         this.label.setTextFill(colour);
@@ -155,6 +155,10 @@ public abstract class Button extends Pane {
 
     public Label getLabel() {
         return label;
+    }
+
+    protected double getHoverOpacity() {
+        return this.HOVER_OPACITY;
     }
 
     public CustomBox getCustomBorder() {

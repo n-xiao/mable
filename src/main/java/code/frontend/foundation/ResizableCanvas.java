@@ -17,8 +17,10 @@
 
 package code.frontend.foundation;
 
+import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Control;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
@@ -49,11 +51,18 @@ public abstract class ResizableCanvas extends Canvas {
 
     protected abstract void draw(GraphicsContext gc, boolean recompute);
 
-    public static Pane applyCustomBorder(Pane p, ResizableCanvas canvas) {
+    public static void applyToPane(Pane p, ResizableCanvas canvas) {
         p.getChildren().add(canvas);
         canvas.widthProperty().bind(p.widthProperty());
         canvas.heightProperty().bind(p.heightProperty());
-        return p;
+    }
+
+    public static Group applyToControl(Control control, ResizableCanvas canvas) {
+        Group group = new Group();
+        canvas.widthProperty().bind(control.widthProperty());
+        canvas.heightProperty().bind(control.heightProperty());
+        group.getChildren().addAll(control, canvas);
+        return group;
     }
 
     public void setStrokeColour(Color strokeColour) {

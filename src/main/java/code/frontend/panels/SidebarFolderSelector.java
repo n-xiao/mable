@@ -20,11 +20,19 @@ package code.frontend.panels;
 import code.backend.CountdownFolder;
 import code.backend.StorageHandler;
 import code.frontend.foundation.CustomBox;
+import code.frontend.foundation.CustomLine;
+import code.frontend.foundation.CustomLine.Type;
+import code.frontend.gui.MainContainer;
 import code.frontend.misc.Vals.Colour;
+import code.frontend.misc.Vals.FontTools;
+import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.TreeSet;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
+import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
@@ -33,6 +41,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
 
 public class SidebarFolderSelector extends VBox {
     private static final int PREF_HEIGHT = 400;
@@ -43,13 +53,23 @@ public class SidebarFolderSelector extends VBox {
     public static SidebarFolderSelector getInstance() {
         if (instance == null) {
             instance = new SidebarFolderSelector();
+            // defines search bar function
             instance.SEARCH_FIELD.getTextField().setOnKeyTyped(new EventHandler<KeyEvent>() {
                 @Override
                 public void handle(KeyEvent event) {
-                    // TODO
+                    String search = instance.SEARCH_FIELD.getTextField().getText();
+                    instance.repopulate(search);
                 }
             });
+            instance.SCROLL_PANE.heightProperty().addListener(
+                (event) -> { instance.moveNewFolderButton(); });
+            instance.NEW_FOLDER_BTTN.setOnMouseEntered(
+                event -> { instance.NEW_FOLDER_BTTN.setTextFill(Colour.BTTN_CREATE); });
+            instance.NEW_FOLDER_BTTN.setOnMouseExited(
+                event -> { instance.NEW_FOLDER_BTTN.setTextFill(Colour.TXT_GHOST); });
+            instance.NEW_FOLDER_BTTN.setOnMouseClicked(event -> { System.out.println("hello"); });
         }
+
         return instance;
     }
 
@@ -58,6 +78,10 @@ public class SidebarFolderSelector extends VBox {
     private final VBox SCROLL_PANE_CONTENT;
     private final LinkedList<FolderPane> FOLDER_PANES;
     private final Label NEW_FOLDER_BTTN;
+
+    private final FolderPane COMPLETED_FOLDER_PANE;
+    private final FolderPane INCOMPLETED_FOLDER_PANE;
+    private Group scrollPaneWrapper;
 
     private SidebarFolderSelector() {
         // need to make sure searchfield is not stuck on selected
@@ -71,46 +95,118 @@ public class SidebarFolderSelector extends VBox {
         this.configureScrollPaneContentStyle();
 
         this.FOLDER_PANES = new LinkedList<FolderPane>();
-        this.initFolderPanes();
+        this.refreshFolderPaneData();
 
         this.NEW_FOLDER_BTTN = new Label();
         this.configureNewFolderButtonStyle();
 
         final CustomBox BORDER = new CustomBox(2, 0, 0, 0);
         BORDER.setStrokeColour(Colour.GHOST);
-        CustomBox.applyCustomBorder(this, BORDER);
-        this.setBackground(null);
+        CustomBox.applyToPane(this, BORDER);
         this.setMinHeight(MIN_HEIGHT);
         this.setPrefHeight(PREF_HEIGHT);
         this.setFillWidth(true);
         this.setBackground(Colour.createBG(Color.BLACK, 13, 8));
         VBox.setMargin(this, new Insets(15)); // TODO set 15 to a sidebar-global constant
+
+        this.COMPLETED_FOLDER_PANE = new FolderPane(StorageHandler.getCompletedFolder());
+        this.INCOMPLETED_FOLDER_PANE = new FolderPane(StorageHandler.getIncompletedFolder());
+
+        this.getChildren().addAll(this.SEARCH_FIELD, this.scrollPaneWrapper);
+        this.repopulate();
     }
 
     private void configureSearchFieldStyle() {
         this.SEARCH_FIELD.getTextField().selectEnd();
         this.SEARCH_FIELD.getTextField().cancelEdit();
+        this.SEARCH_FIELD.getTextField().setPromptText("Search...");
     }
 
     private void configureScrollPaneStyle() {
+        final CustomBox BORDER = new CustomBox();
+        this.scrollPaneWrapper = CustomBox.applyToControl(this.SCROLL_PANE, BORDER);
         this.SCROLL_PANE.setFitToWidth(true);
         this.SCROLL_PANE.setHbarPolicy(ScrollBarPolicy.NEVER);
         this.SCROLL_PANE.setVbarPolicy(ScrollBarPolicy.NEVER);
         this.SCROLL_PANE.setBackground(null);
         this.SCROLL_PANE.setContent(SCROLL_PANE_CONTENT);
-        VBox.setVgrow(SCROLL_PANE, Priority.ALWAYS);
+        this.SCROLL_PANE.setMinHeight(200);
+        VBox.setVgrow(this.scrollPaneWrapper, Priority.ALWAYS);
     }
 
     private void configureScrollPaneContentStyle() {
         this.SCROLL_PANE_CONTENT.setBackground(null);
+        this.SCROLL_PANE_CONTENT.setFillWidth(true);
+        this.SCROLL_PANE_CONTENT.setPadding(new Insets(5));
+        this.SCROLL_PANE_CONTENT.minHeightProperty().bind(this.heightProperty().add(-2));
     }
 
-    private void initFolderPanes() {
-        // TODO
+    /**
+     * This only initialises the collection that holds FolderPanes based on backend data.
+     * It does not update the GUI in any way. Call repopulate() after calling
+     * this method to trigger a GUI update with new data.
+     */
+    private void refreshFolderPaneData() {
+        this.FOLDER_PANES.clear();
+        TreeSet<CountdownFolder> folders = StorageHandler.getFolders();
+        for (CountdownFolder countdownFolder : folders) {
+            FolderPane pane = new FolderPane(countdownFolder);
+            this.FOLDER_PANES.add(pane);
+            VBox.setMargin(pane, new Insets(5));
+        }
+    }
+
+    /**
+     * Repopulates the list of folders displayed to the user in the order
+     * of their search.
+     */
+    public void repopulate(String search) {
+        this.FOLDER_PANES.sort(new Comparator<FolderPane>() {
+            @Override
+            public int compare(FolderPane o1, FolderPane o2) {
+                return o1.getName().compareTo(search) - o2.getName().compareTo(search);
+            }
+        });
+        repopulate();
+    }
+
+    public void repopulate() {
+        this.SCROLL_PANE_CONTENT.getChildren().clear();
+        this.FOLDER_PANES.forEach(this.SCROLL_PANE_CONTENT.getChildren()::add);
+        // creates a visual divider
+        if (!FOLDER_PANES.isEmpty()) {
+            final Pane DIVIDER = new Pane();
+            final CustomLine LINE = new CustomLine(2, Type.HORIZONTAL_TYPE);
+            LINE.setPadding(10);
+            CustomLine.applyToPane(DIVIDER, LINE);
+            DIVIDER.maxWidthProperty().bind(SCROLL_PANE_CONTENT.widthProperty());
+            DIVIDER.setPrefHeight(10);
+            this.SCROLL_PANE_CONTENT.getChildren().add(DIVIDER);
+        }
+        // then adds protected folders
+        this.SCROLL_PANE_CONTENT.getChildren().addAll(
+            this.INCOMPLETED_FOLDER_PANE, this.COMPLETED_FOLDER_PANE);
+        moveNewFolderButton();
+    }
+
+    private void moveNewFolderButton() {
+        double viewport = this.SCROLL_PANE.getViewportBounds().getHeight();
+        double viewable = this.SCROLL_PANE_CONTENT.getHeight();
+        if (viewport >= viewable) {
+            this.getChildren().remove(this.NEW_FOLDER_BTTN);
+            this.SCROLL_PANE_CONTENT.getChildren().add(this.NEW_FOLDER_BTTN);
+        } else {
+            this.SCROLL_PANE_CONTENT.getChildren().remove(this.NEW_FOLDER_BTTN);
+            this.getChildren().add(this.NEW_FOLDER_BTTN);
+        }
     }
 
     private void configureNewFolderButtonStyle() {
         this.NEW_FOLDER_BTTN.setText("+ New folder");
+        this.NEW_FOLDER_BTTN.setFont(Font.font(FontTools.FONT_FAM, FontPosture.ITALIC, 13));
+        this.NEW_FOLDER_BTTN.setTextFill(Color.WHITE);
+        this.NEW_FOLDER_BTTN.setAlignment(Pos.CENTER);
+        this.NEW_FOLDER_BTTN.setMinHeight(20);
     }
 
     private class FolderPane extends ToggleButton {

@@ -57,7 +57,7 @@ public class DateInputField extends VBox {
         hintLabel.setAlignment(Pos.CENTER);
         hintLabel.maxWidthProperty().bind(this.widthProperty());
         border = new CustomBox(Vals.GraphicalUI.INPUT_BORDER_WIDTH);
-        CustomBox.applyCustomBorder(contents, border);
+        CustomBox.applyToPane(contents, border);
         dayInput = new InputField();
         monthInput = new InputField();
         yearInput = new InputField();

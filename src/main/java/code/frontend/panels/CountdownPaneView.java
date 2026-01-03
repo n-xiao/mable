@@ -384,7 +384,7 @@ public class CountdownPaneView extends ScrollPane {
             CONTENT_HBOX.setPrefSize(WIDTH, CONTENT_HEIGHT);
             CONTENT_HBOX.setFillHeight(true);
             // adds the border
-            CustomBox.applyCustomBorder(CONTENT_HBOX, CUSTOM_BORDER);
+            CustomBox.applyToPane(CONTENT_HBOX, CUSTOM_BORDER);
             // adds the name display
             CONTENT_HBOX.getChildren().add(createNameLabel(countdown));
             // adds the divider
@@ -416,7 +416,7 @@ public class CountdownPaneView extends ScrollPane {
             VERTICAL_DIVIDER.setStrokeColour(Color.WHITE);
             VERTICAL_DIVIDER.setOpacity(0.4);
             VERTICAL_DIVIDER.setPadding(20);
-            CustomLine.applyCustomBorder(pane, VERTICAL_DIVIDER);
+            CustomLine.applyToPane(pane, VERTICAL_DIVIDER);
             return pane;
         }
 

@@ -173,7 +173,7 @@ public class RightClickMenu extends VBox {
     private void initStyling() {
         CustomBox border =
             new CustomBox(BORDER_THICKNESS, BORDER_DEV, BORDER_CORNER_DEV, BORDER_CORNER_OFFSET);
-        CustomBox.applyCustomBorder(this, border);
+        CustomBox.applyToPane(this, border);
         this.setManaged(false);
         this.setBackground(Colour.createBG(Colour.BACKGROUND, BG_RADIUS, BG_INSETS));
         this.setFillWidth(true);
@@ -221,7 +221,7 @@ public class RightClickMenu extends VBox {
         CustomLine line = new CustomLine(BORDER_THICKNESS, Type.HORIZONTAL_TYPE);
         line.setPadding(RIGHTLEFT_INSET);
         line.setStrokeColour(Color.WHITE);
-        CustomLine.applyCustomBorder(divider, line);
+        CustomLine.applyToPane(divider, line);
 
         return divider;
     }

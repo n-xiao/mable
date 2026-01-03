@@ -135,7 +135,7 @@ public class SidebarStatsPane extends VBox {
             final Pane PANE = new Pane();
             CustomLine.applyCustomBorder(PANE, this.LINE);
             this.LINE.setStrokeColour(this.COLOUR);
-            this.LINE.setPadding(8);
+            this.LINE.setPadding(6);
             PANE.setBackground(null);
             HBox.setHgrow(PANE, Priority.ALWAYS);
             return PANE;
@@ -143,6 +143,7 @@ public class SidebarStatsPane extends VBox {
 
         private void initCounterLabel() {
             this.COUNTER_LABEL.setText(GraphicalUI.intToString(this.count));
+            this.COUNTER_LABEL.setMinWidth(10);
             initLabel(this.COUNTER_LABEL);
         }
 

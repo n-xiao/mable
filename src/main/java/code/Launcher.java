@@ -34,6 +34,7 @@ public class Launcher extends Application {
 
     @Override
     public void start(Stage stage) {
+        stage.setTitle("Mable");
         stage.setMinWidth(Vals.GraphicalUI.MIN_WIDTH);
         stage.setMinHeight(Vals.GraphicalUI.MIN_HEIGHT);
         stage.setWidth(Vals.GraphicalUI.PREF_WIDTH);

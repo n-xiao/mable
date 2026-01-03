@@ -119,7 +119,7 @@ public abstract class Button extends Pane {
 
     public abstract void executeOnClick();
 
-    private void playClickAnim() {
+    protected void playClickAnim() {
         if (!animationsEnabled)
             return;
         this.ft.stop();
@@ -167,6 +167,10 @@ public abstract class Button extends Pane {
 
     public void setFeedbackBackground(Background bg) {
         this.animPane.setBackground(bg);
+    }
+
+    protected Pane getFeedbackBackground() {
+        return this.animPane;
     }
 
     public void setColour(Color colour) {

@@ -19,6 +19,7 @@ package code.backend;
 
 import code.backend.Countdown.Urgency;
 import code.backend.CountdownFolder.SpecialType;
+import code.frontend.panels.CountdownPaneView;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
@@ -240,5 +241,6 @@ public class StorageHandler {
 
     public static void setCurrentlySelectedFolder(CountdownFolder currentlySelectedFolder) {
         StorageHandler.currentlySelectedFolder = currentlySelectedFolder;
+        CountdownPaneView.getInstance().repopulate(LocalDate.now());
     }
 }

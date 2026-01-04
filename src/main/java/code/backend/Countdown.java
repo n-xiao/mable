@@ -163,6 +163,9 @@ public class Countdown {
 
     public void setDueDate(LocalDate dueDate) {
         this.dueDateTime = dueDate.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
+        // to keep the order
+        StorageHandler.getCountdowns().remove(this);
+        StorageHandler.getCountdowns().add(this);
     }
 
     public void setDone(boolean isDone) {

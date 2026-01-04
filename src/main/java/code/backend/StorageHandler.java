@@ -74,6 +74,10 @@ public class StorageHandler {
         return COMPLETED_FOLDER;
     }
 
+    protected static TreeSet<Countdown> getCountdowns() {
+        return COUNTDOWNS;
+    }
+
     private StorageHandler() {}
 
     public static void init() throws Exception {

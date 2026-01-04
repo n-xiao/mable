@@ -27,29 +27,25 @@ import code.frontend.misc.Vals.FontTools;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.TreeSet;
+import javafx.animation.FadeTransition;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
+import javafx.util.Duration;
 
 public class SidebarFolderSelector extends VBox {
     private static final int PREF_HEIGHT = 600;
@@ -74,7 +70,8 @@ public class SidebarFolderSelector extends VBox {
                 event -> { instance.NEW_FOLDER_BTTN.setTextFill(Colour.BTTN_CREATE); });
             instance.NEW_FOLDER_BTTN.setOnMouseExited(
                 event -> { instance.NEW_FOLDER_BTTN.setTextFill(Colour.TXT_GHOST); });
-            instance.NEW_FOLDER_BTTN.setOnMouseClicked(event -> { System.out.println("hello"); });
+            instance.NEW_FOLDER_BTTN.setOnMouseClicked(
+                event -> { instance.triggerNewFolderInput(""); });
 
             instance.INCOMPLETED_FOLDER_PANE.executeOnClick(); // select the folder on startup
         }
@@ -127,15 +124,6 @@ public class SidebarFolderSelector extends VBox {
         this.setPadding(new Insets(5, 2, 20, 2));
         this.repopulate();
     }
-
-    // private Border createBorder() {
-    //     Stop[] stops = {new Stop(0, Colour.GHOST), new Stop(1, Color.rgb(0, 0, 0, 0))};
-    //     LinearGradient lg = new LinearGradient(0, 0, 0, 0.5, true, CycleMethod.NO_CYCLE, stops);
-    //     BorderStroke stroke =
-    //         new BorderStroke(lg, BorderStrokeStyle.SOLID, new CornerRadii(25), new
-    //         BorderWidths(2));
-    //     return new Border(stroke);
-    // }
 
     private void configureSearchFieldStyle() {
         this.SEARCH_FIELD.getTextField().setPromptText("Search...");
@@ -247,6 +235,87 @@ public class SidebarFolderSelector extends VBox {
         this.NEW_FOLDER_BTTN_CONTAINER.setBackground(null);
         this.NEW_FOLDER_BTTN_CONTAINER.maxWidthProperty().bind(this.widthProperty());
         this.NEW_FOLDER_BTTN_CONTAINER.setMinHeight(30);
+    }
+
+    private void triggerNewFolderInput(String nameToEdit) {
+        final Button CANCEL_BTTN = new Button("cancel edits") {
+            @Override
+            public void executeOnClick() {
+                instance.repopulate();
+            }
+        };
+        CANCEL_BTTN.setColour(Colour.ERROR);
+        // prevent user from clicking the add button (again)
+        this.SCROLL_PANE_CONTENT.getChildren().remove(this.NEW_FOLDER_BTTN);
+        this.NEW_FOLDER_BTTN_CONTAINER.setCenter(CANCEL_BTTN);
+
+        this.SCROLL_PANE.setVvalue(this.SCROLL_PANE.getVmax()); // scroll all the way down
+        final String ERR_EXISTS = "you already have a folder with that name!";
+        final String ERR_BLANK = "that's... not a name";
+        final VBox CONTAINER = new VBox();
+        CONTAINER.setFillWidth(true);
+        CONTAINER.setBackground(null);
+        CONTAINER.setFillWidth(true);
+
+        final Label TOP_HINT = new Label("new folder name: ");
+        TOP_HINT.maxWidthProperty().bind(CONTAINER.widthProperty());
+        TOP_HINT.minHeight(20);
+        TOP_HINT.setAlignment(Pos.CENTER_LEFT);
+        TOP_HINT.setFont(Font.font(FontTools.FONT_FAM, FontPosture.ITALIC, 13));
+        TOP_HINT.setTextFill(Colour.SELECTED);
+
+        final Label HINT = new Label();
+        HINT.maxWidthProperty().bind(CONTAINER.widthProperty());
+        HINT.minHeight(20);
+        HINT.setAlignment(Pos.CENTER);
+        HINT.setFont(Font.font(FontTools.FONT_FAM, FontPosture.ITALIC, 13));
+        HINT.setTextFill(Colour.ERROR);
+        HINT.setOpacity(0);
+
+        final FadeTransition TRANSITION = new FadeTransition();
+
+        VBox.setMargin(CONTAINER, new Insets(10, 2.5, 0, 2.5));
+        final InputField NAME_INPUT = new InputField();
+        NAME_INPUT.getTextField().setText(nameToEdit);
+        NAME_INPUT.getTextField().setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent event) {
+                String input = NAME_INPUT.getTextField().getText();
+                if (input.isBlank()) {
+                    HINT.setText(ERR_BLANK);
+                    playHintTransition();
+                    return;
+                }
+
+                if (!StorageHandler.createFolder(input)) {
+                    HINT.setText(ERR_EXISTS);
+                    playHintTransition();
+                    return;
+                }
+
+                instance.repopulate();
+            };
+
+            private void playHintTransition() {
+                TRANSITION.setNode(HINT);
+                TRANSITION.stop();
+                TRANSITION.setDuration(Duration.millis(200));
+                TRANSITION.setCycleCount(3);
+                TRANSITION.setAutoReverse(true);
+                TRANSITION.setFromValue(0);
+                TRANSITION.setToValue(1);
+                TRANSITION.playFromStart();
+            }
+        });
+        NAME_INPUT.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (!newValue)
+                    instance.repopulate(); // if focus lost, treat it like user wants to cancel
+            }
+        });
+
+        CONTAINER.getChildren().addAll(TOP_HINT, NAME_INPUT, HINT);
+        this.SCROLL_PANE_CONTENT.getChildren().add(CONTAINER);
     }
 
     private class FolderPane extends ToggleButton {

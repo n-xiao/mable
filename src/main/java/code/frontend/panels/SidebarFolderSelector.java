@@ -238,16 +238,16 @@ public class SidebarFolderSelector extends VBox {
     }
 
     private void triggerNewFolderInput(String nameToEdit) {
-        final Button CANCEL_BTTN = new Button("cancel edits") {
-            @Override
-            public void executeOnClick() {
-                instance.repopulate();
-            }
-        };
-        CANCEL_BTTN.setColour(Colour.ERROR);
+        // final Button CANCEL_BTTN = new Button("cancel edits") {
+        //     @Override
+        //     public void executeOnClick() {
+        //         instance.repopulate();
+        //     }
+        // };
+        // CANCEL_BTTN.setColour(Colour.ERROR);
+        // this.NEW_FOLDER_BTTN_CONTAINER.setCenter(CANCEL_BTTN);
         // prevent user from clicking the add button (again)
         this.SCROLL_PANE_CONTENT.getChildren().remove(this.NEW_FOLDER_BTTN);
-        this.NEW_FOLDER_BTTN_CONTAINER.setCenter(CANCEL_BTTN);
 
         this.SCROLL_PANE.setVvalue(this.SCROLL_PANE.getVmax()); // scroll all the way down
         final String ERR_EXISTS = "you already have a folder with that name!";
@@ -257,7 +257,7 @@ public class SidebarFolderSelector extends VBox {
         CONTAINER.setBackground(null);
         CONTAINER.setFillWidth(true);
 
-        final Label TOP_HINT = new Label("new folder name: ");
+        final Label TOP_HINT = new Label("folder name: ");
         TOP_HINT.maxWidthProperty().bind(CONTAINER.widthProperty());
         TOP_HINT.minHeight(20);
         TOP_HINT.setAlignment(Pos.CENTER_LEFT);
@@ -292,6 +292,7 @@ public class SidebarFolderSelector extends VBox {
                     return;
                 }
 
+                instance.refreshFolderPaneData();
                 instance.repopulate();
             };
 
@@ -306,7 +307,7 @@ public class SidebarFolderSelector extends VBox {
                 TRANSITION.playFromStart();
             }
         });
-        NAME_INPUT.focusedProperty().addListener(new ChangeListener<Boolean>() {
+        NAME_INPUT.getTextField().focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (!newValue)

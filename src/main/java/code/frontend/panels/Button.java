@@ -73,8 +73,8 @@ public abstract class Button extends Pane {
         this.label.relocate(0, 0);
         this.label.setViewOrder(0);
 
-        double vertiInset = border.getVertiPadding() + 3;
-        double horizInset = border.getHorizPadding() + 4;
+        double vertiInset = border.getVertiPadding() + 2;
+        double horizInset = border.getHorizPadding() + 3;
         Insets animPaneInsets = new Insets(vertiInset, horizInset, vertiInset, horizInset);
         BackgroundFill bgFill =
             new BackgroundFill(feedbackColour, new CornerRadii(12), animPaneInsets);

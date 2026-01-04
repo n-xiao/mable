@@ -167,6 +167,12 @@ public abstract class Button extends Pane {
 
     public void setFeedbackColour(Color feedbackColour) {
         this.feedbackColour = feedbackColour;
+        double vertiInset = border.getVertiPadding() + 3;
+        double horizInset = border.getHorizPadding() + 4;
+        Insets animPaneInsets = new Insets(vertiInset, horizInset, vertiInset, horizInset);
+        BackgroundFill bgFill =
+            new BackgroundFill(this.feedbackColour, new CornerRadii(12), animPaneInsets);
+        this.animPane.setBackground(new Background(bgFill));
     }
 
     public void setFeedbackBackground(Background bg) {

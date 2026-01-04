@@ -233,11 +233,11 @@ public class SidebarFolderSelector extends VBox {
     }
 
     private void configureNewFolderButtonStyle() {
-        this.NEW_FOLDER_BTTN.setText("+ New folder");
+        this.NEW_FOLDER_BTTN.setText("+ new folder");
         this.NEW_FOLDER_BTTN.setFont(Font.font(FontTools.FONT_FAM, FontPosture.ITALIC, 13));
         this.NEW_FOLDER_BTTN.setTextFill(Color.WHITE);
         this.NEW_FOLDER_BTTN.setAlignment(Pos.CENTER);
-        this.NEW_FOLDER_BTTN.setMinHeight(20);
+        this.NEW_FOLDER_BTTN.setMinHeight(40);
         this.NEW_FOLDER_BTTN.maxWidthProperty().bind(this.widthProperty());
     }
 
@@ -253,15 +253,15 @@ public class SidebarFolderSelector extends VBox {
         protected FolderPane(CountdownFolder folder) {
             super(folder.getName());
             this.FOLDER = folder;
-            this.setFeedbackColour(Colour.BTTN_CREATE); // todo use another colour if needed
+            this.setFeedbackColour(Colour.SELECTED); // todo use another colour if needed
             this.getLabel().setAlignment(Pos.CENTER_LEFT);
             this.getLabel().relocate(15, 0);
             this.getCustomBorder().setCornerOffset(0.45);
             this.getCustomBorder().setThickness(2.3);
             this.getCustomBorder().setCornerDeviation(0.017);
             this.getCustomBorder().setDeviation(0.02);
-            this.setToggledColour(Colour.BTTN_CREATE);
-            this.setUntoggledColour(Colour.TXT_GHOST);
+            this.setToggledColour(Colour.SELECTED);
+            this.setUntoggledColour(Colour.GHOST);
             this.setMinHeight(40);
             this.getLabel().setFont(Font.font(FontTools.FONT_FAM, 13));
             VBox.setMargin(this, new Insets(10, 0, 0, 0));

@@ -43,6 +43,11 @@ public abstract class ToggleButton extends Button {
         }
     }
 
+    /**
+     * This is only called by the program.
+     * It should not be called by a user click or press,
+     * since it assumes no mouse is hovering over the button.
+     */
     public void untoggle() {
         this.isToggled = false;
         this.getFeedbackBackground().setOpacity(0);

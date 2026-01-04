@@ -52,7 +52,7 @@ public class SidebarStatsPane extends VBox {
     private final StatPane TOMORROW_STAT;
 
     private SidebarStatsPane() {
-        final CustomBox BORDER = new CustomBox(2, 0, 0, 0);
+        final CustomBox BORDER = new CustomBox(2, 0.011, 0.01, 0);
         CustomBox.applyToPane(this, BORDER);
         BORDER.setStrokeColour(Colour.GHOST);
 

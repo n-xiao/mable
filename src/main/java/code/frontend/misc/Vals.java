@@ -67,7 +67,7 @@ public class Vals {
     }
 
     public final class GraphicalUI {
-        public static final double DRAW_THICKNESS = 2.5;
+        public static final double DRAW_THICKNESS = 2.4;
         public static final double BTTN_THICKNESS = 2.8;
         public static final double INPUT_BORDER_WIDTH = 2;
         public static final int PREF_WIDTH = 1170;

@@ -310,7 +310,7 @@ public class CountdownPaneView extends ScrollPane {
             this.STATUS_LABEL = new Label();
             this.END_DATE_LABEL = new Label();
             this.NAME_LABEL = new Label();
-            this.CUSTOM_BORDER = new CustomBox(GraphicalUI.DRAW_THICKNESS);
+            this.CUSTOM_BORDER = new CustomBox(GraphicalUI.DRAW_THICKNESS, 0.018, 0.035, 0.29);
             this.FADE_TR = new FadeTransition(Duration.millis(300), HOVER_HBOX);
             this.countdown = cd;
             this.isUrgent = false;

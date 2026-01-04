@@ -156,11 +156,6 @@ public class Countdown {
         this.name = name;
     }
 
-    public void setDueDate(int day, int month, int year) {
-        LocalDate dueDate = LocalDate.of(year, month, day);
-        this.dueDateTime = dueDate.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
-    }
-
     public void setDueDate(LocalDate dueDate) {
         this.dueDateTime = dueDate.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
         // to keep the order

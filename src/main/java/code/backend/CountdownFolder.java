@@ -56,10 +56,10 @@ public class CountdownFolder {
         assert type != null;
         switch (type) {
             case ALL_INCOMPLETE:
-                this.name = "All Ongoing Tasks";
+                this.name = "All Ongoing";
                 break;
             case ALL_COMPLETE:
-                this.name = "All Completed Tasks";
+                this.name = "All Completed";
                 break;
             default:
                 break;

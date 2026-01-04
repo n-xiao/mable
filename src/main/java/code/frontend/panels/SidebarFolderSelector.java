@@ -75,6 +75,8 @@ public class SidebarFolderSelector extends VBox {
             instance.NEW_FOLDER_BTTN.setOnMouseExited(
                 event -> { instance.NEW_FOLDER_BTTN.setTextFill(Colour.TXT_GHOST); });
             instance.NEW_FOLDER_BTTN.setOnMouseClicked(event -> { System.out.println("hello"); });
+
+            instance.INCOMPLETED_FOLDER_PANE.executeOnClick(); // select the folder on startup
         }
 
         return instance;

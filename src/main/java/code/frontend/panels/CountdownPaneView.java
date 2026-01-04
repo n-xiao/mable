@@ -132,9 +132,11 @@ public class CountdownPaneView extends ScrollPane {
             return;
         double cdWidth = CountdownPane.WIDTH + HGAP_BETWEEN;
         double cdHeight = CountdownPane.HEIGHT;
-        double width = this.FLOW_PANE.getWidth();
+        double width = this.getBoundsInLocal().getWidth();
         int numOfCountdowns = StorageHandler.getDescendingCountdowns().size();
         int columns = (int) Math.floor(width / cdWidth);
+        if (columns == 0)
+            return;
         int panesOnLast = (int) (numOfCountdowns % columns);
         int remainder = columns - panesOnLast;
         for (int i = 0; i < remainder; i++) {
@@ -149,6 +151,7 @@ public class CountdownPaneView extends ScrollPane {
     }
 
     public void repopulate(LocalDate now) {
+        StorageHandler.organiseProtectedFolders();
         NavigableSet<Countdown> countdowns;
         // this if-else is ok for now since there's only two DisplayOrders rn
         if (displayOrder.equals(DisplayOrder.ASCENDING))
@@ -164,10 +167,10 @@ public class CountdownPaneView extends ScrollPane {
             Countdown countdown = countdownIterator.next();
             pane.setCountdownAndRefresh(countdown);
         }
-        final boolean PANES_MODIFIED = countdownIterator.hasNext() || paneIterator.hasNext();
+        final boolean IMBALANCE_DETECTED = countdownIterator.hasNext() || paneIterator.hasNext();
         // removes each extra/unused CountdownPanes safely
         paneIterator.forEachRemaining(pane -> {
-            pane.setCountdownAndRefresh(null);
+            pane.setCountdown(null);
             FLOW_PANE.getChildren().remove(pane);
         });
         this.COUNTDOWN_PANES.removeIf(pane -> pane.getCountdown() == null);
@@ -176,9 +179,10 @@ public class CountdownPaneView extends ScrollPane {
             CountdownPane countdownPane = new CountdownPane(countdown, now);
             FLOW_PANE.getChildren().add(countdownPane);
             this.COUNTDOWN_PANES.add(countdownPane);
+            countdownPane.refreshContent();
         });
 
-        if (PANES_MODIFIED)
+        if (IMBALANCE_DETECTED)
             addPaddingForAlignment();
         updateMode();
     }
@@ -538,6 +542,10 @@ public class CountdownPaneView extends ScrollPane {
             CUSTOM_BORDER.setStrokeColour(Vals.Colour.SELECTED);
             STATUS_LABEL.setTextFill(Vals.Colour.SELECTED);
             END_DATE_LABEL.setTextFill(Vals.Colour.SELECTED);
+        }
+
+        public void setCountdown(Countdown countdown) {
+            this.countdown = countdown;
         }
 
         protected void setCountdownAndRefresh(Countdown countdown) {

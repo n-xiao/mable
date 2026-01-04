@@ -64,6 +64,7 @@ public class StorageHandler {
     private static final CountdownFolder COMPLETED_FOLDER =
         new CountdownFolder(SpecialType.ALL_COMPLETE);
 
+    // in the backend, currentlySelectedFolder is always init to INCOMPLETED_FOLDER
     private static CountdownFolder currentlySelectedFolder = INCOMPLETED_FOLDER;
 
     public static CountdownFolder getIncompletedFolder() {
@@ -141,14 +142,12 @@ public class StorageHandler {
         return null;
     }
 
-    @Deprecated
     public static NavigableSet<Countdown> getDescendingCountdowns() {
-        return COUNTDOWNS.descendingSet();
+        return currentlySelectedFolder.getContents().descendingSet();
     }
 
-    @Deprecated
     public static NavigableSet<Countdown> getAscendingCountdowns() {
-        return COUNTDOWNS.descendingSet().reversed();
+        return getDescendingCountdowns().reversed();
     }
 
     public static boolean isCountdownRemoved(Countdown countdown) {
@@ -191,7 +190,13 @@ public class StorageHandler {
             CountdownFolder cdf = MAPPER.treeToValue(v, CountdownFolder.class);
             FOLDERS.add(cdf);
         });
+        // initialises protected folders
+        organiseProtectedFolders();
+    }
 
+    public static void organiseProtectedFolders() {
+        COMPLETED_FOLDER.getContents().clear();
+        INCOMPLETED_FOLDER.getContents().clear();
         for (Countdown countdown : COUNTDOWNS) {
             if (countdown.isDone()) {
                 COMPLETED_FOLDER.getContents().add(countdown);

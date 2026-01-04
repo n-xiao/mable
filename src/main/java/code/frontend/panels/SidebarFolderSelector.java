@@ -147,7 +147,9 @@ public class SidebarFolderSelector extends VBox {
         this.SCROLL_PANE.setBackground(null);
         this.SCROLL_PANE.setMinHeight(200);
         this.SCROLL_PANE.prefWidthProperty().bind(this.scrollPaneWrapper.widthProperty());
-        this.SCROLL_PANE.prefHeightProperty().bind(this.scrollPaneWrapper.heightProperty());
+        this.SCROLL_PANE.prefHeightProperty().bind(
+            this.scrollPaneWrapper.heightProperty().add(-20));
+        this.SCROLL_PANE.relocate(0, 10);
         this.SCROLL_PANE.setStyle("-fx-background: transparent;"); // YAY OMG I FOUND A FIX
         this.scrollPaneWrapper.getChildren().add(this.SCROLL_PANE);
         VBox.setVgrow(this.scrollPaneWrapper, Priority.ALWAYS);
@@ -157,8 +159,9 @@ public class SidebarFolderSelector extends VBox {
         this.SCROLL_PANE_CONTENT.setBackground(Colour.createBG(Color.BLACK, 13, 8));
         this.SCROLL_PANE_CONTENT.setFillWidth(true);
         this.SCROLL_PANE_CONTENT.setPadding(new Insets(4, 5, 0, 5));
-        this.SCROLL_PANE_CONTENT.minHeightProperty().bind(
-            this.SCROLL_PANE.heightProperty().add(-2));
+        // this.SCROLL_PANE_CONTENT.minHeightProperty().bind(
+        //     this.SCROLL_PANE.heightProperty().add(-2));
+        this.SCROLL_PANE_CONTENT.setMaxHeight(Double.MAX_VALUE);
         this.SCROLL_PANE.setContent(SCROLL_PANE_CONTENT); // dont move this; don't even think
     }
 
@@ -211,8 +214,8 @@ public class SidebarFolderSelector extends VBox {
 
     private void moveNewFolderButton() {
         double viewport = this.SCROLL_PANE.getViewportBounds().getHeight();
-        double viewable = this.SCROLL_PANE_CONTENT.getHeight();
-        if (viewport >= viewable) {
+        double viewable = this.SCROLL_PANE_CONTENT.getBoundsInParent().getHeight();
+        if (viewport > viewable) {
             this.NEW_FOLDER_BTTN_CONTAINER.setCenter(null);
             if (!this.SCROLL_PANE_CONTENT.getChildren().contains(this.NEW_FOLDER_BTTN))
                 this.SCROLL_PANE_CONTENT.getChildren().add(this.NEW_FOLDER_BTTN);
@@ -336,7 +339,7 @@ public class SidebarFolderSelector extends VBox {
             this.setUntoggledColour(Colour.GHOST);
             this.setMinHeight(40);
             this.getLabel().setFont(Font.font(FontTools.FONT_FAM, 13));
-            VBox.setMargin(this, new Insets(10, 2.5, 0, 2.5));
+            VBox.setMargin(this, new Insets(3, 2.5, 5, 2.5));
         }
 
         @Override

@@ -117,7 +117,7 @@ public class SidebarFolderSelector extends VBox {
         this.setMinHeight(MIN_HEIGHT);
         this.setPrefHeight(PREF_HEIGHT);
         this.setFillWidth(true);
-        this.setBackground(Colour.createBG(Color.BLACK, 20, 5));
+        this.setBackground(null);
 
         this.COMPLETED_FOLDER_PANE = new FolderPane(StorageHandler.getCompletedFolder());
         this.INCOMPLETED_FOLDER_PANE = new FolderPane(StorageHandler.getIncompletedFolder());
@@ -145,7 +145,7 @@ public class SidebarFolderSelector extends VBox {
         this.SEARCH_FIELD.setCustomBorder(border);
         this.SEARCH_FIELD.enableManualActivation();
         this.SEARCH_FIELD.setFieldMargins(new Insets(5, 7, 5, 7));
-        VBox.setMargin(this.SEARCH_FIELD, new Insets(0, 0, 10, 0));
+        VBox.setMargin(this.SEARCH_FIELD, new Insets(0, 0, 5, 0));
     }
 
     private void configureScrollPaneStyle() {
@@ -282,8 +282,8 @@ public class SidebarFolderSelector extends VBox {
             if (!this.hasSameName(COMPLETED_FOLDER_PANE))
                 COMPLETED_FOLDER_PANE.untoggle();
 
+            this.toggle();
             StorageHandler.setCurrentlySelectedFolder(this.FOLDER);
-            super.executeOnClick();
         }
 
         public boolean hasSameName(FolderPane otherPane) {

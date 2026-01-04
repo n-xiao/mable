@@ -37,10 +37,11 @@ public class Vals {
     public final class Colour {
         public static final Color BACKGROUND = Color.rgb(20, 20, 30);
         public static final Color SIDE_BAR = Color.rgb(10, 2, 22);
-        public static final Color VIEW_PICKER = Color.rgb(44, 44, 53);
         public static final Color FEEDBACK = Color.rgb(75, 148, 174);
         public static final Color TXT_GHOST = Color.rgb(200, 200, 230);
+        public static final Color TXT_GHOST_2 = Color.rgb(170, 170, 220);
         public static final Color SELECTED = Color.rgb(136, 175, 252);
+        public static final Color SELECTED_2 = Color.rgb(95, 122, 176);
         public static final Color ERROR = Color.rgb(250, 11, 11);
         public static final Color DISABLED = Color.rgb(100, 100, 100);
         public static final Color BTTN_CREATE = Color.rgb(126, 182, 187);

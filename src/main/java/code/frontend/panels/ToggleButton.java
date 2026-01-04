@@ -36,9 +36,7 @@ public abstract class ToggleButton extends Button {
         if (this.isToggled) {
             // if toggled on, apply toggle style
             this.getCustomBorder().setStrokeColour(this.toggledColour);
-            this.getFeedbackBackground().setOpacity(1);
         } else {
-            this.getFeedbackBackground().setOpacity(this.getHoverOpacity());
             this.getCustomBorder().setStrokeColour(this.untoggledColour);
         }
     }
@@ -50,8 +48,12 @@ public abstract class ToggleButton extends Button {
      */
     public void untoggle() {
         this.isToggled = false;
-        this.getFeedbackBackground().setOpacity(0);
         this.getCustomBorder().setStrokeColour(this.untoggledColour);
+    }
+
+    public void toggle() {
+        this.isToggled = true;
+        this.getCustomBorder().setStrokeColour(this.toggledColour);
     }
 
     public void setToggledColour(Color toggledColour) {

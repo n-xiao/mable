@@ -88,8 +88,8 @@ public class Vals {
     }
 
     public class UtilityUI {
-        public static final int WIDTH = 530;
-        public static final int HEIGHT = 360;
+        public static final int WIDTH = 510;
+        public static final int HEIGHT = 330;
         public static Font getFont() {
             return Font.font(Vals.FontTools.FONT_FAM + " Medium", 15);
         }

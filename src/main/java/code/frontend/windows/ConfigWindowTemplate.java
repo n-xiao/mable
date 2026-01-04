@@ -41,6 +41,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public abstract class ConfigWindowTemplate extends Stage {
+    private static final Insets INSETS = new Insets(10, 12, 10, 12);
+
     private VBox root;
 
     private InputField nameField;
@@ -92,6 +94,7 @@ public abstract class ConfigWindowTemplate extends Stage {
         label.setAlignment(Pos.CENTER_LEFT);
         label.setMaxWidth(UtilityUI.WIDTH);
         label.setFont(UtilityUI.getFont());
+        nameField.setFieldMargins(INSETS);
         nameField.setMaxWidth(UtilityUI.WIDTH);
         VBox.setMargin(label, new Insets(0, 0, 0, 8));
         // VBox.setMargin(nameField, new Insets(3, 5, 0, 5));
@@ -118,9 +121,8 @@ public abstract class ConfigWindowTemplate extends Stage {
         dateLabel.setTextFill(Color.WHITE);
         dateField.setMaxWidth(300);
         dateField.setMinWidth(300);
+        dateField.setFieldMargins(INSETS);
         VBox.setMargin(dateLabel, new Insets(0, 0, 0, 8));
-        // VBox.setMargin(dateLabel, new Insets(0, 5, 0, 5));
-        // VBox.setMargin(dateField, new Insets(3, 5, 0, 5));
         VBox.setVgrow(filler1, Priority.ALWAYS);
         dateFieldContainer.getChildren().addAll(dateLabel, dateField, filler1);
 
@@ -141,6 +143,7 @@ public abstract class ConfigWindowTemplate extends Stage {
         daysLabel.setTextFill(Color.WHITE);
         daysField.setNumInputOnly(true);
         daysField.setTextLimit(7);
+        daysField.setFieldMargins(INSETS);
         daysField.setMaxWidth(130);
         daysField.setMinWidth(130);
         daysField.getTextField().setAlignment(Pos.CENTER);

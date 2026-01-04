@@ -35,6 +35,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -76,6 +77,7 @@ public class SidebarFolderSelector extends VBox {
     private final VBox SCROLL_PANE_CONTENT;
     private final LinkedList<FolderPane> FOLDER_PANES;
     private final Label NEW_FOLDER_BTTN;
+    private final BorderPane NEW_FOLDER_BTTN_CONTAINER;
 
     private final FolderPane COMPLETED_FOLDER_PANE;
     private final FolderPane INCOMPLETED_FOLDER_PANE;
@@ -99,6 +101,9 @@ public class SidebarFolderSelector extends VBox {
         this.SCROLL_PANE_CONTENT = new VBox();
         this.configureScrollPaneContentStyle();
 
+        this.NEW_FOLDER_BTTN_CONTAINER = new BorderPane();
+        this.configureNewFolderButtonContainerStyle();
+
         this.setMinHeight(MIN_HEIGHT);
         this.setPrefHeight(PREF_HEIGHT);
         this.setFillWidth(true);
@@ -107,13 +112,15 @@ public class SidebarFolderSelector extends VBox {
         this.COMPLETED_FOLDER_PANE = new FolderPane(StorageHandler.getCompletedFolder());
         this.INCOMPLETED_FOLDER_PANE = new FolderPane(StorageHandler.getIncompletedFolder());
 
-        this.getChildren().addAll(this.SEARCH_FIELD, this.scrollPaneWrapper);
+        this.getChildren().addAll(
+            this.SEARCH_FIELD, this.scrollPaneWrapper, this.NEW_FOLDER_BTTN_CONTAINER);
         this.setPadding(new Insets(30, 8, 20, 8));
         this.repopulate();
     }
 
     private void configureSearchFieldStyle() {
         this.SEARCH_FIELD.getTextField().setPromptText("Search...");
+        this.SEARCH_FIELD.setMaxHeight(20);
         this.SEARCH_FIELD.setCustomBorder(new CustomBox(2, 0, 0, 0.32));
         this.SEARCH_FIELD.enableManualActivation();
         VBox.setMargin(this.SEARCH_FIELD, new Insets(0, 0, 10, 0));
@@ -195,13 +202,12 @@ public class SidebarFolderSelector extends VBox {
         double viewport = this.SCROLL_PANE.getViewportBounds().getHeight();
         double viewable = this.SCROLL_PANE_CONTENT.getHeight();
         if (viewport >= viewable) {
-            this.getChildren().remove(this.NEW_FOLDER_BTTN);
+            this.NEW_FOLDER_BTTN_CONTAINER.setCenter(null);
             if (!this.SCROLL_PANE_CONTENT.getChildren().contains(this.NEW_FOLDER_BTTN))
                 this.SCROLL_PANE_CONTENT.getChildren().add(this.NEW_FOLDER_BTTN);
         } else {
             this.SCROLL_PANE_CONTENT.getChildren().remove(this.NEW_FOLDER_BTTN);
-            if (!this.getChildren().contains(this.NEW_FOLDER_BTTN))
-                this.getChildren().add(this.NEW_FOLDER_BTTN);
+            this.NEW_FOLDER_BTTN_CONTAINER.setCenter(this.NEW_FOLDER_BTTN);
         }
     }
 
@@ -214,6 +220,12 @@ public class SidebarFolderSelector extends VBox {
         this.NEW_FOLDER_BTTN.maxWidthProperty().bind(this.widthProperty());
     }
 
+    private void configureNewFolderButtonContainerStyle() {
+        this.NEW_FOLDER_BTTN_CONTAINER.setBackground(null);
+        this.NEW_FOLDER_BTTN_CONTAINER.maxWidthProperty().bind(this.widthProperty());
+        this.NEW_FOLDER_BTTN_CONTAINER.setMinHeight(30);
+    }
+
     private class FolderPane extends ToggleButton {
         final CountdownFolder FOLDER;
 
@@ -222,6 +234,8 @@ public class SidebarFolderSelector extends VBox {
             this.FOLDER = folder;
             this.setFeedbackColour(Colour.BTTN_CREATE); // todo use another colour if needed
             this.getLabel().setAlignment(Pos.CENTER_LEFT);
+            this.getLabel().relocate(15, 0);
+            this.getCustomBorder().setCornerOffset(0.45);
             this.setMinHeight(40);
             this.getLabel().setFont(Font.font(FontTools.FONT_FAM, 13));
             VBox.setMargin(this, new Insets(10, 0, 0, 0));

@@ -214,4 +214,9 @@ public class CustomBox extends ResizableCanvas {
         double bigDev = width * Math.max(deviation, cornerDeviation);
         return Math.floor(width - bigDev) - this.thickness;
     }
+
+    public void setCornerOffset(double cornerOffset) {
+        this.cornerOffset = cornerOffset;
+        this.resizeAndDraw(true);
+    }
 }

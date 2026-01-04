@@ -199,4 +199,10 @@ public class DateInputField extends VBox {
     public InputField getYearInput() {
         return yearInput;
     }
+
+    public void setFieldMargins(Insets insets) {
+        dayInput.setFieldMargins(insets);
+        monthInput.setFieldMargins(insets);
+        yearInput.setFieldMargins(insets);
+    }
 }

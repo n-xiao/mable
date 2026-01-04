@@ -107,22 +107,23 @@ public class SidebarFolderSelector extends VBox {
         this.setMinHeight(MIN_HEIGHT);
         this.setPrefHeight(PREF_HEIGHT);
         this.setFillWidth(true);
-        this.setBackground(Colour.createBG(Color.BLUE, 13, 8));
+        this.setBackground(Colour.createBG(Color.BLUE, 20, 5));
 
         this.COMPLETED_FOLDER_PANE = new FolderPane(StorageHandler.getCompletedFolder());
         this.INCOMPLETED_FOLDER_PANE = new FolderPane(StorageHandler.getIncompletedFolder());
 
         this.getChildren().addAll(
             this.SEARCH_FIELD, this.scrollPaneWrapper, this.NEW_FOLDER_BTTN_CONTAINER);
-        this.setPadding(new Insets(30, 8, 20, 8));
+        this.setPadding(new Insets(10, 8, 20, 8));
         this.repopulate();
     }
 
     private void configureSearchFieldStyle() {
         this.SEARCH_FIELD.getTextField().setPromptText("Search...");
         this.SEARCH_FIELD.setMaxHeight(20);
-        this.SEARCH_FIELD.setCustomBorder(new CustomBox(2, 0, 0, 0.32));
+        this.SEARCH_FIELD.setCustomBorder(new CustomBox(2, 0.012, 0.012, 0.45));
         this.SEARCH_FIELD.enableManualActivation();
+        this.SEARCH_FIELD.setFieldMargins(new Insets(5, 7, 5, 7));
         VBox.setMargin(this.SEARCH_FIELD, new Insets(0, 0, 10, 0));
     }
 
@@ -146,6 +147,7 @@ public class SidebarFolderSelector extends VBox {
     private void configureScrollPaneContentStyle() {
         this.SCROLL_PANE_CONTENT.setBackground(Colour.createBG(Color.BLACK, 13, 8));
         this.SCROLL_PANE_CONTENT.setFillWidth(true);
+        this.SCROLL_PANE_CONTENT.setPadding(new Insets(0, 5, 0, 5));
         this.SCROLL_PANE_CONTENT.minHeightProperty().bind(
             this.SCROLL_PANE.heightProperty().add(-2));
         this.SCROLL_PANE.setContent(SCROLL_PANE_CONTENT); // dont move this; don't even think
@@ -236,6 +238,9 @@ public class SidebarFolderSelector extends VBox {
             this.getLabel().setAlignment(Pos.CENTER_LEFT);
             this.getLabel().relocate(15, 0);
             this.getCustomBorder().setCornerOffset(0.45);
+            this.getCustomBorder().setThickness(2.3);
+            this.getCustomBorder().setCornerDeviation(0.017);
+            this.getCustomBorder().setDeviation(0.02);
             this.setMinHeight(40);
             this.getLabel().setFont(Font.font(FontTools.FONT_FAM, 13));
             VBox.setMargin(this, new Insets(10, 0, 0, 0));

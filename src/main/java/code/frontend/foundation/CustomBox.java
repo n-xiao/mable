@@ -219,4 +219,19 @@ public class CustomBox extends ResizableCanvas {
         this.cornerOffset = cornerOffset;
         this.resizeAndDraw(true);
     }
+
+    public void setThickness(double thickness) {
+        this.thickness = thickness;
+        this.resizeAndDraw(true);
+    }
+
+    public void setDeviation(double deviation) {
+        this.deviation = deviation;
+        this.resizeAndDraw(true);
+    }
+
+    public void setCornerDeviation(double cornerDeviation) {
+        this.cornerDeviation = cornerDeviation;
+        this.resizeAndDraw(true);
+    }
 }

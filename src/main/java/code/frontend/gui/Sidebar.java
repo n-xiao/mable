@@ -35,7 +35,7 @@ public class Sidebar extends VBox {
         this.setBackground(Colour.createBG(Colour.SIDE_BAR, 0, 0));
         this.getChildren().addAll(this.STATS, this.FOLDER_SELECTOR);
         VBox.setMargin(this.STATS, new Insets(10));
-        VBox.setMargin(this.FOLDER_SELECTOR, new Insets(5));
+        VBox.setMargin(this.FOLDER_SELECTOR, new Insets(20, 5, 5, 5));
     }
 
     public static Sidebar getInstance() {

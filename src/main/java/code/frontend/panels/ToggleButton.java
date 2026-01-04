@@ -1,33 +1,63 @@
 package code.frontend.panels;
 
+import javafx.scene.paint.Color;
+
 public abstract class ToggleButton extends Button {
     private boolean isToggled;
+    private Color toggledColour;
+    private Color untoggledColour;
 
     public ToggleButton(String name) {
         this.isToggled = false;
+        this.toggledColour = Color.WHITE;
+        this.untoggledColour = Color.GRAY;
         super(name);
     }
 
-    @Override
-    protected void playClickAnim() {
-        if (this.isToggled)
-            this.getFeedbackBackground().setOpacity(this.getHoverOpacity());
-        else
-            this.getFeedbackBackground().setOpacity(1);
-        this.isToggled = !this.isToggled;
-    }
-
-    public boolean isToggled() {
+    public boolean getIsToggled() {
         return this.isToggled;
     }
 
-    public void setToggled(boolean toggle) {
-        this.isToggled = toggle;
-        // careful: this is the opposite behaviour to what is in playClickAnim()
+    @Override
+    protected void playMouseExitAnim() {
+        if (!isToggled)
+            super.playMouseExitAnim();
+    }
+
+    @Override
+    protected void playMouseEnterAnim() {
+        if (!isToggled)
+            super.playMouseEnterAnim();
+    }
+
+    @Override
+    public void executeOnClick() {
+        this.isToggled = !this.isToggled;
         if (this.isToggled) {
+            // if toggled on, apply toggle style
+            this.getCustomBorder().setStrokeColour(this.toggledColour);
             this.getFeedbackBackground().setOpacity(1);
         } else {
             this.getFeedbackBackground().setOpacity(this.getHoverOpacity());
+            this.getCustomBorder().setStrokeColour(this.untoggledColour);
         }
+    }
+
+    public void untoggle() {
+        this.isToggled = false;
+        this.getFeedbackBackground().setOpacity(0);
+        this.getCustomBorder().setStrokeColour(this.untoggledColour);
+    }
+
+    public void setToggledColour(Color toggledColour) {
+        this.toggledColour = toggledColour;
+        if (this.isToggled)
+            this.getCustomBorder().setStrokeColour(this.toggledColour);
+    }
+
+    public void setUntoggledColour(Color untoggledColour) {
+        this.untoggledColour = untoggledColour;
+        if (!this.isToggled)
+            this.getCustomBorder().setStrokeColour(this.untoggledColour);
     }
 }

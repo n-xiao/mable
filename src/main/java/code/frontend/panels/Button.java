@@ -129,7 +129,7 @@ public abstract class Button extends Pane {
         this.ft.playFromStart();
     }
 
-    private void playMouseEnterAnim() {
+    protected void playMouseEnterAnim() {
         if (!animationsEnabled) {
             this.animPane.setOpacity(1);
             return;
@@ -141,7 +141,7 @@ public abstract class Button extends Pane {
         this.ft.playFromStart();
     }
 
-    private void playMouseExitAnim() {
+    protected void playMouseExitAnim() {
         if (!animationsEnabled) {
             this.animPane.setOpacity(0);
             return;

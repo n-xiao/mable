@@ -35,11 +35,19 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 
@@ -107,21 +115,32 @@ public class SidebarFolderSelector extends VBox {
         this.setMinHeight(MIN_HEIGHT);
         this.setPrefHeight(PREF_HEIGHT);
         this.setFillWidth(true);
-        this.setBackground(Colour.createBG(Color.BLUE, 20, 5));
+        this.setBackground(Colour.createBG(Color.BLACK, 20, 5));
 
         this.COMPLETED_FOLDER_PANE = new FolderPane(StorageHandler.getCompletedFolder());
         this.INCOMPLETED_FOLDER_PANE = new FolderPane(StorageHandler.getIncompletedFolder());
 
         this.getChildren().addAll(
             this.SEARCH_FIELD, this.scrollPaneWrapper, this.NEW_FOLDER_BTTN_CONTAINER);
-        this.setPadding(new Insets(10, 8, 20, 8));
+        this.setPadding(new Insets(5, 2, 20, 2));
         this.repopulate();
     }
+
+    // private Border createBorder() {
+    //     Stop[] stops = {new Stop(0, Colour.GHOST), new Stop(1, Color.rgb(0, 0, 0, 0))};
+    //     LinearGradient lg = new LinearGradient(0, 0, 0, 0.5, true, CycleMethod.NO_CYCLE, stops);
+    //     BorderStroke stroke =
+    //         new BorderStroke(lg, BorderStrokeStyle.SOLID, new CornerRadii(25), new
+    //         BorderWidths(2));
+    //     return new Border(stroke);
+    // }
 
     private void configureSearchFieldStyle() {
         this.SEARCH_FIELD.getTextField().setPromptText("Search...");
         this.SEARCH_FIELD.setMaxHeight(20);
-        this.SEARCH_FIELD.setCustomBorder(new CustomBox(2, 0.012, 0.012, 0.45));
+        CustomBox border = new CustomBox(2, 0.012, 0.012, 0.45);
+        border.setStrokeColour(Colour.GHOST);
+        this.SEARCH_FIELD.setCustomBorder(border);
         this.SEARCH_FIELD.enableManualActivation();
         this.SEARCH_FIELD.setFieldMargins(new Insets(5, 7, 5, 7));
         VBox.setMargin(this.SEARCH_FIELD, new Insets(0, 0, 10, 0));
@@ -129,7 +148,7 @@ public class SidebarFolderSelector extends VBox {
 
     private void configureScrollPaneStyle() {
         final CustomBox BORDER = new CustomBox(2, 0, 0, 0.13);
-        BORDER.setStrokeColour(Color.WHITE);
+        BORDER.setStrokeColour(Colour.GHOST);
         CustomBox.applyToPane(this.scrollPaneWrapper, BORDER);
         this.scrollPaneWrapper.maxWidthProperty().bind(this.widthProperty());
         this.SCROLL_PANE.setFitToWidth(true);
@@ -241,6 +260,8 @@ public class SidebarFolderSelector extends VBox {
             this.getCustomBorder().setThickness(2.3);
             this.getCustomBorder().setCornerDeviation(0.017);
             this.getCustomBorder().setDeviation(0.02);
+            this.setToggledColour(Colour.BTTN_CREATE);
+            this.setUntoggledColour(Colour.TXT_GHOST);
             this.setMinHeight(40);
             this.getLabel().setFont(Font.font(FontTools.FONT_FAM, 13));
             VBox.setMargin(this, new Insets(10, 0, 0, 0));
@@ -249,10 +270,22 @@ public class SidebarFolderSelector extends VBox {
         @Override
         public void executeOnClick() {
             SidebarFolderSelector.getInstance().FOLDER_PANES.forEach(folder -> {
-                if (!folder.getName().equals(this.getName()))
-                    folder.setToggled(false);
+                if (!this.hasSameName(folder))
+                    folder.untoggle();
             });
+
+            if (!this.hasSameName(INCOMPLETED_FOLDER_PANE))
+                INCOMPLETED_FOLDER_PANE.untoggle();
+
+            if (!this.hasSameName(COMPLETED_FOLDER_PANE))
+                COMPLETED_FOLDER_PANE.untoggle();
+
             StorageHandler.setCurrentlySelectedFolder(this.FOLDER);
+            super.executeOnClick();
+        }
+
+        public boolean hasSameName(FolderPane otherPane) {
+            return this.getName().equals(otherPane.getName());
         }
 
         public String getName() {

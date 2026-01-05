@@ -33,8 +33,8 @@ public class FolderManagerRCM extends RightClickMenuTemplate {
         instance = null;
     }
 
-    private static final double WIDTH = 200;
-    private static final double HEIGHT = 200;
+    private static final double WIDTH = 160;
+    private static final double HEIGHT = 130;
 
     private final Button EDIT;
     private final Button REMOVE;
@@ -77,6 +77,10 @@ public class FolderManagerRCM extends RightClickMenuTemplate {
         this.EDIT = edit;
         this.REMOVE = remove;
         this.MARK_ALL_COMPLETE = mark;
+
+        this.getCustomBorder().setCornerOffset(0.20);
+        this.getCustomBorder().setCornerDeviation(0.02);
+        this.getCustomBorder().setCornerDeviation(0.02);
     }
 
     @Override

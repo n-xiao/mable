@@ -31,8 +31,8 @@ import javafx.scene.paint.Color;
 public class CountdownViewRCM extends RightClickMenuTemplate {
     private static CountdownViewRCM instance = null;
 
-    private static final double WIDTH = 200;
-    private static final double HEIGHT = 225;
+    private static final double WIDTH = 180;
+    private static final double HEIGHT = 200;
 
     private final Button CREATE;
     private final Button EDIT;

@@ -8,6 +8,7 @@ import code.frontend.foundation.CustomBox;
 import code.frontend.foundation.CustomLine;
 import code.frontend.foundation.CustomLine.Type;
 import code.frontend.misc.Vals.Colour;
+import code.frontend.misc.Vals.FontTools;
 import code.frontend.panels.Button;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -19,6 +20,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 public abstract class RightClickMenuTemplate extends VBox {
     private static final double BG_RADIUS = 12;
@@ -31,12 +33,14 @@ public abstract class RightClickMenuTemplate extends VBox {
 
     private static final int RIGHTLEFT_INSET = 15;
 
-    private static final double BUTTON_HEIGHT = 40;
+    private static final double BUTTON_HEIGHT = 35;
 
     private final double WIDTH;
     private final double HEIGHT;
     private final Button[] BUTTONS;
     private final Color[] COLOURS;
+
+    private CustomBox border;
 
     public RightClickMenuTemplate(double width, double height, Button[] buttons, Color[] colours) {
         this.WIDTH = width;
@@ -80,6 +84,7 @@ public abstract class RightClickMenuTemplate extends VBox {
                 button.setAnimationsEnabled(false);
                 button.getCustomBorder().setVisible(false);
                 button.getLabel().setAlignment(Pos.CENTER_LEFT);
+                button.getLabel().setFont(Font.font(FontTools.FONT_FAM, 13));
                 button.setConsumeEvent(true);
                 button.setCursor(Cursor.DEFAULT);
                 VBox.setMargin(button, new Insets(0, RIGHTLEFT_INSET, 0, RIGHTLEFT_INSET));
@@ -94,7 +99,7 @@ public abstract class RightClickMenuTemplate extends VBox {
     }
 
     private void initStyling() {
-        CustomBox border =
+        this.border =
             new CustomBox(BORDER_THICKNESS, BORDER_DEV, BORDER_CORNER_DEV, BORDER_CORNER_OFFSET);
         CustomBox.applyToPane(this, border);
         this.setManaged(false);
@@ -118,6 +123,10 @@ public abstract class RightClickMenuTemplate extends VBox {
         CustomLine.applyToPane(divider, line);
 
         return divider;
+    }
+
+    public CustomBox getCustomBorder() {
+        return border;
     }
 
     public abstract void setMode();

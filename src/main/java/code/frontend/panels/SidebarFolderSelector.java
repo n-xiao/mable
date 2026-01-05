@@ -24,6 +24,7 @@ import code.frontend.foundation.CustomLine;
 import code.frontend.foundation.CustomLine.Type;
 import code.frontend.misc.Vals.Colour;
 import code.frontend.misc.Vals.FontTools;
+import code.frontend.panels.dragndrop.DragHandler;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.TreeSet;
@@ -356,10 +357,24 @@ public class SidebarFolderSelector extends VBox {
             this.setMinHeight(40);
             this.getLabel().setFont(Font.font(FontTools.FONT_FAM, 13));
             VBox.setMargin(this, new Insets(3, 2.5, 5, 2.5));
+            if (!FOLDER.isProtectedFolder()) // for now, it's easier to just do this
+                this.configureDrop();
+        }
+
+        private void configureDrop() {
+            this.setOnMouseDragEntered(
+                (event) -> { this.getCustomBorder().setStrokeColour(Color.ORANGE); });
+            this.setOnMouseDragExited((event) -> { this.untoggle(); });
+            this.setOnMouseDragReleased((event) -> {
+                CountdownPaneView.getInstance().addAllSelectedToFolder(this.FOLDER);
+                this.untoggle();
+                DragHandler.close();
+            });
         }
 
         @Override
         public void executeOnClick() {
+            CountdownPaneView.getInstance().deselectAll(); // important
             SidebarFolderSelector.getInstance().FOLDER_PANES.forEach(folder -> {
                 if (!this.hasSameName(folder))
                     folder.untoggle();

@@ -19,6 +19,7 @@ package code.frontend.panels;
 
 import code.backend.Countdown;
 import code.backend.Countdown.Urgency;
+import code.backend.CountdownFolder;
 import code.backend.StorageHandler;
 import code.frontend.foundation.CustomBox;
 import code.frontend.foundation.CustomLine;
@@ -27,6 +28,7 @@ import code.frontend.gui.RightClickMenu;
 import code.frontend.misc.Vals;
 import code.frontend.misc.Vals.Colour;
 import code.frontend.misc.Vals.GraphicalUI;
+import code.frontend.panels.dragndrop.DragHandler;
 import code.frontend.windows.EditWindow;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -196,6 +198,25 @@ public class CountdownPaneView extends ScrollPane {
         return selections;
     }
 
+    public void addAllSelectedToFolder(CountdownFolder folder) {
+        for (CountdownPane countdownPane : COUNTDOWN_PANES) {
+            if (countdownPane.isSelected())
+                folder.getContents().add(countdownPane.getCountdown());
+        }
+    }
+
+    public Urgency[] getSelectedUrgencies() {
+        Urgency[] urgencies = new Urgency[getNumOfSelections()];
+        int i = 0;
+        for (CountdownPane pane : COUNTDOWN_PANES) {
+            if (pane.isSelected()) {
+                urgencies[i] = pane.getCountdown().getUrgency(LocalDate.now());
+                i++;
+            }
+        }
+        return urgencies;
+    }
+
     public void markSelectedAsComplete(boolean isDone) {
         COUNTDOWN_PANES.forEach(pane -> {
             if (pane.isSelected()) {
@@ -214,10 +235,6 @@ public class CountdownPaneView extends ScrollPane {
                 return;
             }
         }
-    }
-
-    public void addSelectedToFolder() {
-        // TODO
     }
 
     public void deleteSelected() {
@@ -322,7 +339,8 @@ public class CountdownPaneView extends ScrollPane {
             this.setAlignment(Pos.CENTER);
             initContentHBox(now);
             initHoverHBox();
-            initSelectable(this);
+            initSelectable();
+            initDraggable();
             this.getChildren().addAll(this.HOVER_HBOX, this.CONTENT_HBOX);
         }
 
@@ -490,18 +508,57 @@ public class CountdownPaneView extends ScrollPane {
             CD_DESC_LABEL.setText(textNoun + "\n" + textAdverb);
         }
 
-        private void initSelectable(CountdownPane thisInstance) {
+        private void initSelectable() {
             CONTENT_HBOX.setOnMousePressed(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
                     if (event.getButton() == MouseButton.PRIMARY) {
-                        thisInstance.onPrimaryMousePress();
+                        onPrimaryMousePress();
                     } else {
-                        thisInstance.onSecondaryMousePress(event.getSceneX(), event.getSceneY());
+                        onSecondaryMousePress(event.getSceneX(), event.getSceneY());
                     }
-                    event.consume();
+                    CONTENT_HBOX.setMouseTransparent(true);
                 }
             });
+        }
+
+        /**
+         * For now, drag and drop is specifically COPYING from one folder to another.
+         * Moving may be implemented later, but due to time constraints that should
+         * be done at a much later date.
+         */
+        private void initDraggable() {
+            CONTENT_HBOX.setOnDragDetected((event) -> {
+                this.selected = true;
+                this.applySelectStyle();
+                CountdownPaneView.getInstance().updateMode();
+
+                this.activateDragStyling();
+                final int NUM_OF_SELS = CountdownPaneView.getInstance().getNumOfSelections();
+
+                CONTENT_HBOX.startFullDrag();
+                System.out.println("drag started, yo");
+                DragHandler.init();
+            });
+
+            // TODO CLEANUP OPS HERE
+            CONTENT_HBOX.setOnMouseReleased((event) -> {
+                CONTENT_HBOX.setMouseTransparent(false);
+                this.deactivateDragStyling();
+                DragHandler.close();
+            });
+        }
+
+        private void activateDragStyling() {
+            CountdownPaneView.getInstance().COUNTDOWN_PANES.forEach(pane -> {
+                if (pane.isSelected())
+                    pane.setOpacity(0.3);
+            });
+        }
+
+        private void deactivateDragStyling() {
+            CountdownPaneView.getInstance().COUNTDOWN_PANES.forEach(
+                pane -> { pane.setOpacity(1); });
         }
 
         private void onPrimaryMousePress() {

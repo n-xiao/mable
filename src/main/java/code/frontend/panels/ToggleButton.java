@@ -67,4 +67,12 @@ public abstract class ToggleButton extends Button {
         if (!this.isToggled)
             this.getCustomBorder().setStrokeColour(this.untoggledColour);
     }
+
+    public Color getToggledColour() {
+        return toggledColour;
+    }
+
+    public Color getUntoggledColour() {
+        return untoggledColour;
+    }
 }

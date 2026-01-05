@@ -4,37 +4,30 @@
 
 package code.frontend.panels;
 
+import code.frontend.foundation.CustomLine;
+import code.frontend.foundation.CustomLine.Type;
 import code.frontend.misc.Vals.Colour;
-import code.frontend.panels.CountdownPaneView.ButtonMode;
+import code.frontend.misc.Vals.FontTools;
 import javafx.geometry.Insets;
-import javafx.scene.layout.HBox;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
-/**
- * Manages the logic for selecting, editing, creating and deleting {@link code.backend.Countdown}
- * instances. Does not perform any styling modifications.
- * When there are no selected {@link CountdownPane}, only the add button is shown.
- * When there is 1 {@link CountdownPane} selected, only the deselect, edit and remove buttons are
- * shown. When there is greater than 1 {@link CountdownPane} selected, only the deselect and remove
- * buttons are shown.
- *
- * TODO: implement shift and ctrl/command click
- *
- * TBD: for 1 or greater selections, a tag button will be shown when the system is implemented.
- */
-public class CountdownPaneViewTitle extends HBox {
+public class CountdownPaneViewTitle extends VBox {
     private static CountdownPaneViewTitle instance = null;
 
-    protected static final String DESELECT_DEFAULT_STR = "select all";
-    protected static final String REMOVE_DEFAULT_STR = "remove";
-
-    private Button addBtn; // add button
-    private Button deselectBtn; // deselect
+    private final Label LABEL;
 
     private CountdownPaneViewTitle() {
         this.setBackground(null);
-        this.setFillHeight(true);
+        this.setFillWidth(true);
+        this.LABEL = new Label();
+        configureLabel();
+        this.getChildren().addAll(this.LABEL, createHorizontalLine());
     }
 
     public static CountdownPaneViewTitle getInstance() {
@@ -44,46 +37,26 @@ public class CountdownPaneViewTitle extends HBox {
         return instance;
     }
 
-    private void applyStyling(Button... buttons) {
-        for (Button button : buttons) {
-            HBox.setMargin(button, new Insets(5, 10, 5, 10));
-            button.setMinWidth(130);
-            button.setMinHeight(40);
-        }
-
-        Pane filler = new Pane();
-        filler.setVisible(false);
-        HBox.setHgrow(filler, Priority.ALWAYS);
-        filler.maxHeightProperty().bind(instance.maxHeightProperty());
-
-        this.addBtn.setColour(Colour.BTTN_CREATE);
-        this.deselectBtn.setColour(Colour.BTTN_DESELECT);
-
-        this.getChildren().add(filler);
-        this.getChildren().addAll(buttons);
+    private void configureLabel() {
+        LABEL.setTextFill(Color.WHITE);
+        LABEL.setFont(Font.font(FontTools.FONT_FAM, FontWeight.BOLD, 13));
+        LABEL.setAlignment(Pos.CENTER);
+        LABEL.setMinHeight(20);
     }
 
-    private void updateSelectionButtonIndicators() {
-        // shows the user how many selections there are via the deselectButton
-        String newDeselectButtonLabel = DESELECT_DEFAULT_STR;
-        int numOfSelections = CountdownPaneView.getInstance().getNumOfSelections();
-        if (numOfSelections > 1) {
-            newDeselectButtonLabel = "deselect "
-                + " (" + Integer.toString(numOfSelections) + ")";
-        }
-        this.deselectBtn.setTextLabel(newDeselectButtonLabel);
+    private static Pane createHorizontalLine() {
+        Pane lineContainer = new Pane();
+        lineContainer.setBackground(null);
+        CustomLine line = new CustomLine(3, Type.HORIZONTAL_TYPE);
+        line.setStrokeColour(Colour.TXT_GHOST_2);
+        CustomLine.applyToPane(lineContainer, line);
+        lineContainer.setMaxWidth(Double.MAX_VALUE);
+        lineContainer.setMinHeight(10);
+        VBox.setMargin(lineContainer, new Insets(5, 10, 5, 10));
+        return lineContainer;
     }
 
-    @Deprecated
-    public void setMode() {
-        ButtonMode mode = CountdownPaneView.getInstance().getMode();
-        if (mode.equals(ButtonMode.NO_SELECT)) {
-            addBtn.setEnabled(true);
-            deselectBtn.setEnabled(false);
-        } else {
-            addBtn.setEnabled(false);
-            deselectBtn.setEnabled(true);
-        }
-        updateSelectionButtonIndicators();
+    public void setTitleText(String text) {
+        this.LABEL.setText(text);
     }
 }

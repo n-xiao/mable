@@ -406,6 +406,7 @@ public class SidebarFolderManager extends VBox {
             this.toggle();
             SidebarFolderManager.selectedFolderPane = this;
             StorageHandler.setCurrentlySelectedFolder(this.FOLDER);
+            CountdownPaneViewTitle.getInstance().setTitleText(this.getName());
 
             if (event != null && event.getButton().equals(MouseButton.SECONDARY)) {
                 FolderManagerRCM.spawnInstance(event.getSceneX(), event.getSceneY());

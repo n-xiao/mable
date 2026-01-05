@@ -12,16 +12,16 @@ import javafx.scene.layout.VBox;
 
 public class HomePage extends VBox {
     private static HomePage instance = null;
-    private CountdownPaneViewTitle controls;
+    private CountdownPaneViewTitle title;
     private CountdownPaneView view;
 
     private HomePage() {
-        this.controls = CountdownPaneViewTitle.getInstance();
+        this.title = CountdownPaneViewTitle.getInstance();
         this.view = CountdownPaneView.getInstance();
         this.setFillWidth(true);
         VBox.setVgrow(this.view, Priority.ALWAYS);
         this.setBackground(Colour.createBG(Colour.BACKGROUND, 0, 0));
-        this.getChildren().addAll(this.controls, this.view);
+        this.getChildren().addAll(this.title, this.view);
     }
 
     public static HomePage getInstance() {

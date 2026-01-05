@@ -215,11 +215,11 @@ public class SidebarFolderSelector extends VBox {
     private void moveNewFolderButton() {
         double viewport = this.SCROLL_PANE.getViewportBounds().getHeight();
         double viewable = this.SCROLL_PANE_CONTENT.getBoundsInParent().getHeight();
-        if (viewport > viewable) {
+        if (viewport > viewable + this.NEW_FOLDER_BTTN.getBoundsInLocal().getHeight()) {
             this.NEW_FOLDER_BTTN_CONTAINER.setCenter(null);
             if (!this.SCROLL_PANE_CONTENT.getChildren().contains(this.NEW_FOLDER_BTTN))
                 this.SCROLL_PANE_CONTENT.getChildren().add(this.NEW_FOLDER_BTTN);
-        } else {
+        } else if (viewport < viewable) {
             this.SCROLL_PANE_CONTENT.getChildren().remove(this.NEW_FOLDER_BTTN);
             this.NEW_FOLDER_BTTN_CONTAINER.setCenter(this.NEW_FOLDER_BTTN);
         }

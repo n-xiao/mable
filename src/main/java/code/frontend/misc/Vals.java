@@ -55,6 +55,7 @@ public class Vals {
         public static final Color CD_TOMORROW = Color.rgb(80, 169, 250);
         public static final Color CD_COMPLETED = Color.rgb(40, 40, 60);
         public static final Color GHOST = Color.rgb(50, 50, 52);
+        public static final Color GHOST_2 = Color.rgb(30, 30, 42);
 
         public static Background createBG(Color c, double radius, double ins) {
             BackgroundFill bgFill = new BackgroundFill(c, new CornerRadii(radius), new Insets(ins));

@@ -28,6 +28,7 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.TreeSet;
 import javafx.animation.FadeTransition;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -203,7 +204,9 @@ public class SidebarFolderSelector extends VBox {
             LINE.setPadding(10);
             CustomLine.applyToPane(DIVIDER, LINE);
             DIVIDER.maxWidthProperty().bind(SCROLL_PANE_CONTENT.widthProperty());
+            DIVIDER.setOpacity(0.4);
             DIVIDER.setPrefHeight(10);
+            VBox.setMargin(DIVIDER, new Insets(5, 0, 5, 0));
             this.SCROLL_PANE_CONTENT.getChildren().add(DIVIDER);
         }
         // then adds protected folders
@@ -251,8 +254,8 @@ public class SidebarFolderSelector extends VBox {
         // this.NEW_FOLDER_BTTN_CONTAINER.setCenter(CANCEL_BTTN);
         // prevent user from clicking the add button (again)
         this.SCROLL_PANE_CONTENT.getChildren().remove(this.NEW_FOLDER_BTTN);
+        this.NEW_FOLDER_BTTN_CONTAINER.setCenter(null);
 
-        this.SCROLL_PANE.setVvalue(this.SCROLL_PANE.getVmax()); // scroll all the way down
         final String ERR_EXISTS = "you already have a folder with that name!";
         final String ERR_BLANK = "that's... not a name";
         final VBox CONTAINER = new VBox();
@@ -320,6 +323,13 @@ public class SidebarFolderSelector extends VBox {
 
         CONTAINER.getChildren().addAll(TOP_HINT, NAME_INPUT, HINT);
         this.SCROLL_PANE_CONTENT.getChildren().add(CONTAINER);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                NAME_INPUT.getTextField().requestFocus();
+                SCROLL_PANE.setVvalue(1); // scroll all the way down
+            }
+        });
     }
 
     private class FolderPane extends ToggleButton {
@@ -336,7 +346,7 @@ public class SidebarFolderSelector extends VBox {
             this.getCustomBorder().setCornerDeviation(0.017);
             this.getCustomBorder().setDeviation(0.02);
             this.setToggledColour(Colour.SELECTED);
-            this.setUntoggledColour(Colour.GHOST);
+            this.setUntoggledColour(Colour.GHOST_2);
             this.setMinHeight(40);
             this.getLabel().setFont(Font.font(FontTools.FONT_FAM, 13));
             VBox.setMargin(this, new Insets(3, 2.5, 5, 2.5));

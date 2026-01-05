@@ -170,6 +170,7 @@ public class SidebarFolderManager extends VBox {
         // StorageHandler.setCurrentlySelectedFolder(prevFolder.FOLDER);
         // selectedFolderPane = prevFolder;
 
+        this.refreshFolderPaneData();
         prevFolder.executeOnClick(null);
     }
 
@@ -275,7 +276,7 @@ public class SidebarFolderManager extends VBox {
         this.SCROLL_PANE_CONTENT.getChildren().remove(this.NEW_FOLDER_BTTN);
         this.NEW_FOLDER_BTTN_CONTAINER.setCenter(null);
 
-        final String ERR_EXISTS = "you already have a folder with that name!";
+        final String ERR_EXISTS = "no duplicate names!";
         final String ERR_BLANK = "that's... not a name";
         final VBox CONTAINER = new VBox();
         CONTAINER.setFillWidth(true);
@@ -302,13 +303,18 @@ public class SidebarFolderManager extends VBox {
         VBox.setMargin(CONTAINER, new Insets(10, 2.5, 0, 2.5));
         final InputField NAME_INPUT = new InputField();
         NAME_INPUT.getTextField().setText(nameToEdit);
-        NAME_INPUT.getCustomBorder().setCornerOffset(0.3);
+        NAME_INPUT.getCustomBorder().setCornerOffset(0.34);
         NAME_INPUT.getCustomBorder().setDeviation(0.02);
         NAME_INPUT.getCustomBorder().setCornerDeviation(0.02);
-        NAME_INPUT.setFieldMargins(new Insets(5));
+        NAME_INPUT.setFieldMargins(new Insets(3));
         NAME_INPUT.getTextField().setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
                 String input = NAME_INPUT.getTextField().getText();
+                if (input.equals(nameToEdit)) {
+                    instance.refreshFolderPaneData();
+                    instance.repopulate();
+                }
+
                 if (input.isBlank()) {
                     HINT.setText(ERR_BLANK);
                     playHintTransition();
@@ -408,7 +414,8 @@ public class SidebarFolderManager extends VBox {
             StorageHandler.setCurrentlySelectedFolder(this.FOLDER);
             CountdownPaneViewTitle.getInstance().setTitleText(this.getName());
 
-            if (event != null && event.getButton().equals(MouseButton.SECONDARY)) {
+            if (!this.FOLDER.isProtectedFolder() && event != null
+                && event.getButton().equals(MouseButton.SECONDARY)) {
                 FolderManagerRCM.spawnInstance(event.getSceneX(), event.getSceneY());
             }
         }

@@ -53,6 +53,8 @@ public class DragHandler extends Region {
     }
 
     public static void close() {
+        if (instance == null)
+            return;
         MC.getChildren().remove(instance);
         MC.getScene().setOnMouseDragOver(null);
         MC.widthProperty().removeListener(instance.WIDTH_LISTENER);

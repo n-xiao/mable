@@ -33,7 +33,7 @@ public class FolderManagerRCM extends RightClickMenuTemplate {
         instance = null;
     }
 
-    private static final double WIDTH = 160;
+    private static final double WIDTH = 155;
     private static final double HEIGHT = 130;
 
     private final Button EDIT;
@@ -41,9 +41,6 @@ public class FolderManagerRCM extends RightClickMenuTemplate {
     private final Button MARK_ALL_COMPLETE;
 
     private FolderManagerRCM() {
-        final boolean SELECTED_ARE_COMPLETED =
-            CountdownPaneView.getInstance().allSelectedAreCompleted();
-
         Button edit = new Button("Edit name") {
             @Override
             public void executeOnClick(MouseEvent event) {
@@ -60,7 +57,11 @@ public class FolderManagerRCM extends RightClickMenuTemplate {
             }
         };
 
-        Button mark = new Button("Mark as complete") {
+        final boolean SELECTED_ARE_COMPLETED =
+            CountdownPaneView.getInstance().allSelectedAreCompleted();
+        final String MARK_STRING =
+            (SELECTED_ARE_COMPLETED) ? "Mark as incomplete" : "Mark as complete";
+        Button mark = new Button(MARK_STRING) {
             @Override
             public void executeOnClick(MouseEvent event) {
                 CountdownPaneView.getInstance().selectAll();

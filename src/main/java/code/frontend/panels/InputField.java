@@ -96,6 +96,10 @@ public class InputField extends BorderPane {
         border.setStrokeColour(borderColour);
     }
 
+    public CustomBox getCustomBorder() {
+        return this.border;
+    }
+
     public void setCustomBorder(CustomBox border) {
         this.getChildren().remove(this.border);
         this.border.widthProperty().unbind();

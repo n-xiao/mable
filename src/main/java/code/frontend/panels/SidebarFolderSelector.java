@@ -283,6 +283,10 @@ public class SidebarFolderSelector extends VBox {
         VBox.setMargin(CONTAINER, new Insets(10, 2.5, 0, 2.5));
         final InputField NAME_INPUT = new InputField();
         NAME_INPUT.getTextField().setText(nameToEdit);
+        NAME_INPUT.getCustomBorder().setCornerOffset(0.3);
+        NAME_INPUT.getCustomBorder().setDeviation(0.02);
+        NAME_INPUT.getCustomBorder().setCornerDeviation(0.02);
+        NAME_INPUT.setFieldMargins(new Insets(5));
         NAME_INPUT.getTextField().setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
                 String input = NAME_INPUT.getTextField().getText();

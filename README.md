@@ -22,6 +22,15 @@ For everyone else,
  - erm... *checks notes...* we're still in a pre-release state.
  - You come back tomorrow ok?
 
+## Roadmap
+All new features are paused for the time being while I work on getting the documentation setup.
+I've rushed this a little bit *(I WAS SUPER EXCITED OK?)*, so there's loads of messy code to clean up and commenting
+that needs to be done. I myself can sometimes get lost in my own code. Other than that, here's a quick list
+of things I wanna get done sometime later:
+ - User settings + light mode option
+ - Toast notifications (e.g "added new task!" or "created new folder!")
+ - Undo and redo function (this one might be tough)
+
 ## Contributing
 // TODO
 

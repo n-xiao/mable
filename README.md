@@ -1,6 +1,6 @@
 # Mable
 > [!IMPORTANT]
-> Mable is in an open-beta stage and is only suitable for use by testers/developers.
+> Mable is in open-beta: it is only suitable for use by testers and developers.
 >
 
 ## About
@@ -12,11 +12,6 @@ Mable is partially inspired by the [Bears Countdown App](https://apps.apple.com/
 and the visual aesthetics of [Excalidraw](https://github.com/excalidraw/excalidraw).
 
 ## Installation Guide
-
-> [!NOTE]
-> The current version of Mable **cannot automatically update**.
->
-
 For developers,
  - Clone the repository and run `./gradlew build` followed by `./gradlew run` in the project root directory.
  - Mable will store all data in JSON format in the folder `mable_data`,

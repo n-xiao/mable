@@ -524,14 +524,11 @@ public class CountdownPaneView extends ScrollPane {
                 CountdownPaneView.getInstance().updateMode();
 
                 this.activateDragStyling();
-                final int NUM_OF_SELS = CountdownPaneView.getInstance().getNumOfSelections();
 
                 CONTENT_HBOX.startFullDrag();
-                System.out.println("drag started, yo");
                 DragHandler.init();
             });
 
-            // TODO CLEANUP OPS HERE
             CONTENT_HBOX.setOnMouseReleased((event) -> {
                 CONTENT_HBOX.setMouseTransparent(false);
                 this.deactivateDragStyling();

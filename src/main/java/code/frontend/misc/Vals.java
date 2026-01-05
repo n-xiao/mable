@@ -38,8 +38,11 @@ public class Vals {
         public static final Color BTTN_DESELECT = Color.rgb(124, 125, 252);
         public static final Color BTTN_MARK_COMPLETE = Color.rgb(67, 161, 237);
         public static final Color CD_OVERDUE = Color.rgb(254, 131, 132);
+        public static final Color CD_OVERDUE_2 = Color.rgb(64, 43, 51);
         public static final Color CD_TODAY = Color.rgb(240, 139, 255);
+        public static final Color CD_TODAY_2 = Color.rgb(65, 43, 75);
         public static final Color CD_TOMORROW = Color.rgb(80, 169, 250);
+        public static final Color CD_TOMORROW_2 = Color.rgb(32, 49, 75);
         public static final Color CD_COMPLETED = Color.rgb(40, 40, 60);
         public static final Color GHOST = Color.rgb(50, 50, 52);
         public static final Color GHOST_2 = Color.rgb(30, 30, 42);

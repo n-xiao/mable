@@ -227,6 +227,25 @@ public class StorageHandler {
         }
     }
 
+    public static void removeSelectedFolder() {
+        if (currentlySelectedFolder.isProtectedFolder())
+            return;
+        FOLDERS.remove(currentlySelectedFolder);
+        DELETED_FOLDERS.add(currentlySelectedFolder);
+    }
+
+    public static boolean setSelectedFolderName(String name) {
+        if (name.equals(currentlySelectedFolder.getName()))
+            return true;
+
+        if (folderExists(name))
+            return false;
+
+        currentlySelectedFolder.setName(name);
+
+        return true;
+    }
+
     public static TreeSet<CountdownFolder> getFolders() {
         return FOLDERS;
     }

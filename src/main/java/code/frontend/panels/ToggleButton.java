@@ -4,6 +4,7 @@
 
 package code.frontend.panels;
 
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 public abstract class ToggleButton extends Button {
@@ -35,7 +36,7 @@ public abstract class ToggleButton extends Button {
     }
 
     @Override
-    public void executeOnClick() {
+    public void executeOnClick(MouseEvent event) {
         this.isToggled = !this.isToggled;
         if (this.isToggled) {
             // if toggled on, apply toggle style

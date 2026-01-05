@@ -91,7 +91,7 @@ public class CountdownPaneView extends ScrollPane {
             if (event.getButton() == MouseButton.SECONDARY)
                 CountdownViewRCM.spawnInstance(event.getSceneX(), event.getSceneY());
             else
-                CountdownViewRCM.despawn();
+                RightClickMenuTemplate.despawnAll();
         });
         this.setContent(this.FLOW_PANE);
     }
@@ -518,7 +518,7 @@ public class CountdownPaneView extends ScrollPane {
          */
         private void initDraggable() {
             CONTENT_HBOX.setOnDragDetected((event) -> {
-                CountdownViewRCM.despawn();
+                RightClickMenuTemplate.despawnAll();
                 this.selected = true;
                 this.applySelectStyle();
                 CountdownPaneView.getInstance().updateMode();
@@ -556,7 +556,7 @@ public class CountdownPaneView extends ScrollPane {
             }
             this.selected = !this.selected;
             updateMode();
-            CountdownViewRCM.despawn();
+            RightClickMenuTemplate.despawnAll();
         }
 
         private void onSecondaryMousePress(double x, double y) {

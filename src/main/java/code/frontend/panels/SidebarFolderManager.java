@@ -9,6 +9,7 @@ import code.backend.StorageHandler;
 import code.frontend.foundation.CustomBox;
 import code.frontend.foundation.CustomLine;
 import code.frontend.foundation.CustomLine.Type;
+import code.frontend.gui.FolderManagerRCM;
 import code.frontend.misc.Vals.Colour;
 import code.frontend.misc.Vals.FontTools;
 import code.frontend.panels.dragndrop.DragHandler;
@@ -28,6 +29,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -37,15 +40,16 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.util.Duration;
 
-public class SidebarFolderSelector extends VBox {
+public class SidebarFolderManager extends VBox {
     private static final int PREF_HEIGHT = 600;
     private static final int MIN_HEIGHT = 300;
 
-    private static SidebarFolderSelector instance = null;
+    private static FolderPane selectedFolderPane;
+    private static SidebarFolderManager instance = null;
 
-    public static SidebarFolderSelector getInstance() {
+    public static SidebarFolderManager getInstance() {
         if (instance == null) {
-            instance = new SidebarFolderSelector();
+            instance = new SidebarFolderManager();
             // defines search bar function
             instance.SEARCH_FIELD.getTextField().setOnKeyTyped(new EventHandler<KeyEvent>() {
                 @Override
@@ -63,7 +67,7 @@ public class SidebarFolderSelector extends VBox {
             instance.NEW_FOLDER_BTTN.setOnMouseClicked(
                 event -> { instance.triggerNewFolderInput(""); });
 
-            instance.INCOMPLETED_FOLDER_PANE.executeOnClick(); // select the folder on startup
+            instance.INCOMPLETED_FOLDER_PANE.executeOnClick(null); // select the folder on startup
         }
 
         return instance;
@@ -77,10 +81,10 @@ public class SidebarFolderSelector extends VBox {
     private final BorderPane NEW_FOLDER_BTTN_CONTAINER;
 
     private final FolderPane COMPLETED_FOLDER_PANE;
-    private final FolderPane INCOMPLETED_FOLDER_PANE;
+    public final FolderPane INCOMPLETED_FOLDER_PANE;
     private Pane scrollPaneWrapper;
 
-    private SidebarFolderSelector() {
+    private SidebarFolderManager() {
         this.scrollPaneWrapper = new Pane();
         // need to make sure searchfield is not stuck on selected
         this.SEARCH_FIELD = new InputField();
@@ -155,12 +159,37 @@ public class SidebarFolderSelector extends VBox {
         this.SCROLL_PANE.setContent(SCROLL_PANE_CONTENT); // dont move this; don't even think
     }
 
+    public void deleteSelectedFolder() {
+        int index = this.FOLDER_PANES.indexOf(selectedFolderPane);
+        if (index == -1)
+            return;
+
+        StorageHandler.removeSelectedFolder();
+        FolderPane prevFolder =
+            (index > 0) ? this.FOLDER_PANES.get(--index) : this.INCOMPLETED_FOLDER_PANE;
+        // StorageHandler.setCurrentlySelectedFolder(prevFolder.FOLDER);
+        // selectedFolderPane = prevFolder;
+
+        prevFolder.executeOnClick(null);
+    }
+
+    public void editSelectedFolder() {
+        this.SCROLL_PANE_CONTENT.getChildren().clear();
+        for (FolderPane folderPane : FOLDER_PANES) {
+            if (folderPane.hasSameName(selectedFolderPane)) {
+                this.triggerNewFolderInput(folderPane.getName());
+                break;
+            }
+            this.SCROLL_PANE_CONTENT.getChildren().add(folderPane);
+        }
+    }
+
     /**
      * This only initialises the collection that holds FolderPanes based on backend data.
      * It does not update the GUI in any way. Call repopulate() after calling
      * this method to trigger a GUI update with new data.
      */
-    private void refreshFolderPaneData() {
+    public void refreshFolderPaneData() {
         this.FOLDER_PANES.clear();
         TreeSet<CountdownFolder> folders = StorageHandler.getFolders();
         for (CountdownFolder countdownFolder : folders) {
@@ -356,14 +385,14 @@ public class SidebarFolderSelector extends VBox {
                 CountdownPaneView.getInstance().addAllSelectedToFolder(this.FOLDER);
                 this.untoggle();
                 DragHandler.close();
-                this.executeOnClick();
+                this.executeOnClick(event);
             });
         }
 
         @Override
-        public void executeOnClick() {
+        public void executeOnClick(MouseEvent event) {
             CountdownPaneView.getInstance().deselectAll(); // important
-            SidebarFolderSelector.getInstance().FOLDER_PANES.forEach(folder -> {
+            SidebarFolderManager.getInstance().FOLDER_PANES.forEach(folder -> {
                 if (!this.hasSameName(folder))
                     folder.untoggle();
             });
@@ -375,7 +404,12 @@ public class SidebarFolderSelector extends VBox {
                 COMPLETED_FOLDER_PANE.untoggle();
 
             this.toggle();
+            SidebarFolderManager.selectedFolderPane = this;
             StorageHandler.setCurrentlySelectedFolder(this.FOLDER);
+
+            if (event != null && event.getButton().equals(MouseButton.SECONDARY)) {
+                FolderManagerRCM.spawnInstance(event.getSceneX(), event.getSceneY());
+            }
         }
 
         public boolean hasSameName(FolderPane otherPane) {

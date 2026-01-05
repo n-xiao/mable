@@ -9,7 +9,7 @@ import java.util.TreeSet;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE)
 public class CountdownFolder {
-    protected enum SpecialType { ALL_INCOMPLETE, ALL_COMPLETE }
+    public enum SpecialType { ALL_INCOMPLETE, ALL_COMPLETE }
 
     private String name;
     private final SpecialType TYPE;
@@ -77,6 +77,10 @@ public class CountdownFolder {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public SpecialType getType() {
+        return TYPE;
     }
 
     public boolean isProtectedFolder() {

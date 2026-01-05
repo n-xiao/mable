@@ -11,6 +11,7 @@ import code.frontend.panels.CountdownPaneView;
 import code.frontend.panels.DateInputField;
 import code.frontend.panels.InputField;
 import java.time.LocalDate;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 public class EditWindow extends ConfigWindowTemplate {
@@ -59,7 +60,7 @@ public class EditWindow extends ConfigWindowTemplate {
     protected Button createButton() {
         return new Button("confirm edits") {
             @Override
-            public void executeOnClick() {
+            public void executeOnClick(MouseEvent event) {
                 String newName = getNameField().getTextField().getText();
                 LocalDate newDue = getDateField().getLocalDateInput(false);
                 countdown.setName(newName);

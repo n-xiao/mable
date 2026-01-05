@@ -1,3 +1,7 @@
+/*
+   Copyright (C) 2026  Nicholas Siow <nxiao.dev@gmail.com>
+*/
+
 package code.frontend.gui;
 
 import code.frontend.foundation.CustomBox;
@@ -5,7 +9,6 @@ import code.frontend.foundation.CustomLine;
 import code.frontend.foundation.CustomLine.Type;
 import code.frontend.misc.Vals.Colour;
 import code.frontend.panels.Button;
-import java.util.HashSet;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -42,6 +45,10 @@ public abstract class RightClickMenuTemplate extends VBox {
         this.COLOURS = colours;
         initStyling();
         initButtonStylings();
+    }
+
+    public static void despawnAll() {
+        CountdownViewRCM.despawn();
     }
 
     public void openAt(double x, double y) {

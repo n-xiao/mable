@@ -9,6 +9,7 @@ import code.frontend.panels.Button;
 import code.frontend.panels.CountdownPaneView;
 import code.frontend.panels.CountdownPaneView.ButtonMode;
 import code.frontend.windows.AddWindow;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 /**
@@ -45,7 +46,7 @@ public class CountdownViewRCM extends RightClickMenuTemplate {
         instance.openAt(x, y);
     }
 
-    public static void despawn() {
+    protected static void despawn() {
         if (instance == null)
             return;
         instance.close();
@@ -67,14 +68,14 @@ public class CountdownViewRCM extends RightClickMenuTemplate {
 
         Button create = new Button(CREATE_STR) {
             @Override
-            public void executeOnClick() {
+            public void executeOnClick(MouseEvent event) {
                 AddWindow.getInstance();
                 CountdownViewRCM.despawn();
             }
         };
 
         Button selector = new Button(SELECTOR_STR) {
-            public void executeOnClick() {
+            public void executeOnClick(MouseEvent event) {
                 if (NUM_OF_SELECTIONS > 0)
                     CountdownPaneView.getInstance().deselectAll();
                 else
@@ -85,21 +86,21 @@ public class CountdownViewRCM extends RightClickMenuTemplate {
 
         Button markAsComplete = new Button(MARK_COMPLETE_STR) {
             @Override
-            public void executeOnClick() {
+            public void executeOnClick(MouseEvent event) {
                 CountdownPaneView.getInstance().markSelectedAsComplete(!SELECTED_ARE_COMPLETED);
                 CountdownViewRCM.despawn();
             }
         };
         Button edit = new Button(EDIT_STR) {
             @Override
-            public void executeOnClick() {
+            public void executeOnClick(MouseEvent event) {
                 CountdownPaneView.getInstance().editSelected();
                 CountdownViewRCM.despawn();
             }
         };
         Button delete = new Button(DELETE_STR) {
             @Override
-            public void executeOnClick() {
+            public void executeOnClick(MouseEvent event) {
                 CountdownPaneView.getInstance().deleteSelected();
                 CountdownViewRCM.despawn();
             }

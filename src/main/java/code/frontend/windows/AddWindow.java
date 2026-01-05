@@ -9,6 +9,7 @@ import code.backend.StorageHandler;
 import code.frontend.panels.Button;
 import code.frontend.panels.CountdownPaneView;
 import java.time.LocalDate;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 public class AddWindow extends ConfigWindowTemplate {
@@ -33,7 +34,7 @@ public class AddWindow extends ConfigWindowTemplate {
     protected Button createButton() {
         return new Button("create") {
             @Override
-            public void executeOnClick() {
+            public void executeOnClick(MouseEvent event) {
                 String name = getNameField().getTextField().getText();
                 LocalDate due = getDateField().getLocalDateInput(false);
                 if (due == null)

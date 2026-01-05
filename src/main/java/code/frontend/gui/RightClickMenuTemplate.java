@@ -18,8 +18,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 public abstract class RightClickMenuTemplate extends VBox {
-    private static final HashSet<RightClickMenuTemplate> MENUS =
-        new HashSet<RightClickMenuTemplate>();
     private static final double BG_RADIUS = 12;
     private static final double BG_INSETS = 4;
 
@@ -37,13 +35,6 @@ public abstract class RightClickMenuTemplate extends VBox {
     private final Button[] BUTTONS;
     private final Color[] COLOURS;
 
-    public static void despawnAll() {
-        for (RightClickMenuTemplate menu : MENUS) {
-            menu.close();
-        }
-        MENUS.clear();
-    }
-
     public RightClickMenuTemplate(double width, double height, Button[] buttons, Color[] colours) {
         this.WIDTH = width;
         this.HEIGHT = height;
@@ -51,7 +42,6 @@ public abstract class RightClickMenuTemplate extends VBox {
         this.COLOURS = colours;
         initStyling();
         initButtonStylings();
-        MENUS.add(this);
     }
 
     public void openAt(double x, double y) {
@@ -64,7 +54,7 @@ public abstract class RightClickMenuTemplate extends VBox {
         MC.getChildren().add(this);
     }
 
-    public void close() {
+    protected void close() {
         final MainContainer MC = MainContainer.getInstance();
         MC.getChildren().remove(this);
     }

@@ -24,7 +24,7 @@ import code.backend.StorageHandler;
 import code.frontend.foundation.CustomBox;
 import code.frontend.foundation.CustomLine;
 import code.frontend.foundation.CustomLine.Type;
-import code.frontend.gui.RightClickMenu;
+import code.frontend.gui.CountdownViewRCM;
 import code.frontend.gui.RightClickMenuTemplate;
 import code.frontend.misc.Vals;
 import code.frontend.misc.Vals.Colour;
@@ -102,7 +102,9 @@ public class CountdownPaneView extends ScrollPane {
         this.setVbarPolicy(ScrollBarPolicy.NEVER);
         this.FLOW_PANE.setOnMousePressed(event -> {
             if (event.getButton() == MouseButton.SECONDARY)
-                RightClickMenu.spawnInstance(event.getSceneX(), event.getSceneY());
+                CountdownViewRCM.spawnInstance(event.getSceneX(), event.getSceneY());
+            else
+                CountdownViewRCM.despawn();
         });
         this.setContent(this.FLOW_PANE);
     }
@@ -529,7 +531,7 @@ public class CountdownPaneView extends ScrollPane {
          */
         private void initDraggable() {
             CONTENT_HBOX.setOnDragDetected((event) -> {
-                RightClickMenuTemplate.despawnAll();
+                CountdownViewRCM.despawn();
                 this.selected = true;
                 this.applySelectStyle();
                 CountdownPaneView.getInstance().updateMode();
@@ -570,7 +572,7 @@ public class CountdownPaneView extends ScrollPane {
             }
             this.selected = !this.selected;
             updateMode();
-            RightClickMenuTemplate.despawnAll();
+            CountdownViewRCM.despawn();
         }
 
         private void onSecondaryMousePress(double x, double y) {
@@ -579,7 +581,7 @@ public class CountdownPaneView extends ScrollPane {
             applySelectStyle();
             this.selected = true;
             updateMode(); // needs to be called before RightClickMenu opens
-            RightClickMenu.spawnInstance(x, y);
+            CountdownViewRCM.spawnInstance(x, y);
         }
 
         public void applyDeselectStyle(boolean withFadeOut) {

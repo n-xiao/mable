@@ -40,8 +40,8 @@ import javafx.scene.paint.Color;
  * oh btw this is like the neatest class ever...
  *
  */
-public class RightClickMenu extends RightClickMenuTemplate {
-    private static RightClickMenu instance = null;
+public class CountdownViewRCM extends RightClickMenuTemplate {
+    private static CountdownViewRCM instance = null;
 
     private static final double WIDTH = 200;
     private static final double HEIGHT = 225;
@@ -54,7 +54,7 @@ public class RightClickMenu extends RightClickMenuTemplate {
 
     public static void spawnInstance(double x, double y) {
         if (instance == null)
-            instance = new RightClickMenu();
+            instance = new CountdownViewRCM();
         instance.openAt(x, y);
     }
 
@@ -62,9 +62,10 @@ public class RightClickMenu extends RightClickMenuTemplate {
         if (instance == null)
             return;
         instance.close();
+        instance = null;
     }
 
-    private RightClickMenu() {
+    private CountdownViewRCM() {
         final boolean SELECTED_ARE_COMPLETED =
             CountdownPaneView.getInstance().allSelectedAreCompleted();
         final int NUM_OF_SELECTIONS = CountdownPaneView.getInstance().getNumOfSelections();
@@ -81,7 +82,7 @@ public class RightClickMenu extends RightClickMenuTemplate {
             @Override
             public void executeOnClick() {
                 AddWindow.getInstance();
-                instance.close();
+                CountdownViewRCM.despawn();
             }
         };
 
@@ -91,7 +92,7 @@ public class RightClickMenu extends RightClickMenuTemplate {
                     CountdownPaneView.getInstance().deselectAll();
                 else
                     CountdownPaneView.getInstance().selectAll();
-                instance.close();
+                CountdownViewRCM.despawn();
             };
         };
 
@@ -99,21 +100,21 @@ public class RightClickMenu extends RightClickMenuTemplate {
             @Override
             public void executeOnClick() {
                 CountdownPaneView.getInstance().markSelectedAsComplete(!SELECTED_ARE_COMPLETED);
-                instance.close();
+                CountdownViewRCM.despawn();
             }
         };
         Button edit = new Button(EDIT_STR) {
             @Override
             public void executeOnClick() {
                 CountdownPaneView.getInstance().editSelected();
-                instance.close();
+                CountdownViewRCM.despawn();
             }
         };
         Button delete = new Button(DELETE_STR) {
             @Override
             public void executeOnClick() {
                 CountdownPaneView.getInstance().deleteSelected();
-                instance.close();
+                CountdownViewRCM.despawn();
             }
         };
 

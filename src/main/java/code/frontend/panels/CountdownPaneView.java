@@ -25,6 +25,7 @@ import code.frontend.foundation.CustomBox;
 import code.frontend.foundation.CustomLine;
 import code.frontend.foundation.CustomLine.Type;
 import code.frontend.gui.RightClickMenu;
+import code.frontend.gui.RightClickMenuTemplate;
 import code.frontend.misc.Vals;
 import code.frontend.misc.Vals.Colour;
 import code.frontend.misc.Vals.GraphicalUI;
@@ -100,9 +101,8 @@ public class CountdownPaneView extends ScrollPane {
         this.setHbarPolicy(ScrollBarPolicy.NEVER);
         this.setVbarPolicy(ScrollBarPolicy.NEVER);
         this.FLOW_PANE.setOnMousePressed(event -> {
-            RightClickMenu.close();
             if (event.getButton() == MouseButton.SECONDARY)
-                RightClickMenu.openAt(event.getSceneX(), event.getSceneY());
+                RightClickMenu.spawnInstance(event.getSceneX(), event.getSceneY());
         });
         this.setContent(this.FLOW_PANE);
     }
@@ -529,6 +529,7 @@ public class CountdownPaneView extends ScrollPane {
          */
         private void initDraggable() {
             CONTENT_HBOX.setOnDragDetected((event) -> {
+                RightClickMenuTemplate.despawnAll();
                 this.selected = true;
                 this.applySelectStyle();
                 CountdownPaneView.getInstance().updateMode();
@@ -569,7 +570,7 @@ public class CountdownPaneView extends ScrollPane {
             }
             this.selected = !this.selected;
             updateMode();
-            RightClickMenu.close();
+            RightClickMenuTemplate.despawnAll();
         }
 
         private void onSecondaryMousePress(double x, double y) {
@@ -578,7 +579,7 @@ public class CountdownPaneView extends ScrollPane {
             applySelectStyle();
             this.selected = true;
             updateMode(); // needs to be called before RightClickMenu opens
-            RightClickMenu.openAt(x, y);
+            RightClickMenu.spawnInstance(x, y);
         }
 
         public void applyDeselectStyle(boolean withFadeOut) {

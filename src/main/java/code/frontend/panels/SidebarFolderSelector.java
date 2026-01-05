@@ -369,6 +369,7 @@ public class SidebarFolderSelector extends VBox {
                 CountdownPaneView.getInstance().addAllSelectedToFolder(this.FOLDER);
                 this.untoggle();
                 DragHandler.close();
+                this.executeOnClick();
             });
         }
 

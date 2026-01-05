@@ -39,7 +39,7 @@ public class CountdownPaneViewTitle extends VBox {
 
     private void configureLabel() {
         LABEL.setTextFill(Color.WHITE);
-        LABEL.setFont(Font.font(FontTools.FONT_FAM, FontWeight.BOLD, 13));
+        LABEL.setFont(Font.font(FontTools.FONT_FAM, FontWeight.BOLD, 15));
         LABEL.setAlignment(Pos.CENTER);
         LABEL.setMinHeight(20);
     }
@@ -52,7 +52,8 @@ public class CountdownPaneViewTitle extends VBox {
         CustomLine.applyToPane(lineContainer, line);
         lineContainer.setMaxWidth(Double.MAX_VALUE);
         lineContainer.setMinHeight(10);
-        VBox.setMargin(lineContainer, new Insets(5, 10, 5, 10));
+        lineContainer.setOpacity(0.5);
+        VBox.setMargin(lineContainer, new Insets(5, 0, 5, 0));
         return lineContainer;
     }
 

@@ -49,6 +49,7 @@ public abstract class RightClickMenuTemplate extends VBox {
 
     public static void despawnAll() {
         CountdownViewRCM.despawn();
+        FolderManagerRCM.despawn();
     }
 
     public void openAt(double x, double y) {

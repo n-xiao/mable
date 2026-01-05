@@ -34,7 +34,7 @@ public class FolderManagerRCM extends RightClickMenuTemplate {
     }
 
     private static final double WIDTH = 200;
-    private static final double HEIGHT = 225;
+    private static final double HEIGHT = 200;
 
     private final Button EDIT;
     private final Button REMOVE;

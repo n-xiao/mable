@@ -11,6 +11,8 @@ import code.frontend.misc.Vals.Colour;
 import code.frontend.misc.Vals.FontTools;
 import code.frontend.misc.Vals.GraphicalUI;
 import code.frontend.panels.CountdownPaneView;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
 import javafx.scene.control.Label;
@@ -41,10 +43,8 @@ public class DragHandler extends Region {
             MC.getScene().setOnMouseDragOver(
                 (event) -> { instance.CONTAINER.relocate(event.getSceneX(), event.getSceneY()); });
 
-            MC.widthProperty().addListener(
-                (event) -> { instance.resize(MC.getWidth(), MC.getHeight()); });
-            MC.heightProperty().addListener(
-                (event) -> { instance.resize(MC.getWidth(), MC.getHeight()); });
+            MC.widthProperty().addListener(instance.WIDTH_LISTENER);
+            MC.heightProperty().addListener(instance.HEIGHT_LISTENER);
 
             MC.getChildren().add(instance);
         }
@@ -54,12 +54,31 @@ public class DragHandler extends Region {
 
     public static void close() {
         MC.getChildren().remove(instance);
+        MC.getScene().setOnMouseDragOver(null);
+        MC.widthProperty().removeListener(instance.WIDTH_LISTENER);
+        MC.heightProperty().removeListener(instance.HEIGHT_LISTENER);
         instance = null;
     }
 
     private final Pane CONTAINER;
 
+    private final ChangeListener<Number> WIDTH_LISTENER;
+    private final ChangeListener<Number> HEIGHT_LISTENER;
+
     public DragHandler() {
+        this.WIDTH_LISTENER = new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                    instance.resize(MC.getWidth(), MC.getHeight());
+                }
+        };
+        this.HEIGHT_LISTENER = new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                    instance.resize(MC.getWidth(), MC.getHeight());
+                }
+        };
+
         this.CONTAINER = new StackPane();
         this.CONTAINER.setManaged(false);
         this.CONTAINER.setCacheHint(CacheHint.SPEED);

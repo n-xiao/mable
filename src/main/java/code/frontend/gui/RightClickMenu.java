@@ -27,6 +27,7 @@ import code.frontend.panels.CountdownPaneView.ButtonMode;
 import code.frontend.windows.AddWindow;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -190,6 +191,7 @@ public class RightClickMenu extends VBox {
             button.getCustomBorder().setVisible(false);
             button.getLabel().setAlignment(Pos.CENTER_LEFT);
             button.setConsumeEvent(true);
+            button.setCursor(Cursor.DEFAULT);
             VBox.setMargin(button, new Insets(0, RIGHTLEFT_INSET, 0, RIGHTLEFT_INSET));
         }
 

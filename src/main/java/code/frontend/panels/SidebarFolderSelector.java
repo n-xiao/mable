@@ -35,6 +35,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
@@ -235,6 +236,7 @@ public class SidebarFolderSelector extends VBox {
         this.NEW_FOLDER_BTTN.setAlignment(Pos.CENTER);
         this.NEW_FOLDER_BTTN.setMinHeight(40);
         this.NEW_FOLDER_BTTN.maxWidthProperty().bind(this.widthProperty());
+        this.NEW_FOLDER_BTTN.setCursor(Cursor.HAND);
     }
 
     private void configureNewFolderButtonContainerStyle() {

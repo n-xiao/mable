@@ -24,6 +24,7 @@ import javafx.animation.FadeTransition;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -88,6 +89,7 @@ public abstract class Button extends Pane {
 
         this.getChildren().addAll(label, animPane);
 
+        this.setCursor(Cursor.HAND);
         this.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {

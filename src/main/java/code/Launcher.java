@@ -47,6 +47,7 @@ public class Launcher extends Application {
         Scene scene = new Scene(root);
         scene.setFill(Vals.Colour.BACKGROUND);
         stage.setScene(scene);
+        root.init();
         stage.show();
 
         Watchdog.startWatchdog();

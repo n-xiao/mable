@@ -1,3 +1,7 @@
+/*
+   Copyright (C) 2026  Nicholas Siow <nxiao.dev@gmail.com>
+*/
+
 package code.frontend.panels.dragndrop;
 
 import code.backend.Countdown.Urgency;

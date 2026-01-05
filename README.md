@@ -18,6 +18,10 @@ For developers,
    located within your `HOME` directory aka the output of Java's `System.getProperty("user.home")`.
    Please ensure that your development environment is configured for read and write operations.
 
+For everyone else,
+ - erm... *checks notes...* we're still in a pre-release state.
+ - You come back tomorrow ok?
+
 ## Contributing
 // TODO
 

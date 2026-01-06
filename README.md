@@ -13,6 +13,7 @@ and the visual aesthetics of [Excalidraw](https://github.com/excalidraw/excalidr
 
 ## Installation Guide
 For developers,
+ - Ensure that you have OpenJDK installed, version 25.0.1.
  - Clone the repository and run `./gradlew build` followed by `./gradlew run` in the project root directory.
  - Mable will store all data in JSON format in the folder `mable_data`,
    located within your `HOME` directory aka the output of Java's `System.getProperty("user.home")`.

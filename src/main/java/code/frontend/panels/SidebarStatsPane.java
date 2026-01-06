@@ -12,6 +12,7 @@ import code.frontend.foundation.CustomLine.Type;
 import code.frontend.misc.Vals.Colour;
 import code.frontend.misc.Vals.FontTools;
 import code.frontend.misc.Vals.GraphicalUI;
+import code.frontend.panels.dragndrop.RemovePane;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -28,9 +29,12 @@ public class SidebarStatsPane extends VBox {
     private static final int LEFTRIGHT_SPACE = 15;
     private static final int TOPBOTTOM_SPACE = 10;
 
+    private RemovePane removePane;
+
     public static SidebarStatsPane getInstance() {
-        if (instance == null)
+        if (instance == null) {
             instance = new SidebarStatsPane();
+        }
         return instance;
     }
 
@@ -54,6 +58,10 @@ public class SidebarStatsPane extends VBox {
         VBox.setMargin(this.TODAY_STAT, new Insets(0, LEFTRIGHT_SPACE, 0, LEFTRIGHT_SPACE));
         VBox.setMargin(
             this.TOMORROW_STAT, new Insets(0, LEFTRIGHT_SPACE, TOPBOTTOM_SPACE, LEFTRIGHT_SPACE));
+    }
+
+    public RemovePane getRemovePane() {
+        return removePane;
     }
 
     public void refreshContent() {

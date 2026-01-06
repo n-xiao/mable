@@ -75,11 +75,16 @@ public class StorageHandler {
         } else {
             Files.createDirectories(DATA_DIR);
 
-            if (Files.notExists(STORAGE_PATH))
+            if (Files.notExists(STORAGE_PATH)) {
                 Files.createFile(STORAGE_PATH);
-
-            if (Files.notExists(FOLDER_PATH))
+                saveCountdowns();
+            }
+            if (Files.notExists(FOLDER_PATH)) {
                 Files.createFile(FOLDER_PATH);
+                saveFolders();
+            }
+
+            load();
         }
     }
 

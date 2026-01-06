@@ -4,9 +4,13 @@
 
 package code.frontend.panels.dragndrop;
 
+import code.backend.StorageHandler;
 import code.frontend.foundation.CustomBox;
 import code.frontend.misc.Vals.Colour;
 import code.frontend.misc.Vals.FontTools;
+import code.frontend.panels.CountdownPaneView;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -26,25 +30,61 @@ public class RemovePane extends Pane {
         CONTAINER = new BorderPane();
         CustomBox.applyToPane(this, BORDER);
         configureStyling();
+
+        this.setOnMouseDragReleased((event) -> {
+            CountdownPaneView.getInstance().removeSelectedFromFolder(
+                StorageHandler.getCurrentlySelectedFolder());
+            DragHandler.close();
+        });
+
+        this.setOnMouseDragEntered((event) -> {
+            BORDER.setStrokeColour(Color.ORANGE);
+            LABEL.setTextFill(Color.ORANGE);
+        });
+        this.setOnMouseDragExited((event) -> {
+            BORDER.setStrokeColour(Colour.BTTN_REMOVE);
+            LABEL.setTextFill(Colour.BTTN_REMOVE);
+        });
     }
 
     public static RemovePane applyTo(Pane pane) {
         RemovePane removePane = new RemovePane();
-        removePane.setManaged(false);
-        removePane.resize(pane.getWidth(), pane.getHeight());
-        removePane.relocate(0, 0);
-        removePane.setViewOrder(-1);
+        pane.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                removePane.resize(pane.getWidth(), pane.getHeight());
+            }
+        });
+        pane.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                removePane.resize(pane.getWidth(), pane.getHeight());
+            }
+        });
+        removePane.setViewOrder(-2);
         removePane.setVisible(false);
+        removePane.setManaged(false);
         pane.getChildren().add(removePane);
+        removePane.relocate(0, 0);
+
         return removePane;
+    }
+
+    public void wake() {
+        if (!StorageHandler.getCurrentlySelectedFolder().isProtectedFolder())
+            this.setVisible(true);
+    }
+
+    public void sleep() {
+        this.setVisible(false);
     }
 
     private void configureStyling() {
         BORDER.setStrokeColour(Colour.BTTN_REMOVE);
-        final Color BG_COLOUR = Color.rgb(255, 0, 0, 0.5);
-        this.setBackground(Colour.createBG(BG_COLOUR, 12, 3));
-        LABEL.setTextFill(Color.WHITE);
-        LABEL.setText("Drop here to remove");
+        final Color BG_COLOUR = Colour.SIDE_BAR;
+        this.setBackground(Colour.createBG(BG_COLOUR, 18, 3));
+        LABEL.setTextFill(Colour.BTTN_REMOVE);
+        LABEL.setText("Remove from folder");
         LABEL.setFont(Font.font(FontTools.FONT_FAM, FontWeight.BOLD, FontPosture.ITALIC, 13));
         CONTAINER.setCenter(LABEL);
         CONTAINER.setBackground(null);

@@ -10,6 +10,7 @@ import code.frontend.misc.Vals.Colour;
 import code.frontend.misc.Vals.FontTools;
 import code.frontend.panels.SidebarFolderManager;
 import code.frontend.panels.SidebarStatsPane;
+import code.frontend.panels.dragndrop.RemovePane;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -26,9 +27,11 @@ public class Sidebar extends VBox {
 
     private final SidebarStatsPane STATS;
     private final SidebarFolderManager FOLDER_SELECTOR;
+    private final RemovePane HOVER_REMOVE_PANE;
 
     private Sidebar() {
         this.STATS = SidebarStatsPane.getInstance();
+        this.HOVER_REMOVE_PANE = RemovePane.applyTo(this.STATS);
         this.FOLDER_SELECTOR = SidebarFolderManager.getInstance();
         this.setBackground(Colour.createBG(Colour.SIDE_BAR, 0, 0));
         this.setFillWidth(true);
@@ -89,5 +92,9 @@ public class Sidebar extends VBox {
         HBox.setHgrow(lineContainer, Priority.ALWAYS);
         lineContainer.setOpacity(0.5);
         return lineContainer;
+    }
+
+    public RemovePane getRemovePane() {
+        return HOVER_REMOVE_PANE;
     }
 }

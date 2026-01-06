@@ -8,7 +8,6 @@ import code.backend.CountdownFolder.SpecialType;
 import code.backend.StorageHandler;
 import code.frontend.misc.Vals.Colour;
 import code.frontend.panels.Button;
-import code.frontend.panels.CountdownPaneView;
 import code.frontend.panels.SidebarFolderManager;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -33,12 +32,11 @@ public class FolderManagerRCM extends RightClickMenuTemplate {
         instance = null;
     }
 
-    private static final double WIDTH = 155;
-    private static final double HEIGHT = 130;
+    private static final double WIDTH = 160;
+    private static final double HEIGHT = 85;
 
     private final Button EDIT;
     private final Button REMOVE;
-    private final Button MARK_ALL_COMPLETE;
 
     private FolderManagerRCM() {
         Button edit = new Button("Edit name") {
@@ -57,27 +55,13 @@ public class FolderManagerRCM extends RightClickMenuTemplate {
             }
         };
 
-        final boolean SELECTED_ARE_COMPLETED =
-            CountdownPaneView.getInstance().allSelectedAreCompleted();
-        final String MARK_STRING =
-            (SELECTED_ARE_COMPLETED) ? "Mark as incomplete" : "Mark as complete";
-        Button mark = new Button(MARK_STRING) {
-            @Override
-            public void executeOnClick(MouseEvent event) {
-                CountdownPaneView.getInstance().selectAll();
-                CountdownPaneView.getInstance().markSelectedAsComplete(!SELECTED_ARE_COMPLETED);
-                FolderManagerRCM.despawn();
-            }
-        };
-
-        Button[] buttons = {mark, null, edit, remove};
-        Color[] colours = {Colour.BTTN_MARK_COMPLETE, null, Colour.BTTN_EDIT, Colour.BTTN_REMOVE};
+        Button[] buttons = {edit, remove};
+        Color[] colours = {Colour.BTTN_EDIT, Colour.BTTN_REMOVE};
 
         super(WIDTH, HEIGHT, buttons, colours);
 
         this.EDIT = edit;
         this.REMOVE = remove;
-        this.MARK_ALL_COMPLETE = mark;
 
         this.getCustomBorder().setCornerOffset(0.20);
         this.getCustomBorder().setCornerDeviation(0.02);
@@ -88,15 +72,12 @@ public class FolderManagerRCM extends RightClickMenuTemplate {
     public void setMode() {
         SpecialType type = StorageHandler.getCurrentlySelectedFolder().getType();
         if (type == SpecialType.ALL_INCOMPLETE) {
-            this.MARK_ALL_COMPLETE.setEnabled(true);
             this.EDIT.setEnabled(false);
             this.REMOVE.setEnabled(false);
         } else if (type == SpecialType.ALL_COMPLETE) {
-            this.MARK_ALL_COMPLETE.setEnabled(false);
             this.EDIT.setEnabled(false);
             this.REMOVE.setEnabled(false);
         } else {
-            this.MARK_ALL_COMPLETE.setEnabled(true);
             this.EDIT.setEnabled(true);
             this.REMOVE.setEnabled(true);
         }

@@ -205,6 +205,14 @@ public class CountdownPaneView extends ScrollPane {
         }
     }
 
+    public void removeSelectedFromFolder(CountdownFolder folder) {
+        for (CountdownPane countdownPane : COUNTDOWN_PANES) {
+            if (countdownPane.isSelected())
+                folder.getContents().remove(countdownPane.getCountdown());
+        }
+        repopulate(LocalDate.now());
+    }
+
     public Urgency[] getSelectedUrgencies() {
         Urgency[] urgencies = new Urgency[getNumOfSelections()];
         int i = 0;
@@ -221,6 +229,10 @@ public class CountdownPaneView extends ScrollPane {
         COUNTDOWN_PANES.forEach(pane -> {
             if (pane.isSelected()) {
                 pane.getCountdown().setDone(isDone);
+            }
+            // removes from folder if mark as done... yes, bad design... will improve later
+            if (isDone && !StorageHandler.getCurrentlySelectedFolder().isProtectedFolder()) {
+                removeSelectedFromFolder(StorageHandler.getCurrentlySelectedFolder());
             }
         });
         deselectAll();
@@ -444,7 +456,7 @@ public class CountdownPaneView extends ScrollPane {
             Font nameFont = Font.font(Vals.FontTools.FONT_FAM, FontWeight.SEMI_BOLD, 16);
             NAME_LABEL.setAlignment(Pos.CENTER);
             NAME_LABEL.setTextAlignment(TextAlignment.JUSTIFY);
-            NAME_LABEL.setTextOverrun(OverrunStyle.ELLIPSIS);
+            NAME_LABEL.setWrapText(true);
             NAME_LABEL.setFont(nameFont);
             NAME_LABEL.setTextFill(Color.WHITE);
             NAME_LABEL.setPrefWidth(NAME_WIDTH);

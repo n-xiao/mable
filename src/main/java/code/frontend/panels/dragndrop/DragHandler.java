@@ -7,6 +7,7 @@ package code.frontend.panels.dragndrop;
 import code.backend.Countdown.Urgency;
 import code.frontend.foundation.CustomBox;
 import code.frontend.gui.MainContainer;
+import code.frontend.gui.Sidebar;
 import code.frontend.misc.Vals.Colour;
 import code.frontend.misc.Vals.FontTools;
 import code.frontend.misc.Vals.GraphicalUI;
@@ -53,6 +54,7 @@ public class DragHandler extends Region {
     }
 
     public static void close() {
+        Sidebar.getInstance().getRemovePane().sleep();
         if (instance == null)
             return;
         MC.getChildren().remove(instance);
@@ -94,6 +96,7 @@ public class DragHandler extends Region {
         this.setViewOrder(-200);
 
         populateStack();
+        Sidebar.getInstance().getRemovePane().wake();
 
         this.getChildren().add(this.CONTAINER);
     }

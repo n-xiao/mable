@@ -326,6 +326,12 @@ public class SidebarFolderManager extends VBox {
 
                 instance.refreshFolderPaneData();
                 instance.repopulate();
+
+                // selects new folder
+                FOLDER_PANES.forEach(pane -> {
+                    if (pane.getName().equals(input))
+                        pane.executeOnClick(null);
+                });
             };
 
             private void playHintTransition() {

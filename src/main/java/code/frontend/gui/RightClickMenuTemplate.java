@@ -60,6 +60,11 @@ public abstract class RightClickMenuTemplate extends VBox {
         final MainContainer MC = MainContainer.getInstance();
         MC.getChildren().removeIf(child -> child instanceof RightClickMenuTemplate);
 
+        if (x + this.WIDTH > MC.getWidth())
+            x -= (x + this.WIDTH) - MC.getWidth();
+        if (y + this.HEIGHT > MC.getHeight())
+            y -= (y + this.HEIGHT) - MC.getHeight();
+
         this.setMode();
         this.relocate(x, y);
         this.setViewOrder(-100);

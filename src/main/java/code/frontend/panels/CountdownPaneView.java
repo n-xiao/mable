@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.NavigableSet;
+import java.util.SequencedSet;
 import javafx.animation.Animation.Status;
 import javafx.animation.FadeTransition;
 import javafx.beans.value.ChangeListener;
@@ -64,6 +65,7 @@ public class CountdownPaneView extends ScrollPane {
 
     private ButtonMode mode;
     private DisplayOrder displayOrder;
+    private CountdownPane pivot; // for command or ctrl click
 
     private static CountdownPaneView cpv = null;
 
@@ -87,12 +89,6 @@ public class CountdownPaneView extends ScrollPane {
         this.setStyle("-fx-background: transparent;"); // important: removes the stupid background
         this.setHbarPolicy(ScrollBarPolicy.NEVER);
         this.setVbarPolicy(ScrollBarPolicy.NEVER);
-        this.FLOW_PANE.setOnMousePressed(event -> {
-            if (event.getButton() == MouseButton.SECONDARY)
-                CountdownViewRCM.spawnInstance(event.getSceneX(), event.getSceneY());
-            else
-                RightClickMenuTemplate.despawnAll();
-        });
         this.setContent(this.FLOW_PANE);
     }
 
@@ -104,6 +100,16 @@ public class CountdownPaneView extends ScrollPane {
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 cpv.addPaddingForAlignment();
             }
+            });
+
+            cpv.FLOW_PANE.setOnMousePressed(event -> {
+                if (event.getButton() == MouseButton.SECONDARY)
+                    CountdownViewRCM.spawnInstance(event.getSceneX(), event.getSceneY());
+                else {
+                    cpv.deselectAll();
+                    RightClickMenuTemplate.despawnAll();
+                }
+                event.consume();
             });
         }
         return cpv;
@@ -242,18 +248,41 @@ public class CountdownPaneView extends ScrollPane {
 
     public void deselectAll() {
         for (CountdownPane countdownPane : COUNTDOWN_PANES) {
-            countdownPane.setSelected(false);
-            countdownPane.applyDeselectStyle(true);
+            deselect(countdownPane);
         }
+        this.pivot = null;
         updateMode();
     }
 
+    private void deselect(CountdownPane pane) {
+        pane.setSelected(false);
+        pane.applyDeselectStyle(true);
+    }
+
+    private void select(CountdownPane pane) {
+        pane.setSelected(true);
+        pane.applySelectStyle();
+    }
+
     public void selectAll() {
-        COUNTDOWN_PANES.forEach(pane -> {
-            pane.setSelected(true);
-            pane.applySelectStyle();
-        });
+        COUNTDOWN_PANES.forEach(pane -> { select(pane); });
+        this.pivot = null;
         updateMode();
+    }
+
+    /**
+     * Selects all panes between pane1 and pane2, inclusive of pane1 and pane2.
+     */
+    public void selectAllBetween(CountdownPane pane1, CountdownPane pane2) {
+        boolean select = false;
+        for (CountdownPane countdownPane : COUNTDOWN_PANES) {
+            boolean atBounds = countdownPane.equals(pane1) || countdownPane.equals(pane2);
+            if (atBounds)
+                select = !select;
+            if (select || atBounds) {
+                select(countdownPane);
+            }
+        }
     }
 
     public boolean allSelectedAreCompleted() {
@@ -309,7 +338,6 @@ public class CountdownPaneView extends ScrollPane {
         private Countdown countdown; // points to the backend object
         private boolean isUrgent;
         private boolean selected; // for selection detection
-        // TODO private CountdownPane prev; // for multi-select functionality
 
         public CountdownPane(Countdown cd, LocalDate now) {
             this.HOVER_HBOX = new HBox();
@@ -501,12 +529,17 @@ public class CountdownPaneView extends ScrollPane {
             CONTENT_HBOX.setOnMousePressed(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    if (event.getButton() == MouseButton.PRIMARY) {
-                        onPrimaryMousePress();
+                    final boolean IS_PRIMARY_MOUSE = event.getButton() == MouseButton.PRIMARY;
+                    if (IS_PRIMARY_MOUSE && event.isShiftDown()) {
+                        onShiftClick();
+                    } else if (IS_PRIMARY_MOUSE && event.isMetaDown()) {
+                        onMetaClick();
+                    } else if (IS_PRIMARY_MOUSE) {
+                        onNormalClick();
                     } else {
                         onSecondaryMousePress(event.getSceneX(), event.getSceneY());
                     }
-                    CONTENT_HBOX.setMouseTransparent(true);
+                    CONTENT_HBOX.setMouseTransparent(true); // this has to do with drag n drop stuff
                 }
             });
         }
@@ -548,13 +581,33 @@ public class CountdownPaneView extends ScrollPane {
                 pane -> { pane.setOpacity(1); });
         }
 
-        private void onPrimaryMousePress() {
-            if (this.selected) {
-                applyDeselectStyle(false);
-            } else {
-                applySelectStyle();
+        private void onShiftClick() {
+            if (pivot == null) {
+                CountdownPaneView.getInstance().selectAllBetween(COUNTDOWN_PANES.getFirst(), this);
+                return;
             }
-            this.selected = !this.selected;
+
+            final boolean PIVOT_SELECTED = pivot.isSelected();
+            CountdownPaneView.getInstance().selectAllBetween(pivot, this);
+
+            if (!PIVOT_SELECTED)
+                CountdownPaneView.getInstance().deselect(pivot);
+        }
+
+        private void onMetaClick() {
+            if (this.selected) {
+                CountdownPaneView.getInstance().deselect(this);
+            } else {
+                CountdownPaneView.getInstance().select(this);
+            }
+            CountdownPaneView.getInstance().pivot = this;
+            updateMode();
+            RightClickMenuTemplate.despawnAll();
+        }
+
+        private void onNormalClick() {
+            CountdownPaneView.getInstance().deselectAll();
+            CountdownPaneView.getInstance().select(this);
             updateMode();
             RightClickMenuTemplate.despawnAll();
         }

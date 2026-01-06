@@ -200,15 +200,19 @@ public class CountdownPaneView extends ScrollPane {
 
     public void addAllSelectedToFolder(CountdownFolder folder) {
         for (CountdownPane countdownPane : COUNTDOWN_PANES) {
-            if (countdownPane.isSelected())
+            if (countdownPane.isSelected()) {
                 folder.getContents().add(countdownPane.getCountdown());
+            }
         }
+        markSelectedAsComplete(false);
     }
 
     public void removeSelectedFromFolder(CountdownFolder folder) {
         for (CountdownPane countdownPane : COUNTDOWN_PANES) {
             if (countdownPane.isSelected())
                 folder.getContents().remove(countdownPane.getCountdown());
+            if (countdownPane.getCountdown().isDone())
+                countdownPane.getCountdown().setDone(false);
         }
         repopulate(LocalDate.now());
     }

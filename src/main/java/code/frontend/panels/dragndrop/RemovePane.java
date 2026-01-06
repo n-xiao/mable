@@ -4,6 +4,7 @@
 
 package code.frontend.panels.dragndrop;
 
+import code.backend.CountdownFolder.SpecialType;
 import code.backend.StorageHandler;
 import code.frontend.foundation.CustomBox;
 import code.frontend.misc.Vals.Colour;
@@ -71,7 +72,7 @@ public class RemovePane extends Pane {
     }
 
     public void wake() {
-        if (!StorageHandler.getCurrentlySelectedFolder().isProtectedFolder())
+        if (!(StorageHandler.getCurrentlySelectedFolder().getType() == SpecialType.ALL_INCOMPLETE))
             this.setVisible(true);
     }
 

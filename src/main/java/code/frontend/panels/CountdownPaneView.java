@@ -539,7 +539,7 @@ public class CountdownPaneView extends ScrollPane {
                     } else {
                         onSecondaryMousePress(event.getSceneX(), event.getSceneY());
                     }
-                    CONTENT_HBOX.setMouseTransparent(true); // this has to do with drag n drop stuff
+                    event.consume();
                 }
             });
         }
@@ -606,10 +606,13 @@ public class CountdownPaneView extends ScrollPane {
         }
 
         private void onNormalClick() {
-            CountdownPaneView.getInstance().deselectAll();
-            CountdownPaneView.getInstance().select(this);
-            updateMode();
-            RightClickMenuTemplate.despawnAll();
+            if (!this.isSelected()) {
+                CountdownPaneView.getInstance().deselectAll();
+                CountdownPaneView.getInstance().select(this);
+                CountdownPaneView.getInstance().pivot = this;
+                updateMode();
+                RightClickMenuTemplate.despawnAll();
+            }
         }
 
         private void onSecondaryMousePress(double x, double y) {

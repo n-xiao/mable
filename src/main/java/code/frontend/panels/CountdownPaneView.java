@@ -455,14 +455,14 @@ public class CountdownPaneView extends ScrollPane {
             NAME_LABEL.setText(name);
             Font nameFont = Font.font(Vals.FontTools.FONT_FAM, FontWeight.SEMI_BOLD, 16);
             NAME_LABEL.setAlignment(Pos.CENTER);
-            NAME_LABEL.setTextAlignment(TextAlignment.JUSTIFY);
+            NAME_LABEL.setTextAlignment(TextAlignment.CENTER);
             NAME_LABEL.setWrapText(true);
             NAME_LABEL.setFont(nameFont);
             NAME_LABEL.setTextFill(Color.WHITE);
             NAME_LABEL.setPrefWidth(NAME_WIDTH);
             NAME_LABEL.prefHeightProperty().bind(this.heightProperty());
 
-            HBox.setMargin(NAME_LABEL, new Insets(10, -2, 10, 10));
+            HBox.setMargin(NAME_LABEL, new Insets(10, 2, 10, 14));
             HBox.setHgrow(NAME_LABEL, Priority.ALWAYS);
             return NAME_LABEL;
         }

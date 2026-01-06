@@ -11,8 +11,9 @@ it easy for you to see which deadline is most (or least) urgent.
 Mable is partially inspired by the [Bears Countdown App](https://apps.apple.com/us/app/bears-countdown/id1536711520)
 and the visual aesthetics of [Excalidraw](https://github.com/excalidraw/excalidraw).
 
-## Installation Guide
+## Get Started
 For developers,
+ - Check [releases](https://github.com/n-xiao/mable/releases) and run the compiled binary, or follow the steps below:
  - Ensure that you have OpenJDK installed, version 25.0.1.
  - Clone the repository and run `./gradlew build` followed by `./gradlew run` in the project root directory.
  - Mable will store all data in JSON format in the folder `mable_data`,

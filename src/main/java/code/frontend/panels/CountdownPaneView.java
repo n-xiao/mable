@@ -121,26 +121,31 @@ public class CountdownPaneView extends ScrollPane {
      * row of a FlowPane will be aligned to the left when all children of the
      * FlowPane are centered. It is attached to a listener for when the window
      * is resized.
+     *
+     * At the time of writing, I can't seem to figure out how to reliably get
+     * the extra number of paddings needed. Hence, one extra padding is added
+     * and the height of the paddings are locked to 1 pixel, so it should not
+     * affect the scrolling experience of the user. (as in, the invisible
+     * paddings will probably not let the user scroll down to nothing)
      */
     private void addPaddingForAlignment() {
         this.PADDINGS_IN_USE.forEach(padding -> FLOW_PANE.getChildren().remove(padding));
         this.PADDINGS_IN_USE.clear();
         if (this.COUNTDOWN_PANES.isEmpty())
             return;
-        double cdWidth = CountdownPane.WIDTH + HGAP_BETWEEN;
-        double cdHeight = CountdownPane.HEIGHT;
-        double width = this.getBoundsInLocal().getWidth();
+        int cdWidth = (int) (CountdownPane.WIDTH + HGAP_BETWEEN * 0.5);
+        int width = (int) this.getBoundsInParent().getWidth();
         int numOfCountdowns = StorageHandler.getDescendingCountdowns().size();
-        int columns = (int) Math.floor(width / cdWidth);
+        int columns = (int) (width / cdWidth);
         if (columns == 0)
             return;
         int panesOnLast = (int) (numOfCountdowns % columns);
-        int remainder = columns - panesOnLast;
+        int remainder = columns - panesOnLast + 1;
         for (int i = 0; i < remainder; i++) {
             Region padding = new Region();
-            padding.setMinSize(CountdownPane.WIDTH, cdHeight);
-            padding.setMaxSize(CountdownPane.WIDTH, cdHeight);
-            padding.setVisible(false);
+            padding.setMinSize(CountdownPane.WIDTH, 1);
+            padding.setMaxSize(CountdownPane.WIDTH, 1);
+            // padding.setVisible(true);
             // padding.setBackground(Colour.createBG(Color.PINK, 0, 0));
             this.FLOW_PANE.getChildren().add(padding);
             this.PADDINGS_IN_USE.add(padding);

@@ -385,7 +385,7 @@ public class SidebarFolderManager extends VBox {
             this.setOnMouseDragEntered(
                 (event) -> { this.getCustomBorder().setStrokeColour(Color.ORANGE); });
             this.setOnMouseDragExited((event) -> {
-                if (!this.getIsToggled())
+                if (!this.getIsToggled()) // this interferes with DragRelease if no check
                     this.untoggle();
             });
             this.setOnMouseDragReleased((event) -> {

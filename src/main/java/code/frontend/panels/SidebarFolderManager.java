@@ -373,6 +373,7 @@ public class SidebarFolderManager extends VBox {
             this.getCustomBorder().setDeviation(0.02);
             this.setToggledColour(Colour.SELECTED);
             this.setUntoggledColour(Colour.GHOST_2);
+            this.setCursor(Cursor.DEFAULT);
             this.setMinHeight(40);
             this.getLabel().setFont(Font.font(FontTools.FONT_FAM, 13));
             VBox.setMargin(this, new Insets(3, 2.5, 5, 2.5));
@@ -383,10 +384,13 @@ public class SidebarFolderManager extends VBox {
         private void configureDrop() {
             this.setOnMouseDragEntered(
                 (event) -> { this.getCustomBorder().setStrokeColour(Color.ORANGE); });
-            this.setOnMouseDragExited((event) -> { this.untoggle(); });
+            this.setOnMouseDragExited((event) -> {
+                if (!this.getIsToggled())
+                    this.untoggle();
+            });
             this.setOnMouseDragReleased((event) -> {
                 CountdownPaneView.getInstance().addAllSelectedToFolder(this.FOLDER);
-                this.untoggle();
+                // this.untoggle();
                 DragHandler.close();
                 this.executeOnClick(event);
             });
@@ -395,10 +399,8 @@ public class SidebarFolderManager extends VBox {
         @Override
         public void executeOnClick(MouseEvent event) {
             CountdownPaneView.getInstance().deselectAll(); // important
-            SidebarFolderManager.getInstance().FOLDER_PANES.forEach(folder -> {
-                if (!this.hasSameName(folder))
-                    folder.untoggle();
-            });
+            SidebarFolderManager.getInstance().FOLDER_PANES.forEach(
+                folder -> { folder.untoggle(); });
 
             if (!this.hasSameName(INCOMPLETED_FOLDER_PANE))
                 INCOMPLETED_FOLDER_PANE.untoggle();
@@ -406,7 +408,6 @@ public class SidebarFolderManager extends VBox {
             if (!this.hasSameName(COMPLETED_FOLDER_PANE))
                 COMPLETED_FOLDER_PANE.untoggle();
 
-            this.toggle();
             SidebarFolderManager.selectedFolderPane = this;
             StorageHandler.setCurrentlySelectedFolder(this.FOLDER);
             CountdownPaneViewTitle.getInstance().setTitleText(this.getName());
@@ -415,6 +416,8 @@ public class SidebarFolderManager extends VBox {
                 && event.getButton().equals(MouseButton.SECONDARY)) {
                 FolderManagerRCM.spawnInstance(event.getSceneX(), event.getSceneY());
             }
+
+            this.toggle();
         }
 
         public boolean hasSameName(FolderPane otherPane) {

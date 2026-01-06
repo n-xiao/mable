@@ -165,13 +165,10 @@ public class SidebarFolderManager extends VBox {
             return;
 
         StorageHandler.removeSelectedFolder();
-        FolderPane prevFolder =
-            (index > 0) ? this.FOLDER_PANES.get(--index) : this.INCOMPLETED_FOLDER_PANE;
-        // StorageHandler.setCurrentlySelectedFolder(prevFolder.FOLDER);
-        // selectedFolderPane = prevFolder;
 
         this.refreshFolderPaneData();
-        prevFolder.executeOnClick(null);
+        this.repopulate();
+        this.INCOMPLETED_FOLDER_PANE.executeOnClick(null);
     }
 
     public void editSelectedFolder() {

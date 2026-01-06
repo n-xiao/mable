@@ -118,6 +118,9 @@ public class StorageHandler {
 
     public static void addCountdown(Countdown c) {
         COUNTDOWNS.add(c);
+        currentlySelectedFolder.getContents().add(c);
+        if (currentlySelectedFolder.equals(COMPLETED_FOLDER))
+            c.setDone(true);
         save();
     }
 

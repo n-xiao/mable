@@ -3,6 +3,8 @@
 > Mable is in open-beta: it is only suitable for use by testers and developers.
 >
 
+![Preview](https://github.com/n-xiao/mable/blob/master/docs/media/preview-0.png)
+
 ## About
 Mable is a simple, free and open source deadline manager for Windows and MacOS.
 Mable is built to make the management of many ongoing, concurrent deadlines easier by allowing you to see the

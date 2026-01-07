@@ -39,7 +39,7 @@ However, some planned features include:
 
 ## Contributing
 If you have an issue and/or want to contribute to the codebase, I recommend you start with reading
-[the docs](https://github.com/n-xiao/mable/tree/master/docs).
+[the docs](https://github.com/n-xiao/mable/tree/master/docs/developers).
 
 ## Acknowledgements
 - Mable uses [JavaFX](https://github.com/openjdk/jfx/tree/master) as a Gradle dependency. You can find a copy of their

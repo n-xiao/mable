@@ -1,42 +1,45 @@
 # Mable
 > [!IMPORTANT]
-> Mable is in open-beta: it is only suitable for use by testers and developers.
+> Mable is in open-beta. Bugs and software instability are expected.
 >
 
-![Preview](https://github.com/n-xiao/mable/blob/master/docs/media/preview-0.png)
+![Preview_IMG](https://github.com/n-xiao/mable/blob/master/docs/media/preview-0.png)
 
 ## About
-Mable is a simple, free and open source deadline manager for Windows and MacOS.
-Mable is built to make the management of many ongoing, concurrent deadlines easier by allowing you to see the
-number of days that remain for each deadline in a sorted layout. This makes
-it easy for you to see which deadline is most (or least) urgent.
-Mable is partially inspired by the [Bears Countdown App](https://apps.apple.com/us/app/bears-countdown/id1536711520)
-and the visual aesthetics of [Excalidraw](https://github.com/excalidraw/excalidraw).
+Mable is an application which allows you to create Countdowns — it counts down the days till a date you set.
+When a Countdown approaches or passes its due date, the built-in *Heads Up Display*
+will update, showing you how many Countdowns are either overdue, due today or due tomorrow. Mable is **not**
+intended to replace your Calendar or To-Do list. Instead, it provides you with a quick overview about how much time
+you have left for multiple deadlines.
+
+## Features
+ * Free of charge. Free to use. *it's built for you.*
+ * Folders allow you to view a selection of Countdowns at a time. *keeping the riff-raff out!*
+ * Autosaving to local storage. *works offline, with no strings attached*
+ * Resizable window. *you got a wide-screen? USE IT.*
+ * Procedurally-generated UI. *for the aesthetics*
+ * Dark mode. Only. *one of the perks of being in beta... no light mode yet, sorry!*
 
 ## Get Started
 For developers,
  - Check [releases](https://github.com/n-xiao/mable/releases) and run the compiled binary, or follow the steps below:
+
  - Ensure that you have OpenJDK installed, version 25.0.1.
  - Clone the repository and run `./gradlew build` followed by `./gradlew run` in the project root directory.
  - Mable will store all data in JSON format in the folder `mable_data`,
    located within your `HOME` directory aka the output of Java's `System.getProperty("user.home")`.
    Please ensure that your development environment is configured for read and write operations.
 
-For everyone else,
- - erm... *checks notes...* we're still in a pre-release state.
- - You come back tomorrow ok?
-
 ## Roadmap
-All new features are paused for the time being while I work on getting the documentation setup.
-I've rushed this a little bit *(I WAS SUPER EXCITED OK?)*, so there's loads of messy code to clean up and commenting
-that needs to be done. I myself can sometimes get lost in my own code. Other than that, here's a quick list
-of things I wanna get done sometime later:
+All new features are paused for the time being while I work on getting the documentation setup and fix bugs.
+However, some planned features include:
  - User settings + light mode option
  - Toast notifications (e.g "added new task!" or "created new folder!")
  - Undo and redo function (this one might be tough)
 
 ## Contributing
-// TODO
+If you have an issue and/or want to contribute to the codebase, I recommend you start with reading
+[the docs](https://github.com/n-xiao/mable/tree/master/docs).
 
 ## Acknowledgements
 - Mable uses [JavaFX](https://github.com/openjdk/jfx/tree/master) as a Gradle dependency. You can find a copy of their

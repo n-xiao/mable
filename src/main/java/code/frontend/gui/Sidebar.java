@@ -23,16 +23,15 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 
 public class Sidebar extends VBox {
+    // using:
+    private static final SidebarStatsPane STATS = SidebarStatsPane.getInstance();
+    private static final SidebarFolderManager FOLDER_SELECTOR = SidebarFolderManager.getInstance();
     private static Sidebar instance = null;
 
-    private final SidebarStatsPane STATS;
-    private final SidebarFolderManager FOLDER_SELECTOR;
     private final RemovePane HOVER_REMOVE_PANE;
 
     private Sidebar() {
-        this.STATS = SidebarStatsPane.getInstance();
-        this.HOVER_REMOVE_PANE = RemovePane.applyTo(this.STATS);
-        this.FOLDER_SELECTOR = SidebarFolderManager.getInstance();
+        this.HOVER_REMOVE_PANE = RemovePane.applyTo(STATS);
         this.setBackground(Colour.createBG(Colour.SIDE_BAR, 0, 0));
         this.setFillWidth(true);
     }
@@ -42,12 +41,11 @@ public class Sidebar extends VBox {
             instance = new Sidebar();
             HBox hudHeading = createSectionHeading("H. U. D.");
             HBox folderHeading = createSectionHeading("Folders");
-            instance.getChildren().addAll(
-                hudHeading, instance.STATS, folderHeading, instance.FOLDER_SELECTOR);
+            instance.getChildren().addAll(hudHeading, STATS, folderHeading, FOLDER_SELECTOR);
             VBox.setMargin(hudHeading, new Insets(10, 0, 0, 0));
-            VBox.setMargin(instance.STATS, new Insets(0, 10, 10, 10));
+            VBox.setMargin(STATS, new Insets(0, 10, 10, 10));
             VBox.setMargin(folderHeading, new Insets(20, 0, 0, 0));
-            VBox.setMargin(instance.FOLDER_SELECTOR, new Insets(0, 10, 5, 10));
+            VBox.setMargin(FOLDER_SELECTOR, new Insets(0, 10, 5, 10));
         }
         return instance;
     }

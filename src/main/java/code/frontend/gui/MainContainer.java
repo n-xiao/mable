@@ -4,9 +4,7 @@
 
 package code.frontend.gui;
 
-import code.frontend.panels.dragndrop.DragHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Cursor;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
@@ -31,7 +29,6 @@ public class MainContainer extends HBox {
     /**
      * This is called separately so that children can reference this full instance within their
      * constructor.
-     *
      */
     public void init() {
         this.sidebar = Sidebar.getInstance();
@@ -40,6 +37,5 @@ public class MainContainer extends HBox {
         HBox.setMargin(this.sidebar, new Insets(0, 5, 0, 0));
         HBox.setHgrow(this.content, Priority.ALWAYS);
         this.getChildren().addAll(this.sidebar, this.content);
-        // DragHandler.init();
     }
 }

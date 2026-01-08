@@ -6,7 +6,7 @@ package code.backend;
 
 import code.backend.Countdown.Urgency;
 import code.backend.CountdownFolder.SpecialType;
-import code.frontend.panels.CountdownPaneView;
+import code.frontend.gui.pages.home.CountdownPaneView;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;

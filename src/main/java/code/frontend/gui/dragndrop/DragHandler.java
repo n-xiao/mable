@@ -2,16 +2,16 @@
    Copyright (C) 2026  Nicholas Siow <nxiao.dev@gmail.com>
 */
 
-package code.frontend.panels.dragndrop;
+package code.frontend.gui.dragndrop;
 
 import code.backend.Countdown.Urgency;
-import code.frontend.foundation.CustomBox;
-import code.frontend.gui.MainContainer;
-import code.frontend.gui.Sidebar;
+import code.frontend.foundation.custom.CustomBox;
+import code.frontend.gui.containers.MainContainer;
+import code.frontend.gui.containers.Sidebar;
+import code.frontend.gui.pages.home.CountdownPaneView;
 import code.frontend.misc.Vals.Colour;
 import code.frontend.misc.Vals.FontTools;
 import code.frontend.misc.Vals.GraphicalUI;
-import code.frontend.panels.CountdownPaneView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;

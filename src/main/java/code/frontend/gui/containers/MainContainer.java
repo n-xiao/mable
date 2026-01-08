@@ -2,7 +2,7 @@
    Copyright (C) 2026  Nicholas Siow <nxiao.dev@gmail.com>
 */
 
-package code.frontend.gui;
+package code.frontend.gui.containers;
 
 import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;

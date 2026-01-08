@@ -2,17 +2,21 @@
    Copyright (C) 2026  Nicholas Siow <nxiao.dev@gmail.com>
 */
 
-package code.frontend.panels;
+package code.frontend.gui.sidebar;
 
 import code.backend.CountdownFolder;
 import code.backend.StorageHandler;
-import code.frontend.foundation.CustomBox;
-import code.frontend.foundation.CustomLine;
-import code.frontend.foundation.CustomLine.Type;
-import code.frontend.gui.FolderManagerRCM;
+import code.frontend.foundation.custom.CustomBox;
+import code.frontend.foundation.custom.CustomLine;
+import code.frontend.foundation.custom.CustomLine.Type;
+import code.frontend.foundation.panels.buttons.ToggleButton;
+import code.frontend.foundation.panels.inputs.InputField;
+import code.frontend.gui.dragndrop.DragHandler;
+import code.frontend.gui.pages.home.CountdownPaneView;
+import code.frontend.gui.pages.home.CountdownPaneViewTitle;
+import code.frontend.gui.rightclickmenu.FolderManagerRCM;
 import code.frontend.misc.Vals.Colour;
 import code.frontend.misc.Vals.FontTools;
-import code.frontend.panels.dragndrop.DragHandler;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.TreeSet;

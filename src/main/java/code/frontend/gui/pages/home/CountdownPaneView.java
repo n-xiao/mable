@@ -2,21 +2,21 @@
    Copyright (C) 2026  Nicholas Siow <nxiao.dev@gmail.com>
 */
 
-package code.frontend.panels;
+package code.frontend.gui.pages.home;
 
 import code.backend.Countdown;
 import code.backend.Countdown.Urgency;
 import code.backend.CountdownFolder;
 import code.backend.StorageHandler;
-import code.frontend.foundation.CustomBox;
-import code.frontend.foundation.CustomLine;
-import code.frontend.foundation.CustomLine.Type;
-import code.frontend.gui.CountdownViewRCM;
-import code.frontend.gui.RightClickMenuTemplate;
+import code.frontend.foundation.custom.CustomBox;
+import code.frontend.foundation.custom.CustomLine;
+import code.frontend.foundation.custom.CustomLine.Type;
+import code.frontend.gui.dragndrop.DragHandler;
+import code.frontend.gui.rightclickmenu.CountdownViewRCM;
+import code.frontend.gui.rightclickmenu.RightClickMenuTemplate;
 import code.frontend.misc.Vals;
 import code.frontend.misc.Vals.Colour;
 import code.frontend.misc.Vals.GraphicalUI;
-import code.frontend.panels.dragndrop.DragHandler;
 import code.frontend.windows.EditWindow;
 import java.time.LocalDate;
 import java.util.ArrayList;

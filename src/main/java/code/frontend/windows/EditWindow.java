@@ -5,10 +5,10 @@
 package code.frontend.windows;
 
 import code.backend.Countdown;
-import code.frontend.panels.Button;
-import code.frontend.panels.CountdownPaneView;
-import code.frontend.panels.DateInputField;
-import code.frontend.panels.InputField;
+import code.frontend.foundation.panels.buttons.Button;
+import code.frontend.foundation.panels.inputs.DateInputField;
+import code.frontend.foundation.panels.inputs.InputField;
+import code.frontend.gui.pages.home.CountdownPaneView;
 import java.time.LocalDate;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;

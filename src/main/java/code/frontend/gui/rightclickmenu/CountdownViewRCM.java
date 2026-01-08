@@ -2,12 +2,12 @@
    Copyright (C) 2026  Nicholas Siow <nxiao.dev@gmail.com>
 */
 
-package code.frontend.gui;
+package code.frontend.gui.rightclickmenu;
 
+import code.frontend.foundation.panels.buttons.Button;
+import code.frontend.gui.pages.home.CountdownPaneView;
+import code.frontend.gui.pages.home.CountdownPaneView.ButtonMode;
 import code.frontend.misc.Vals.Colour;
-import code.frontend.panels.Button;
-import code.frontend.panels.CountdownPaneView;
-import code.frontend.panels.CountdownPaneView.ButtonMode;
 import code.frontend.windows.AddWindow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;

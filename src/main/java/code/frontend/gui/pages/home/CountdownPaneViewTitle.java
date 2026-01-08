@@ -2,10 +2,10 @@
    Copyright (C) 2026  Nicholas Siow <nxiao.dev@gmail.com>
 */
 
-package code.frontend.panels;
+package code.frontend.gui.pages.home;
 
-import code.frontend.foundation.CustomLine;
-import code.frontend.foundation.CustomLine.Type;
+import code.frontend.foundation.custom.CustomLine;
+import code.frontend.foundation.custom.CustomLine.Type;
 import code.frontend.misc.Vals.Colour;
 import code.frontend.misc.Vals.FontTools;
 import javafx.geometry.Insets;

@@ -2,11 +2,9 @@
    Copyright (C) 2026  Nicholas Siow <nxiao.dev@gmail.com>
 */
 
-package code.frontend.gui.pages;
+package code.frontend.gui.pages.home;
 
 import code.frontend.misc.Vals.Colour;
-import code.frontend.panels.CountdownPaneView;
-import code.frontend.panels.CountdownPaneViewTitle;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 

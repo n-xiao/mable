@@ -2,14 +2,15 @@
    Copyright (C) 2026  Nicholas Siow <nxiao.dev@gmail.com>
 */
 
-package code.frontend.gui;
+package code.frontend.gui.rightclickmenu;
 
-import code.frontend.foundation.CustomBox;
-import code.frontend.foundation.CustomLine;
-import code.frontend.foundation.CustomLine.Type;
+import code.frontend.foundation.custom.CustomBox;
+import code.frontend.foundation.custom.CustomLine;
+import code.frontend.foundation.custom.CustomLine.Type;
+import code.frontend.foundation.panels.buttons.Button;
+import code.frontend.gui.containers.MainContainer;
 import code.frontend.misc.Vals.Colour;
 import code.frontend.misc.Vals.FontTools;
-import code.frontend.panels.Button;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;

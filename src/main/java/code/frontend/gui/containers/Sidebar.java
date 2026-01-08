@@ -2,15 +2,15 @@
    Copyright (C) 2026  Nicholas Siow <nxiao.dev@gmail.com>
 */
 
-package code.frontend.gui;
+package code.frontend.gui.containers;
 
-import code.frontend.foundation.CustomLine;
-import code.frontend.foundation.CustomLine.Type;
+import code.frontend.foundation.custom.CustomLine;
+import code.frontend.foundation.custom.CustomLine.Type;
+import code.frontend.gui.dragndrop.RemovePane;
+import code.frontend.gui.sidebar.SidebarFolderManager;
+import code.frontend.gui.sidebar.SidebarStatsPane;
 import code.frontend.misc.Vals.Colour;
 import code.frontend.misc.Vals.FontTools;
-import code.frontend.panels.SidebarFolderManager;
-import code.frontend.panels.SidebarStatsPane;
-import code.frontend.panels.dragndrop.RemovePane;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;

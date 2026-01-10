@@ -57,13 +57,13 @@ while remaining in the comfort of Java boilerplate-ness.
 >
 > - When I say "I love my girlfriend", `NullPointerException` is thrown because "girlfriend" is `null`.
 
->[!CAUTION]
+>[!WARNING]
 > Do not mix up JavaFX "parent component" and "child component" terminology
 > with OOP "parent class" and "child class" terminology.
 >
 
 
-### Code example
+### Code Example
 Here is a code snippet from the singleton class `CountdownPaneViewTitle`:
 
 ```java
@@ -93,17 +93,17 @@ public class CountdownPaneViewTitle extends VBox {
 ```
 
 One advantage of using the singleton design pattern is that the instance of the class can still be a JavaFX component
-(through inheritance); saying that "a `CountdownPaneViewTitle` **is a** `VBox`" is intuitive [^1].
+(through inheritance); saying that "a `CountdownPaneViewTitle` **is a** `VBox`" is intuitive. [^1]
 [^1]: This is why the singleton class is preferred over other design patterns, such as a utility or factory classes.
 
-> [!WARNING]
-> Avoid calling **any** `getInstance()` methods within **any** class's constructor.
+> [!CAUTION]
+> Use caution when calling **any** `getInstance()` methods within **any** class's constructor.
 >
 > - Calling the `getInstance()` method in the constructor of the same class will result in an infinite recursive loop
 >ending in a `StackOverflowError` as `getInstance()` will never be able to return an incomplete object; `getInstance()`
 >is called again (by the constructor) before the object can be constructed.
 >
-> * Though the above issue may seem trivial at first, but many UI components rely on their parents' properties
+> * The above issue may seem trivial at first, but many UI components rely on their parents' properties
 >when defining their own properties, such as component sizes. As a result, if a parent calls the `getInstance()` method
 >of its child component's class while neither components have been constructed **and** if the child component's
 >constructor also calls `getInstance()` on the parent (or vice versa), a deadlock situation arises where

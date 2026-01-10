@@ -10,7 +10,7 @@ the [JavaFX 25 Documentation](https://openjfx.io/javadoc/25/index.html).
 > [!IMPORTANT]
 > Words in *italics* are informal terms, and have been included for over-simplification.\
 > Words in **bold** are of significant importance to the reader.\
-> Words in `monospace` are code-related, and can usually be found in the source code.\
+> Words in `monospace` are code-related, and can usually be found in the source code.
 >
 
 ## Overview
@@ -23,9 +23,9 @@ references to one instance of `Sidebar` and one instance of `Content` on applica
 a user interface entity *"contains"* other entities will be discussed later.
 
 > [!NOTE]
-> `Content` is **omitted** from the annotation as it is an entity \
-> with a sole purpose of *containing* other UI entities in order\
-> to support "page-switching". It, alone, is never seen by the user.\
+>`Content` is **omitted** from the annotation as it is an entity \
+>with a sole purpose of *containing* other UI entities in order\
+>to support "page-switching". It, alone, is never seen by the user.
 >
 
 Page-switching refers to the design intention of `Content` to control the visibility of *pages* (e.g `HomePage`).

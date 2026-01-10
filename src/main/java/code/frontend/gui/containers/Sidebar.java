@@ -6,7 +6,9 @@ package code.frontend.gui.containers;
 
 import code.frontend.foundation.custom.CustomLine;
 import code.frontend.foundation.custom.CustomLine.Type;
+import code.frontend.foundation.panels.inputs.InputField;
 import code.frontend.gui.dragndrop.RemovePane;
+import code.frontend.gui.pages.home.CountdownPaneView;
 import code.frontend.gui.sidebar.SidebarFolderManager;
 import code.frontend.gui.sidebar.SidebarStatsPane;
 import code.frontend.misc.Vals.Colour;
@@ -49,6 +51,12 @@ public class Sidebar extends VBox {
             VBox.setMargin(instance.STATS, new Insets(0, 10, 10, 10));
             VBox.setMargin(folderHeading, new Insets(20, 0, 0, 0));
             VBox.setMargin(instance.FOLDER_SELECTOR, new Insets(0, 10, 5, 10));
+
+            instance.setOnMousePressed((event) -> {
+                InputField.escapeAllInputs();
+                CountdownPaneView.getInstance().deselectAll();
+                instance.requestFocus();
+            });
         }
         return instance;
     }

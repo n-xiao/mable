@@ -11,6 +11,7 @@ import code.backend.StorageHandler;
 import code.frontend.foundation.custom.CustomBox;
 import code.frontend.foundation.custom.CustomLine;
 import code.frontend.foundation.custom.CustomLine.Type;
+import code.frontend.foundation.panels.inputs.InputField;
 import code.frontend.gui.dragndrop.DragHandler;
 import code.frontend.gui.rightclickmenu.CountdownViewRCM;
 import code.frontend.gui.rightclickmenu.RightClickMenuTemplate;
@@ -107,6 +108,8 @@ public class CountdownPaneView extends ScrollPane {
                     cpv.deselectAll();
                     RightClickMenuTemplate.despawnAll();
                 }
+                InputField.escapeAllInputs();
+                cpv.requestFocus();
                 event.consume();
             });
         }

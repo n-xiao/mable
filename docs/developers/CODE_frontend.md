@@ -36,7 +36,7 @@ and a `SidebarFolderManager`, while the `HomePage` *contains* `CountdownPaneView
 Note that `CountdownPaneView` *contains* multiple `CountdownPane`s (3 in this example).
 
 ## Singleton Class Design Pattern
-The [singleton classes](https://www.geeksforgeeks.org/system-design/singleton-design-pattern/) is a
+The [singleton class](https://www.geeksforgeeks.org/system-design/singleton-design-pattern/) is a
 design pattern which has been used extensively throughout the code in `frontend`. This is because OOP
 isn't very ideal when it comes to creating user interfaces. *You may disagree with this design choice. Oh no!*
 Anyways, with singleton classes, we can **reference** the same instance of a class from all other classes
@@ -55,7 +55,6 @@ while remaining in the comfort of Java boilerplate-ness.
 >but may not **contain** `bar`. With the singleton design pattern, this is often done through the use of a
 >`Bar.getInstance()` static method which returns `bar`.
 >
-> - When I say "I love my girlfriend", `NullPointerException` is thrown because "girlfriend" is `null`.
 
 >[!WARNING]
 > Do not mix up JavaFX "parent component" and "child component" terminology

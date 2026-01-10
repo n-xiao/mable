@@ -8,9 +8,9 @@ understand. A good tab to have open as you read through the following sections i
 the [JavaFX 25 Documentation](https://openjfx.io/javadoc/25/index.html).
 
 > [!IMPORTANT]
-> Words in *italics* are informal terms, and have been included for over-simplification.
-> Words in **bold** are of significant importance to the reader.
-> Words in `monospace` are code-related, and can usually be found in the source code.
+> Words in *italics* are informal terms, and have been included for over-simplification.\
+> Words in **bold** are of significant importance to the reader.\
+> Words in `monospace` are code-related, and can usually be found in the source code.\
 >
 
 ## Overview
@@ -23,8 +23,9 @@ references to one instance of `Sidebar` and one instance of `Content` on applica
 a user interface entity *"contains"* other entities will be discussed later.
 
 > [!NOTE]
-> `Content` is **omitted** from the annotation as it is an entity with a sole purpose of *containing* other UI entities
-> in order to support "page-switching". It, alone, is never seen by the user.
+> `Content` is **omitted** from the annotation as it is an entity \
+> with a sole purpose of *containing* other UI entities in order\
+> to support "page-switching". It, alone, is never seen by the user.\
 >
 
 Page-switching refers to the design intention of `Content` to control the visibility of *pages* (e.g `HomePage`).
@@ -48,9 +49,9 @@ the comfort of Java boilerplate-ness.
 > This is where we clarify the difference between "**holding a reference to**" and "**contains**".
 >
 
-When I say "`foo` **contains** `bar`", I am referring to how `foo` **is a JavaFX [Parent](https://openjfx.io/javadoc/25/javafx.graphics/javafx/scene/Parent.html#)**, where its `getChildren()` method returns a list which **contains** `foo`.
+When I say **"`foo` contains `bar`"**, I am referring to how `foo` **is a JavaFX [Parent](https://openjfx.io/javadoc/25/javafx.graphics/javafx/scene/Parent.html#)**, where its `getChildren()` method returns a list which **contains** `foo`.
 
-When I say "`foo` **references** `bar`", I am referring to how `foo` has accessed an object reference to `bar`,
+When I say **"`foo` references `bar`"**, I am referring to how `foo` has accessed an object reference to `bar`,
 but may not **contain** `bar`. With the singleton design pattern, this is often done through the use of a
 `Bar.getInstance()` static method which returns `bar`.
 

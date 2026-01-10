@@ -23,8 +23,7 @@ references to one instance of `Sidebar` and one instance of `Content` on applica
 a user interface entity *"contains"* other entities will be discussed later.
 
 > [!NOTE]
->`Content` is **omitted** from the annotation as it is an entity \
->with a sole purpose of *containing* other UI entities in order\
+>`Content` is **omitted** from the annotation as it is an entity with a sole purpose of *containing* other UI entities in order
 >to support "page-switching". It, alone, is never seen by the user.
 >
 

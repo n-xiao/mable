@@ -99,16 +99,16 @@ One advantage of using the singleton design pattern is that the instance of the 
 > [!WARNING]
 > Avoid calling **any** `getInstance()` methods within **any** class's constructor.
 >
-
- - Calling the `getInstance()` method in the constructor of the same class will result in an infinite recursive loop
-ending in a `StackOverflowError` as `getInstance()` will never be able to return an incomplete object; `getInstance()`
-is called again (by the constructor) before the object can be constructed.
-
- * Though the above issue may seem trivial at first, but many UI components rely on their parents' properties
-when defining their own properties, such as component sizes. As a result, if a parent calls the `getInstance()` method
-of its child component's class while neither components have been constructed **and** if the child component's
-constructor also calls `getInstance()` on the parent (or vice versa), a deadlock situation arises where
-neither `getInstance()` methods complete as they both end up calling each other.
-
- * You can identify this issue and offending class(es) by looking at the output of the `StackOverflowError`.
- Multiple `getInstance()` calls would be printed in the stack trace.
+> - Calling the `getInstance()` method in the constructor of the same class will result in an infinite recursive loop
+>ending in a `StackOverflowError` as `getInstance()` will never be able to return an incomplete object; `getInstance()`
+>is called again (by the constructor) before the object can be constructed.
+>
+> * Though the above issue may seem trivial at first, but many UI components rely on their parents' properties
+>when defining their own properties, such as component sizes. As a result, if a parent calls the `getInstance()` method
+>of its child component's class while neither components have been constructed **and** if the child component's
+>constructor also calls `getInstance()` on the parent (or vice versa), a deadlock situation arises where
+>neither `getInstance()` methods complete as they both end up calling each other.
+>
+> * You can identify this issue and offending class(es) by looking at the output of the `StackOverflowError`.
+> Multiple `getInstance()` calls would be printed in the stack trace.
+>

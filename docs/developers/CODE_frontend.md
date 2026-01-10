@@ -31,9 +31,9 @@ a user interface entity *"contains"* other entities will be discussed later.
 Page-switching refers to the design intention of `Content` to control the visibility of *pages* (e.g `HomePage`).
 A good analogy would be: switching between *tabs of a web browser*; only the page that is selected by the user is displayed.
 
-Notice how the `Sidebar` and `HomePage` contain other entities as well: the `Sidebar` *contains* a `SidebarStatsPane`
-and a `SidebarFolderManager`, while the `HomePage` *contains* `CountdownPaneViewTitle` (indicated by the light blue dotted
-box) and `CountdownPaneView`. Note that `CountdownPaneView` *contains* multiple `CountdownPane`s (3 in this example).
+Notice how the `Sidebar` and `HomePage` contains other components as well: the `Sidebar` *contains* a `SidebarStatsPane`
+and a `SidebarFolderManager`, while the `HomePage` *contains* `CountdownPaneViewTitle` and `CountdownPaneView`.
+Note that `CountdownPaneView` *contains* multiple `CountdownPane`s (3 in this example).
 
 ## Singleton Class Design Pattern
 The [singleton classes](https://www.geeksforgeeks.org/system-design/singleton-design-pattern/) is a

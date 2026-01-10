@@ -48,7 +48,7 @@ the comfort of Java boilerplate-ness.
 > This is where we clarify the difference between "**holding a reference to**" and "**contains**".
 >
 
-When I say **"`foo` contains `bar`"**, I am referring to how `foo` **is a JavaFX [Parent](https://openjfx.io/javadoc/25/javafx.graphics/javafx/scene/Parent.html#)**, where its `getChildren()` method returns a list which **contains** `foo`.
+When I say **"`foo` contains `bar`"**, I am referring to how `foo` **is a JavaFX [Parent](https://openjfx.io/javadoc/25/javafx.graphics/javafx/scene/Parent.html#)**, where its `getChildren()` method returns a list which **contains** `bar`.
 
 When I say **"`foo` references `bar`"**, I am referring to how `foo` has accessed an object reference to `bar`,
 but may not **contain** `bar`. With the singleton design pattern, this is often done through the use of a

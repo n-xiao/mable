@@ -38,26 +38,24 @@ box) and `CountdownPaneView`. Note that `CountdownPaneView` *contains* multiple 
 ## Singleton Class Design Pattern
 The [singleton classes](https://www.geeksforgeeks.org/system-design/singleton-design-pattern/) is a
 design pattern which has been used extensively throughout the code in `frontend`. This is because OOP
-isn't very ideal when it comes to creating user interfaces.
-
-*You may disagree with this design choice. Oh no!*
-
-Anyways, with singleton classes, we can **reference** the same instance of a class from all other classes while remaining in
-the comfort of Java boilerplate-ness.
+isn't very ideal when it comes to creating user interfaces. *You may disagree with this design choice. Oh no!*
+Anyways, with singleton classes, we can **reference** the same instance of a class from all other classes
+while remaining in the comfort of Java boilerplate-ness.
 
 > [!IMPORTANT]
 > This is where we clarify the difference between "**holding a reference to**" and "**contains**".
 >
-
- - When I say **"`foo` contains `bar`"**, I am referring to how `foo` **is a JavaFX [Parent](https://openjfx.io/javadoc/25/javafx.graphics/javafx/scene/Parent.html#)**, where `foo.getChildren()` returns a list which **contains** `bar`.
-    - `foo` is the (JavaFX) parent component of `bar`
-    - `bar` is the (JavaFX) child component of `foo`
-
- - When I say **"`foo` references `bar`"**, I am referring to how `foo` has utilised an object reference to `bar`,
-but may not **contain** `bar`. With the singleton design pattern, this is often done through the use of a
-`Bar.getInstance()` static method which returns `bar`.
-
- - When I say "I love my girlfriend", `NullPointerException` is thrown because "girlfriend" is `null`.
+>
+>
+> - When I say **"`foo` contains `bar`"**, I am referring to how `foo` **is a JavaFX [Parent](https://openjfx.io/javadoc/25/javafx.graphics/javafx/scene/Parent.html#)**, where `foo.getChildren()` returns a list which **contains** `bar`.
+>     - `foo` is the (JavaFX) parent component of `bar`
+>     - `bar` is the (JavaFX) child component of `foo`
+>
+> - When I say **"`foo` references `bar`"**, I am referring to how `foo` has utilised an object reference to `bar`,
+>but may not **contain** `bar`. With the singleton design pattern, this is often done through the use of a
+>`Bar.getInstance()` static method which returns `bar`.
+>
+> - When I say "I love my girlfriend", `NullPointerException` is thrown because "girlfriend" is `null`.
 
 >[!CAUTION]
 > Do not mix up JavaFX "parent component" and "child component" terminology
@@ -90,8 +88,8 @@ public class CountdownPaneViewTitle extends VBox {
         }
         return instance;
     }
-
 ...
+}
 ```
 
 One advantage of using the singleton design pattern is that the instance of the class can still be a JavaFX component

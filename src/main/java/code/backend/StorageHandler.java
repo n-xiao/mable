@@ -126,6 +126,7 @@ public class StorageHandler {
 
     public static void deleteCountdowns(Collection<Countdown> countdowns) {
         COUNTDOWNS.removeAll(countdowns);
+        FOLDERS.forEach(folder -> { folder.getContents().removeAll(countdowns); });
         DELETED_COUNTDOWNS.addAll(countdowns);
     }
 

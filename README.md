@@ -6,7 +6,7 @@
 ![Preview_IMG](https://github.com/n-xiao/mable-artifacts/blob/main/media/public-readme/preview-0.png)
 
 ## Installation Guides
-Follow the installation guide to install Mable.
+Follow the [installation guide](https://github.com/n-xiao/mable/wiki/Installing-Mable) to install Mable.
 
 You can also build it from source.
 

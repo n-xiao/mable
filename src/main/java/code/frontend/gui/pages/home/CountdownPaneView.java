@@ -15,7 +15,6 @@ import code.frontend.foundation.panels.inputs.InputField;
 import code.frontend.gui.dragndrop.DragHandler;
 import code.frontend.gui.rightclickmenu.CountdownViewRCM;
 import code.frontend.gui.rightclickmenu.RightClickMenuTemplate;
-import code.frontend.gui.sidebar.SidebarFolderManager;
 import code.frontend.misc.Vals;
 import code.frontend.misc.Vals.Colour;
 import code.frontend.misc.Vals.GraphicalUI;

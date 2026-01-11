@@ -8,7 +8,7 @@
 ## Installation Guides
 Follow the [installation guide](https://github.com/n-xiao/mable/wiki/Installing-Mable) to install Mable.
 
-You can also build it from source.
+Advanced users can [build it from source](https://github.com/n-xiao/mable/wiki/Building-Mable-from-Source).
 
 ## About
 Mable is an application which allows you to create Countdowns — it counts down the days till a date you set.

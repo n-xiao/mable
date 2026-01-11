@@ -2,17 +2,17 @@
    Copyright (C) 2026  Nicholas Siow <nxiao.dev@gmail.com>
 */
 
-package code.frontend.panels;
+package code.frontend.gui.sidebar;
 
 import code.backend.Countdown.Urgency;
 import code.backend.StorageHandler;
-import code.frontend.foundation.CustomBox;
-import code.frontend.foundation.CustomLine;
-import code.frontend.foundation.CustomLine.Type;
+import code.frontend.foundation.custom.CustomBox;
+import code.frontend.foundation.custom.CustomLine;
+import code.frontend.foundation.custom.CustomLine.Type;
+import code.frontend.gui.dragndrop.RemovePane;
 import code.frontend.misc.Vals.Colour;
 import code.frontend.misc.Vals.FontTools;
 import code.frontend.misc.Vals.GraphicalUI;
-import code.frontend.panels.dragndrop.RemovePane;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;

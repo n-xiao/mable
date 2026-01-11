@@ -2,17 +2,21 @@
    Copyright (C) 2026  Nicholas Siow <nxiao.dev@gmail.com>
 */
 
-package code.frontend.panels;
+package code.frontend.gui.sidebar;
 
 import code.backend.CountdownFolder;
 import code.backend.StorageHandler;
-import code.frontend.foundation.CustomBox;
-import code.frontend.foundation.CustomLine;
-import code.frontend.foundation.CustomLine.Type;
-import code.frontend.gui.FolderManagerRCM;
+import code.frontend.foundation.custom.CustomBox;
+import code.frontend.foundation.custom.CustomLine;
+import code.frontend.foundation.custom.CustomLine.Type;
+import code.frontend.foundation.panels.buttons.ToggleButton;
+import code.frontend.foundation.panels.inputs.InputField;
+import code.frontend.gui.dragndrop.DragHandler;
+import code.frontend.gui.pages.home.CountdownPaneView;
+import code.frontend.gui.pages.home.CountdownPaneViewTitle;
+import code.frontend.gui.rightclickmenu.FolderManagerRCM;
 import code.frontend.misc.Vals.Colour;
 import code.frontend.misc.Vals.FontTools;
-import code.frontend.panels.dragndrop.DragHandler;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.TreeSet;
@@ -58,8 +62,7 @@ public class SidebarFolderManager extends VBox {
                     instance.repopulate(search);
                 }
             });
-            instance.SCROLL_PANE.heightProperty().addListener(
-                (event) -> { instance.moveNewFolderButton(); });
+            instance.heightProperty().addListener((event) -> { instance.moveNewFolderButton(); });
             instance.NEW_FOLDER_BTTN.setOnMouseEntered(
                 event -> { instance.NEW_FOLDER_BTTN.setTextFill(Colour.BTTN_CREATE); });
             instance.NEW_FOLDER_BTTN.setOnMouseExited(
@@ -201,10 +204,56 @@ public class SidebarFolderManager extends VBox {
      * of their search.
      */
     public void repopulate(String search) {
+        if (search.isEmpty()) {
+            this.refreshFolderPaneData();
+            this.repopulate();
+            return;
+        }
         this.FOLDER_PANES.sort(new Comparator<FolderPane>() {
             @Override
             public int compare(FolderPane o1, FolderPane o2) {
-                return o1.getName().compareTo(search) - o2.getName().compareTo(search);
+                return getLevenshteinDistance(o1.getName(), search)
+                    - getLevenshteinDistance(o2.getName(), search);
+            }
+            /**
+             * Edit distance algorithm which measures how closely two strings match. The smaller the
+             * distance, the closer the match of the two provided strings. Method has a bias, where
+             * having to append characters for a match of the two strings is penalised less than
+             * replacement or removal since this method is often called when the user is in the
+             * process of typing something.
+             *
+             * @param input first <code>String</code>
+             * @param target second <code>String</code>
+             * @return <b>int</b> the levenshtein distance distance between the two strings provided
+             *     in the parameters
+             */
+            private int getLevenshteinDistance(String input, String target) {
+                int[][] dp = new int[input.length() + 1][target.length() + 1];
+
+                for (int i = 0; i < dp.length; i++) // scenario where second str is empty
+                    dp[i][0] = i;
+
+                for (int i = 0; i < dp[0].length; i++) // scenario where first str is empty
+                    dp[0][i] = i;
+
+                for (int i = 1; i < dp.length; i++) {
+                    for (int j = 1; j < dp[i].length; j++) {
+                        int append = dp[i][j - 1] + 1; // append to input
+                        int remove = dp[i - 1][j] + 2; // remove from input (double penalty)
+                        int replace = dp[i - 1][j - 1]; // assume no replacement
+
+                        if (input.charAt(i - 1) != target.charAt(j - 1)) // if chars at pos i dont
+                                                                         // match
+                            replace += 2; // add replacement penalty (double penalty)
+
+                        dp[i][j] = Math.min(append,
+                            Math.min(remove,
+                                replace)); // find min of append, remove and replace ops
+                    }
+                }
+
+                return dp[input.length()][target.length()]; // returns the last element of the 2d
+                                                            // array (bottom right element)
             }
         });
         repopulate();
@@ -234,12 +283,12 @@ public class SidebarFolderManager extends VBox {
     private void moveNewFolderButton() {
         double viewport = this.SCROLL_PANE.getViewportBounds().getHeight();
         double viewable = this.SCROLL_PANE_CONTENT.getBoundsInParent().getHeight();
-        if (viewport > viewable + this.NEW_FOLDER_BTTN.getBoundsInLocal().getHeight()) {
-            this.NEW_FOLDER_BTTN_CONTAINER.setCenter(null);
-            if (!this.SCROLL_PANE_CONTENT.getChildren().contains(this.NEW_FOLDER_BTTN))
-                this.SCROLL_PANE_CONTENT.getChildren().add(this.NEW_FOLDER_BTTN);
-        } else if (viewport < viewable) {
-            this.SCROLL_PANE_CONTENT.getChildren().remove(this.NEW_FOLDER_BTTN);
+        double buttonHeight = this.NEW_FOLDER_BTTN.getBoundsInParent().getHeight();
+        this.SCROLL_PANE_CONTENT.getChildren().remove(this.NEW_FOLDER_BTTN);
+        this.NEW_FOLDER_BTTN_CONTAINER.setCenter(null);
+        if (viewport > viewable + buttonHeight) {
+            this.SCROLL_PANE_CONTENT.getChildren().add(this.NEW_FOLDER_BTTN);
+        } else {
             this.NEW_FOLDER_BTTN_CONTAINER.setCenter(this.NEW_FOLDER_BTTN);
         }
     }
@@ -382,6 +431,7 @@ public class SidebarFolderManager extends VBox {
             this.setCursor(Cursor.DEFAULT);
             this.setMinHeight(40);
             this.getLabel().setFont(Font.font(FontTools.FONT_FAM, 13));
+            this.setConsumeEvent(true);
             VBox.setMargin(this, new Insets(3, 2.5, 5, 2.5));
             if (!FOLDER.isProtectedFolder()) // for now, it's easier to just do this
                 this.configureDrop();

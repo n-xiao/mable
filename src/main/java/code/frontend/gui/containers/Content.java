@@ -2,9 +2,9 @@
    Copyright (C) 2026  Nicholas Siow <nxiao.dev@gmail.com>
 */
 
-package code.frontend.gui;
+package code.frontend.gui.containers;
 
-import code.frontend.gui.pages.HomePage;
+import code.frontend.gui.pages.home.HomePage;
 import javafx.geometry.Insets;
 import javafx.scene.layout.StackPane;
 

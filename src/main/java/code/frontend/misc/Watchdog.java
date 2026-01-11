@@ -4,8 +4,8 @@
 
 package code.frontend.misc;
 
-import code.frontend.panels.CountdownPaneView;
-import code.frontend.panels.SidebarStatsPane;
+import code.frontend.gui.pages.home.CountdownPaneView;
+import code.frontend.gui.sidebar.SidebarStatsPane;
 import java.time.LocalDate;
 import javafx.application.Platform;
 import javafx.concurrent.ScheduledService;

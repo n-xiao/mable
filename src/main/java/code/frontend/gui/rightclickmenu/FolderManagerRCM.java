@@ -2,13 +2,13 @@
    Copyright (C) 2026  Nicholas Siow <nxiao.dev@gmail.com>
 */
 
-package code.frontend.gui;
+package code.frontend.gui.rightclickmenu;
 
 import code.backend.CountdownFolder.SpecialType;
 import code.backend.StorageHandler;
+import code.frontend.foundation.panels.buttons.Button;
+import code.frontend.gui.sidebar.SidebarFolderManager;
 import code.frontend.misc.Vals.Colour;
-import code.frontend.panels.Button;
-import code.frontend.panels.SidebarFolderManager;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 

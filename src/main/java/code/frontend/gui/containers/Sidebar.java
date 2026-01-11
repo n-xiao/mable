@@ -2,15 +2,17 @@
    Copyright (C) 2026  Nicholas Siow <nxiao.dev@gmail.com>
 */
 
-package code.frontend.gui;
+package code.frontend.gui.containers;
 
-import code.frontend.foundation.CustomLine;
-import code.frontend.foundation.CustomLine.Type;
+import code.frontend.foundation.custom.CustomLine;
+import code.frontend.foundation.custom.CustomLine.Type;
+import code.frontend.foundation.panels.inputs.InputField;
+import code.frontend.gui.dragndrop.RemovePane;
+import code.frontend.gui.pages.home.CountdownPaneView;
+import code.frontend.gui.sidebar.SidebarFolderManager;
+import code.frontend.gui.sidebar.SidebarStatsPane;
 import code.frontend.misc.Vals.Colour;
 import code.frontend.misc.Vals.FontTools;
-import code.frontend.panels.SidebarFolderManager;
-import code.frontend.panels.SidebarStatsPane;
-import code.frontend.panels.dragndrop.RemovePane;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -23,14 +25,16 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 
 public class Sidebar extends VBox {
-    // using:
-    private static final SidebarStatsPane STATS = SidebarStatsPane.getInstance();
-    private static final SidebarFolderManager FOLDER_SELECTOR = SidebarFolderManager.getInstance();
     private static Sidebar instance = null;
 
+    private final SidebarStatsPane STATS;
+    private final SidebarFolderManager FOLDER_SELECTOR;
     private final RemovePane HOVER_REMOVE_PANE;
 
     private Sidebar() {
+        this.STATS = SidebarStatsPane.getInstance();
+        this.FOLDER_SELECTOR = SidebarFolderManager.getInstance();
+
         this.HOVER_REMOVE_PANE = RemovePane.applyTo(STATS);
         this.setBackground(Colour.createBG(Colour.SIDE_BAR, 0, 0));
         this.setFillWidth(true);
@@ -41,11 +45,18 @@ public class Sidebar extends VBox {
             instance = new Sidebar();
             HBox hudHeading = createSectionHeading("H. U. D.");
             HBox folderHeading = createSectionHeading("Folders");
-            instance.getChildren().addAll(hudHeading, STATS, folderHeading, FOLDER_SELECTOR);
+            instance.getChildren().addAll(
+                hudHeading, instance.STATS, folderHeading, instance.FOLDER_SELECTOR);
             VBox.setMargin(hudHeading, new Insets(10, 0, 0, 0));
-            VBox.setMargin(STATS, new Insets(0, 10, 10, 10));
+            VBox.setMargin(instance.STATS, new Insets(0, 10, 10, 10));
             VBox.setMargin(folderHeading, new Insets(20, 0, 0, 0));
-            VBox.setMargin(FOLDER_SELECTOR, new Insets(0, 10, 5, 10));
+            VBox.setMargin(instance.FOLDER_SELECTOR, new Insets(0, 10, 5, 10));
+
+            instance.setOnMousePressed((event) -> {
+                InputField.escapeAllInputs();
+                CountdownPaneView.getInstance().deselectAll();
+                instance.requestFocus();
+            });
         }
         return instance;
     }

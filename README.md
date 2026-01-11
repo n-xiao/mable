@@ -3,7 +3,12 @@
 > Mable is in open-beta. Bugs and software instability are expected.
 >
 
-![Preview_IMG](https://github.com/n-xiao/mable/blob/master/docs/media/preview-0.png)
+![Preview_IMG](https://github.com/n-xiao/mable-artifacts/blob/main/media/public-readme/preview-0.png)
+
+## Installation Guides
+Follow the installation guide to install Mable.
+
+You can also build it from source.
 
 ## About
 Mable is an application which allows you to create Countdowns — it counts down the days till a date you set.
@@ -19,16 +24,6 @@ you have left for multiple deadlines.
  * Resizable window. *you got a wide-screen? USE IT.*
  * Procedurally-generated UI. *for the aesthetics*
  * Dark mode. Only. *one of the perks of being in beta... no light mode yet, sorry!*
-
-## Get Started
-For developers,
- - Check [releases](https://github.com/n-xiao/mable/releases) and run the compiled binary, or follow the steps below:
-
- - Ensure that you have OpenJDK installed, version 25.0.1.
- - Clone the repository and run `./gradlew build` followed by `./gradlew run` in the project root directory.
- - Mable will store all data in JSON format in the folder `mable_data`,
-   located within your `HOME` directory aka the output of Java's `System.getProperty("user.home")`.
-   Please ensure that your development environment is configured for read and write operations.
 
 ## Roadmap
 All new features are paused for the time being while I work on getting the documentation setup and fix bugs.

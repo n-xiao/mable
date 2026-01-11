@@ -2,13 +2,15 @@
    Copyright (C) 2026  Nicholas Siow <nxiao.dev@gmail.com>
 */
 
-package code.frontend.panels;
+package code.frontend.foundation.panels.inputs;
 
-import code.frontend.foundation.CustomBox;
+import code.frontend.foundation.custom.CustomBox;
 import code.frontend.misc.Vals;
+import java.util.ArrayList;
 import java.util.function.UnaryOperator;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
@@ -18,6 +20,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class InputField extends BorderPane {
+    private static ArrayList<InputField> MANUAL_INPUTS = new ArrayList<InputField>();
+
+    public static void escapeAllInputs() {
+        MANUAL_INPUTS.forEach((input) -> input.setFocused(false));
+    }
+
     private TextField textField;
     private CustomBox border;
     private InputFilter inputFilter;
@@ -31,8 +39,6 @@ public class InputField extends BorderPane {
         textField = new TextField();
         textField.setBackground(null);
         textField.setBorder(null);
-        // textField.prefHeightProperty().bind(this.heightProperty());
-        // textField.prefWidthProperty().bind(this.widthProperty());
         textField.setFont(new Font(Vals.FontTools.FONT_FAM + " Medium", 15));
         textField.setStyle("-fx-text-fill: white; user-select: none;");
         this.applyFocusLogic();
@@ -43,12 +49,16 @@ public class InputField extends BorderPane {
 
         BorderPane.setAlignment(textField, Pos.CENTER);
         this.setCenter(textField);
+        this.setCursor(Cursor.TEXT);
     }
 
     public void enableManualActivation() {
         this.textField.setFocusTraversable(false);
-        this.setFocusTraversable(false);
-        this.setOnMousePressed(event -> { textField.requestFocus(); });
+        this.setOnMousePressed(event -> {
+            textField.requestFocus();
+            event.consume();
+        });
+        MANUAL_INPUTS.add(this);
     }
 
     protected void applyFocusLogic() {

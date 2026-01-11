@@ -5,7 +5,7 @@
 package code;
 
 import code.backend.StorageHandler;
-import code.frontend.gui.MainContainer;
+import code.frontend.gui.containers.MainContainer;
 import code.frontend.misc.Vals;
 import code.frontend.misc.Watchdog;
 import javafx.application.Application;

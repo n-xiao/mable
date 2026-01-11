@@ -2,9 +2,9 @@
    Copyright (C) 2026  Nicholas Siow <nxiao.dev@gmail.com>
 */
 
-package code.frontend.panels;
+package code.frontend.foundation.panels.inputs;
 
-import code.frontend.foundation.CustomBox;
+import code.frontend.foundation.custom.CustomBox;
 import code.frontend.misc.Vals;
 import code.frontend.misc.Vals.Colour;
 import java.text.DecimalFormat;

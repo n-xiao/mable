@@ -2,7 +2,7 @@
    Copyright (C) 2026  Nicholas Siow <nxiao.dev@gmail.com>
 */
 
-package code.frontend.foundation;
+package code.frontend.foundation.custom;
 
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;

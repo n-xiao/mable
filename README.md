@@ -18,12 +18,17 @@ intended to replace your Calendar or To-Do list. Instead, it provides you with a
 you have left for multiple deadlines.
 
 ## Features
- * Free of charge. Free to use. *it's built for you.*
- * Folders allow you to view a selection of Countdowns at a time. *keeping the riff-raff out!*
- * Autosaving to local storage. *works offline, with no strings attached*
- * Resizable window. *you got a wide-screen? USE IT.*
- * Procedurally-generated UI. *for the aesthetics*
- * Dark mode. Only. *one of the perks of being in beta... no light mode yet, sorry!*
+- Add and remove Countdowns easily
+- Shift-Click + Meta-Click functionality for selecting multiple Countdowns
+- Drag n' Drop to organise Countdowns
+- Mark Countdowns as Completed
+- Add and remove Folders
+- Search for Folders
+- Number of Countdowns that are Overdue, Due today or Due tomorrow at a glance
+- Auto-saves to local storage
+- Scrollable views
+- Free of charge
+Check out the [Wiki](https://github.com/n-xiao/mable/wiki) to learn more!
 
 ## Roadmap
 All new features are paused for the time being while I work on getting the documentation setup and fix bugs.
@@ -34,7 +39,7 @@ However, some planned features include:
 
 ## Contributing
 If you have an issue and/or want to contribute to the codebase, I recommend you start with reading
-[the docs](https://github.com/n-xiao/mable/tree/master/docs/developers).
+[the docs](https://github.com/n-xiao/mable/tree/master/docs).
 
 ## Acknowledgements
 - Mable uses [JavaFX](https://github.com/openjdk/jfx/tree/master) as a Gradle dependency. You can find a copy of their

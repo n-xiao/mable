@@ -3,12 +3,14 @@
 > Mable is in open-beta. Bugs and software instability are expected.
 >
 
-![Preview_IMG](https://github.com/n-xiao/mable-artifacts/blob/main/media/public-readme/preview-0.png)
-
-## Installation Guides
-Follow the [installation guide](https://github.com/n-xiao/mable/wiki/Installing-Mable) to install Mable.
+## Install now
+Follow the [**installation guide**](https://github.com/n-xiao/mable/wiki/Installing-Mable) to install Mable.
 
 Advanced users can [build it from source](https://github.com/n-xiao/mable/wiki/Building-Mable-from-Source).
+
+---
+
+![Preview_IMG](https://github.com/n-xiao/mable-artifacts/blob/main/media/public-readme/preview-0.png)
 
 ## About
 Mable is an application which allows you to create Countdowns — it counts down the days till a date you set.

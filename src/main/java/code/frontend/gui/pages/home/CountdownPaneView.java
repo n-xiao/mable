@@ -7,6 +7,7 @@ package code.frontend.gui.pages.home;
 import code.backend.Countdown;
 import code.backend.Countdown.Urgency;
 import code.backend.CountdownFolder;
+import code.backend.CountdownFolder.SpecialType;
 import code.backend.StorageHandler;
 import code.frontend.foundation.custom.CustomBox;
 import code.frontend.foundation.custom.CustomLine;
@@ -209,10 +210,12 @@ public class CountdownPaneView extends ScrollPane {
     }
 
     public void removeSelectedFromFolder(CountdownFolder folder) {
+        final boolean DRAG_FROM_COMPLETED_FOLDER =
+            StorageHandler.getCurrentlySelectedFolder().getType() == SpecialType.ALL_COMPLETE;
         for (CountdownPane countdownPane : COUNTDOWN_PANES) {
             if (countdownPane.isSelected())
                 folder.getContents().remove(countdownPane.getCountdown());
-            if (countdownPane.getCountdown().isDone())
+            if (countdownPane.isSelected() && DRAG_FROM_COMPLETED_FOLDER)
                 countdownPane.getCountdown().setDone(false);
         }
         repopulate(LocalDate.now());

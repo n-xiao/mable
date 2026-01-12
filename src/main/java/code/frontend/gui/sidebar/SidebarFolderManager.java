@@ -86,6 +86,7 @@ public class SidebarFolderManager extends VBox {
     private final FolderPane COMPLETED_FOLDER_PANE;
     public final FolderPane INCOMPLETED_FOLDER_PANE;
     private Pane scrollPaneWrapper;
+    private VBox nameFieldContainer;
 
     private SidebarFolderManager() {
         this.scrollPaneWrapper = new Pane();
@@ -281,6 +282,8 @@ public class SidebarFolderManager extends VBox {
     }
 
     private void moveNewFolderButton() {
+        if (this.SCROLL_PANE_CONTENT.getChildren().contains(this.nameFieldContainer))
+            return; // do not execute if name field container is on-screen
         double viewport = this.SCROLL_PANE.getViewportBounds().getHeight();
         double viewable = this.SCROLL_PANE_CONTENT.getBoundsInParent().getHeight();
         double buttonHeight = this.NEW_FOLDER_BTTN.getBoundsInParent().getHeight();
@@ -316,22 +319,23 @@ public class SidebarFolderManager extends VBox {
 
         final String ERR_EXISTS = "no duplicate names!";
         final String ERR_BLANK = "that's... not a name";
-        final VBox CONTAINER = new VBox();
-        CONTAINER.setFillWidth(true);
-        CONTAINER.setBackground(null);
-        CONTAINER.setFillWidth(true);
-        CONTAINER.setPadding(new Insets(0, 0, 10, 0)); // adds space at the bottom
-                                                       // so the container can be seen when
-                                                       // scroll pane is scrolled all the way down
+        this.nameFieldContainer = new VBox();
+        this.nameFieldContainer.setFillWidth(true);
+        this.nameFieldContainer.setBackground(null);
+        this.nameFieldContainer.setFillWidth(true);
+        this.nameFieldContainer.setPadding(new Insets(0, 0, 10, 0)); // adds space at the bottom
+                                                                     // so the container can be seen
+                                                                     // when scroll pane is scrolled
+                                                                     // all the way down
         final Label TOP_HINT = new Label("folder name: ");
-        TOP_HINT.maxWidthProperty().bind(CONTAINER.widthProperty());
+        TOP_HINT.maxWidthProperty().bind(this.nameFieldContainer.widthProperty());
         TOP_HINT.minHeight(20);
         TOP_HINT.setAlignment(Pos.CENTER_LEFT);
         TOP_HINT.setFont(Font.font(FontTools.FONT_FAM, FontPosture.ITALIC, 13));
         TOP_HINT.setTextFill(Colour.SELECTED);
 
         final Label HINT = new Label();
-        HINT.maxWidthProperty().bind(CONTAINER.widthProperty());
+        HINT.maxWidthProperty().bind(this.nameFieldContainer.widthProperty());
         HINT.minHeight(20);
         HINT.setAlignment(Pos.CENTER);
         HINT.setFont(Font.font(FontTools.FONT_FAM, FontPosture.ITALIC, 13));
@@ -340,7 +344,7 @@ public class SidebarFolderManager extends VBox {
 
         final FadeTransition TRANSITION = new FadeTransition();
 
-        VBox.setMargin(CONTAINER, new Insets(10, 2.5, 0, 2.5));
+        VBox.setMargin(this.nameFieldContainer, new Insets(10, 2.5, 0, 2.5));
         final InputField NAME_INPUT = new InputField();
         NAME_INPUT.getTextField().setText(nameToEdit);
         NAME_INPUT.getCustomBorder().setCornerOffset(0.34);
@@ -391,7 +395,7 @@ public class SidebarFolderManager extends VBox {
 
         final ChangeListener<Number> AUTO_SCROLL_DOWN_LISTENER = new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                if (SCROLL_PANE_CONTENT.getChildren().contains(CONTAINER)) {
+                if (SCROLL_PANE_CONTENT.getChildren().contains(instance.nameFieldContainer)) {
                     SCROLL_PANE.setVvalue(1); // scroll all the way down
                 }
             };
@@ -409,8 +413,8 @@ public class SidebarFolderManager extends VBox {
 
         this.SCROLL_PANE_CONTENT.heightProperty().addListener(AUTO_SCROLL_DOWN_LISTENER);
 
-        CONTAINER.getChildren().addAll(TOP_HINT, NAME_INPUT, HINT);
-        this.SCROLL_PANE_CONTENT.getChildren().add(CONTAINER);
+        this.nameFieldContainer.getChildren().addAll(TOP_HINT, NAME_INPUT, HINT);
+        this.SCROLL_PANE_CONTENT.getChildren().add(instance.nameFieldContainer);
 
         Platform.runLater(new Runnable() {
             @Override

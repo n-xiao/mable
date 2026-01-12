@@ -1,7 +1,8 @@
 <img src="https://github.com/n-xiao/mable-artifacts/blob/main/media/icons/mable-repo-banner.png"/>
 
-
-Follow the [**installation guide**](https://github.com/n-xiao/mable/wiki/Installing-Mable) to install Mable.
+<h4 align="center">
+  <a href="https://github.com/n-xiao/mable/wiki/Installing-Mable">Installation Guide</a>
+</h4>
 
 ---
 

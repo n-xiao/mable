@@ -388,21 +388,34 @@ public class SidebarFolderManager extends VBox {
                 TRANSITION.playFromStart();
             }
         });
+
+        final ChangeListener<Number> AUTO_SCROLL_DOWN_LISTENER = new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                if (SCROLL_PANE_CONTENT.getChildren().contains(CONTAINER)) {
+                    SCROLL_PANE.setVvalue(1); // scroll all the way down
+                }
+            };
+        };
+
         NAME_INPUT.getTextField().focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (!newValue)
+                if (!newValue) {
+                    SCROLL_PANE_CONTENT.heightProperty().removeListener(AUTO_SCROLL_DOWN_LISTENER);
                     instance.repopulate(); // if focus lost, treat it like user wants to cancel
+                }
             }
         });
 
+        this.SCROLL_PANE_CONTENT.heightProperty().addListener(AUTO_SCROLL_DOWN_LISTENER);
+
         CONTAINER.getChildren().addAll(TOP_HINT, NAME_INPUT, HINT);
         this.SCROLL_PANE_CONTENT.getChildren().add(CONTAINER);
+
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 NAME_INPUT.getTextField().requestFocus();
-                SCROLL_PANE.setVvalue(1); // scroll all the way down
             }
         });
     }

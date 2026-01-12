@@ -587,7 +587,9 @@ public class CountdownPaneView extends ScrollPane {
                 DragHandler.init();
             });
 
-            CONTENT_HBOX.setOnMouseReleased((event) -> {
+            CONTENT_HBOX.setOnMouseReleased((event) -> { // this is a hack... see docs
+                                                         // executes on mouse release but drag
+                                                         // is incomplete
                 CONTENT_HBOX.setMouseTransparent(false);
                 this.deactivateDragStyling();
                 DragHandler.close();

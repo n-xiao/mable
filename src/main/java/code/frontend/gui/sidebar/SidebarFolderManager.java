@@ -156,8 +156,6 @@ public class SidebarFolderManager extends VBox {
         this.SCROLL_PANE_CONTENT.setBackground(Colour.createBG(Color.BLACK, 13, 8));
         this.SCROLL_PANE_CONTENT.setFillWidth(true);
         this.SCROLL_PANE_CONTENT.setPadding(new Insets(4, 5, 0, 5));
-        // this.SCROLL_PANE_CONTENT.minHeightProperty().bind(
-        //     this.SCROLL_PANE.heightProperty().add(-2));
         this.SCROLL_PANE_CONTENT.setMaxHeight(Double.MAX_VALUE);
         this.SCROLL_PANE.setContent(SCROLL_PANE_CONTENT); // dont move this; don't even think
     }
@@ -262,10 +260,11 @@ public class SidebarFolderManager extends VBox {
     public void repopulate() {
         this.SCROLL_PANE_CONTENT.getChildren().clear();
         this.FOLDER_PANES.forEach(this.SCROLL_PANE_CONTENT.getChildren()::add);
-        // creates a visual divider
-        if (!FOLDER_PANES.isEmpty()) {
+
+        if (!FOLDER_PANES.isEmpty()) { // creates a visual divider
             final Pane DIVIDER = new Pane();
             final CustomLine LINE = new CustomLine(2, Type.HORIZONTAL_TYPE);
+
             LINE.setPadding(10);
             CustomLine.applyToPane(DIVIDER, LINE);
             DIVIDER.maxWidthProperty().bind(SCROLL_PANE_CONTENT.widthProperty());
@@ -274,6 +273,7 @@ public class SidebarFolderManager extends VBox {
             VBox.setMargin(DIVIDER, new Insets(5, 0, 5, 0));
             this.SCROLL_PANE_CONTENT.getChildren().add(DIVIDER);
         }
+
         // then adds protected folders
         this.SCROLL_PANE_CONTENT.getChildren().addAll(
             this.INCOMPLETED_FOLDER_PANE, this.COMPLETED_FOLDER_PANE);
@@ -310,14 +310,6 @@ public class SidebarFolderManager extends VBox {
     }
 
     private void triggerNewFolderInput(String nameToEdit) {
-        // final Button CANCEL_BTTN = new Button("cancel edits") {
-        //     @Override
-        //     public void executeOnClick() {
-        //         instance.repopulate();
-        //     }
-        // };
-        // CANCEL_BTTN.setColour(Colour.ERROR);
-        // this.NEW_FOLDER_BTTN_CONTAINER.setCenter(CANCEL_BTTN);
         // prevent user from clicking the add button (again)
         this.SCROLL_PANE_CONTENT.getChildren().remove(this.NEW_FOLDER_BTTN);
         this.NEW_FOLDER_BTTN_CONTAINER.setCenter(null);
@@ -328,7 +320,9 @@ public class SidebarFolderManager extends VBox {
         CONTAINER.setFillWidth(true);
         CONTAINER.setBackground(null);
         CONTAINER.setFillWidth(true);
-
+        CONTAINER.setPadding(new Insets(0, 0, 10, 0)); // adds space at the bottom
+                                                       // so the container can be seen when
+                                                       // scroll pane is scrolled all the way down
         final Label TOP_HINT = new Label("folder name: ");
         TOP_HINT.maxWidthProperty().bind(CONTAINER.widthProperty());
         TOP_HINT.minHeight(20);
@@ -446,9 +440,7 @@ public class SidebarFolderManager extends VBox {
             });
             this.setOnMouseDragReleased((event) -> {
                 CountdownPaneView.getInstance().addAllSelectedToFolder(this.FOLDER);
-                // this.untoggle();
                 DragHandler.close();
-                this.executeOnClick(event);
             });
         }
 

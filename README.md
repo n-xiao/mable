@@ -1,6 +1,5 @@
 # Mable
 
-## Install now
 Follow the [**installation guide**](https://github.com/n-xiao/mable/wiki/Installing-Mable) to install Mable.
 
 > [!IMPORTANT]

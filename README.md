@@ -2,10 +2,6 @@
 
 Follow the [**installation guide**](https://github.com/n-xiao/mable/wiki/Installing-Mable) to install Mable.
 
-> [!IMPORTANT]
-> Mable is in open-beta. Bugs and software instability are expected.
->
-
 ---
 
 ![Preview_IMG](https://github.com/n-xiao/mable-artifacts/blob/main/media/public-readme/preview-0.png)

@@ -28,6 +28,7 @@ you have left for multiple deadlines.
 - Auto-saves to local storage
 - Scrollable views
 - Free of charge
+
 Check out the [Wiki](https://github.com/n-xiao/mable/wiki) to learn more!
 
 ## Roadmap

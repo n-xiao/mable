@@ -19,10 +19,10 @@ import java.util.LinkedList;
 import java.util.NavigableSet;
 import java.util.Stack;
 import java.util.TreeSet;
+import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.SerializationFeature;
-import tools.jackson.databind.exc.ValueInstantiationException;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.node.ObjectNode;
 
@@ -100,20 +100,18 @@ public class StorageHandler {
     private static void load() {
         try {
             loadCountdowns(); // ALWAYS LOAD COUNTDOWNS FIRST
-        } catch (ValueInstantiationException e) {
+        } catch (JacksonException e) {
             salvageCountdowns();
-            System.out.println("countdowns salvage attempted");
         }
 
         try {
             loadFolders();
-        } catch (ValueInstantiationException e) {
+        } catch (JacksonException e) {
             salvageSavedFolders();
-            System.out.println("folder salvage attempted");
         }
     }
 
-    private static void loadCountdowns() throws ValueInstantiationException {
+    private static void loadCountdowns() throws JacksonException {
         assert COUNTDOWNS.isEmpty();
         final JsonNode JSON_ROOT = MAPPER.readTree(COUNTDOWNS_PATH);
         JSON_ROOT.forEachEntry((_k, v) -> {
@@ -136,10 +134,10 @@ public class StorageHandler {
         COUNTDOWNS.clear(); // ensures empty
         final JsonNode JSON_ROOT = MAPPER.readTree(COUNTDOWNS_PATH);
         JSON_ROOT.forEachEntry((_k, v) -> {
-            String id = MAPPER.writeValueAsString(v.get("id"));
-            String name = MAPPER.writeValueAsString(v.get("name"));
-            boolean isDone = Boolean.parseBoolean(MAPPER.writeValueAsString(v.get("isDone")));
-            String due = MAPPER.writeValueAsString(v.get("due"));
+            String id = MAPPER.convertValue(v.get("id"), String.class); // assumes "id", not "ID"
+            String name = MAPPER.convertValue(v.get("name"), String.class);
+            boolean isDone = MAPPER.convertValue(v.get("isDone"), Boolean.class).booleanValue();
+            String due = MAPPER.convertValue(v.get("due"), String.class);
             COUNTDOWNS.add(new Countdown(id, name, isDone, due));
         });
 
@@ -156,12 +154,7 @@ public class StorageHandler {
         } catch (IOException _e) {
         }
 
-        // delete countdown data
-        // final JsonNode COUNTDOWN_JSON_ROOT = MAPPER.readTree(STORAGE_PATH);
-        // if (!COUNTDOWN_JSON_ROOT.isObject())
-        //     return;
-        // final ObjectNode COUNTDOWN_OBJ_ROOT = (ObjectNode) COUNTDOWN_JSON_ROOT;
-        // COUNTDOWN_OBJ_ROOT.removeAll();
+        // clears json file contents
         MAPPER.writeValue(COUNTDOWNS_PATH, MAPPER.createObjectNode().putObject(""));
     }
 
@@ -237,7 +230,7 @@ public class StorageHandler {
         return stat;
     }
 
-    private static void loadFolders() throws ValueInstantiationException {
+    private static void loadFolders() throws JacksonException {
         assert FOLDERS.isEmpty();
         final JsonNode JSON_ROOT = MAPPER.readTree(FOLDER_PATH);
         JSON_ROOT.forEachEntry((_k, v) -> {
@@ -263,7 +256,7 @@ public class StorageHandler {
         FOLDERS.clear(); // ensures empty
         final JsonNode JSON_ROOT = MAPPER.readTree(FOLDER_PATH);
         JSON_ROOT.forEachEntry((k, v) -> {
-            String name = MAPPER.writeValueAsString(v.get("name"));
+            String name = MAPPER.convertValue(v.get("name"), String.class);
             String jsonContentsArray = MAPPER.writeValueAsString(v.get("contents"));
             ArrayList<String> contents = MAPPER.readValue(jsonContentsArray, ArrayList.class);
 
@@ -286,12 +279,8 @@ public class StorageHandler {
                 Files.copy(FOLDER_PATH, FOLDER_BACKUP);
         } catch (IOException _e) {
         }
-        // delete folder data
-        // final JsonNode FOLDER_JSON_ROOT = MAPPER.readTree(STORAGE_PATH);
-        // if (!FOLDER_JSON_ROOT.isObject())
-        //     return;
-        // final ObjectNode FOLDER_OBJ_ROOT = (ObjectNode) FOLDER_JSON_ROOT;
-        // FOLDER_OBJ_ROOT.removeAll();
+
+        // clears json file contents
         MAPPER.writeValue(FOLDER_PATH, MAPPER.createObjectNode().putObject(""));
     }
 

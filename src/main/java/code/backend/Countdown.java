@@ -5,6 +5,7 @@
 package code.backend;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Countdown extends Identifiable {
     public enum Urgency { OVERDUE, TODAY, TOMORROW, ONGOING, COMPLETED }
 
@@ -38,7 +40,7 @@ public class Countdown extends Identifiable {
     }
 
     @JsonCreator
-    public Countdown(@JsonProperty("id") String id, @JsonProperty("name") String name,
+    public Countdown(@JsonProperty("ID") String id, @JsonProperty("name") String name,
         @JsonProperty("isDone") boolean isDone, @JsonProperty("due") String due) {
         super(id);
         this.name = name;

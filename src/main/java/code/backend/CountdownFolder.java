@@ -6,10 +6,12 @@ package code.backend;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.TreeSet;
 import java.util.UUID;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CountdownFolder extends Identifiable {
     public enum SpecialType { ALL_INCOMPLETE, ALL_COMPLETE }
 
@@ -25,8 +27,8 @@ public class CountdownFolder extends Identifiable {
     }
 
     @JsonCreator
-    public CountdownFolder(@JsonProperty("id") String folderId,
-        @JsonProperty("folderName") String name, @JsonProperty("contents") String[] contentAsIDs) {
+    public CountdownFolder(@JsonProperty("ID") String folderId, @JsonProperty("name") String name,
+        @JsonProperty("contents") String[] contentAsIDs) {
         super(folderId);
         this.name = name;
         this.TYPE = null;
@@ -64,7 +66,7 @@ public class CountdownFolder extends Identifiable {
         return this.CONTENTS;
     }
 
-    @JsonProperty("folderName")
+    @JsonProperty("name")
     public String getName() {
         return name;
     }

@@ -7,7 +7,6 @@ package code.backend;
 import code.backend.Countdown.Urgency;
 import code.backend.CountdownFolder.SpecialType;
 import code.frontend.gui.pages.home.CountdownPaneView;
-import java.awt.List;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,6 +22,7 @@ import java.util.TreeSet;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.SerializationFeature;
+import tools.jackson.databind.exc.ValueInstantiationException;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.node.ObjectNode;
 
@@ -33,7 +33,7 @@ import tools.jackson.databind.node.ObjectNode;
  */
 public class StorageHandler {
     private static final Path DATA_DIR = Path.of(System.getProperty("user.home") + "/mable_data");
-    private static final Path STORAGE_PATH = Path.of(DATA_DIR.toString() + "/countdowns.json");
+    private static final Path COUNTDOWNS_PATH = Path.of(DATA_DIR.toString() + "/countdowns.json");
     private static final Path FOLDER_PATH = Path.of(DATA_DIR.toString() + "/folders.json");
     private static final ObjectMapper MAPPER =
         JsonMapper.builder().enable(SerializationFeature.INDENT_OUTPUT).build();
@@ -73,14 +73,14 @@ public class StorageHandler {
     private StorageHandler() {}
 
     public static void init() throws Exception {
-        final boolean LOADABLE = Files.exists(STORAGE_PATH) && Files.exists(FOLDER_PATH);
+        final boolean LOADABLE = Files.exists(COUNTDOWNS_PATH) && Files.exists(FOLDER_PATH);
         if (LOADABLE) {
             load();
         } else {
             Files.createDirectories(DATA_DIR);
 
-            if (Files.notExists(STORAGE_PATH)) {
-                Files.createFile(STORAGE_PATH);
+            if (Files.notExists(COUNTDOWNS_PATH)) {
+                Files.createFile(COUNTDOWNS_PATH);
                 saveCountdowns();
             }
             if (Files.notExists(FOLDER_PATH)) {
@@ -98,26 +98,80 @@ public class StorageHandler {
     }
 
     private static void load() {
-        loadCountdowns(); // ALWAYS LOAD COUNTDOWNS FIRST
-        loadFolders();
+        try {
+            loadCountdowns(); // ALWAYS LOAD COUNTDOWNS FIRST
+        } catch (ValueInstantiationException e) {
+            salvageCountdowns();
+            System.out.println("countdowns salvage attempted");
+        }
+
+        try {
+            loadFolders();
+        } catch (ValueInstantiationException e) {
+            salvageSavedFolders();
+            System.out.println("folder salvage attempted");
+        }
     }
 
-    private static void loadCountdowns() {
+    private static void loadCountdowns() throws ValueInstantiationException {
         assert COUNTDOWNS.isEmpty();
-        final JsonNode JSON_ROOT = MAPPER.readTree(STORAGE_PATH);
+        final JsonNode JSON_ROOT = MAPPER.readTree(COUNTDOWNS_PATH);
         JSON_ROOT.forEachEntry((_k, v) -> {
             Countdown cd = MAPPER.treeToValue(v, Countdown.class);
             COUNTDOWNS.add(cd);
         });
     }
 
+    /**
+     * This attempts to extract required Countdown information to reconstruct
+     * COUNTDOWNS. This method is useful when a user is migrating from an older
+     * version of Mable, which may slightly different backend functionality.
+     * To put it plainly, this method attempts (but does not guarantee) to
+     * provide backwards compatibility for all previous Mable versions.
+     *
+     * This method should only be run if the main loading method throws a
+     * Jackson exception.
+     */
+    private static void salvageCountdowns() {
+        COUNTDOWNS.clear(); // ensures empty
+        final JsonNode JSON_ROOT = MAPPER.readTree(COUNTDOWNS_PATH);
+        JSON_ROOT.forEachEntry((_k, v) -> {
+            String id = MAPPER.writeValueAsString(v.get("id"));
+            String name = MAPPER.writeValueAsString(v.get("name"));
+            boolean isDone = Boolean.parseBoolean(MAPPER.writeValueAsString(v.get("isDone")));
+            String due = MAPPER.writeValueAsString(v.get("due"));
+            COUNTDOWNS.add(new Countdown(id, name, isDone, due));
+        });
+
+        deleteAllCountdownsSafely();
+        saveCountdowns();
+    }
+
+    private static void deleteAllCountdownsSafely() {
+        final Path COUNTDOWN_BACKUP = Path.of(
+            DATA_DIR.toString() + "/" + LocalDateTime.now().toString() + "-countdowns-backup.json");
+        try { // make a copy of the existing data
+            if (Files.notExists(COUNTDOWN_BACKUP))
+                Files.copy(COUNTDOWNS_PATH, COUNTDOWN_BACKUP);
+        } catch (IOException _e) {
+        }
+
+        // delete countdown data
+        // final JsonNode COUNTDOWN_JSON_ROOT = MAPPER.readTree(STORAGE_PATH);
+        // if (!COUNTDOWN_JSON_ROOT.isObject())
+        //     return;
+        // final ObjectNode COUNTDOWN_OBJ_ROOT = (ObjectNode) COUNTDOWN_JSON_ROOT;
+        // COUNTDOWN_OBJ_ROOT.removeAll();
+        MAPPER.writeValue(COUNTDOWNS_PATH, MAPPER.createObjectNode().putObject(""));
+    }
+
     private static void saveCountdowns() {
-        final JsonNode JSON_ROOT = MAPPER.readTree(STORAGE_PATH);
+        final JsonNode JSON_ROOT = MAPPER.readTree(COUNTDOWNS_PATH);
         final ObjectNode OBJ_ROOT = JSON_ROOT.isObject() ? ((ObjectNode) JSON_ROOT)
                                                          : MAPPER.createObjectNode().putObject("");
         COUNTDOWNS.forEach(cd -> { OBJ_ROOT.putPOJO(cd.getID().toString(), cd); });
         DELETED_COUNTDOWNS.forEach(cd -> { OBJ_ROOT.remove(cd.getID().toString()); });
-        MAPPER.writeValue(STORAGE_PATH, OBJ_ROOT);
+        MAPPER.writeValue(COUNTDOWNS_PATH, OBJ_ROOT);
     }
 
     public static void addCountdown(Countdown c) {
@@ -183,7 +237,7 @@ public class StorageHandler {
         return stat;
     }
 
-    private static void loadFolders() {
+    private static void loadFolders() throws ValueInstantiationException {
         assert FOLDERS.isEmpty();
         final JsonNode JSON_ROOT = MAPPER.readTree(FOLDER_PATH);
         JSON_ROOT.forEachEntry((_k, v) -> {
@@ -204,8 +258,9 @@ public class StorageHandler {
      * This method should only be run if the main loading method throws a
      * Jackson exception.
      */
+    @SuppressWarnings("unchecked")
     private static void salvageSavedFolders() {
-        assert FOLDERS.isEmpty();
+        FOLDERS.clear(); // ensures empty
         final JsonNode JSON_ROOT = MAPPER.readTree(FOLDER_PATH);
         JSON_ROOT.forEachEntry((k, v) -> {
             String name = MAPPER.writeValueAsString(v.get("name"));
@@ -213,32 +268,14 @@ public class StorageHandler {
             ArrayList<String> contents = MAPPER.readValue(jsonContentsArray, ArrayList.class);
 
             CountdownFolder folder = new CountdownFolder(name);
-            contents.forEach(
+            contents.forEach( // rebuild contents
                 string -> folder.getContents().add(StorageHandler.getCountdownByID(string)));
 
             FOLDERS.add(folder); // adds the serialised folder to the FOLDERS
         });
 
-        deleteAllCountdownsSafely();
+        deleteAllFoldersSafely();
         saveFolders();
-    }
-
-    private static void deleteAllCountdownsSafely() {
-        final Path COUNTDOWN_BACKUP = Path.of(
-            DATA_DIR.toString() + "/" + LocalDateTime.now().toString() + "-countdowns-backup.json");
-        try { // make a copy of the existing data
-            if (Files.notExists(COUNTDOWN_BACKUP))
-                Files.copy(STORAGE_PATH, COUNTDOWN_BACKUP);
-        } catch (IOException _e) {
-        }
-
-        // delete countdown data
-        // final JsonNode COUNTDOWN_JSON_ROOT = MAPPER.readTree(STORAGE_PATH);
-        // if (!COUNTDOWN_JSON_ROOT.isObject())
-        //     return;
-        // final ObjectNode COUNTDOWN_OBJ_ROOT = (ObjectNode) COUNTDOWN_JSON_ROOT;
-        // COUNTDOWN_OBJ_ROOT.removeAll();
-        MAPPER.writeValue(STORAGE_PATH, MAPPER.createObjectNode().putObject(""));
     }
 
     private static void deleteAllFoldersSafely() {

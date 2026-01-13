@@ -7,9 +7,13 @@ package code.backend;
 import code.backend.Countdown.Urgency;
 import code.backend.CountdownFolder.SpecialType;
 import code.frontend.gui.pages.home.CountdownPaneView;
+import java.awt.List;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -111,8 +115,8 @@ public class StorageHandler {
         final JsonNode JSON_ROOT = MAPPER.readTree(STORAGE_PATH);
         final ObjectNode OBJ_ROOT = JSON_ROOT.isObject() ? ((ObjectNode) JSON_ROOT)
                                                          : MAPPER.createObjectNode().putObject("");
-        COUNTDOWNS.forEach(cd -> { OBJ_ROOT.putPOJO(cd.getIdAsString(), cd); });
-        DELETED_COUNTDOWNS.forEach(cd -> { OBJ_ROOT.remove(cd.getIdAsString()); });
+        COUNTDOWNS.forEach(cd -> { OBJ_ROOT.putPOJO(cd.getID().toString(), cd); });
+        DELETED_COUNTDOWNS.forEach(cd -> { OBJ_ROOT.remove(cd.getID().toString()); });
         MAPPER.writeValue(STORAGE_PATH, OBJ_ROOT);
     }
 
@@ -132,7 +136,7 @@ public class StorageHandler {
 
     public static Countdown getCountdownByID(String id) {
         for (Countdown countdown : COUNTDOWNS) {
-            if (countdown.getIdAsString().equals(id))
+            if (countdown.getID().toString().equals(id))
                 return countdown;
         }
         return null;
@@ -190,6 +194,70 @@ public class StorageHandler {
         organiseProtectedFolders();
     }
 
+    /**
+     * This attempts to extract required folder information to reconstruct
+     * FOLDERS. This method is useful when a user is migrating from an older
+     * version of Mable, which may slightly different backend functionality.
+     * To put it plainly, this method attempts (but does not guarantee) to
+     * provide backwards compatibility for all previous Mable versions.
+     *
+     * This method should only be run if the main loading method throws a
+     * Jackson exception.
+     */
+    private static void salvageSavedFolders() {
+        assert FOLDERS.isEmpty();
+        final JsonNode JSON_ROOT = MAPPER.readTree(FOLDER_PATH);
+        JSON_ROOT.forEachEntry((k, v) -> {
+            String name = MAPPER.writeValueAsString(v.get("name"));
+            String jsonContentsArray = MAPPER.writeValueAsString(v.get("contents"));
+            ArrayList<String> contents = MAPPER.readValue(jsonContentsArray, ArrayList.class);
+
+            CountdownFolder folder = new CountdownFolder(name);
+            contents.forEach(
+                string -> folder.getContents().add(StorageHandler.getCountdownByID(string)));
+
+            FOLDERS.add(folder); // adds the serialised folder to the FOLDERS
+        });
+
+        deleteAllCountdownsSafely();
+        saveFolders();
+    }
+
+    private static void deleteAllCountdownsSafely() {
+        final Path COUNTDOWN_BACKUP = Path.of(
+            DATA_DIR.toString() + "/" + LocalDateTime.now().toString() + "-countdowns-backup.json");
+        try { // make a copy of the existing data
+            if (Files.notExists(COUNTDOWN_BACKUP))
+                Files.copy(STORAGE_PATH, COUNTDOWN_BACKUP);
+        } catch (IOException _e) {
+        }
+
+        // delete countdown data
+        // final JsonNode COUNTDOWN_JSON_ROOT = MAPPER.readTree(STORAGE_PATH);
+        // if (!COUNTDOWN_JSON_ROOT.isObject())
+        //     return;
+        // final ObjectNode COUNTDOWN_OBJ_ROOT = (ObjectNode) COUNTDOWN_JSON_ROOT;
+        // COUNTDOWN_OBJ_ROOT.removeAll();
+        MAPPER.writeValue(STORAGE_PATH, MAPPER.createObjectNode().putObject(""));
+    }
+
+    private static void deleteAllFoldersSafely() {
+        final Path FOLDER_BACKUP = Path.of(
+            DATA_DIR.toString() + "/" + LocalDateTime.now().toString() + "-folders-backup.json");
+        try {
+            if (Files.notExists(FOLDER_BACKUP))
+                Files.copy(FOLDER_PATH, FOLDER_BACKUP);
+        } catch (IOException _e) {
+        }
+        // delete folder data
+        // final JsonNode FOLDER_JSON_ROOT = MAPPER.readTree(STORAGE_PATH);
+        // if (!FOLDER_JSON_ROOT.isObject())
+        //     return;
+        // final ObjectNode FOLDER_OBJ_ROOT = (ObjectNode) FOLDER_JSON_ROOT;
+        // FOLDER_OBJ_ROOT.removeAll();
+        MAPPER.writeValue(FOLDER_PATH, MAPPER.createObjectNode().putObject(""));
+    }
+
     public static void organiseProtectedFolders() {
         COMPLETED_FOLDER.getContents().clear();
         INCOMPLETED_FOLDER.getContents().clear();
@@ -206,8 +274,9 @@ public class StorageHandler {
         final JsonNode JSON_ROOT = MAPPER.readTree(FOLDER_PATH);
         final ObjectNode OBJ_ROOT = JSON_ROOT.isObject() ? ((ObjectNode) JSON_ROOT)
                                                          : MAPPER.createObjectNode().putObject("");
-        FOLDERS.forEach(folder -> { OBJ_ROOT.putPOJO(folder.getName(), folder); });
-        DELETED_FOLDERS.forEach(deletedFolder -> { OBJ_ROOT.remove(deletedFolder.getName()); });
+        FOLDERS.forEach(folder -> { OBJ_ROOT.putPOJO(folder.getID().toString(), folder); });
+        DELETED_FOLDERS.forEach(
+            deletedFolder -> { OBJ_ROOT.remove(deletedFolder.getID().toString()); });
         MAPPER.writeValue(FOLDER_PATH, OBJ_ROOT);
     }
 

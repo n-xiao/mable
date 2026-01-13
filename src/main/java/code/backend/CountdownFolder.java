@@ -4,26 +4,30 @@
 
 package code.backend;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.TreeSet;
+import java.util.UUID;
 
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE)
-public class CountdownFolder {
+public class CountdownFolder extends Identifiable {
     public enum SpecialType { ALL_INCOMPLETE, ALL_COMPLETE }
 
     private String name;
-    private final SpecialType TYPE;
+    @JsonIgnore private final SpecialType TYPE;
     private final TreeSet<Countdown> CONTENTS;
 
     public CountdownFolder(String name) {
         this.name = name;
         this.CONTENTS = new TreeSet<Countdown>(new SortByRemainingDays());
         this.TYPE = null;
+        super(UUID.randomUUID());
     }
 
     @JsonCreator
-    public CountdownFolder(
-        @JsonProperty("name") String name, @JsonProperty("contents") String[] contentAsIDs) {
+    public CountdownFolder(@JsonProperty("id") String folderId,
+        @JsonProperty("folderName") String name, @JsonProperty("contents") String[] contentAsIDs) {
+        super(folderId);
         this.name = name;
         this.TYPE = null;
         this.CONTENTS = new TreeSet<Countdown>(new SortByRemainingDays());
@@ -53,13 +57,14 @@ public class CountdownFolder {
         }
         this.TYPE = type;
         this.CONTENTS = new TreeSet<Countdown>(new SortByRemainingDays());
+        super(UUID.randomUUID());
     }
 
     public TreeSet<Countdown> getContents() {
         return this.CONTENTS;
     }
 
-    @JsonProperty("name")
+    @JsonProperty("folderName")
     public String getName() {
         return name;
     }
@@ -69,7 +74,7 @@ public class CountdownFolder {
         String[] stringIDs = new String[this.CONTENTS.size()];
         int index = 0;
         for (Countdown countdown : this.CONTENTS) {
-            stringIDs[index] = countdown.getIdAsString();
+            stringIDs[index] = countdown.getID().toString();
             index++;
         }
         return stringIDs;
@@ -83,6 +88,7 @@ public class CountdownFolder {
         return TYPE;
     }
 
+    @JsonIgnore
     public boolean isProtectedFolder() {
         return this.TYPE != null;
     }

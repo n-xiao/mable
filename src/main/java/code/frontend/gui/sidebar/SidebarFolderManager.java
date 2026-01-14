@@ -195,6 +195,8 @@ public class SidebarFolderManager extends VBox {
         for (CountdownFolder countdownFolder : folders) {
             FolderPane pane = new FolderPane(countdownFolder);
             this.FOLDER_PANES.add(pane);
+            if (countdownFolder.equals(FolderHandler.getCurrentlySelectedFolder()))
+                pane.toggle();
         }
     }
 

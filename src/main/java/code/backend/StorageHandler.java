@@ -123,13 +123,18 @@ public class StorageHandler {
     /**
      * This attempts to extract required Countdown information to reconstruct
      * COUNTDOWNS. This method is useful when a user is migrating from an older
-     * version of Mable, which may slightly different backend functionality.
+     * version of Mable (< v1.0.4-beta), with slightly different backend functionality.
      * To put it plainly, this method attempts (but does not guarantee) to
      * provide backwards compatibility for all previous Mable versions.
      *
      * This method should only be run if the main loading method throws a
      * Jackson exception.
+     *
+     * This method has literally been deprecated just as it was created,
+     * given that it is technically unnecessary for such a young & small project.
+     * This method will be removed in the first stable release of Mable.
      */
+    @Deprecated
     private static void salvageCountdowns() {
         COUNTDOWNS.clear(); // ensures empty
         final JsonNode JSON_ROOT = MAPPER.readTree(COUNTDOWNS_PATH);
@@ -244,14 +249,19 @@ public class StorageHandler {
     /**
      * This attempts to extract required folder information to reconstruct
      * FOLDERS. This method is useful when a user is migrating from an older
-     * version of Mable, which may slightly different backend functionality.
+     * version of Mable (< v1.0.4-beta), with slightly different backend functionality.
      * To put it plainly, this method attempts (but does not guarantee) to
      * provide backwards compatibility for all previous Mable versions.
      *
      * This method should only be run if the main loading method throws a
      * Jackson exception.
+     *
+     * This method has literally been deprecated just as it was created,
+     * given that it is technically unnecessary for such a young & small project.
+     * This method will be removed in the first stable release of Mable.
      */
     @SuppressWarnings("unchecked")
+    @Deprecated
     private static void salvageSavedFolders() {
         FOLDERS.clear(); // ensures empty
         final JsonNode JSON_ROOT = MAPPER.readTree(FOLDER_PATH);

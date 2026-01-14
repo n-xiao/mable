@@ -81,10 +81,10 @@ public class CountdownPaneView extends ScrollPane {
         this.FLOW_PANE.minHeightProperty().bind(this.heightProperty().add(-2));
         this.FLOW_PANE.setMaxHeight(Double.MAX_VALUE);
         this.FLOW_PANE.setBackground(Colour.createBG(Colour.BACKGROUND, 0, 0));
-        // this.fp.setBackground(Colour.createBG(Color.BLUE, 0, 0));
         this.FLOW_PANE.setAlignment(Pos.TOP_CENTER);
         this.FLOW_PANE.setHgap(HGAP_BETWEEN);
         this.FLOW_PANE.setVgap(VGAP_BETWEEN);
+        this.FLOW_PANE.setPadding(new Insets(0, 0, 30, 0));
         this.setBackground(null);
         this.setFitToWidth(true);
         this.setStyle("-fx-background: transparent;"); // important: removes the stupid background
@@ -190,6 +190,8 @@ public class CountdownPaneView extends ScrollPane {
         if (IMBALANCE_DETECTED)
             addPaddingForAlignment();
         updateMode();
+
+        CountdownPaneViewTitle.getInstance().updateTitleText();
     }
 
     public int getNumOfSelections() {

@@ -74,12 +74,14 @@ public class FolderHandler {
         DELETED_FOLDERS.add(currentlySelectedFolder);
     }
 
-    public static boolean setSelectedFolderName(String name) {
-        if (folderExists(name) && !name.equals(currentlySelectedFolder.getName()))
-            return false;
-
-        currentlySelectedFolder.setName(name);
-        return true;
+    public static boolean renameFolder(String oldName, String newName) {
+        for (CountdownFolder folder : FOLDERS) {
+            if (folder.getName().equals(oldName)) {
+                folder.setName(newName);
+                return true;
+            }
+        }
+        return false;
     }
 
     public static TreeSet<CountdownFolder> getFolders() {

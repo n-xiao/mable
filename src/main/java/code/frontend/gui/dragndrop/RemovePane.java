@@ -4,8 +4,8 @@
 
 package code.frontend.gui.dragndrop;
 
-import code.backend.CountdownFolder.SpecialType;
-import code.backend.StorageHandler;
+import code.backend.data.CountdownFolder.SpecialType;
+import code.backend.utils.FolderHandler;
 import code.frontend.foundation.custom.CustomBox;
 import code.frontend.gui.pages.home.CountdownPaneView;
 import code.frontend.misc.Vals.Colour;
@@ -34,7 +34,7 @@ public class RemovePane extends Pane {
 
         this.setOnMouseDragReleased((event) -> {
             CountdownPaneView.getInstance().removeSelectedFromFolder(
-                StorageHandler.getCurrentlySelectedFolder());
+                FolderHandler.getCurrentlySelectedFolder());
             DragHandler.close();
         });
 
@@ -72,7 +72,7 @@ public class RemovePane extends Pane {
     }
 
     public void wake() {
-        if (!(StorageHandler.getCurrentlySelectedFolder().getType() == SpecialType.ALL_INCOMPLETE))
+        if (!(FolderHandler.getCurrentlySelectedFolder().getType() == SpecialType.ALL_INCOMPLETE))
             this.setVisible(true);
     }
 

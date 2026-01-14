@@ -4,7 +4,7 @@
 
 package code;
 
-import code.backend.StorageHandler;
+import code.backend.utils.StorageHandler;
 import code.frontend.gui.containers.MainContainer;
 import code.frontend.misc.Vals;
 import code.frontend.misc.Watchdog;

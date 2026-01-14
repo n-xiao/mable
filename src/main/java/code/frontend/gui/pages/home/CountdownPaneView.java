@@ -4,11 +4,12 @@
 
 package code.frontend.gui.pages.home;
 
-import code.backend.Countdown;
-import code.backend.Countdown.Urgency;
-import code.backend.CountdownFolder;
-import code.backend.CountdownFolder.SpecialType;
-import code.backend.StorageHandler;
+import code.backend.data.Countdown;
+import code.backend.data.Countdown.Urgency;
+import code.backend.data.CountdownFolder;
+import code.backend.data.CountdownFolder.SpecialType;
+import code.backend.utils.CountdownHandler;
+import code.backend.utils.FolderHandler;
 import code.frontend.foundation.custom.CustomBox;
 import code.frontend.foundation.custom.CustomLine;
 import code.frontend.foundation.custom.CustomLine.Type;
@@ -137,7 +138,7 @@ public class CountdownPaneView extends ScrollPane {
             return;
         int cdWidth = (int) (CountdownPane.WIDTH + HGAP_BETWEEN * 0.5);
         int width = (int) this.getBoundsInParent().getWidth();
-        int numOfCountdowns = StorageHandler.getDescendingCountdowns().size();
+        int numOfCountdowns = CountdownHandler.getDescendingCountdowns().size();
         int columns = (int) (width / cdWidth);
         if (columns == 0)
             return;
@@ -155,13 +156,13 @@ public class CountdownPaneView extends ScrollPane {
     }
 
     public void repopulate(LocalDate now) {
-        StorageHandler.organiseProtectedFolders();
+        FolderHandler.organiseProtectedFolders();
         NavigableSet<Countdown> countdowns;
         // this if-else is ok for now since there's only two DisplayOrders rn
         if (displayOrder.equals(DisplayOrder.ASCENDING))
-            countdowns = StorageHandler.getAscendingCountdowns();
+            countdowns = CountdownHandler.getAscendingCountdowns();
         else
-            countdowns = StorageHandler.getDescendingCountdowns();
+            countdowns = CountdownHandler.getDescendingCountdowns();
 
         Iterator<Countdown> countdownIterator = countdowns.iterator();
         Iterator<CountdownPane> paneIterator = this.COUNTDOWN_PANES.iterator();
@@ -211,7 +212,7 @@ public class CountdownPaneView extends ScrollPane {
 
     public void removeSelectedFromFolder(CountdownFolder folder) {
         final boolean DRAG_FROM_COMPLETED_FOLDER =
-            StorageHandler.getCurrentlySelectedFolder().getType() == SpecialType.ALL_COMPLETE;
+            FolderHandler.getCurrentlySelectedFolder().getType() == SpecialType.ALL_COMPLETE;
         for (CountdownPane countdownPane : COUNTDOWN_PANES) {
             if (countdownPane.isSelected())
                 folder.getContents().remove(countdownPane.getCountdown());
@@ -239,8 +240,8 @@ public class CountdownPaneView extends ScrollPane {
                 pane.getCountdown().setDone(isDone);
             }
             // removes from folder if mark as done... yes, bad design... will improve later
-            if (isDone && !StorageHandler.getCurrentlySelectedFolder().isProtectedFolder()) {
-                removeSelectedFromFolder(StorageHandler.getCurrentlySelectedFolder());
+            if (isDone && !FolderHandler.getCurrentlySelectedFolder().isProtectedFolder()) {
+                removeSelectedFromFolder(FolderHandler.getCurrentlySelectedFolder());
             }
         });
         deselectAll();
@@ -265,7 +266,7 @@ public class CountdownPaneView extends ScrollPane {
                 FLOW_PANE.getChildren().remove(pane);
             }
         });
-        StorageHandler.deleteCountdowns(selected);
+        CountdownHandler.deleteCountdowns(selected);
         COUNTDOWN_PANES.removeIf(pane -> pane.isSelected());
         deselectAll();
         repopulate(LocalDate.now());

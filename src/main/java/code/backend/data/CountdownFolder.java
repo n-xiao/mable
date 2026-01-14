@@ -2,8 +2,10 @@
    Copyright (C) 2026  Nicholas Siow <nxiao.dev@gmail.com>
 */
 
-package code.backend;
+package code.backend.data;
 
+import code.backend.utils.CountdownHandler;
+import code.backend.utils.SortByRemainingDays;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -34,7 +36,7 @@ public class CountdownFolder extends Identifiable {
         this.TYPE = null;
         this.CONTENTS = new TreeSet<Countdown>(new SortByRemainingDays());
         for (String id : contentAsIDs) {
-            Countdown countdown = StorageHandler.getCountdownByID(id);
+            Countdown countdown = CountdownHandler.getCountdownByID(id);
             if (countdown != null)
                 this.CONTENTS.add(countdown);
         }
@@ -45,7 +47,7 @@ public class CountdownFolder extends Identifiable {
      * the set of FOLDERS to prevent accidental deletion by user actions. When instantiating through
      * this constructor, please ensure that you hold a reference to it.
      */
-    protected CountdownFolder(SpecialType type) {
+    public CountdownFolder(SpecialType type) {
         assert type != null;
         switch (type) {
             case ALL_INCOMPLETE:
@@ -93,5 +95,14 @@ public class CountdownFolder extends Identifiable {
     @JsonIgnore
     public boolean isProtectedFolder() {
         return this.TYPE != null;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof CountdownFolder))
+            return false;
+
+        CountdownFolder other = (CountdownFolder) obj;
+        return other.name.equals(this.name);
     }
 }

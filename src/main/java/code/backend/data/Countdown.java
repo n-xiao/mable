@@ -2,8 +2,9 @@
    Copyright (C) 2026  Nicholas Siow <nxiao.dev@gmail.com>
 */
 
-package code.backend;
+package code.backend.data;
 
+import code.backend.utils.CountdownHandler;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -130,8 +131,8 @@ public class Countdown extends Identifiable {
     public void setDueDate(LocalDate dueDate) {
         this.dueDateTime = dueDate.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
         // to keep the order
-        StorageHandler.getCountdowns().remove(this);
-        StorageHandler.getCountdowns().add(this);
+        CountdownHandler.getCountdowns().remove(this);
+        CountdownHandler.getCountdowns().add(this);
     }
 
     public void setDone(boolean isDone) {

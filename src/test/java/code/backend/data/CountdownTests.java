@@ -1,4 +1,4 @@
-package code.backend;
+package code.backend.data;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

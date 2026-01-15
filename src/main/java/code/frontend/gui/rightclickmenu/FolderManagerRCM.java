@@ -4,8 +4,8 @@
 
 package code.frontend.gui.rightclickmenu;
 
-import code.backend.CountdownFolder.SpecialType;
-import code.backend.StorageHandler;
+import code.backend.data.CountdownFolder.SpecialType;
+import code.backend.utils.FolderHandler;
 import code.frontend.foundation.panels.buttons.Button;
 import code.frontend.gui.sidebar.SidebarFolderManager;
 import code.frontend.misc.Vals.Colour;
@@ -70,7 +70,7 @@ public class FolderManagerRCM extends RightClickMenuTemplate {
 
     @Override
     public void setMode() {
-        SpecialType type = StorageHandler.getCurrentlySelectedFolder().getType();
+        SpecialType type = FolderHandler.getCurrentlySelectedFolder().getType();
         if (type == SpecialType.ALL_INCOMPLETE) {
             this.EDIT.setEnabled(false);
             this.REMOVE.setEnabled(false);

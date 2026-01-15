@@ -4,8 +4,8 @@
 
 package code.frontend.gui.sidebar;
 
-import code.backend.CountdownFolder;
-import code.backend.StorageHandler;
+import code.backend.data.CountdownFolder;
+import code.backend.utils.FolderHandler;
 import code.frontend.foundation.custom.CustomBox;
 import code.frontend.foundation.custom.CustomLine;
 import code.frontend.foundation.custom.CustomLine.Type;
@@ -13,10 +13,10 @@ import code.frontend.foundation.panels.buttons.ToggleButton;
 import code.frontend.foundation.panels.inputs.InputField;
 import code.frontend.gui.dragndrop.DragHandler;
 import code.frontend.gui.pages.home.CountdownPaneView;
-import code.frontend.gui.pages.home.CountdownPaneViewTitle;
 import code.frontend.gui.rightclickmenu.FolderManagerRCM;
 import code.frontend.misc.Vals.Colour;
 import code.frontend.misc.Vals.FontTools;
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.TreeSet;
@@ -114,8 +114,8 @@ public class SidebarFolderManager extends VBox {
         this.setFillWidth(true);
         this.setBackground(null);
 
-        this.COMPLETED_FOLDER_PANE = new FolderPane(StorageHandler.getCompletedFolder());
-        this.INCOMPLETED_FOLDER_PANE = new FolderPane(StorageHandler.getIncompletedFolder());
+        this.COMPLETED_FOLDER_PANE = new FolderPane(FolderHandler.getCompletedFolder());
+        this.INCOMPLETED_FOLDER_PANE = new FolderPane(FolderHandler.getIncompletedFolder());
 
         this.getChildren().addAll(
             this.SEARCH_FIELD, this.scrollPaneWrapper, this.NEW_FOLDER_BTTN_CONTAINER);
@@ -166,7 +166,7 @@ public class SidebarFolderManager extends VBox {
         if (index == -1)
             return;
 
-        StorageHandler.removeSelectedFolder();
+        FolderHandler.removeSelectedFolder();
 
         this.refreshFolderPaneData();
         this.repopulate();
@@ -178,9 +178,9 @@ public class SidebarFolderManager extends VBox {
         for (FolderPane folderPane : FOLDER_PANES) {
             if (folderPane.hasSameName(selectedFolderPane)) {
                 this.triggerNewFolderInput(folderPane.getName());
-                break;
+            } else {
+                this.SCROLL_PANE_CONTENT.getChildren().add(folderPane);
             }
-            this.SCROLL_PANE_CONTENT.getChildren().add(folderPane);
         }
     }
 
@@ -191,10 +191,12 @@ public class SidebarFolderManager extends VBox {
      */
     public void refreshFolderPaneData() {
         this.FOLDER_PANES.clear();
-        TreeSet<CountdownFolder> folders = StorageHandler.getFolders();
+        TreeSet<CountdownFolder> folders = FolderHandler.getFolders();
         for (CountdownFolder countdownFolder : folders) {
             FolderPane pane = new FolderPane(countdownFolder);
             this.FOLDER_PANES.add(pane);
+            if (countdownFolder.equals(FolderHandler.getCurrentlySelectedFolder()))
+                pane.toggle();
         }
     }
 
@@ -351,13 +353,10 @@ public class SidebarFolderManager extends VBox {
         NAME_INPUT.getCustomBorder().setDeviation(0.02);
         NAME_INPUT.getCustomBorder().setCornerDeviation(0.02);
         NAME_INPUT.setFieldMargins(new Insets(3));
+
         NAME_INPUT.getTextField().setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
                 String input = NAME_INPUT.getTextField().getText();
-                if (input.equals(nameToEdit)) {
-                    instance.refreshFolderPaneData();
-                    instance.repopulate();
-                }
 
                 if (input.isBlank()) {
                     HINT.setText(ERR_BLANK);
@@ -365,20 +364,14 @@ public class SidebarFolderManager extends VBox {
                     return;
                 }
 
-                if (!StorageHandler.createFolder(input)) {
+                if (FolderHandler.renameFolder(nameToEdit, input)
+                    || FolderHandler.createFolder(input)) {
+                    instance.refreshFolderPaneData();
+                    instance.repopulate();
+                } else {
                     HINT.setText(ERR_EXISTS);
                     playHintTransition();
-                    return;
                 }
-
-                instance.refreshFolderPaneData();
-                instance.repopulate();
-
-                // selects new folder
-                FOLDER_PANES.forEach(pane -> {
-                    if (pane.getName().equals(input))
-                        pane.executeOnClick(null);
-                });
             };
 
             private void playHintTransition() {
@@ -474,8 +467,8 @@ public class SidebarFolderManager extends VBox {
                 COMPLETED_FOLDER_PANE.untoggle();
 
             SidebarFolderManager.selectedFolderPane = this;
-            StorageHandler.setCurrentlySelectedFolder(this.FOLDER);
-            CountdownPaneViewTitle.getInstance().setTitleText(this.getName());
+            FolderHandler.setCurrentlySelectedFolder(this.FOLDER);
+            CountdownPaneView.getInstance().repopulate(LocalDate.now());
 
             if (!this.FOLDER.isProtectedFolder() && event != null
                 && event.getButton().equals(MouseButton.SECONDARY)) {

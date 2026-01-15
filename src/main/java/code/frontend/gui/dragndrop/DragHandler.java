@@ -4,7 +4,7 @@
 
 package code.frontend.gui.dragndrop;
 
-import code.backend.Countdown.Urgency;
+import code.backend.data.Countdown.Urgency;
 import code.frontend.foundation.custom.CustomBox;
 import code.frontend.gui.containers.MainContainer;
 import code.frontend.gui.containers.Sidebar;

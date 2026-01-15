@@ -111,3 +111,6 @@ One advantage of using the singleton design pattern is that the instance of the 
 > * You can identify this issue and offending class(es) by looking at the output of the `StackOverflowError`.
 > Multiple `getInstance()` calls would be printed in the stack trace.
 >
+
+
+<sub>Copyright © 2026 Nicholas Siow  <nxiao.dev@gmail.com> </sub>

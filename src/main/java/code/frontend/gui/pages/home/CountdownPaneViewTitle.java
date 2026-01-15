@@ -4,6 +4,7 @@
 
 package code.frontend.gui.pages.home;
 
+import code.backend.utils.FolderHandler;
 import code.frontend.foundation.custom.CustomLine;
 import code.frontend.foundation.custom.CustomLine.Type;
 import code.frontend.misc.Vals.Colour;
@@ -57,7 +58,7 @@ public class CountdownPaneViewTitle extends VBox {
         return lineContainer;
     }
 
-    public void setTitleText(String text) {
-        this.LABEL.setText(text);
+    public void updateTitleText() {
+        this.LABEL.setText(FolderHandler.getCurrentlySelectedFolder().getName());
     }
 }

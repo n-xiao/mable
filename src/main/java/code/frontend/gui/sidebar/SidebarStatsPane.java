@@ -4,8 +4,8 @@
 
 package code.frontend.gui.sidebar;
 
-import code.backend.Countdown.Urgency;
-import code.backend.StorageHandler;
+import code.backend.data.Countdown.Urgency;
+import code.backend.utils.CountdownHandler;
 import code.frontend.foundation.custom.CustomBox;
 import code.frontend.foundation.custom.CustomLine;
 import code.frontend.foundation.custom.CustomLine.Type;
@@ -82,7 +82,7 @@ public class SidebarStatsPane extends VBox {
         private int count;
 
         StatPane(Urgency urgency) {
-            this.count = StorageHandler.getStatistic(urgency);
+            this.count = CountdownHandler.getStatistic(urgency);
             this.URGENCY = urgency;
             switch (URGENCY) {
                 case OVERDUE:
@@ -149,7 +149,7 @@ public class SidebarStatsPane extends VBox {
         }
 
         public void refreshContent() {
-            this.count = StorageHandler.getStatistic(this.URGENCY);
+            this.count = CountdownHandler.getStatistic(this.URGENCY);
             this.COUNTER_LABEL.setText(GraphicalUI.intToString(this.count));
             if (this.count == 0) {
                 this.setOverallColour(Colour.TXT_GHOST);

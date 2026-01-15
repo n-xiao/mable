@@ -4,7 +4,7 @@
 
 package code.frontend.windows;
 
-import code.backend.Countdown;
+import code.backend.data.Countdown;
 import code.frontend.foundation.panels.buttons.Button;
 import code.frontend.foundation.panels.inputs.DateInputField;
 import code.frontend.foundation.panels.inputs.InputField;

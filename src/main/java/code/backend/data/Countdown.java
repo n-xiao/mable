@@ -2,10 +2,10 @@
    Copyright (C) 2026  Nicholas Siow <nxiao.dev@gmail.com>
 */
 
-package code.backend;
+package code.backend.data;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -13,15 +13,14 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE)
-public class Countdown {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Countdown extends Identifiable {
     public enum Urgency { OVERDUE, TODAY, TOMORROW, ONGOING, COMPLETED }
 
     private String name;
     private boolean isDone;
     private ZonedDateTime dueDateTime;
 
-    public final UUID ID; // represents unique id
     private static final String ZONE_ID_STR = "UTC";
 
     /**
@@ -35,15 +34,15 @@ public class Countdown {
     }
 
     public Countdown(String name, LocalDate dueDate) {
-        this.ID = UUID.randomUUID();
+        super(UUID.randomUUID());
         this.name = name;
         this.dueDateTime = dueDate.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
     }
 
     @JsonCreator
-    public Countdown(@JsonProperty("id") String id, @JsonProperty("name") String name,
+    public Countdown(@JsonProperty("ID") String id, @JsonProperty("name") String name,
         @JsonProperty("isDone") boolean isDone, @JsonProperty("due") String due) {
-        this.ID = UUID.fromString(id);
+        super(id);
         this.name = name;
         this.isDone = isDone;
         this.dueDateTime = ZonedDateTime.parse(due);
@@ -82,11 +81,6 @@ public class Countdown {
         return name;
     }
 
-    @JsonProperty("id")
-    public String getIdAsString() {
-        return this.ID.toString();
-    }
-
     @JsonProperty("isDone")
     public boolean isDone() {
         return isDone;
@@ -95,16 +89,6 @@ public class Countdown {
     @JsonProperty("due")
     public ZonedDateTime getDueDateTime() {
         return dueDateTime;
-    }
-
-    @Deprecated
-    public String getStatusString(LocalDate now) {
-        if (isOverdue(now))
-            return "Overdue";
-        else if (this.isDone)
-            return "Completed";
-        else
-            return "Ongoing";
     }
 
     public Urgency getUrgency(LocalDate now) {
@@ -145,22 +129,9 @@ public class Countdown {
 
     public void setDueDate(LocalDate dueDate) {
         this.dueDateTime = dueDate.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
-        // to keep the order
-        StorageHandler.getCountdowns().remove(this);
-        StorageHandler.getCountdowns().add(this);
     }
 
     public void setDone(boolean isDone) {
         this.isDone = isDone;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Countdown))
-            return false;
-        else {
-            Countdown other = (Countdown) obj;
-            return other.ID.equals(this.ID);
-        }
     }
 }

@@ -4,8 +4,8 @@
 
 package code.frontend.windows;
 
-import code.backend.Countdown;
-import code.backend.StorageHandler;
+import code.backend.data.Countdown;
+import code.backend.utils.CountdownHandler;
 import code.frontend.foundation.panels.buttons.Button;
 import code.frontend.gui.pages.home.CountdownPaneView;
 import java.time.LocalDate;
@@ -39,7 +39,7 @@ public class AddWindow extends ConfigWindowTemplate {
                 LocalDate due = getDateField().getLocalDateInput(false);
                 if (due == null)
                     return;
-                StorageHandler.addCountdown(new Countdown(name, due));
+                CountdownHandler.addCountdown(new Countdown(name, due));
                 CountdownPaneView.getInstance().repopulate(LocalDate.now());
                 CountdownPaneView.getInstance().deselectAll();
                 window.close();

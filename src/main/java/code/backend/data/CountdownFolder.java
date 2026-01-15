@@ -2,33 +2,41 @@
    Copyright (C) 2026  Nicholas Siow <nxiao.dev@gmail.com>
 */
 
-package code.backend;
+package code.backend.data;
 
-import com.fasterxml.jackson.annotation.*;
+import code.backend.utils.CountdownHandler;
+import code.backend.utils.SortByRemainingDays;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.TreeSet;
+import java.util.UUID;
 
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE)
-public class CountdownFolder {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class CountdownFolder extends Identifiable {
     public enum SpecialType { ALL_INCOMPLETE, ALL_COMPLETE }
 
     private String name;
-    private final SpecialType TYPE;
+    @JsonIgnore private final SpecialType TYPE;
     private final TreeSet<Countdown> CONTENTS;
 
     public CountdownFolder(String name) {
         this.name = name;
         this.CONTENTS = new TreeSet<Countdown>(new SortByRemainingDays());
         this.TYPE = null;
+        super(UUID.randomUUID());
     }
 
     @JsonCreator
-    public CountdownFolder(
-        @JsonProperty("name") String name, @JsonProperty("contents") String[] contentAsIDs) {
+    public CountdownFolder(@JsonProperty("ID") String folderId, @JsonProperty("name") String name,
+        @JsonProperty("contents") String[] contentAsIDs) {
+        super(folderId);
         this.name = name;
         this.TYPE = null;
         this.CONTENTS = new TreeSet<Countdown>(new SortByRemainingDays());
         for (String id : contentAsIDs) {
-            Countdown countdown = StorageHandler.getCountdownByID(id);
+            Countdown countdown = CountdownHandler.getCountdownByID(id);
             if (countdown != null)
                 this.CONTENTS.add(countdown);
         }
@@ -39,7 +47,7 @@ public class CountdownFolder {
      * the set of FOLDERS to prevent accidental deletion by user actions. When instantiating through
      * this constructor, please ensure that you hold a reference to it.
      */
-    protected CountdownFolder(SpecialType type) {
+    public CountdownFolder(SpecialType type) {
         assert type != null;
         switch (type) {
             case ALL_INCOMPLETE:
@@ -53,6 +61,7 @@ public class CountdownFolder {
         }
         this.TYPE = type;
         this.CONTENTS = new TreeSet<Countdown>(new SortByRemainingDays());
+        super(UUID.randomUUID());
     }
 
     public TreeSet<Countdown> getContents() {
@@ -69,7 +78,7 @@ public class CountdownFolder {
         String[] stringIDs = new String[this.CONTENTS.size()];
         int index = 0;
         for (Countdown countdown : this.CONTENTS) {
-            stringIDs[index] = countdown.getIdAsString();
+            stringIDs[index] = countdown.getID().toString();
             index++;
         }
         return stringIDs;
@@ -83,7 +92,17 @@ public class CountdownFolder {
         return TYPE;
     }
 
+    @JsonIgnore
     public boolean isProtectedFolder() {
         return this.TYPE != null;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof CountdownFolder))
+            return false;
+
+        CountdownFolder other = (CountdownFolder) obj;
+        return other.name.equals(this.name);
     }
 }

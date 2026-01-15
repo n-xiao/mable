@@ -2,8 +2,9 @@
    Copyright (C) 2026  Nicholas Siow <nxiao.dev@gmail.com>
 */
 
-package code.backend;
+package code.backend.utils;
 
+import code.backend.data.Countdown;
 import java.time.LocalDate;
 import java.util.Comparator;
 
@@ -14,7 +15,7 @@ public class SortByRemainingDays implements Comparator<Countdown> {
         int dist1 = c1.daysUntilDue(now);
         int dist2 = c2.daysUntilDue(now);
         int dateDiff = dist1 - dist2;
-        int idDiff = c1.ID.compareTo(c2.ID); // enforces uniqueness for sets
+        int idDiff = c1.getID().compareTo(c2.getID()); // enforces uniqueness for sets
         return (dateDiff == 0) ? idDiff : dateDiff;
     }
 }

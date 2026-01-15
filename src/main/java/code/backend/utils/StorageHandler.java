@@ -21,7 +21,7 @@ import tools.jackson.databind.node.ObjectNode;
 
 /**
  *  Handles all mutable file read/writing operations. Note that this does not handle resources
- *  (resources are handled by {@link code.frontend.misc.Vals}) since data in resouces are
+ *  (resources are handled by Vals) since data in resouces are
  *  immutable by a user.
  */
 public class StorageHandler {

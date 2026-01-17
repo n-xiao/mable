@@ -93,7 +93,7 @@ public class CountdownPaneViewTitle extends VBox {
 
 One advantage of using the singleton design pattern is that the instance of the class can still be a JavaFX component
 (through inheritance); saying that "a `CountdownPaneViewTitle` **is a** `VBox`" is intuitive. [^1]
-[^1]: This is why the singleton class is preferred over other design patterns, such as a utility or factory classes.
+[^1]: This is why the singleton class is preferred over other design patterns, such as a utility or factory class.
 
 > [!CAUTION]
 > Use caution when calling **any** `getInstance()` methods within **any** class's constructor.

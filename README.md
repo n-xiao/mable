@@ -30,11 +30,12 @@ you have left for multiple deadlines.
 Check out the [Wiki](https://github.com/n-xiao/mable/wiki) to learn more!
 
 ## Roadmap
-All new features are paused for the time being while I work on getting the documentation setup and fix bugs.
-However, some planned features include:
- - User settings + light mode option
- - Toast notifications (e.g "added new task!" or "created new folder!")
- - Undo and redo function (this one might be tough)
+ - User settings
+ - In-app toast notifications
+ - Undo and redo function
+
+Development is ongoing for the next release (`v3.0.0-beta`)
+
 
 ## Contributing
 If you have an issue and/or want to contribute to the codebase, I recommend you start with reading

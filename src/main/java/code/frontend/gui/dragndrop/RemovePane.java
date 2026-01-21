@@ -6,7 +6,7 @@ package code.frontend.gui.dragndrop;
 
 import code.backend.data.CountdownFolder.SpecialType;
 import code.backend.utils.FolderHandler;
-import code.frontend.foundation.custom.CustomBox;
+import code.frontend.foundation.custom.MableBorder;
 import code.frontend.gui.pages.home.CountdownPaneView;
 import code.frontend.misc.Vals.Colour;
 import code.frontend.misc.Vals.FontTools;
@@ -21,15 +21,15 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 
 public class RemovePane extends Pane {
-    private final CustomBox BORDER;
+    private final MableBorder BORDER;
     private final Label LABEL;
     private final BorderPane CONTAINER;
 
     private RemovePane() {
-        BORDER = new CustomBox();
+        BORDER = new MableBorder(2, 0.2, 0.35);
         LABEL = new Label();
         CONTAINER = new BorderPane();
-        CustomBox.applyToPane(this, BORDER);
+        MableBorder.applyToPane(this, BORDER);
         configureStyling();
 
         this.setOnMouseDragReleased((event) -> {

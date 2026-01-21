@@ -9,6 +9,10 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 
+@Deprecated
+/**
+ * Deprecated in favour of the new and improved MableBorder
+ */
 public class CustomBox extends ResizableCanvas {
     // CORNER_OFFSET > CORNER_DEVIATION
     private double deviation = Vals.GraphicalUI.DEVIATION;
@@ -36,8 +40,6 @@ public class CustomBox extends ResizableCanvas {
         assert cornerOffset > cornerDeviation;
     }
 
-    // TODO: FIX THIS SO THAT REDRAW WITH EXACT PREV PATH IS POSSIBLE
-    // IDEA IS TO EXTEND gc class AND IMPLEMENT SOME KIND OF PATH LOGGER
     @Override
     protected void draw(GraphicsContext gc, boolean recompute) {
         gc.setLineWidth(this.thickness);

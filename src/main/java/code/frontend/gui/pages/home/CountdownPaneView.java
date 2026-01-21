@@ -10,45 +10,24 @@ import code.backend.data.CountdownFolder;
 import code.backend.data.CountdownFolder.SpecialType;
 import code.backend.utils.CountdownHandler;
 import code.backend.utils.FolderHandler;
-import code.frontend.foundation.custom.CustomBox;
-import code.frontend.foundation.custom.CustomLine;
-import code.frontend.foundation.custom.CustomLine.Type;
 import code.frontend.foundation.panels.inputs.InputField;
-import code.frontend.gui.dragndrop.DragHandler;
 import code.frontend.gui.rightclickmenu.CountdownViewRCM;
 import code.frontend.gui.rightclickmenu.RightClickMenuTemplate;
-import code.frontend.misc.Vals;
 import code.frontend.misc.Vals.Colour;
-import code.frontend.misc.Vals.GraphicalUI;
 import code.frontend.windows.EditWindow;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.NavigableSet;
-import javafx.animation.Animation.Status;
-import javafx.animation.FadeTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.TextAlignment;
-import javafx.util.Duration;
 
 /**
  * This is the scrollable Pane that is responsible for displaying {@link CountdownPane}.
@@ -58,15 +37,15 @@ public class CountdownPaneView extends ScrollPane {
     public enum ButtonMode { NO_SELECT, SINGLE_SELECT, MULTI_SELECT }
     public enum DisplayOrder { ASCENDING, DESCENDING }
 
-    private final double HGAP_BETWEEN = 20;
-    private final double VGAP_BETWEEN = -5;
-    private final FlowPane FLOW_PANE;
-    private final LinkedHashSet<CountdownPane> COUNTDOWN_PANES;
-    private final ArrayList<Region> PADDINGS_IN_USE;
+    protected final double HGAP_BETWEEN = 24;
+    protected final double VGAP_BETWEEN = 2;
+    protected final FlowPane FLOW_PANE;
+    protected final LinkedHashSet<CountdownPane> COUNTDOWN_PANES;
+    protected final ArrayList<Region> PADDINGS_IN_USE;
 
-    private ButtonMode mode;
-    private DisplayOrder displayOrder;
-    private CountdownPane pivot; // for command or ctrl click
+    protected ButtonMode mode;
+    protected DisplayOrder displayOrder;
+    protected CountdownPane pivot; // for command or ctrl click
 
     private static CountdownPaneView cpv = null;
 
@@ -282,12 +261,12 @@ public class CountdownPaneView extends ScrollPane {
         updateMode();
     }
 
-    private void deselect(CountdownPane pane) {
+    protected void deselect(CountdownPane pane) {
         pane.setSelected(false);
         pane.applyDeselectStyle(true);
     }
 
-    private void select(CountdownPane pane) {
+    protected void select(CountdownPane pane) {
         pane.setSelected(true);
         pane.applySelectStyle();
     }
@@ -334,7 +313,7 @@ public class CountdownPaneView extends ScrollPane {
         return mode;
     }
 
-    private void updateMode() {
+    protected void updateMode() {
         int selections = getNumOfSelections();
         if (selections == 0)
             this.mode = ButtonMode.NO_SELECT;
@@ -342,375 +321,5 @@ public class CountdownPaneView extends ScrollPane {
             this.mode = ButtonMode.SINGLE_SELECT;
         else
             this.mode = ButtonMode.MULTI_SELECT;
-    }
-
-    private class CountdownPane extends VBox {
-        public static final double WIDTH = 280;
-        public static final double HEIGHT = 140;
-        public static final double NAME_WIDTH = 150;
-        public static final double DIV_WIDTH = 10;
-        public static final double CONTENT_HEIGHT = 100;
-
-        private final Label CD_DESC_LABEL;
-        private final Label CD_DAYS_LABEL;
-        private final Label STATUS_LABEL; // for displaying the status on mouse hover
-        private final Label END_DATE_LABEL; // for displaying the due date on mouse hover
-        private final Label NAME_LABEL;
-
-        private final CustomLine VERTICAL_DIVIDER;
-        private final HBox HOVER_HBOX; // container
-        private final HBox CONTENT_HBOX; // container
-        private final FadeTransition FADE_TR; // for ui hover animation
-        private final CustomBox CUSTOM_BORDER; // for selection ui indication
-
-        private Countdown countdown; // points to the backend object
-        private boolean isUrgent;
-        private boolean selected; // for selection detection
-
-        public CountdownPane(Countdown cd, LocalDate now) {
-            this.HOVER_HBOX = new HBox();
-            this.CONTENT_HBOX = new HBox();
-            this.VERTICAL_DIVIDER = new CustomLine(2, Type.VERTICAL_TYPE);
-            this.CD_DESC_LABEL = new Label();
-            this.CD_DAYS_LABEL = new Label();
-            this.STATUS_LABEL = new Label();
-            this.END_DATE_LABEL = new Label();
-            this.NAME_LABEL = new Label();
-            this.CUSTOM_BORDER = new CustomBox(GraphicalUI.DRAW_THICKNESS, 0.018, 0.035, 0.29);
-            this.FADE_TR = new FadeTransition(Duration.millis(300), HOVER_HBOX);
-            this.countdown = cd;
-            this.isUrgent = false;
-            this.selected = false;
-            this.setAlignment(Pos.CENTER);
-            initContentHBox(now);
-            initHoverHBox();
-            initSelectable();
-            initDraggable();
-            this.getChildren().addAll(this.HOVER_HBOX, this.CONTENT_HBOX);
-        }
-
-        private void initHoverHBox() {
-            int leftRightPadding = 16;
-            double height = HEIGHT - CONTENT_HEIGHT;
-            this.HOVER_HBOX.setPrefSize(WIDTH, height);
-            Font font =
-                Font.font(Vals.FontTools.FONT_FAM, FontWeight.MEDIUM, FontPosture.ITALIC, 14);
-            this.STATUS_LABEL.setAlignment(Pos.BOTTOM_LEFT);
-            this.STATUS_LABEL.setFont(font);
-            this.STATUS_LABEL.setTextFill(Vals.Colour.TXT_GHOST);
-            this.STATUS_LABEL.setMaxSize(WIDTH / 2, height);
-            HBox.setMargin(this.STATUS_LABEL, new Insets(0, 0, 0, leftRightPadding));
-            Pane spacer = new Pane();
-            spacer.setMaxSize(WIDTH, height);
-            HBox.setHgrow(spacer, Priority.ALWAYS);
-            this.END_DATE_LABEL.setAlignment(Pos.BOTTOM_RIGHT);
-            this.END_DATE_LABEL.setFont(font);
-            this.END_DATE_LABEL.setTextFill(Vals.Colour.TXT_GHOST);
-            this.END_DATE_LABEL.setMaxSize(WIDTH / 2, height);
-            HBox.setMargin(this.END_DATE_LABEL, new Insets(0, leftRightPadding, 0, 0));
-            this.HOVER_HBOX.setFillHeight(true);
-            this.HOVER_HBOX.getChildren().addAll(this.STATUS_LABEL, spacer, this.END_DATE_LABEL);
-            this.HOVER_HBOX.setOpacity(0);
-
-            CONTENT_HBOX.setOnMouseEntered(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    if (selected)
-                        return; // do nothing if selected
-                    FADE_TR.stop();
-                    setMouseEnterAnim(FADE_TR);
-                    FADE_TR.playFromStart();
-                }
-            });
-
-            CONTENT_HBOX.setOnMouseExited(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    final boolean ALREADY_RUNNING =
-                        FADE_TR.getStatus() == Status.RUNNING && FADE_TR.getToValue() == 0
-                        || HOVER_HBOX.getOpacity() == 0;
-                    if (selected || ALREADY_RUNNING)
-                        return; // do nothing if selected
-                    FADE_TR.stop();
-                    setMouseExitAnim(FADE_TR);
-                    FADE_TR.playFromStart();
-                }
-            });
-        }
-
-        private void setMouseEnterAnim(FadeTransition anim) {
-            anim.setFromValue(0);
-            anim.setToValue(1);
-        }
-
-        private void setMouseExitAnim(FadeTransition anim) {
-            anim.setFromValue(1);
-            anim.setToValue(0);
-        }
-
-        private void initContentHBox(LocalDate now) {
-            CONTENT_HBOX.setPrefSize(WIDTH, CONTENT_HEIGHT);
-            CONTENT_HBOX.setFillHeight(true);
-            // adds the border
-            CustomBox.applyToPane(CONTENT_HBOX, CUSTOM_BORDER);
-            // adds the name display
-            CONTENT_HBOX.getChildren().add(createNameLabel(countdown));
-            // adds the divider
-            CONTENT_HBOX.getChildren().add(createVerticalDivider());
-            // adds the day countdown pane
-            CONTENT_HBOX.getChildren().add(createCountdownDisplay(countdown, now));
-        }
-
-        private Label createNameLabel(Countdown cd) {
-            String name = cd.getName();
-            NAME_LABEL.setText(name);
-            Font nameFont = Font.font(Vals.FontTools.FONT_FAM, FontWeight.SEMI_BOLD, 16);
-            NAME_LABEL.setAlignment(Pos.CENTER);
-            NAME_LABEL.setTextAlignment(TextAlignment.CENTER);
-            NAME_LABEL.setWrapText(true);
-            NAME_LABEL.setFont(nameFont);
-            NAME_LABEL.setTextFill(Color.WHITE);
-            NAME_LABEL.setPrefWidth(NAME_WIDTH);
-            NAME_LABEL.prefHeightProperty().bind(this.heightProperty());
-
-            HBox.setMargin(NAME_LABEL, new Insets(10, 2, 10, 14));
-            HBox.setHgrow(NAME_LABEL, Priority.ALWAYS);
-            return NAME_LABEL;
-        }
-
-        private Pane createVerticalDivider() {
-            Pane pane = new Pane();
-            pane.setPrefSize(DIV_WIDTH, HEIGHT);
-            VERTICAL_DIVIDER.setStrokeColour(Color.WHITE);
-            VERTICAL_DIVIDER.setOpacity(0.4);
-            VERTICAL_DIVIDER.setPadding(20);
-            CustomLine.applyToPane(pane, VERTICAL_DIVIDER);
-            return pane;
-        }
-
-        private VBox createCountdownDisplay(Countdown cd, LocalDate now) {
-            VBox display = new VBox();
-
-            Font numFont =
-                Font.font(Vals.FontTools.FONT_FAM, FontWeight.BOLD, FontPosture.ITALIC, 30);
-            CD_DAYS_LABEL.setAlignment(Pos.CENTER);
-            CD_DAYS_LABEL.setTextAlignment(TextAlignment.CENTER);
-            CD_DAYS_LABEL.setFont(numFont);
-            CD_DAYS_LABEL.setTextFill(Color.WHITE);
-            CD_DAYS_LABEL.prefWidthProperty().bind(display.widthProperty());
-
-            Font textFont =
-                Font.font(Vals.FontTools.FONT_FAM, FontWeight.BOLD, FontPosture.ITALIC, 13);
-            CD_DESC_LABEL.setAlignment(Pos.CENTER);
-            CD_DESC_LABEL.setTextAlignment(TextAlignment.CENTER);
-            CD_DESC_LABEL.setFont(textFont);
-            CD_DESC_LABEL.setTextFill(Color.WHITE);
-            CD_DESC_LABEL.prefWidthProperty().bind(display.widthProperty());
-
-            configureCountdownLabelsText(countdown, now);
-
-            display.getChildren().addAll(CD_DAYS_LABEL, CD_DESC_LABEL);
-            HBox.setMargin(display, new Insets(10, 10, 10, 0));
-            HBox.setHgrow(display, Priority.ALWAYS);
-            return display;
-        }
-
-        private void configureLabelsForUrgency(Countdown countdown, LocalDate now) {
-            String statusString = "Ongoing";
-            String dateString = "Due: " + countdown.getStringDueDate(now);
-            Color colour = Color.WHITE;
-            final Urgency URGENCY = countdown.getUrgency(now);
-            this.isUrgent = true;
-            switch (URGENCY) {
-                case OVERDUE:
-                    statusString = "Overdue";
-                    colour = Colour.CD_OVERDUE;
-                    break;
-                case TODAY:
-                    statusString = "Due today";
-                    colour = Colour.CD_TODAY;
-                    break;
-                case TOMORROW:
-                    statusString = "Due tomorrow";
-                    colour = Colour.CD_TOMORROW;
-                    break;
-                case COMPLETED:
-                    statusString = "Completed";
-                default:
-                    this.isUrgent = false;
-                    break;
-            }
-            this.STATUS_LABEL.setText(statusString);
-            this.END_DATE_LABEL.setText(dateString);
-            this.setPriorityColour(colour);
-        }
-
-        private void configureCountdownLabelsText(Countdown countdown, LocalDate now) {
-            int daysLeft = Math.abs(countdown.daysUntilDue(now));
-            CD_DAYS_LABEL.setText(Vals.GraphicalUI.intToString(daysLeft));
-            String textNoun = (daysLeft != 1) ? "DAYS" : "DAY";
-            String textAdverb = (countdown.isOverdue(now)) ? "SINCE DUE" : "LEFT";
-            CD_DESC_LABEL.setText(textNoun + "\n" + textAdverb);
-        }
-
-        private void initSelectable() {
-            CONTENT_HBOX.setOnMousePressed(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    final boolean IS_PRIMARY_MOUSE = event.getButton() == MouseButton.PRIMARY;
-                    if (IS_PRIMARY_MOUSE && event.isShiftDown()) {
-                        onShiftClick();
-                    } else if (IS_PRIMARY_MOUSE && event.isMetaDown()) {
-                        onMetaClick();
-                    } else if (IS_PRIMARY_MOUSE) {
-                        onNormalClick();
-                    } else {
-                        onSecondaryMousePress(event.getSceneX(), event.getSceneY());
-                    }
-                    event.consume();
-                }
-            });
-        }
-
-        /**
-         * For now, drag and drop is specifically COPYING from one folder to another.
-         * Moving may be implemented later, but due to time constraints that should
-         * be done at a much later date.
-         */
-        private void initDraggable() {
-            CONTENT_HBOX.setOnDragDetected((event) -> {
-                RightClickMenuTemplate.despawnAll();
-                this.selected = true;
-                this.applySelectStyle();
-                CountdownPaneView.getInstance().updateMode();
-
-                this.activateDragStyling();
-
-                CONTENT_HBOX.startFullDrag();
-                DragHandler.init();
-            });
-
-            CONTENT_HBOX.setOnMouseReleased((event) -> { // this is a hack... see docs
-                                                         // executes on mouse release but drag
-                                                         // is incomplete
-                CONTENT_HBOX.setMouseTransparent(false);
-                this.deactivateDragStyling();
-                DragHandler.close();
-            });
-        }
-
-        private void activateDragStyling() {
-            CountdownPaneView.getInstance().COUNTDOWN_PANES.forEach(pane -> {
-                if (pane.isSelected())
-                    pane.setOpacity(0.3);
-            });
-        }
-
-        private void deactivateDragStyling() {
-            CountdownPaneView.getInstance().COUNTDOWN_PANES.forEach(
-                pane -> { pane.setOpacity(1); });
-        }
-
-        private void onShiftClick() {
-            if (pivot == null) {
-                CountdownPaneView.getInstance().selectAllBetween(COUNTDOWN_PANES.getFirst(), this);
-                return;
-            }
-
-            final boolean PIVOT_SELECTED = pivot.isSelected();
-            CountdownPaneView.getInstance().selectAllBetween(pivot, this);
-
-            if (!PIVOT_SELECTED)
-                CountdownPaneView.getInstance().deselect(pivot);
-        }
-
-        private void onMetaClick() {
-            if (this.selected) {
-                CountdownPaneView.getInstance().deselect(this);
-            } else {
-                CountdownPaneView.getInstance().select(this);
-            }
-            CountdownPaneView.getInstance().pivot = this;
-            updateMode();
-            RightClickMenuTemplate.despawnAll();
-        }
-
-        private void onNormalClick() {
-            if (!this.isSelected()) {
-                CountdownPaneView.getInstance().deselectAll();
-                CountdownPaneView.getInstance().select(this);
-                CountdownPaneView.getInstance().pivot = this;
-                updateMode();
-                RightClickMenuTemplate.despawnAll();
-            }
-        }
-
-        private void onSecondaryMousePress(double x, double y) {
-            if (!this.selected)
-                CountdownPaneView.getInstance().deselectAll();
-            applySelectStyle();
-            this.selected = true;
-            updateMode(); // needs to be called before RightClickMenu opens
-            CountdownViewRCM.spawnInstance(x, y);
-        }
-
-        public void applyDeselectStyle(boolean withFadeOut) {
-            if (withFadeOut) {
-                FADE_TR.stop();
-                FADE_TR.setToValue(0);
-                FADE_TR.setFromValue(HOVER_HBOX.getOpacity());
-                FADE_TR.playFromStart();
-            }
-            CUSTOM_BORDER.setStrokeColour(Color.WHITE);
-            STATUS_LABEL.setTextFill(Vals.Colour.TXT_GHOST);
-            END_DATE_LABEL.setTextFill(Vals.Colour.TXT_GHOST);
-        }
-
-        public void applySelectStyle() {
-            FADE_TR.stop();
-            HOVER_HBOX.setOpacity(1);
-            CUSTOM_BORDER.setStrokeColour(Vals.Colour.SELECTED);
-            STATUS_LABEL.setTextFill(Vals.Colour.SELECTED);
-            END_DATE_LABEL.setTextFill(Vals.Colour.SELECTED);
-        }
-
-        public void setCountdown(Countdown countdown) {
-            this.countdown = countdown;
-        }
-
-        protected void setCountdownAndRefresh(Countdown countdown) {
-            if (countdown == null)
-                return;
-            this.countdown = countdown;
-            refreshContent();
-        }
-
-        public Countdown getCountdown() {
-            return countdown;
-        }
-
-        public boolean isSelected() {
-            return selected;
-        }
-
-        public void setSelected(boolean selected) {
-            this.selected = selected;
-            CountdownPaneView.getInstance().updateMode();
-        }
-
-        protected void refreshContent() {
-            LocalDate now = LocalDate.now();
-            NAME_LABEL.setText(this.countdown.getName());
-            configureCountdownLabelsText(this.countdown, now);
-            configureLabelsForUrgency(this.countdown, now);
-        }
-
-        private void setPriorityColour(Color colour) {
-            if (this.isUrgent)
-                CONTENT_HBOX.setBackground(
-                    Colour.createBG(Colour.adjustOpacity(colour, 0.2), 14, 6));
-            else
-                CONTENT_HBOX.setBackground(null);
-        }
     }
 }

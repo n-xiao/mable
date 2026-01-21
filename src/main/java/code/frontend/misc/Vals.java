@@ -91,7 +91,7 @@ public class Vals {
         public static final String FONT_FAM = "Shantell Sans";
 
         public static Font getButtonFont() {
-            return new Font(FONT_FAM + " Medium", 16);
+            return new Font(FONT_FAM + " Medium", 14);
         }
 
         public static void initFonts() {

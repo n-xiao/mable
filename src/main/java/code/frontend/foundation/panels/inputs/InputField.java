@@ -4,7 +4,7 @@
 
 package code.frontend.foundation.panels.inputs;
 
-import code.frontend.foundation.custom.CustomBox;
+import code.frontend.foundation.custom.MableBorder;
 import code.frontend.misc.Vals;
 import java.util.ArrayList;
 import java.util.function.UnaryOperator;
@@ -27,15 +27,15 @@ public class InputField extends BorderPane {
     }
 
     private TextField textField;
-    private CustomBox border;
+    private MableBorder border;
     private InputFilter inputFilter;
     private Color borderColour;
     private Label label = null;
 
     public InputField() {
         borderColour = Color.WHITE;
-        border = new CustomBox(Vals.GraphicalUI.INPUT_BORDER_WIDTH);
-        CustomBox.applyToPane(this, border);
+        border = new MableBorder(1.8, 0.3, 0.38);
+        MableBorder.applyToPane(this, border);
         textField = new TextField();
         textField.setBackground(null);
         textField.setBorder(null);
@@ -93,16 +93,16 @@ public class InputField extends BorderPane {
         border.setStrokeColour(borderColour);
     }
 
-    public CustomBox getCustomBorder() {
+    public MableBorder getCustomBorder() {
         return this.border;
     }
 
-    public void setCustomBorder(CustomBox border) {
+    public void setCustomBorder(MableBorder border) {
         this.getChildren().remove(this.border);
         this.border.widthProperty().unbind();
         this.border.heightProperty().unbind();
         this.border = border;
-        CustomBox.applyToPane(this, this.border);
+        MableBorder.applyToPane(this, this.border);
     }
 
     /**
@@ -129,8 +129,6 @@ public class InputField extends BorderPane {
         public Change apply(Change t) {
             String text = t.getControlNewText();
             boolean hasNumOnly = text.matches("^-?[0-9]+$");
-            // boolean invalid = (maxLength > 0 && text.length() > maxLength) || (numOnly &&
-            // !hasNumOnly);
             boolean valid =
                 (maxLength <= 0 || text.length() <= maxLength) && (!numOnly || hasNumOnly)
                 || text.isEmpty();

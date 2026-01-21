@@ -29,7 +29,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public abstract class ConfigWindowTemplate extends Stage {
-    private static final Insets INSETS = new Insets(10, 12, 10, 12);
+    private static final Insets INSETS = new Insets(7);
 
     private VBox root;
 
@@ -85,7 +85,6 @@ public abstract class ConfigWindowTemplate extends Stage {
         nameField.setFieldMargins(INSETS);
         nameField.setMaxWidth(UtilityUI.WIDTH);
         VBox.setMargin(label, new Insets(0, 0, 0, 8));
-        // VBox.setMargin(nameField, new Insets(3, 5, 0, 5));
 
         container.getChildren().addAll(label, nameField);
 
@@ -135,8 +134,6 @@ public abstract class ConfigWindowTemplate extends Stage {
         daysField.setMaxWidth(130);
         daysField.setMinWidth(130);
         daysField.getTextField().setAlignment(Pos.CENTER);
-        // VBox.setMargin(daysLabel, new Insets(3, 5, 0, 5));
-        // VBox.setMargin(daysField, new Insets(-3, 0, 0, 0));
         VBox.setVgrow(filler2, Priority.ALWAYS);
         daysFieldContainer.getChildren().addAll(filler2, daysField, daysLabel);
         container.getChildren().addAll(dateFieldContainer, separator, daysFieldContainer);
@@ -148,8 +145,8 @@ public abstract class ConfigWindowTemplate extends Stage {
     private Pane createButtonPart() {
         BorderPane container = new BorderPane();
         container.setPrefWidth(UtilityUI.WIDTH);
-        button.setMaxSize(150, 40);
-        button.setMinSize(150, 40);
+        button.setMaxSize(125, 35);
+        button.setMinSize(125, 35);
         container.setCenter(button);
 
         VBox.setMargin(container, new Insets(30, 0, 40, 0));

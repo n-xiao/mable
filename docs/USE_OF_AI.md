@@ -69,7 +69,7 @@ A considerable number of Slop Generators involve the collection and use of arbit
 from a website that a Slop Generator user is currently visiting.
 And, when it is difficult to differentiate between genuine and malicious data,
 such as with Slop Generator prompts, you can get prompt injection vulnerabilities.
-Open Source is based on collaberation. Be responsible, and be secure.
+Open Source is based on collaboration. Be responsible, and be secure.
 <br></br>
 <h4 align="center">
     You know what's bad for you. Slop Generators don't.

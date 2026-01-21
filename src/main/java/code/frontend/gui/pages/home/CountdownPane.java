@@ -66,7 +66,7 @@ public class CountdownPane extends VBox {
         this.STATUS_LABEL = new Label();
         this.END_DATE_LABEL = new Label();
         this.NAME_LABEL = new Label();
-        this.CUSTOM_BORDER = new MableBorder(2, 0.19, 0.42);
+        this.CUSTOM_BORDER = new MableBorder(2.2, 0.19, 0.42);
         this.FADE_TR = new FadeTransition(Duration.millis(300), HOVER_HBOX);
         this.countdown = cd;
         this.isUrgent = false;
@@ -396,7 +396,7 @@ public class CountdownPane extends VBox {
 
     private void setPriorityColour(Color colour) {
         if (this.isUrgent)
-            CONTENT_HBOX.setBackground(Colour.createBG(Colour.adjustOpacity(colour, 0.2), 14, 5));
+            CONTENT_HBOX.setBackground(Colour.createBG(Colour.adjustOpacity(colour, 0.2), 14, 3.5));
         else
             CONTENT_HBOX.setBackground(null);
     }

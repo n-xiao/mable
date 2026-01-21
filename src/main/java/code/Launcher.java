@@ -6,6 +6,7 @@ package code;
 
 import code.backend.utils.StorageHandler;
 import code.frontend.gui.containers.MainContainer;
+import code.frontend.gui.ricing.RiceHandler;
 import code.frontend.misc.Vals;
 import code.frontend.misc.Watchdog;
 import javafx.application.Application;
@@ -38,6 +39,7 @@ public class Launcher extends Application {
         stage.show();
 
         Watchdog.startWatchdog();
+        RiceHandler.updatePalette("DARK");
     }
 
     @Override

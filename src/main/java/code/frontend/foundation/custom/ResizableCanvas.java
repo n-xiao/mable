@@ -29,6 +29,7 @@ public abstract class ResizableCanvas extends Canvas {
         double height = this.getHeight();
         if (width > 0 && height > 0) {
             GraphicsContext gc = getGraphicsContext2D();
+            gc.setImageSmoothing(true);
             gc.clearRect(0, 0, width, height);
             gc.setStroke(this.strokeColour);
             draw(gc, recompute);

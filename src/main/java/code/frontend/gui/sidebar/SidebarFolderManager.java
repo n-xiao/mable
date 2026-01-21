@@ -6,9 +6,9 @@ package code.frontend.gui.sidebar;
 
 import code.backend.data.CountdownFolder;
 import code.backend.utils.FolderHandler;
-import code.frontend.foundation.custom.CustomBox;
 import code.frontend.foundation.custom.CustomLine;
 import code.frontend.foundation.custom.CustomLine.Type;
+import code.frontend.foundation.custom.MableBorder;
 import code.frontend.foundation.panels.buttons.ToggleButton;
 import code.frontend.foundation.panels.inputs.InputField;
 import code.frontend.gui.dragndrop.DragHandler;
@@ -126,7 +126,7 @@ public class SidebarFolderManager extends VBox {
     private void configureSearchFieldStyle() {
         this.SEARCH_FIELD.getTextField().setPromptText("Search...");
         this.SEARCH_FIELD.setMaxHeight(20);
-        CustomBox border = new CustomBox(2, 0.022, 0.02, 0.45);
+        MableBorder border = new MableBorder(1.5, 0.1, 0.8);
         border.setStrokeColour(Colour.GHOST);
         this.SEARCH_FIELD.setCustomBorder(border);
         this.SEARCH_FIELD.enableManualActivation();
@@ -135,9 +135,9 @@ public class SidebarFolderManager extends VBox {
     }
 
     private void configureScrollPaneStyle() {
-        final CustomBox BORDER = new CustomBox(2, 0.0101, 0.01, 0.12);
+        final MableBorder BORDER = new MableBorder(2, 0.25, 0.15);
         BORDER.setStrokeColour(Colour.GHOST);
-        CustomBox.applyToPane(this.scrollPaneWrapper, BORDER);
+        MableBorder.applyToPane(this.scrollPaneWrapper, BORDER);
         this.scrollPaneWrapper.maxWidthProperty().bind(this.widthProperty());
         this.SCROLL_PANE.setFitToWidth(true);
         this.SCROLL_PANE.setHbarPolicy(ScrollBarPolicy.NEVER);
@@ -349,9 +349,8 @@ public class SidebarFolderManager extends VBox {
         VBox.setMargin(this.nameFieldContainer, new Insets(10, 2.5, 0, 2.5));
         final InputField NAME_INPUT = new InputField();
         NAME_INPUT.getTextField().setText(nameToEdit);
-        NAME_INPUT.getCustomBorder().setCornerOffset(0.34);
-        NAME_INPUT.getCustomBorder().setDeviation(0.02);
-        NAME_INPUT.getCustomBorder().setCornerDeviation(0.02);
+        NAME_INPUT.getCustomBorder().setCornerRadii(0.5);
+        NAME_INPUT.getCustomBorder().setMessiness(0.2);
         NAME_INPUT.setFieldMargins(new Insets(3));
 
         NAME_INPUT.getTextField().setOnAction(new EventHandler<ActionEvent>() {
@@ -426,10 +425,9 @@ public class SidebarFolderManager extends VBox {
             this.setFeedbackColour(Colour.SELECTED); // todo use another colour if needed
             this.getLabel().setAlignment(Pos.CENTER_LEFT);
             this.getLabel().relocate(15, 0);
-            this.getCustomBorder().setCornerOffset(0.45);
-            this.getCustomBorder().setThickness(2.3);
-            this.getCustomBorder().setCornerDeviation(0.017);
-            this.getCustomBorder().setDeviation(0.02);
+            this.getCustomBorder().setThickness(1.5);
+            this.getCustomBorder().setCornerRadii(0.8);
+            this.getCustomBorder().setMessiness(0.1);
             this.setToggledColour(Colour.SELECTED);
             this.setUntoggledColour(Colour.GHOST_2);
             this.setCursor(Cursor.DEFAULT);
@@ -450,6 +448,12 @@ public class SidebarFolderManager extends VBox {
             });
             this.setOnMouseDragReleased((event) -> {
                 CountdownPaneView.getInstance().addAllSelectedToFolder(this.FOLDER);
+
+                if (FolderHandler.getCurrentlySelectedFolder().equals(this.FOLDER))
+                    this.toggle();
+                else
+                    this.untoggle();
+
                 DragHandler.close();
             });
         }

@@ -4,9 +4,9 @@
 
 package code.frontend.gui.rightclickmenu;
 
-import code.frontend.foundation.custom.CustomBox;
 import code.frontend.foundation.custom.CustomLine;
 import code.frontend.foundation.custom.CustomLine.Type;
+import code.frontend.foundation.custom.MableBorder;
 import code.frontend.foundation.panels.buttons.Button;
 import code.frontend.gui.containers.MainContainer;
 import code.frontend.misc.Vals.Colour;
@@ -25,11 +25,8 @@ import javafx.scene.text.Font;
 
 public abstract class RightClickMenuTemplate extends VBox {
     private static final double BG_RADIUS = 12;
-    private static final double BG_INSETS = 4;
+    private static final double BG_INSETS = 3.5;
 
-    private static final double BORDER_CORNER_OFFSET = 0.12;
-    private static final double BORDER_DEV = 0;
-    private static final double BORDER_CORNER_DEV = 0.014;
     private static final double BORDER_THICKNESS = 2;
 
     private static final int RIGHTLEFT_INSET = 15;
@@ -41,7 +38,7 @@ public abstract class RightClickMenuTemplate extends VBox {
     private final Button[] BUTTONS;
     private final Color[] COLOURS;
 
-    private CustomBox border;
+    private MableBorder border;
 
     public RightClickMenuTemplate(double width, double height, Button[] buttons, Color[] colours) {
         this.WIDTH = width;
@@ -105,9 +102,8 @@ public abstract class RightClickMenuTemplate extends VBox {
     }
 
     private void initStyling() {
-        this.border =
-            new CustomBox(BORDER_THICKNESS, BORDER_DEV, BORDER_CORNER_DEV, BORDER_CORNER_OFFSET);
-        CustomBox.applyToPane(this, border);
+        this.border = new MableBorder(BORDER_THICKNESS, 0.2, 0.2);
+        MableBorder.applyToPane(this, border);
         this.setManaged(false);
         this.setBackground(Colour.createBG(Colour.BACKGROUND, BG_RADIUS, BG_INSETS));
         this.setFillWidth(true);
@@ -131,7 +127,7 @@ public abstract class RightClickMenuTemplate extends VBox {
         return divider;
     }
 
-    public CustomBox getCustomBorder() {
+    public MableBorder getCustomBorder() {
         return border;
     }
 

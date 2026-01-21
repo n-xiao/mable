@@ -16,6 +16,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 
 public class CountdownPaneViewTitle extends VBox {
@@ -40,9 +41,8 @@ public class CountdownPaneViewTitle extends VBox {
 
     private void configureLabel() {
         LABEL.setTextFill(Color.WHITE);
-        LABEL.setFont(Font.font(FontTools.FONT_FAM, FontWeight.BOLD, 15));
+        LABEL.setFont(Font.font(FontTools.FONT_FAM, FontWeight.BOLD, 17));
         LABEL.setAlignment(Pos.CENTER);
-        LABEL.setMinHeight(20);
     }
 
     private static Pane createHorizontalLine() {
@@ -52,9 +52,9 @@ public class CountdownPaneViewTitle extends VBox {
         line.setStrokeColour(Colour.TXT_GHOST_2);
         CustomLine.applyToPane(lineContainer, line);
         lineContainer.setMaxWidth(Double.MAX_VALUE);
-        lineContainer.setMinHeight(10);
+        lineContainer.setMinHeight(5);
         lineContainer.setOpacity(0.5);
-        VBox.setMargin(lineContainer, new Insets(5, 0, 5, 0));
+        VBox.setMargin(lineContainer, new Insets(5, 0, 10, 0));
         return lineContainer;
     }
 

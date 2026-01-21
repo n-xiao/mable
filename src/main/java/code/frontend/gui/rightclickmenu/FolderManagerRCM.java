@@ -62,10 +62,7 @@ public class FolderManagerRCM extends RightClickMenuTemplate {
 
         this.EDIT = edit;
         this.REMOVE = remove;
-
-        this.getCustomBorder().setCornerOffset(0.20);
-        this.getCustomBorder().setCornerDeviation(0.02);
-        this.getCustomBorder().setCornerDeviation(0.02);
+        this.getCustomBorder().setCornerRadii(0.35);
     }
 
     @Override

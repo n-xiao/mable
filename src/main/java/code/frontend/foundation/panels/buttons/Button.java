@@ -4,7 +4,7 @@
 
 package code.frontend.foundation.panels.buttons;
 
-import code.frontend.foundation.custom.CustomBox;
+import code.frontend.foundation.custom.MableBorder;
 import code.frontend.misc.Vals;
 import code.frontend.misc.Vals.Colour;
 import javafx.animation.FadeTransition;
@@ -23,19 +23,18 @@ import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 public abstract class Button extends Pane {
-    private final double HOVER_OPACITY = 0.2;
+    private final double HOVER_OPACITY = 0.1;
 
     private Font labelFont;
     private Color feedbackColour;
     private Color colour;
-    private double borderThickness;
 
     private Pane animPane = new Pane();
     private FadeTransition ft = new FadeTransition();
     private boolean animationsEnabled;
 
     private Label label;
-    private CustomBox border;
+    private MableBorder border;
 
     private boolean enabled;
     private boolean consumeEvent;
@@ -45,12 +44,11 @@ public abstract class Button extends Pane {
         this.labelFont = Vals.FontTools.getButtonFont();
         this.feedbackColour = Vals.Colour.FEEDBACK;
         this.colour = Color.WHITE;
-        this.borderThickness = Vals.GraphicalUI.BTTN_THICKNESS;
         this.enabled = true;
         this.animationsEnabled = true;
 
-        this.border = new CustomBox(borderThickness);
-        CustomBox.applyToPane(this, border);
+        this.border = new MableBorder(1.5, 0.3, 0.35);
+        MableBorder.applyToPane(this, border);
 
         this.label = new Label(text);
         this.label.setTextFill(colour);
@@ -61,9 +59,7 @@ public abstract class Button extends Pane {
         this.label.relocate(0, 0);
         this.label.setViewOrder(0);
 
-        double vertiInset = border.getVertiPadding() + 2;
-        double horizInset = border.getHorizPadding() + 3;
-        Insets animPaneInsets = new Insets(vertiInset, horizInset, vertiInset, horizInset);
+        Insets animPaneInsets = new Insets(border.getPaddingDist());
         BackgroundFill bgFill =
             new BackgroundFill(feedbackColour, new CornerRadii(12), animPaneInsets);
         this.animPane.setBackground(new Background(bgFill));
@@ -113,7 +109,7 @@ public abstract class Button extends Pane {
             return;
         this.ft.stop();
         this.ft.setDuration(Duration.millis(200));
-        this.ft.setFromValue(0.8);
+        this.ft.setFromValue(HOVER_OPACITY);
         this.ft.setToValue(0);
         this.ft.playFromStart();
     }
@@ -150,15 +146,13 @@ public abstract class Button extends Pane {
         return this.HOVER_OPACITY;
     }
 
-    public CustomBox getCustomBorder() {
+    public MableBorder getCustomBorder() {
         return border;
     }
 
     public void setFeedbackColour(Color feedbackColour) {
         this.feedbackColour = feedbackColour;
-        double vertiInset = border.getVertiPadding() + 3;
-        double horizInset = border.getHorizPadding() + 4;
-        Insets animPaneInsets = new Insets(vertiInset, horizInset, vertiInset, horizInset);
+        Insets animPaneInsets = new Insets(border.getPaddingDist() - 0.5);
         BackgroundFill bgFill =
             new BackgroundFill(this.feedbackColour, new CornerRadii(12), animPaneInsets);
         this.animPane.setBackground(new Background(bgFill));
@@ -175,10 +169,6 @@ public abstract class Button extends Pane {
     public void setColour(Color colour) {
         this.colour = colour;
         this.border.setStrokeColour(colour);
-    }
-
-    public void setBorderThickness(int borderThickness) {
-        this.borderThickness = borderThickness;
     }
 
     public void setTextLabel(String text) {

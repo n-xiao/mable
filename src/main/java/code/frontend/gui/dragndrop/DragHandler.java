@@ -5,7 +5,7 @@
 package code.frontend.gui.dragndrop;
 
 import code.backend.data.Countdown.Urgency;
-import code.frontend.foundation.custom.CustomBox;
+import code.frontend.foundation.custom.MableBorder;
 import code.frontend.gui.containers.MainContainer;
 import code.frontend.gui.containers.Sidebar;
 import code.frontend.gui.pages.home.CountdownPaneView;
@@ -107,10 +107,10 @@ public class DragHandler extends Region {
         final Urgency[] URGENCIES = CountdownPaneView.getInstance().getSelectedUrgencies();
         // max of 3 "preview" panes to be generated
         for (int i = 0; i < 3 && i < URGENCIES.length; i++) {
-            final CustomBox BORDER = new CustomBox(GraphicalUI.DRAW_THICKNESS, 0.018, 0.035, 0.29);
+            final MableBorder BORDER = new MableBorder(GraphicalUI.DRAW_THICKNESS, 0.2, 0.42);
             BORDER.setStrokeColour(Colour.SELECTED);
             final Pane PANE = new Pane();
-            CustomBox.applyToPane(PANE, BORDER);
+            MableBorder.applyToPane(PANE, BORDER);
             PANE.resize(WIDTH, HEIGHT);
             Urgency urgency = URGENCIES[i];
             Color bgColour = Colour.BACKGROUND;
@@ -129,7 +129,7 @@ public class DragHandler extends Region {
                     break;
             }
             PANE.setManaged(false);
-            PANE.setBackground(Colour.createBG(bgColour, 14, 5));
+            PANE.setBackground(Colour.createBG(bgColour, 14, 2));
             PANE.relocate(0, 0);
             PANE.getTransforms().add(new Rotate((i + 1) * 5, 0, 0));
             CONTAINER.getChildren().add(PANE);

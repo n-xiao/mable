@@ -4,7 +4,7 @@
 
 package code.frontend.foundation.panels.inputs;
 
-import code.frontend.foundation.custom.CustomBox;
+import code.frontend.foundation.custom.MableBorder;
 import code.frontend.misc.Vals;
 import code.frontend.misc.Vals.Colour;
 import java.text.DecimalFormat;
@@ -24,7 +24,7 @@ import javafx.util.Duration;
 public class DateInputField extends VBox {
     private Label hintLabel;
     private String format;
-    private CustomBox border;
+    private MableBorder border;
     private InputField dayInput;
     private InputField monthInput;
     private InputField yearInput;
@@ -43,8 +43,8 @@ public class DateInputField extends VBox {
         hintLabel.setFont(Font.font(Vals.FontTools.FONT_FAM + " Medium Italic", 13));
         hintLabel.setAlignment(Pos.CENTER);
         hintLabel.maxWidthProperty().bind(this.widthProperty());
-        border = new CustomBox(Vals.GraphicalUI.INPUT_BORDER_WIDTH);
-        CustomBox.applyToPane(contents, border);
+        border = new MableBorder(Vals.GraphicalUI.INPUT_BORDER_WIDTH, 0.15, 0.5);
+        MableBorder.applyToPane(contents, border);
         dayInput = new InputField() {
             @Override
             protected void applyFocusLogic() {

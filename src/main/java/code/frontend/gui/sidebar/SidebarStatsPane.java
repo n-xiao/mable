@@ -6,9 +6,9 @@ package code.frontend.gui.sidebar;
 
 import code.backend.data.Countdown.Urgency;
 import code.backend.utils.CountdownHandler;
-import code.frontend.foundation.custom.CustomBox;
 import code.frontend.foundation.custom.CustomLine;
 import code.frontend.foundation.custom.CustomLine.Type;
+import code.frontend.foundation.custom.MableBorder;
 import code.frontend.gui.dragndrop.RemovePane;
 import code.frontend.misc.Vals.Colour;
 import code.frontend.misc.Vals.FontTools;
@@ -43,8 +43,8 @@ public class SidebarStatsPane extends VBox {
     private final StatPane TOMORROW_STAT;
 
     private SidebarStatsPane() {
-        final CustomBox BORDER = new CustomBox(2, 0.011, 0.01, 0);
-        CustomBox.applyToPane(this, BORDER);
+        final MableBorder BORDER = new MableBorder(2, 0.2, 0.4);
+        MableBorder.applyToPane(this, BORDER);
         BORDER.setStrokeColour(Colour.GHOST);
 
         this.OVERDUE_STAT = new StatPane(Urgency.OVERDUE);

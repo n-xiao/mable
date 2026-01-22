@@ -11,6 +11,7 @@ import code.frontend.misc.Vals;
 import code.frontend.misc.Watchdog;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Launcher extends Application {
@@ -22,6 +23,8 @@ public class Launcher extends Application {
 
     @Override
     public void start(Stage stage) {
+        RiceHandler.updatePalette("DARK");
+
         stage.setTitle("Mable");
         stage.setMinWidth(Vals.GraphicalUI.MIN_WIDTH);
         stage.setMinHeight(Vals.GraphicalUI.MIN_HEIGHT);
@@ -33,13 +36,12 @@ public class Launcher extends Application {
         root.prefHeightProperty().bind(stage.heightProperty());
 
         Scene scene = new Scene(root);
-        scene.setFill(Vals.Colour.BACKGROUND);
+        scene.setFill(RiceHandler.getColour("background1"));
         stage.setScene(scene);
         root.init();
         stage.show();
 
         Watchdog.startWatchdog();
-        RiceHandler.updatePalette("DARK");
     }
 
     @Override

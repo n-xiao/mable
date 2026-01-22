@@ -5,8 +5,8 @@
 package code.frontend.foundation.panels.buttons;
 
 import code.frontend.foundation.custom.MableBorder;
+import code.frontend.gui.ricing.RiceHandler;
 import code.frontend.misc.Vals;
-import code.frontend.misc.Vals.Colour;
 import javafx.animation.FadeTransition;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -42,8 +42,8 @@ public abstract class Button extends Pane {
     public Button(String text) {
         this.consumeEvent = false;
         this.labelFont = Vals.FontTools.getButtonFont();
-        this.feedbackColour = Vals.Colour.FEEDBACK;
-        this.colour = Color.WHITE;
+        this.feedbackColour = RiceHandler.getColour("feedback");
+        this.colour = RiceHandler.getColour();
         this.enabled = true;
         this.animationsEnabled = true;
 
@@ -180,8 +180,8 @@ public abstract class Button extends Pane {
             this.border.setStrokeColour(colour);
             this.label.setTextFill(colour);
         } else {
-            this.border.setStrokeColour(Colour.DISABLED);
-            this.label.setTextFill(Colour.DISABLED);
+            this.border.setStrokeColour(RiceHandler.getColour("disabled"));
+            this.label.setTextFill(RiceHandler.getColour("disabled"));
         }
         this.enabled = enabled;
     }

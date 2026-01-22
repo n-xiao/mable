@@ -1,8 +1,9 @@
-package code.frontend.gui.ricing;
+/*
+   Copyright (C) 2026  Nicholas Siow <nxiao.dev@gmail.com>
+*/
 
-import java.util.HashMap;
+package code.frontend.gui.ricing;
 
 public interface Ricing {
     public void rice();
-    public void previewRice(final HashMap<String, String> CONFIG); // for live preview
 }

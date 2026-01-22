@@ -1,7 +1,16 @@
+/*
+   Copyright (C) 2026  Nicholas Siow <nxiao.dev@gmail.com>
+*/
+
 package code.frontend.gui.ricing;
 
 import java.io.InputStream;
 import java.util.HashMap;
+import javafx.geometry.Insets;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
@@ -29,8 +38,6 @@ public class RiceHandler {
         if (jsonTheme != null)
             palette = MAPPER.convertValue(JSON_ROOT.get(THEME_NAME), typeRef);
         // else, continue with a custom theme
-
-        System.out.println(palette);
     }
 
     public static String getColourString(String name) {
@@ -38,5 +45,18 @@ public class RiceHandler {
             return "rgb(255,255,255)";
 
         return palette.get(name);
+    }
+
+    public static Color getColour(String name) {
+        return Color.web(getColourString(name));
+    }
+
+    public static Color getColour() {
+        return getColour("primary");
+    }
+
+    public static Background createBG(Color c, double radius, double ins) {
+        BackgroundFill bgFill = new BackgroundFill(c, new CornerRadii(radius), new Insets(ins));
+        return new Background(bgFill);
     }
 }

@@ -9,9 +9,9 @@ import code.frontend.foundation.custom.CustomLine.Type;
 import code.frontend.foundation.panels.inputs.InputField;
 import code.frontend.gui.dragndrop.RemovePane;
 import code.frontend.gui.pages.home.CountdownPaneView;
+import code.frontend.gui.ricing.RiceHandler;
 import code.frontend.gui.sidebar.SidebarFolderManager;
 import code.frontend.gui.sidebar.SidebarStatsPane;
-import code.frontend.misc.Vals.Colour;
 import code.frontend.misc.Vals.FontTools;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -36,7 +36,7 @@ public class Sidebar extends VBox {
         this.FOLDER_SELECTOR = SidebarFolderManager.getInstance();
 
         this.HOVER_REMOVE_PANE = RemovePane.applyTo(STATS);
-        this.setBackground(Colour.createBG(Colour.SIDE_BAR, 0, 0));
+        this.setBackground(RiceHandler.createBG(RiceHandler.getColour("background2"), 0, 0));
         this.setFillWidth(true);
     }
 
@@ -71,7 +71,7 @@ public class Sidebar extends VBox {
         divider.setFillHeight(true);
 
         Label label = new Label(text);
-        label.setTextFill(Colour.TXT_GHOST_2);
+        label.setTextFill(RiceHandler.getColour("txtGhost2"));
         label.setFont(Font.font(FontTools.FONT_FAM, FontWeight.BOLD, FontPosture.ITALIC, 13.5));
         label.maxHeightProperty().bind(divider.heightProperty());
         label.setAlignment(Pos.CENTER);
@@ -96,7 +96,7 @@ public class Sidebar extends VBox {
         Pane lineContainer = new Pane();
         lineContainer.setBackground(null);
         CustomLine line = new CustomLine(3, Type.HORIZONTAL_TYPE);
-        line.setStrokeColour(Colour.TXT_GHOST_2);
+        line.setStrokeColour(RiceHandler.getColour("txtGhost2"));
         CustomLine.applyToPane(lineContainer, line);
         HBox.setHgrow(lineContainer, Priority.ALWAYS);
         lineContainer.setOpacity(0.5);

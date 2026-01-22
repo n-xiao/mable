@@ -21,6 +21,7 @@ import javafx.scene.text.Font;
  *  no, i haven't heard about CSS before... and neither have you.
  */
 public class Vals {
+    @Deprecated
     public final class Colour {
         public static final Color BACKGROUND = Color.rgb(20, 20, 30);
         public static final Color SIDE_BAR = Color.rgb(10, 2, 22);

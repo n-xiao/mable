@@ -5,6 +5,7 @@
 package code.frontend.foundation.panels.inputs;
 
 import code.frontend.foundation.custom.MableBorder;
+import code.frontend.gui.ricing.RiceHandler;
 import code.frontend.misc.Vals;
 import java.util.ArrayList;
 import java.util.function.UnaryOperator;
@@ -33,7 +34,7 @@ public class InputField extends BorderPane {
     private Label label = null;
 
     public InputField() {
-        borderColour = Color.WHITE;
+        borderColour = RiceHandler.getColour();
         border = new MableBorder(1.8, 0.3, 0.38);
         MableBorder.applyToPane(this, border);
         textField = new TextField();
@@ -65,9 +66,9 @@ public class InputField extends BorderPane {
         textField.focusedProperty().addListener(((observable, oldValue, newValue) -> {
             if (newValue) {
                 borderColour = border.getStrokeColour();
-                border.setStrokeColour(Vals.Colour.SELECTED);
+                border.setStrokeColour(RiceHandler.getColour("selected"));
                 if (label != null)
-                    label.setTextFill(Vals.Colour.SELECTED);
+                    label.setTextFill(RiceHandler.getColour("selected"));
             } else {
                 border.setStrokeColour(borderColour);
                 if (label != null)

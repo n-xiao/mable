@@ -9,7 +9,7 @@ import code.frontend.foundation.custom.MableBorder;
 import code.frontend.gui.containers.MainContainer;
 import code.frontend.gui.containers.Sidebar;
 import code.frontend.gui.pages.home.CountdownPaneView;
-import code.frontend.misc.Vals.Colour;
+import code.frontend.gui.ricing.RiceHandler;
 import code.frontend.misc.Vals.FontTools;
 import code.frontend.misc.Vals.GraphicalUI;
 import javafx.beans.value.ChangeListener;
@@ -108,36 +108,36 @@ public class DragHandler extends Region {
         // max of 3 "preview" panes to be generated
         for (int i = 0; i < 3 && i < URGENCIES.length; i++) {
             final MableBorder BORDER = new MableBorder(GraphicalUI.DRAW_THICKNESS, 0.2, 0.42);
-            BORDER.setStrokeColour(Colour.SELECTED);
+            BORDER.setStrokeColour(RiceHandler.getColour("selected"));
             final Pane PANE = new Pane();
             MableBorder.applyToPane(PANE, BORDER);
             PANE.resize(WIDTH, HEIGHT);
             Urgency urgency = URGENCIES[i];
-            Color bgColour = Colour.BACKGROUND;
+            Color bgColour = RiceHandler.getColour("background1");
             switch (urgency) {
                 case OVERDUE:
-                    bgColour = Colour.CD_OVERDUE_2;
+                    bgColour = RiceHandler.getColour("cdOverdue2");
                     break;
                 case TODAY:
-                    bgColour = Colour.CD_TODAY_2;
+                    bgColour = RiceHandler.getColour("cdToday2");
                     break;
                 case TOMORROW:
-                    bgColour = Colour.CD_TOMORROW_2;
+                    bgColour = RiceHandler.getColour("cdTomorrow2");
                     break;
                 default:
-                    bgColour = Colour.BACKGROUND;
+                    bgColour = RiceHandler.getColour("background1");
                     break;
             }
             PANE.setManaged(false);
-            PANE.setBackground(Colour.createBG(bgColour, 14, 2));
+            PANE.setBackground(RiceHandler.createBG(bgColour, 14, 2));
             PANE.relocate(0, 0);
             PANE.getTransforms().add(new Rotate((i + 1) * 5, 0, 0));
             CONTAINER.getChildren().add(PANE);
         }
 
         final Label LABEL = new Label("copying: " + URGENCIES.length);
-        LABEL.setBackground(Colour.createBG(Color.BLACK, 0, 0));
-        LABEL.setTextFill(Color.WHITE);
+        LABEL.setBackground(RiceHandler.createBG(RiceHandler.getColour("labelDragndrop"), 0, 0));
+        LABEL.setTextFill(RiceHandler.getColour("txtDragnDrop"));
         LABEL.setFont(Font.font(FontTools.FONT_FAM, 13));
         LABEL.setAlignment(Pos.CENTER);
         LABEL.relocate(10, 0);

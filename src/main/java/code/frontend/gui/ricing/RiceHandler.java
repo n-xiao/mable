@@ -41,8 +41,11 @@ public class RiceHandler {
     }
 
     public static String getColourString(String name) {
-        if (palette == null || palette.get(name) == null)
+        if (palette == null || palette.get(name) == null) {
+            System.err.println("WARNING: COULD NOT FIND COLOUR: " + name);
+            System.err.println(Thread.currentThread().getStackTrace());
             return "rgb(255,255,255)";
+        }
 
         return palette.get(name);
     }
@@ -58,5 +61,10 @@ public class RiceHandler {
     public static Background createBG(Color c, double radius, double ins) {
         BackgroundFill bgFill = new BackgroundFill(c, new CornerRadii(radius), new Insets(ins));
         return new Background(bgFill);
+    }
+
+    public static Color adjustOpacity(Color color, double opacity) {
+        Color adjusted = new Color(color.getRed(), color.getGreen(), color.getBlue(), opacity);
+        return adjusted;
     }
 }

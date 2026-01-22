@@ -10,10 +10,10 @@ import code.frontend.foundation.custom.CustomLine;
 import code.frontend.foundation.custom.CustomLine.Type;
 import code.frontend.foundation.custom.MableBorder;
 import code.frontend.gui.dragndrop.DragHandler;
+import code.frontend.gui.ricing.RiceHandler;
 import code.frontend.gui.rightclickmenu.CountdownViewRCM;
 import code.frontend.gui.rightclickmenu.RightClickMenuTemplate;
 import code.frontend.misc.Vals;
-import code.frontend.misc.Vals.Colour;
 import java.time.LocalDate;
 import javafx.animation.Animation.Status;
 import javafx.animation.FadeTransition;
@@ -86,7 +86,7 @@ public class CountdownPane extends VBox {
         Font font = Font.font(Vals.FontTools.FONT_FAM, FontWeight.MEDIUM, FontPosture.ITALIC, 14);
         this.STATUS_LABEL.setAlignment(Pos.BOTTOM_LEFT);
         this.STATUS_LABEL.setFont(font);
-        this.STATUS_LABEL.setTextFill(Vals.Colour.TXT_GHOST);
+        this.STATUS_LABEL.setTextFill(RiceHandler.getColour("txtGhost"));
         this.STATUS_LABEL.setMaxSize(WIDTH / 2, height);
         HBox.setMargin(this.STATUS_LABEL, new Insets(0, 0, 0, leftRightPadding));
         Pane spacer = new Pane();
@@ -94,7 +94,7 @@ public class CountdownPane extends VBox {
         HBox.setHgrow(spacer, Priority.ALWAYS);
         this.END_DATE_LABEL.setAlignment(Pos.BOTTOM_RIGHT);
         this.END_DATE_LABEL.setFont(font);
-        this.END_DATE_LABEL.setTextFill(Vals.Colour.TXT_GHOST);
+        this.END_DATE_LABEL.setTextFill(RiceHandler.getColour("txtGhost"));
         this.END_DATE_LABEL.setMaxSize(WIDTH / 2, height);
         HBox.setMargin(this.END_DATE_LABEL, new Insets(0, leftRightPadding, 0, 0));
         this.HOVER_HBOX.setFillHeight(true);
@@ -158,7 +158,7 @@ public class CountdownPane extends VBox {
         NAME_LABEL.setTextAlignment(TextAlignment.CENTER);
         NAME_LABEL.setWrapText(true);
         NAME_LABEL.setFont(nameFont);
-        NAME_LABEL.setTextFill(Color.WHITE);
+        NAME_LABEL.setTextFill(RiceHandler.getColour());
         NAME_LABEL.setPrefWidth(NAME_WIDTH);
         NAME_LABEL.prefHeightProperty().bind(this.heightProperty());
 
@@ -170,7 +170,7 @@ public class CountdownPane extends VBox {
     private Pane createVerticalDivider() {
         Pane pane = new Pane();
         pane.setPrefSize(DIV_WIDTH, HEIGHT);
-        VERTICAL_DIVIDER.setStrokeColour(Color.WHITE);
+        VERTICAL_DIVIDER.setStrokeColour(RiceHandler.getColour());
         VERTICAL_DIVIDER.setOpacity(0.4);
         VERTICAL_DIVIDER.setPadding(20);
         CustomLine.applyToPane(pane, VERTICAL_DIVIDER);
@@ -184,14 +184,14 @@ public class CountdownPane extends VBox {
         CD_DAYS_LABEL.setAlignment(Pos.CENTER);
         CD_DAYS_LABEL.setTextAlignment(TextAlignment.CENTER);
         CD_DAYS_LABEL.setFont(numFont);
-        CD_DAYS_LABEL.setTextFill(Color.WHITE);
+        CD_DAYS_LABEL.setTextFill(RiceHandler.getColour());
         CD_DAYS_LABEL.prefWidthProperty().bind(display.widthProperty());
 
         Font textFont = Font.font(Vals.FontTools.FONT_FAM, FontWeight.BOLD, FontPosture.ITALIC, 13);
         CD_DESC_LABEL.setAlignment(Pos.CENTER);
         CD_DESC_LABEL.setTextAlignment(TextAlignment.CENTER);
         CD_DESC_LABEL.setFont(textFont);
-        CD_DESC_LABEL.setTextFill(Color.WHITE);
+        CD_DESC_LABEL.setTextFill(RiceHandler.getColour());
         CD_DESC_LABEL.prefWidthProperty().bind(display.widthProperty());
 
         configureCountdownLabelsText(countdown, now);
@@ -205,21 +205,21 @@ public class CountdownPane extends VBox {
     private void configureLabelsForUrgency(Countdown countdown, LocalDate now) {
         String statusString = "Ongoing";
         String dateString = "Due: " + countdown.getStringDueDate(now);
-        Color colour = Color.WHITE;
+        Color colour = RiceHandler.getColour();
         final Urgency URGENCY = countdown.getUrgency(now);
         this.isUrgent = true;
         switch (URGENCY) {
             case OVERDUE:
                 statusString = "Overdue";
-                colour = Colour.CD_OVERDUE;
+                colour = RiceHandler.getColour("cdOverdue");
                 break;
             case TODAY:
                 statusString = "Due today";
-                colour = Colour.CD_TODAY;
+                colour = RiceHandler.getColour("cdToday");
                 break;
             case TOMORROW:
                 statusString = "Due tomorrow";
-                colour = Colour.CD_TOMORROW;
+                colour = RiceHandler.getColour("cdTomorrow");
                 break;
             case COMPLETED:
                 statusString = "Completed";
@@ -350,17 +350,17 @@ public class CountdownPane extends VBox {
             FADE_TR.setFromValue(HOVER_HBOX.getOpacity());
             FADE_TR.playFromStart();
         }
-        CUSTOM_BORDER.setStrokeColour(Color.WHITE);
-        STATUS_LABEL.setTextFill(Vals.Colour.TXT_GHOST);
-        END_DATE_LABEL.setTextFill(Vals.Colour.TXT_GHOST);
+        CUSTOM_BORDER.setStrokeColour(RiceHandler.getColour());
+        STATUS_LABEL.setTextFill(RiceHandler.getColour("txtGhost"));
+        END_DATE_LABEL.setTextFill(RiceHandler.getColour("txtGhost"));
     }
 
     public void applySelectStyle() {
         FADE_TR.stop();
         HOVER_HBOX.setOpacity(1);
-        CUSTOM_BORDER.setStrokeColour(Vals.Colour.SELECTED);
-        STATUS_LABEL.setTextFill(Vals.Colour.SELECTED);
-        END_DATE_LABEL.setTextFill(Vals.Colour.SELECTED);
+        CUSTOM_BORDER.setStrokeColour(RiceHandler.getColour("selected"));
+        STATUS_LABEL.setTextFill(RiceHandler.getColour("selected"));
+        END_DATE_LABEL.setTextFill(RiceHandler.getColour("selected"));
     }
 
     public void setCountdown(Countdown countdown) {
@@ -396,7 +396,8 @@ public class CountdownPane extends VBox {
 
     private void setPriorityColour(Color colour) {
         if (this.isUrgent)
-            CONTENT_HBOX.setBackground(Colour.createBG(Colour.adjustOpacity(colour, 0.2), 14, 3.5));
+            CONTENT_HBOX.setBackground(
+                RiceHandler.createBG(RiceHandler.adjustOpacity(colour, 0.2), 14, 3.5));
         else
             CONTENT_HBOX.setBackground(null);
     }

@@ -8,7 +8,7 @@ import code.backend.data.CountdownFolder.SpecialType;
 import code.backend.utils.FolderHandler;
 import code.frontend.foundation.custom.MableBorder;
 import code.frontend.gui.pages.home.CountdownPaneView;
-import code.frontend.misc.Vals.Colour;
+import code.frontend.gui.ricing.RiceHandler;
 import code.frontend.misc.Vals.FontTools;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -39,12 +39,12 @@ public class RemovePane extends Pane {
         });
 
         this.setOnMouseDragEntered((event) -> {
-            BORDER.setStrokeColour(Color.ORANGE);
-            LABEL.setTextFill(Color.ORANGE);
+            BORDER.setStrokeColour(RiceHandler.getColour("hoverDragndrop"));
+            LABEL.setTextFill(RiceHandler.getColour("hoverDragndrop"));
         });
         this.setOnMouseDragExited((event) -> {
-            BORDER.setStrokeColour(Colour.BTTN_REMOVE);
-            LABEL.setTextFill(Colour.BTTN_REMOVE);
+            BORDER.setStrokeColour(RiceHandler.getColour("bttnRemove"));
+            LABEL.setTextFill(RiceHandler.getColour("bttnRemove"));
         });
     }
 
@@ -81,10 +81,10 @@ public class RemovePane extends Pane {
     }
 
     private void configureStyling() {
-        BORDER.setStrokeColour(Colour.BTTN_REMOVE);
-        final Color BG_COLOUR = Colour.SIDE_BAR;
-        this.setBackground(Colour.createBG(BG_COLOUR, 18, 3));
-        LABEL.setTextFill(Colour.BTTN_REMOVE);
+        BORDER.setStrokeColour(RiceHandler.getColour("bttnRemove"));
+        final Color BG_COLOUR = RiceHandler.getColour("background2");
+        this.setBackground(RiceHandler.createBG(BG_COLOUR, 18, 3));
+        LABEL.setTextFill(RiceHandler.getColour("bttnRemove"));
         LABEL.setText("Remove from folder");
         LABEL.setFont(Font.font(FontTools.FONT_FAM, FontWeight.BOLD, FontPosture.ITALIC, 13));
         CONTAINER.setCenter(LABEL);

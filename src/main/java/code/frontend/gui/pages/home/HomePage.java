@@ -18,7 +18,7 @@ public class HomePage extends VBox {
         this.view = CountdownPaneView.getInstance();
         this.setFillWidth(true);
         VBox.setVgrow(this.view, Priority.ALWAYS);
-        this.setBackground(RiceHandler.createBG(RiceHandler.getColour("background"), 0, 0));
+        this.setBackground(RiceHandler.createBG(RiceHandler.getColour("background1"), 0, 0));
         this.getChildren().addAll(this.title, this.view);
     }
 

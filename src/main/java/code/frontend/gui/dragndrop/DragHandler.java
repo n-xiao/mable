@@ -137,7 +137,7 @@ public class DragHandler extends Region {
 
         final Label LABEL = new Label("copying: " + URGENCIES.length);
         LABEL.setBackground(RiceHandler.createBG(RiceHandler.getColour("labelDragndrop"), 0, 0));
-        LABEL.setTextFill(RiceHandler.getColour("txtDragnDrop"));
+        LABEL.setTextFill(RiceHandler.getColour("txtDragndrop"));
         LABEL.setFont(Font.font(FontTools.FONT_FAM, 13));
         LABEL.setAlignment(Pos.CENTER);
         LABEL.relocate(10, 0);

@@ -60,7 +60,7 @@ public class CountdownPaneView extends ScrollPane {
         this.FLOW_PANE.minHeightProperty().bind(this.heightProperty().add(-2));
         this.FLOW_PANE.setMaxHeight(Double.MAX_VALUE);
         this.FLOW_PANE.setBackground(
-            RiceHandler.createBG(RiceHandler.getColour("background"), 0, 0));
+            RiceHandler.createBG(RiceHandler.getColour("background1"), 0, 0));
         this.FLOW_PANE.setAlignment(Pos.TOP_CENTER);
         this.FLOW_PANE.setHgap(HGAP_BETWEEN);
         this.FLOW_PANE.setVgap(VGAP_BETWEEN);

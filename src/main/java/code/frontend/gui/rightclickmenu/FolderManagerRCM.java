@@ -7,8 +7,8 @@ package code.frontend.gui.rightclickmenu;
 import code.backend.data.CountdownFolder.SpecialType;
 import code.backend.utils.FolderHandler;
 import code.frontend.foundation.panels.buttons.Button;
+import code.frontend.gui.ricing.RiceHandler;
 import code.frontend.gui.sidebar.SidebarFolderManager;
-import code.frontend.misc.Vals.Colour;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
@@ -56,7 +56,7 @@ public class FolderManagerRCM extends RightClickMenuTemplate {
         };
 
         Button[] buttons = {edit, remove};
-        Color[] colours = {Colour.BTTN_EDIT, Colour.BTTN_REMOVE};
+        Color[] colours = {RiceHandler.getColour("bttnEdit"), RiceHandler.getColour("bttnRemove")};
 
         super(WIDTH, HEIGHT, buttons, colours);
 

@@ -9,7 +9,7 @@ import code.frontend.foundation.custom.CustomLine.Type;
 import code.frontend.foundation.custom.MableBorder;
 import code.frontend.foundation.panels.buttons.Button;
 import code.frontend.gui.containers.MainContainer;
-import code.frontend.misc.Vals.Colour;
+import code.frontend.gui.ricing.RiceHandler;
 import code.frontend.misc.Vals.FontTools;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -105,7 +105,8 @@ public abstract class RightClickMenuTemplate extends VBox {
         this.border = new MableBorder(BORDER_THICKNESS, 0.2, 0.2);
         MableBorder.applyToPane(this, border);
         this.setManaged(false);
-        this.setBackground(Colour.createBG(Colour.BACKGROUND, BG_RADIUS, BG_INSETS));
+        this.setBackground(
+            RiceHandler.createBG(RiceHandler.getColour("background"), BG_RADIUS, BG_INSETS));
         this.setFillWidth(true);
         this.resize(WIDTH, HEIGHT);
         this.setVisible(true);
@@ -121,7 +122,7 @@ public abstract class RightClickMenuTemplate extends VBox {
         divider.setOpacity(0.3);
         CustomLine line = new CustomLine(BORDER_THICKNESS, Type.HORIZONTAL_TYPE);
         line.setPadding(RIGHTLEFT_INSET);
-        line.setStrokeColour(Color.WHITE);
+        line.setStrokeColour(RiceHandler.getColour());
         CustomLine.applyToPane(divider, line);
 
         return divider;

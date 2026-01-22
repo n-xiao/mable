@@ -7,16 +7,14 @@ package code.frontend.gui.pages.home;
 import code.backend.utils.FolderHandler;
 import code.frontend.foundation.custom.CustomLine;
 import code.frontend.foundation.custom.CustomLine.Type;
-import code.frontend.misc.Vals.Colour;
+import code.frontend.gui.ricing.RiceHandler;
 import code.frontend.misc.Vals.FontTools;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 
 public class CountdownPaneViewTitle extends VBox {
@@ -40,7 +38,7 @@ public class CountdownPaneViewTitle extends VBox {
     }
 
     private void configureLabel() {
-        LABEL.setTextFill(Color.WHITE);
+        LABEL.setTextFill(RiceHandler.getColour());
         LABEL.setFont(Font.font(FontTools.FONT_FAM, FontWeight.BOLD, 17));
         LABEL.setAlignment(Pos.CENTER);
     }
@@ -49,7 +47,7 @@ public class CountdownPaneViewTitle extends VBox {
         Pane lineContainer = new Pane();
         lineContainer.setBackground(null);
         CustomLine line = new CustomLine(3, Type.HORIZONTAL_TYPE);
-        line.setStrokeColour(Colour.TXT_GHOST_2);
+        line.setStrokeColour(RiceHandler.getColour("txtGhost2"));
         CustomLine.applyToPane(lineContainer, line);
         lineContainer.setMaxWidth(Double.MAX_VALUE);
         lineContainer.setMinHeight(5);

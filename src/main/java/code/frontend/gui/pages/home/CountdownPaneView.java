@@ -11,9 +11,9 @@ import code.backend.data.CountdownFolder.SpecialType;
 import code.backend.utils.CountdownHandler;
 import code.backend.utils.FolderHandler;
 import code.frontend.foundation.panels.inputs.InputField;
+import code.frontend.gui.ricing.RiceHandler;
 import code.frontend.gui.rightclickmenu.CountdownViewRCM;
 import code.frontend.gui.rightclickmenu.RightClickMenuTemplate;
-import code.frontend.misc.Vals.Colour;
 import code.frontend.windows.EditWindow;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -59,7 +59,8 @@ public class CountdownPaneView extends ScrollPane {
         // the -2 below is needed to correct a small offset when at minHeight
         this.FLOW_PANE.minHeightProperty().bind(this.heightProperty().add(-2));
         this.FLOW_PANE.setMaxHeight(Double.MAX_VALUE);
-        this.FLOW_PANE.setBackground(Colour.createBG(Colour.BACKGROUND, 0, 0));
+        this.FLOW_PANE.setBackground(
+            RiceHandler.createBG(RiceHandler.getColour("background"), 0, 0));
         this.FLOW_PANE.setAlignment(Pos.TOP_CENTER);
         this.FLOW_PANE.setHgap(HGAP_BETWEEN);
         this.FLOW_PANE.setVgap(VGAP_BETWEEN);

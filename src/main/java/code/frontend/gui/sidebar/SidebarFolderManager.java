@@ -13,8 +13,8 @@ import code.frontend.foundation.panels.buttons.ToggleButton;
 import code.frontend.foundation.panels.inputs.InputField;
 import code.frontend.gui.dragndrop.DragHandler;
 import code.frontend.gui.pages.home.CountdownPaneView;
+import code.frontend.gui.ricing.RiceHandler;
 import code.frontend.gui.rightclickmenu.FolderManagerRCM;
-import code.frontend.misc.Vals.Colour;
 import code.frontend.misc.Vals.FontTools;
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -63,10 +63,12 @@ public class SidebarFolderManager extends VBox {
                 }
             });
             instance.heightProperty().addListener((event) -> { instance.moveNewFolderButton(); });
-            instance.NEW_FOLDER_BTTN.setOnMouseEntered(
-                event -> { instance.NEW_FOLDER_BTTN.setTextFill(Colour.BTTN_CREATE); });
-            instance.NEW_FOLDER_BTTN.setOnMouseExited(
-                event -> { instance.NEW_FOLDER_BTTN.setTextFill(Colour.TXT_GHOST); });
+            instance.NEW_FOLDER_BTTN.setOnMouseEntered(event -> {
+                instance.NEW_FOLDER_BTTN.setTextFill(RiceHandler.getColour("bttnCreate"));
+            });
+            instance.NEW_FOLDER_BTTN.setOnMouseExited(event -> {
+                instance.NEW_FOLDER_BTTN.setTextFill(RiceHandler.getColour("txtGhost"));
+            });
             instance.NEW_FOLDER_BTTN.setOnMouseClicked(
                 event -> { instance.triggerNewFolderInput(""); });
 
@@ -127,7 +129,7 @@ public class SidebarFolderManager extends VBox {
         this.SEARCH_FIELD.getTextField().setPromptText("Search...");
         this.SEARCH_FIELD.setMaxHeight(20);
         MableBorder border = new MableBorder(1.5, 0.1, 0.8);
-        border.setStrokeColour(Colour.GHOST);
+        border.setStrokeColour(RiceHandler.getColour("ghost"));
         this.SEARCH_FIELD.setCustomBorder(border);
         this.SEARCH_FIELD.enableManualActivation();
         this.SEARCH_FIELD.setFieldMargins(new Insets(5, 7, 5, 7));
@@ -136,7 +138,7 @@ public class SidebarFolderManager extends VBox {
 
     private void configureScrollPaneStyle() {
         final MableBorder BORDER = new MableBorder(2, 0.25, 0.15);
-        BORDER.setStrokeColour(Colour.GHOST);
+        BORDER.setStrokeColour(RiceHandler.getColour("ghost"));
         MableBorder.applyToPane(this.scrollPaneWrapper, BORDER);
         this.scrollPaneWrapper.maxWidthProperty().bind(this.widthProperty());
         this.SCROLL_PANE.setFitToWidth(true);
@@ -154,7 +156,8 @@ public class SidebarFolderManager extends VBox {
     }
 
     private void configureScrollPaneContentStyle() {
-        this.SCROLL_PANE_CONTENT.setBackground(Colour.createBG(Color.BLACK, 13, 8));
+        this.SCROLL_PANE_CONTENT.setBackground(
+            RiceHandler.createBG(RiceHandler.getColour("background3"), 13, 8));
         this.SCROLL_PANE_CONTENT.setFillWidth(true);
         this.SCROLL_PANE_CONTENT.setPadding(new Insets(4, 5, 0, 5));
         this.SCROLL_PANE_CONTENT.setMaxHeight(Double.MAX_VALUE);
@@ -334,14 +337,14 @@ public class SidebarFolderManager extends VBox {
         TOP_HINT.minHeight(20);
         TOP_HINT.setAlignment(Pos.CENTER_LEFT);
         TOP_HINT.setFont(Font.font(FontTools.FONT_FAM, FontPosture.ITALIC, 13));
-        TOP_HINT.setTextFill(Colour.SELECTED);
+        TOP_HINT.setTextFill(RiceHandler.getColour("selected"));
 
         final Label HINT = new Label();
         HINT.maxWidthProperty().bind(this.nameFieldContainer.widthProperty());
         HINT.minHeight(20);
         HINT.setAlignment(Pos.CENTER);
         HINT.setFont(Font.font(FontTools.FONT_FAM, FontPosture.ITALIC, 13));
-        HINT.setTextFill(Colour.ERROR);
+        HINT.setTextFill(RiceHandler.getColour("error"));
         HINT.setOpacity(0);
 
         final FadeTransition TRANSITION = new FadeTransition();
@@ -422,14 +425,14 @@ public class SidebarFolderManager extends VBox {
         protected FolderPane(CountdownFolder folder) {
             super(folder.getName());
             this.FOLDER = folder;
-            this.setFeedbackColour(Colour.SELECTED); // todo use another colour if needed
+            this.setFeedbackColour(RiceHandler.getColour("selected"));
             this.getLabel().setAlignment(Pos.CENTER_LEFT);
             this.getLabel().relocate(15, 0);
             this.getCustomBorder().setThickness(1.5);
             this.getCustomBorder().setCornerRadii(0.8);
             this.getCustomBorder().setMessiness(0.1);
-            this.setToggledColour(Colour.SELECTED);
-            this.setUntoggledColour(Colour.GHOST_2);
+            this.setToggledColour(RiceHandler.getColour("selected"));
+            this.setUntoggledColour(RiceHandler.getColour("ghost2"));
             this.setCursor(Cursor.DEFAULT);
             this.setMinHeight(40);
             this.getLabel().setFont(Font.font(FontTools.FONT_FAM, 13));

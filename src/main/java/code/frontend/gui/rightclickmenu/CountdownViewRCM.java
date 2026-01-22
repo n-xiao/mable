@@ -7,7 +7,7 @@ package code.frontend.gui.rightclickmenu;
 import code.frontend.foundation.panels.buttons.Button;
 import code.frontend.gui.pages.home.CountdownPaneView;
 import code.frontend.gui.pages.home.CountdownPaneView.ButtonMode;
-import code.frontend.misc.Vals.Colour;
+import code.frontend.gui.ricing.RiceHandler;
 import code.frontend.windows.AddWindow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -107,8 +107,9 @@ public class CountdownViewRCM extends RightClickMenuTemplate {
         };
 
         Button[] buttons = {create, edit, delete, null, markAsComplete, null, selector};
-        Color[] colours = {Colour.BTTN_CREATE, Colour.BTTN_EDIT, Colour.BTTN_REMOVE, null,
-            Colour.BTTN_MARK_COMPLETE, null, Colour.BTTN_DESELECT};
+        Color[] colours = {RiceHandler.getColour("bttnCreate"), RiceHandler.getColour("bttnEdit"),
+            RiceHandler.getColour("bttnRemove"), null, RiceHandler.getColour("bttnMarkComplete"),
+            null, RiceHandler.getColour("bttnDeselect")};
 
         super(WIDTH, HEIGHT, buttons, colours);
 

@@ -4,7 +4,7 @@
 
 package code.frontend.gui.pages.home;
 
-import code.frontend.misc.Vals.Colour;
+import code.frontend.gui.ricing.RiceHandler;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
@@ -18,7 +18,7 @@ public class HomePage extends VBox {
         this.view = CountdownPaneView.getInstance();
         this.setFillWidth(true);
         VBox.setVgrow(this.view, Priority.ALWAYS);
-        this.setBackground(Colour.createBG(Colour.BACKGROUND, 0, 0));
+        this.setBackground(RiceHandler.createBG(RiceHandler.getColour("background"), 0, 0));
         this.getChildren().addAll(this.title, this.view);
     }
 

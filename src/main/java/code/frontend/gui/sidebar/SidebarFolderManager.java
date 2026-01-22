@@ -39,7 +39,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.util.Duration;
@@ -304,7 +303,7 @@ public class SidebarFolderManager extends VBox {
     private void configureNewFolderButtonStyle() {
         this.NEW_FOLDER_BTTN.setText("+ new folder");
         this.NEW_FOLDER_BTTN.setFont(Font.font(FontTools.FONT_FAM, FontPosture.ITALIC, 13));
-        this.NEW_FOLDER_BTTN.setTextFill(Color.WHITE);
+        this.NEW_FOLDER_BTTN.setTextFill(RiceHandler.getColour());
         this.NEW_FOLDER_BTTN.setAlignment(Pos.CENTER);
         this.NEW_FOLDER_BTTN.setMinHeight(40);
         this.NEW_FOLDER_BTTN.maxWidthProperty().bind(this.widthProperty());
@@ -443,8 +442,9 @@ public class SidebarFolderManager extends VBox {
         }
 
         private void configureDrop() {
-            this.setOnMouseDragEntered(
-                (event) -> { this.getCustomBorder().setStrokeColour(Color.ORANGE); });
+            this.setOnMouseDragEntered((event) -> {
+                this.getCustomBorder().setStrokeColour(RiceHandler.getColour("hoverDragndrop"));
+            });
             this.setOnMouseDragExited((event) -> {
                 if (!this.getIsToggled()) // this interferes with DragRelease if no check
                     this.untoggle();

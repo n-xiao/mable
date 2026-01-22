@@ -8,7 +8,7 @@ import code.backend.data.Countdown;
 import code.frontend.foundation.panels.buttons.Button;
 import code.frontend.foundation.panels.inputs.DateInputField;
 import code.frontend.foundation.panels.inputs.InputField;
-import code.frontend.misc.Vals;
+import code.frontend.gui.ricing.RiceHandler;
 import code.frontend.misc.Vals.UtilityUI;
 import java.time.LocalDate;
 import javafx.beans.value.ChangeListener;
@@ -24,7 +24,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -57,7 +56,7 @@ public abstract class ConfigWindowTemplate extends Stage {
         this.root.setBackground(null);
 
         Scene scene = new Scene(this.root);
-        scene.setFill(Vals.Colour.BACKGROUND);
+        scene.setFill(RiceHandler.getColour("background1"));
         this.setScene(scene);
     }
 
@@ -78,7 +77,7 @@ public abstract class ConfigWindowTemplate extends Stage {
         container.setFillWidth(true);
 
         Label label = new Label(getNameInputuserHint());
-        label.setTextFill(Color.WHITE);
+        label.setTextFill(RiceHandler.getColour());
         label.setAlignment(Pos.CENTER_LEFT);
         label.setMaxWidth(UtilityUI.WIDTH);
         label.setFont(UtilityUI.getFont());
@@ -105,7 +104,7 @@ public abstract class ConfigWindowTemplate extends Stage {
         dateLabel.setAlignment(Pos.CENTER_LEFT);
         dateLabel.setMaxWidth(UtilityUI.WIDTH);
         dateLabel.setFont(UtilityUI.getFont());
-        dateLabel.setTextFill(Color.WHITE);
+        dateLabel.setTextFill(RiceHandler.getColour());
         dateField.setMaxWidth(300);
         dateField.setMinWidth(300);
         dateField.setFieldMargins(INSETS);
@@ -117,7 +116,7 @@ public abstract class ConfigWindowTemplate extends Stage {
         separator.setMaxHeight(UtilityUI.HEIGHT);
         separator.setAlignment(Pos.CENTER);
         separator.setFont(UtilityUI.getFont());
-        separator.setTextFill(Color.WHITE);
+        separator.setTextFill(RiceHandler.getColour());
         separator.setMaxWidth(UtilityUI.WIDTH);
         HBox.setHgrow(separator, Priority.ALWAYS);
         HBox.setMargin(separator, new Insets(0, 8, 0, 8));
@@ -127,7 +126,7 @@ public abstract class ConfigWindowTemplate extends Stage {
         daysLabel.setAlignment(Pos.CENTER_RIGHT);
         daysLabel.setMaxWidth(UtilityUI.WIDTH);
         daysLabel.setFont(UtilityUI.getFont());
-        daysLabel.setTextFill(Color.WHITE);
+        daysLabel.setTextFill(RiceHandler.getColour());
         daysField.setNumInputOnly(true);
         daysField.setTextLimit(7);
         daysField.setFieldMargins(INSETS);

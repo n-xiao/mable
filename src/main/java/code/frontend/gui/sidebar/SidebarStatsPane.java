@@ -10,7 +10,7 @@ import code.frontend.foundation.custom.CustomLine;
 import code.frontend.foundation.custom.CustomLine.Type;
 import code.frontend.foundation.custom.MableBorder;
 import code.frontend.gui.dragndrop.RemovePane;
-import code.frontend.misc.Vals.Colour;
+import code.frontend.gui.ricing.RiceHandler;
 import code.frontend.misc.Vals.FontTools;
 import code.frontend.misc.Vals.GraphicalUI;
 import javafx.geometry.Insets;
@@ -45,13 +45,13 @@ public class SidebarStatsPane extends VBox {
     private SidebarStatsPane() {
         final MableBorder BORDER = new MableBorder(2, 0.2, 0.4);
         MableBorder.applyToPane(this, BORDER);
-        BORDER.setStrokeColour(Colour.GHOST);
+        BORDER.setStrokeColour(RiceHandler.getColour("ghost"));
 
         this.OVERDUE_STAT = new StatPane(Urgency.OVERDUE);
         this.TODAY_STAT = new StatPane(Urgency.TODAY);
         this.TOMORROW_STAT = new StatPane(Urgency.TOMORROW);
         this.setAlignment(Pos.CENTER);
-        this.setBackground(Colour.createBG(Color.BLACK, 13, 8));
+        this.setBackground(RiceHandler.createBG(RiceHandler.getColour("background3"), 13, 8));
         this.getChildren().addAll(this.OVERDUE_STAT, this.TODAY_STAT, this.TOMORROW_STAT);
         VBox.setMargin(
             this.OVERDUE_STAT, new Insets(TOPBOTTOM_SPACE, LEFTRIGHT_SPACE, 0, LEFTRIGHT_SPACE));
@@ -87,19 +87,19 @@ public class SidebarStatsPane extends VBox {
             switch (URGENCY) {
                 case OVERDUE:
                     this.STRING_LABEL = "Overdue";
-                    this.COLOUR = Colour.CD_OVERDUE;
+                    this.COLOUR = RiceHandler.getColour("cdOverdue");
                     break;
                 case TODAY:
                     this.STRING_LABEL = "Due today";
-                    this.COLOUR = Colour.CD_TODAY;
+                    this.COLOUR = RiceHandler.getColour("cdToday");
                     break;
                 case TOMORROW:
                     this.STRING_LABEL = "Due tomorrow";
-                    this.COLOUR = Colour.CD_TOMORROW;
+                    this.COLOUR = RiceHandler.getColour("cdTomorrow");
                     break;
                 default:
                     this.STRING_LABEL = "Others";
-                    this.COLOUR = Color.WHITE;
+                    this.COLOUR = RiceHandler.getColour();
                     break;
             }
             this.NAME_LABEL = new Label();
@@ -152,7 +152,7 @@ public class SidebarStatsPane extends VBox {
             this.count = CountdownHandler.getStatistic(this.URGENCY);
             this.COUNTER_LABEL.setText(GraphicalUI.intToString(this.count));
             if (this.count == 0) {
-                this.setOverallColour(Colour.TXT_GHOST);
+                this.setOverallColour(RiceHandler.getColour("txtGhost"));
                 this.setOpacity(0.5);
             } else {
                 this.setOverallColour(this.COLOUR);

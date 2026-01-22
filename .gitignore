@@ -47,7 +47,6 @@ Thumbs.db
 
 # Sensitive Data #
 ##################
-*.json
 app/tokens/
 tokens/
 

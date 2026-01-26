@@ -10,8 +10,8 @@ import code.frontend.gui.ricing.RiceHandler;
 import code.frontend.misc.Vals;
 import code.frontend.misc.Watchdog;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Launcher extends Application {
@@ -30,6 +30,7 @@ public class Launcher extends Application {
         stage.setMinHeight(Vals.GraphicalUI.MIN_HEIGHT);
         stage.setWidth(Vals.GraphicalUI.PREF_WIDTH);
         stage.setHeight(Vals.GraphicalUI.PREF_HEIGHT);
+        stage.setOnCloseRequest((event) -> { Platform.exit(); });
 
         MainContainer root = MainContainer.getInstance();
         root.prefWidthProperty().bind(stage.widthProperty());

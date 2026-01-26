@@ -243,7 +243,7 @@ public class MableBorder extends ResizableCanvas {
         }
 
         private double getCornerRadii() {
-            return this.IS_DECOR ? this.BORDER.cornerRadii * getRandom(1.18, 1.25)
+            return this.IS_DECOR ? this.BORDER.cornerRadii * getRandom(1.05, 1.2)
                                  : this.BORDER.cornerRadii;
         }
     }

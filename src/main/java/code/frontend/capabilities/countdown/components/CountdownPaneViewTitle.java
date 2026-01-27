@@ -5,7 +5,7 @@
 package code.frontend.capabilities.countdown.components;
 
 import code.backend.utils.FolderHandler;
-import code.frontend.Vals.FontTools;
+import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.graphics.CustomLine;
 import code.frontend.libs.katlaf.graphics.CustomLine.Type;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
@@ -14,8 +14,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 
 public class CountdownPaneViewTitle extends VBox {
     private static CountdownPaneViewTitle instance = null;
@@ -39,7 +37,7 @@ public class CountdownPaneViewTitle extends VBox {
 
     private void configureLabel() {
         LABEL.setTextFill(RiceHandler.getColour());
-        LABEL.setFont(Font.font(FontTools.FONT_FAM, FontWeight.BOLD, 17));
+        LABEL.setFont(FontHandler.getHeading(1));
         LABEL.setAlignment(Pos.CENTER);
     }
 

@@ -5,10 +5,11 @@
 package code.frontend.capabilities.countdown.windows;
 
 import code.backend.data.Countdown;
-import code.frontend.foundation.panels.buttons.Button;
-import code.frontend.foundation.panels.inputs.DateInputField;
-import code.frontend.foundation.panels.inputs.InputField;
-import code.frontend.gui.pages.home.CountdownPaneView;
+import code.frontend.capabilities.countdown.components.CountdownPaneView;
+import code.frontend.libs.katlaf.buttons.Button;
+import code.frontend.libs.katlaf.inputfields.DateInputField;
+import code.frontend.libs.katlaf.inputfields.InputField;
+import code.frontend.libs.katlaf.windows.ConfigWindowTemplate;
 import java.time.LocalDate;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;

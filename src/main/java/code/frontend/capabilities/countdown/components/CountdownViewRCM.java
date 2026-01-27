@@ -4,11 +4,11 @@
 
 package code.frontend.capabilities.countdown.components;
 
-import code.frontend.foundation.panels.buttons.Button;
-import code.frontend.gui.pages.home.CountdownPaneView;
-import code.frontend.gui.pages.home.CountdownPaneView.ButtonMode;
-import code.frontend.gui.ricing.RiceHandler;
-import code.frontend.windows.AddWindow;
+import code.frontend.capabilities.countdown.components.CountdownPaneView.ButtonMode;
+import code.frontend.capabilities.countdown.windows.AddWindow;
+import code.frontend.libs.katlaf.buttons.Button;
+import code.frontend.libs.katlaf.menus.RightClickMenuTemplate;
+import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 

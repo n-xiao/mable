@@ -6,9 +6,9 @@ package code.frontend.capabilities.countdown.components;
 
 import code.backend.data.CountdownFolder.SpecialType;
 import code.backend.utils.FolderHandler;
-import code.frontend.foundation.panels.buttons.Button;
-import code.frontend.gui.ricing.RiceHandler;
-import code.frontend.gui.sidebar.SidebarFolderManager;
+import code.frontend.libs.katlaf.buttons.Button;
+import code.frontend.libs.katlaf.menus.RightClickMenuTemplate;
+import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 

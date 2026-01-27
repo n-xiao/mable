@@ -4,7 +4,8 @@
 
 package code.frontend.libs.katlaf.inputfields;
 
-import code.frontend.Vals;
+import code.frontend.libs.katlaf.FontHandler;
+import code.frontend.libs.katlaf.FontHandler.DedicatedFont;
 import code.frontend.libs.katlaf.graphics.MableBorder;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.util.ArrayList;
@@ -18,7 +19,6 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextFormatter.Change;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
 public class InputField extends BorderPane {
     private static ArrayList<InputField> MANUAL_INPUTS = new ArrayList<InputField>();
@@ -40,7 +40,7 @@ public class InputField extends BorderPane {
         textField = new TextField();
         textField.setBackground(null);
         textField.setBorder(null);
-        textField.setFont(new Font(Vals.FontTools.FONT_FAM + " Medium", 15));
+        textField.setFont(FontHandler.getDedicated(DedicatedFont.USER_INPUT));
         textField.setStyle("-fx-text-fill: white; user-select: none;");
         this.applyFocusLogic();
 

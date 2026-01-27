@@ -5,6 +5,11 @@
 package code.frontend.libs.katlaf.windows;
 
 import code.backend.data.Countdown;
+import code.frontend.libs.katlaf.FontHandler;
+import code.frontend.libs.katlaf.buttons.Button;
+import code.frontend.libs.katlaf.inputfields.DateInputField;
+import code.frontend.libs.katlaf.inputfields.InputField;
+import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.time.LocalDate;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -23,6 +28,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public abstract class ConfigWindowTemplate extends Stage {
+    public static final int WIDTH = 510;
+    public static final int HEIGHT = 330;
     private static final Insets INSETS = new Insets(7);
 
     private VBox root;
@@ -40,13 +47,13 @@ public abstract class ConfigWindowTemplate extends Stage {
     protected void setStageStyling() {
         this.setResizable(false);
         this.initStyle(StageStyle.DECORATED);
-        this.setMinWidth(UtilityUI.WIDTH);
-        this.setMaxWidth(UtilityUI.WIDTH);
-        this.setMinHeight(UtilityUI.HEIGHT);
-        this.setMaxHeight(UtilityUI.HEIGHT);
+        this.setMinWidth(WIDTH);
+        this.setMinHeight(HEIGHT);
+        this.setMaxWidth(WIDTH);
+        this.setMaxHeight(HEIGHT);
 
         this.root = new VBox();
-        this.root.setPrefSize(UtilityUI.WIDTH, UtilityUI.HEIGHT);
+        this.root.setPrefSize(WIDTH, HEIGHT);
         this.root.relocate(0, 0);
         this.root.setBackground(null);
 
@@ -74,10 +81,10 @@ public abstract class ConfigWindowTemplate extends Stage {
         Label label = new Label(getNameInputuserHint());
         label.setTextFill(RiceHandler.getColour());
         label.setAlignment(Pos.CENTER_LEFT);
-        label.setMaxWidth(UtilityUI.WIDTH);
-        label.setFont(UtilityUI.getFont());
+        label.setMaxWidth(WIDTH);
+        label.setFont(FontHandler.getHeading(3));
         nameField.setFieldMargins(INSETS);
-        nameField.setMaxWidth(UtilityUI.WIDTH);
+        nameField.setMaxWidth(WIDTH);
         VBox.setMargin(label, new Insets(0, 0, 0, 8));
 
         container.getChildren().addAll(label, nameField);
@@ -97,8 +104,8 @@ public abstract class ConfigWindowTemplate extends Stage {
         VBox dateFieldContainer = new VBox();
         Label dateLabel = new Label(getDateInputuserHint());
         dateLabel.setAlignment(Pos.CENTER_LEFT);
-        dateLabel.setMaxWidth(UtilityUI.WIDTH);
-        dateLabel.setFont(UtilityUI.getFont());
+        dateLabel.setMaxWidth(WIDTH);
+        dateLabel.setFont(FontHandler.getHeading(3));
         dateLabel.setTextFill(RiceHandler.getColour());
         dateField.setMaxWidth(300);
         dateField.setMinWidth(300);
@@ -108,19 +115,19 @@ public abstract class ConfigWindowTemplate extends Stage {
         dateFieldContainer.getChildren().addAll(dateLabel, dateField, filler1);
 
         Label separator = new Label("or in");
-        separator.setMaxHeight(UtilityUI.HEIGHT);
+        separator.setMaxHeight(HEIGHT);
         separator.setAlignment(Pos.CENTER);
-        separator.setFont(UtilityUI.getFont());
+        separator.setFont(FontHandler.getHeading(3));
         separator.setTextFill(RiceHandler.getColour());
-        separator.setMaxWidth(UtilityUI.WIDTH);
+        separator.setMaxWidth(WIDTH);
         HBox.setHgrow(separator, Priority.ALWAYS);
         HBox.setMargin(separator, new Insets(0, 8, 0, 8));
 
         VBox daysFieldContainer = new VBox();
         Label daysLabel = new Label("day(s)");
         daysLabel.setAlignment(Pos.CENTER_RIGHT);
-        daysLabel.setMaxWidth(UtilityUI.WIDTH);
-        daysLabel.setFont(UtilityUI.getFont());
+        daysLabel.setMaxWidth(WIDTH);
+        daysLabel.setFont(FontHandler.getHeading(3));
         daysLabel.setTextFill(RiceHandler.getColour());
         daysField.setNumInputOnly(true);
         daysField.setTextLimit(7);
@@ -138,7 +145,7 @@ public abstract class ConfigWindowTemplate extends Stage {
 
     private Pane createButtonPart() {
         BorderPane container = new BorderPane();
-        container.setPrefWidth(UtilityUI.WIDTH);
+        container.setPrefWidth(WIDTH);
         button.setMaxSize(125, 35);
         button.setMinSize(125, 35);
         container.setCenter(button);

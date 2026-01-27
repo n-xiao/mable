@@ -6,14 +6,14 @@ package code.frontend.capabilities.countdown.components;
 
 import code.backend.data.Countdown;
 import code.backend.data.Countdown.Urgency;
-import code.frontend.foundation.custom.CustomLine;
-import code.frontend.foundation.custom.CustomLine.Type;
-import code.frontend.foundation.custom.MableBorder;
-import code.frontend.gui.dragndrop.DragHandler;
-import code.frontend.gui.ricing.RiceHandler;
-import code.frontend.gui.rightclickmenu.CountdownViewRCM;
-import code.frontend.gui.rightclickmenu.RightClickMenuTemplate;
-import code.frontend.misc.Vals;
+import code.frontend.libs.katlaf.FontHandler;
+import code.frontend.libs.katlaf.FontHandler.DedicatedFont;
+import code.frontend.libs.katlaf.FormatHandler;
+import code.frontend.libs.katlaf.graphics.CustomLine;
+import code.frontend.libs.katlaf.graphics.CustomLine.Type;
+import code.frontend.libs.katlaf.graphics.MableBorder;
+import code.frontend.libs.katlaf.menus.RightClickMenuTemplate;
+import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.time.LocalDate;
 import javafx.animation.Animation.Status;
 import javafx.animation.FadeTransition;
@@ -29,8 +29,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
@@ -81,7 +79,7 @@ public class CountdownPane extends VBox {
         int leftRightPadding = 16;
         double height = HEIGHT - CONTENT_HEIGHT;
         this.HOVER_HBOX.setPrefSize(WIDTH, height);
-        Font font = Font.font(Vals.FontTools.FONT_FAM, FontWeight.MEDIUM, FontPosture.ITALIC, 14);
+        Font font = FontHandler.getSubtitle();
         this.STATUS_LABEL.setAlignment(Pos.BOTTOM_LEFT);
         this.STATUS_LABEL.setFont(font);
         this.STATUS_LABEL.setTextFill(RiceHandler.getColour("txtGhost"));
@@ -151,7 +149,7 @@ public class CountdownPane extends VBox {
     private Label createNameLabel(Countdown cd) {
         String name = cd.getName();
         NAME_LABEL.setText(name);
-        Font nameFont = Font.font(Vals.FontTools.FONT_FAM, FontWeight.SEMI_BOLD, 16);
+        Font nameFont = FontHandler.getDedicated(DedicatedFont.COUNTDOWN_NAME);
         NAME_LABEL.setAlignment(Pos.CENTER);
         NAME_LABEL.setTextAlignment(TextAlignment.CENTER);
         NAME_LABEL.setWrapText(true);
@@ -178,14 +176,14 @@ public class CountdownPane extends VBox {
     private VBox createCountdownDisplay(Countdown cd, LocalDate now) {
         VBox display = new VBox();
 
-        Font numFont = Font.font(Vals.FontTools.FONT_FAM, FontWeight.BOLD, FontPosture.ITALIC, 30);
+        Font numFont = FontHandler.getDedicated(DedicatedFont.COUNTDOWN_NUM);
         CD_DAYS_LABEL.setAlignment(Pos.CENTER);
         CD_DAYS_LABEL.setTextAlignment(TextAlignment.CENTER);
         CD_DAYS_LABEL.setFont(numFont);
         CD_DAYS_LABEL.setTextFill(RiceHandler.getColour());
         CD_DAYS_LABEL.prefWidthProperty().bind(display.widthProperty());
 
-        Font textFont = Font.font(Vals.FontTools.FONT_FAM, FontWeight.BOLD, FontPosture.ITALIC, 13);
+        Font textFont = FontHandler.getDedicated(DedicatedFont.COUNTDOWN_INFO);
         CD_DESC_LABEL.setAlignment(Pos.CENTER);
         CD_DESC_LABEL.setTextAlignment(TextAlignment.CENTER);
         CD_DESC_LABEL.setFont(textFont);
@@ -225,7 +223,7 @@ public class CountdownPane extends VBox {
 
     private void configureCountdownLabelsText(Countdown countdown, LocalDate now) {
         int daysLeft = Math.abs(countdown.daysUntilDue(now));
-        CD_DAYS_LABEL.setText(Vals.GraphicalUI.intToString(daysLeft));
+        CD_DAYS_LABEL.setText(FormatHandler.intToString(daysLeft));
         String textNoun = (daysLeft != 1) ? "DAYS" : "DAY";
         String textAdverb = (countdown.isOverdue(now)) ? "SINCE DUE" : "LEFT";
         CD_DESC_LABEL.setText(textNoun + "\n" + textAdverb);

@@ -4,8 +4,8 @@
 
 package code.frontend.capabilities.countdown.concurrency;
 
-import code.frontend.gui.pages.home.CountdownPaneView;
-import code.frontend.gui.sidebar.SidebarStatsPane;
+import code.frontend.capabilities.countdown.components.CountdownPaneView;
+import code.frontend.capabilities.countdown.components.SidebarStatsPane;
 import java.time.LocalDate;
 import javafx.application.Platform;
 import javafx.concurrent.ScheduledService;

@@ -6,8 +6,9 @@ package code.frontend.capabilities.countdown.windows;
 
 import code.backend.data.Countdown;
 import code.backend.utils.CountdownHandler;
-import code.frontend.foundation.panels.buttons.Button;
-import code.frontend.gui.pages.home.CountdownPaneView;
+import code.frontend.capabilities.countdown.components.CountdownPaneView;
+import code.frontend.libs.katlaf.buttons.Button;
+import code.frontend.libs.katlaf.windows.ConfigWindowTemplate;
 import java.time.LocalDate;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;

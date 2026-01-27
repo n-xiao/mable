@@ -4,15 +4,11 @@
 
 package code.frontend.capabilities.countdown.components;
 
-import code.frontend.foundation.custom.CustomLine;
-import code.frontend.foundation.custom.CustomLine.Type;
-import code.frontend.foundation.panels.inputs.InputField;
-import code.frontend.gui.dragndrop.RemovePane;
-import code.frontend.gui.pages.home.CountdownPaneView;
-import code.frontend.gui.ricing.RiceHandler;
-import code.frontend.gui.sidebar.SidebarFolderManager;
-import code.frontend.gui.sidebar.SidebarStatsPane;
-import code.frontend.misc.Vals.FontTools;
+import code.frontend.libs.katlaf.FontHandler;
+import code.frontend.libs.katlaf.graphics.CustomLine;
+import code.frontend.libs.katlaf.graphics.CustomLine.Type;
+import code.frontend.libs.katlaf.inputfields.InputField;
+import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -20,9 +16,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
 
 public class Sidebar extends VBox {
     private static Sidebar instance = null;
@@ -72,7 +65,7 @@ public class Sidebar extends VBox {
 
         Label label = new Label(text);
         label.setTextFill(RiceHandler.getColour("txtGhost2"));
-        label.setFont(Font.font(FontTools.FONT_FAM, FontWeight.BOLD, FontPosture.ITALIC, 13.5));
+        label.setFont(FontHandler.getHeading(4));
         label.maxHeightProperty().bind(divider.heightProperty());
         label.setAlignment(Pos.CENTER);
         HBox.setMargin(label, new Insets(0, 5, 0, 5));

@@ -5,10 +5,10 @@
 package code.frontend.capabilities.countdown.components;
 
 import code.backend.utils.FolderHandler;
-import code.frontend.foundation.custom.CustomLine;
-import code.frontend.foundation.custom.CustomLine.Type;
-import code.frontend.gui.ricing.RiceHandler;
-import code.frontend.misc.Vals.FontTools;
+import code.frontend.Vals.FontTools;
+import code.frontend.libs.katlaf.graphics.CustomLine;
+import code.frontend.libs.katlaf.graphics.CustomLine.Type;
+import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;

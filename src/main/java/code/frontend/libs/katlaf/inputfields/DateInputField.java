@@ -4,7 +4,7 @@
 
 package code.frontend.libs.katlaf.inputfields;
 
-import code.frontend.Vals;
+import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.graphics.MableBorder;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.text.DecimalFormat;
@@ -17,8 +17,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
 
 public class DateInputField extends VBox {
@@ -40,10 +38,10 @@ public class DateInputField extends VBox {
         hintLabel = new Label();
         hintLabel.setTextFill(RiceHandler.getColour("error"));
         hintLabel.setOpacity(0);
-        hintLabel.setFont(Font.font(Vals.FontTools.FONT_FAM + " Medium Italic", 13));
+        hintLabel.setFont(FontHandler.getNormal());
         hintLabel.setAlignment(Pos.CENTER);
         hintLabel.maxWidthProperty().bind(this.widthProperty());
-        border = new MableBorder(Vals.GraphicalUI.INPUT_BORDER_WIDTH, 0.15, 0.5);
+        border = new MableBorder(2, 0.15, 0.5);
         MableBorder.applyToPane(contents, border);
         dayInput = new InputField() {
             @Override
@@ -124,7 +122,7 @@ public class DateInputField extends VBox {
 
     private Label createSlashSeparator() {
         Label slash = new Label("/");
-        slash.setFont(Font.font(Vals.FontTools.FONT_FAM, FontWeight.BOLD, 12));
+        slash.setFont(FontHandler.getHeading(4));
         slash.setTextFill(Color.WHITE);
         slash.prefHeightProperty().bind(contents.heightProperty());
         slash.setPrefWidth(10);

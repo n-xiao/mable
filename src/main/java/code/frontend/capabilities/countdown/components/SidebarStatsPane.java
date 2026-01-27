@@ -6,13 +6,12 @@ package code.frontend.capabilities.countdown.components;
 
 import code.backend.data.Countdown.Urgency;
 import code.backend.utils.CountdownHandler;
-import code.frontend.foundation.custom.CustomLine;
-import code.frontend.foundation.custom.CustomLine.Type;
-import code.frontend.foundation.custom.MableBorder;
-import code.frontend.gui.dragndrop.RemovePane;
-import code.frontend.gui.ricing.RiceHandler;
-import code.frontend.misc.Vals.FontTools;
-import code.frontend.misc.Vals.GraphicalUI;
+import code.frontend.libs.katlaf.FontHandler;
+import code.frontend.libs.katlaf.FormatHandler;
+import code.frontend.libs.katlaf.graphics.CustomLine;
+import code.frontend.libs.katlaf.graphics.CustomLine.Type;
+import code.frontend.libs.katlaf.graphics.MableBorder;
+import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -21,7 +20,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
 public class SidebarStatsPane extends VBox {
     private static SidebarStatsPane instance = null;
@@ -117,7 +115,7 @@ public class SidebarStatsPane extends VBox {
 
         private void initLabel(Label label) {
             label.setTextFill(this.COLOUR);
-            label.setFont(Font.font(FontTools.FONT_FAM, 14));
+            label.setFont(FontHandler.getNormal());
             label.setAlignment(Pos.CENTER);
         }
 
@@ -137,7 +135,7 @@ public class SidebarStatsPane extends VBox {
         }
 
         private void initCounterLabel() {
-            this.COUNTER_LABEL.setText(GraphicalUI.intToString(this.count));
+            this.COUNTER_LABEL.setText(FormatHandler.intToString(this.count));
             this.COUNTER_LABEL.setMinWidth(10);
             initLabel(this.COUNTER_LABEL);
         }
@@ -150,7 +148,7 @@ public class SidebarStatsPane extends VBox {
 
         public void refreshContent() {
             this.count = CountdownHandler.getStatistic(this.URGENCY);
-            this.COUNTER_LABEL.setText(GraphicalUI.intToString(this.count));
+            this.COUNTER_LABEL.setText(FormatHandler.intToString(this.count));
             if (this.count == 0) {
                 this.setOverallColour(RiceHandler.getColour("txtGhost"));
                 this.setOpacity(0.5);

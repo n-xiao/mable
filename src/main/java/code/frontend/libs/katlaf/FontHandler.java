@@ -9,10 +9,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 
 public class FontHandler {
     public static final String FONT_FAM = "Shantell Sans";
+    public static enum DedicatedFont { COUNTDOWN_NAME, COUNTDOWN_NUM, COUNTDOWN_INFO, USER_INPUT }
 
     @Deprecated
     public static Font getButtonFont() {
@@ -20,26 +22,63 @@ public class FontHandler {
     }
 
     public static Font getTitle() {
-        return Font.font(FONT_FAM, FontWeight.BOLD, 17);
+        return Font.font(FONT_FAM, FontWeight.BOLD, 18);
     }
 
     /**
      * Returns a Font that represents one of three headings. The
-     * parameter accepts an integer from 1 to 3 (inclusive),
+     * parameter accepts an integer from 1 to 4 (inclusive),
      * with the largest heading starting at 1. Any other values
-     * will be ignored and heading 3 will be returned.
+     * will be ignored and heading 4 will be returned.
      *
      * @param type
-     * @return a Font representing a heading from 1 of 3 types
+     * @return a Font representing a heading from 1 of 4 types
      */
     public static Font getHeading(int type) {
         switch (type) {
             case 1:
-                return Font.font(FONT_FAM, FontWeight.BOLD, 15);
+                return Font.font(FONT_FAM, FontWeight.BOLD, 17);
             case 2:
-                return Font.font(FONT_FAM, FontWeight.BOLD, 13);
+                return Font.font(FONT_FAM, FontWeight.BOLD, 16);
+            case 3:
+                return Font.font(FONT_FAM, FontWeight.BOLD, 15);
             default:
-                return Font.font(FONT_FAM, FontWeight.MEDIUM, 12);
+                return Font.font(FONT_FAM, FontWeight.BOLD, 13);
+        }
+    }
+
+    public static Font getNormal() {
+        return Font.font(FONT_FAM + " Medium", 13.5);
+    }
+
+    public static Font getItalic() {
+        return Font.font(FONT_FAM + " Medium", FontPosture.ITALIC, 13.5);
+    }
+
+    public static Font getSubtitle() {
+        return Font.font(FONT_FAM, FontPosture.ITALIC, 13);
+    }
+
+    /**
+     * This returns fonts for specific user interface components
+     * that require unique fonts for aesthetic reasons. Invalid arguments,
+     * such as null, will be ignored and normal font will be returned.
+     *
+     * @param FONT
+     * @return an appropriate Font
+     */
+    public static Font getDedicated(final DedicatedFont FONT) {
+        switch (FONT) {
+            case COUNTDOWN_NAME:
+                return Font.font(FONT_FAM, FontWeight.SEMI_BOLD, 16);
+            case COUNTDOWN_NUM:
+                return Font.font(FONT_FAM, FontWeight.BOLD, FontPosture.ITALIC, 30);
+            case COUNTDOWN_INFO:
+                return Font.font(FONT_FAM, FontWeight.BOLD, FontPosture.ITALIC, 13);
+            case USER_INPUT:
+                return Font.font(FONT_FAM + " Medium", 15);
+            default:
+                return getNormal();
         }
     }
 

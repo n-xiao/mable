@@ -4,7 +4,7 @@
 
 package code.frontend.capabilities.countdown.components;
 
-import code.frontend.gui.ricing.RiceHandler;
+import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 

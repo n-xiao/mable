@@ -7,6 +7,7 @@ package code.frontend.libs.katlaf.menus;
 import code.frontend.MainContainer;
 import code.frontend.capabilities.countdown.components.CountdownViewRCM;
 import code.frontend.capabilities.countdown.components.FolderManagerRCM;
+import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.buttons.Button;
 import code.frontend.libs.katlaf.graphics.CustomLine;
 import code.frontend.libs.katlaf.graphics.CustomLine.Type;
@@ -22,7 +23,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
 public abstract class RightClickMenuTemplate extends VBox {
     private static final double BG_RADIUS = 12;
@@ -88,7 +88,7 @@ public abstract class RightClickMenuTemplate extends VBox {
                 button.setAnimationsEnabled(false);
                 button.getCustomBorder().setVisible(false);
                 button.getLabel().setAlignment(Pos.CENTER_LEFT);
-                button.getLabel().setFont(Font.font(FontTools.FONT_FAM, 13));
+                button.getLabel().setFont(FontHandler.getNormal());
                 button.setConsumeEvent(true);
                 button.setCursor(Cursor.DEFAULT);
                 VBox.setMargin(button, new Insets(0, RIGHTLEFT_INSET, 0, RIGHTLEFT_INSET));

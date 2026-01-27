@@ -5,13 +5,10 @@
 package code.frontend.capabilities.countdown.components;
 
 import code.backend.data.Countdown.Urgency;
-import code.frontend.foundation.custom.MableBorder;
-import code.frontend.gui.containers.MainContainer;
-import code.frontend.gui.containers.Sidebar;
-import code.frontend.gui.pages.home.CountdownPaneView;
-import code.frontend.gui.ricing.RiceHandler;
-import code.frontend.misc.Vals.FontTools;
-import code.frontend.misc.Vals.GraphicalUI;
+import code.frontend.MainContainer;
+import code.frontend.libs.katlaf.FontHandler;
+import code.frontend.libs.katlaf.graphics.MableBorder;
+import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
@@ -21,7 +18,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.transform.Rotate;
 
 public class DragHandler extends Region {
@@ -107,7 +103,7 @@ public class DragHandler extends Region {
         final Urgency[] URGENCIES = CountdownPaneView.getInstance().getSelectedUrgencies();
         // max of 3 "preview" panes to be generated
         for (int i = 0; i < 3 && i < URGENCIES.length; i++) {
-            final MableBorder BORDER = new MableBorder(GraphicalUI.DRAW_THICKNESS, 0.2, 0.42);
+            final MableBorder BORDER = new MableBorder(2.4, 0.2, 0.42);
             BORDER.setStrokeColour(RiceHandler.getColour("selected"));
             final Pane PANE = new Pane();
             MableBorder.applyToPane(PANE, BORDER);
@@ -138,7 +134,7 @@ public class DragHandler extends Region {
         final Label LABEL = new Label("copying: " + URGENCIES.length);
         LABEL.setBackground(RiceHandler.createBG(RiceHandler.getColour("labelDragndrop"), 0, 0));
         LABEL.setTextFill(RiceHandler.getColour("txtDragndrop"));
-        LABEL.setFont(Font.font(FontTools.FONT_FAM, 13));
+        LABEL.setFont(FontHandler.getNormal());
         LABEL.setAlignment(Pos.CENTER);
         LABEL.relocate(10, 0);
         LABEL.resize(100, 30);

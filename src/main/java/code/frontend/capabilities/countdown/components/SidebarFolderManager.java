@@ -6,16 +6,13 @@ package code.frontend.capabilities.countdown.components;
 
 import code.backend.data.CountdownFolder;
 import code.backend.utils.FolderHandler;
-import code.frontend.foundation.custom.CustomLine;
-import code.frontend.foundation.custom.CustomLine.Type;
-import code.frontend.foundation.custom.MableBorder;
-import code.frontend.foundation.panels.buttons.ToggleButton;
-import code.frontend.foundation.panels.inputs.InputField;
-import code.frontend.gui.dragndrop.DragHandler;
-import code.frontend.gui.pages.home.CountdownPaneView;
-import code.frontend.gui.ricing.RiceHandler;
-import code.frontend.gui.rightclickmenu.FolderManagerRCM;
-import code.frontend.misc.Vals.FontTools;
+import code.frontend.libs.katlaf.FontHandler;
+import code.frontend.libs.katlaf.buttons.ToggleButton;
+import code.frontend.libs.katlaf.graphics.CustomLine;
+import code.frontend.libs.katlaf.graphics.CustomLine.Type;
+import code.frontend.libs.katlaf.graphics.MableBorder;
+import code.frontend.libs.katlaf.inputfields.InputField;
+import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -39,8 +36,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
 import javafx.util.Duration;
 
 public class SidebarFolderManager extends VBox {
@@ -49,6 +44,18 @@ public class SidebarFolderManager extends VBox {
 
     private static FolderPane selectedFolderPane;
     private static SidebarFolderManager instance = null;
+
+    private final InputField SEARCH_FIELD;
+    private final ScrollPane SCROLL_PANE;
+    private final VBox SCROLL_PANE_CONTENT;
+    private final LinkedList<FolderPane> FOLDER_PANES;
+    private final Label NEW_FOLDER_BTTN;
+    private final BorderPane NEW_FOLDER_BTTN_CONTAINER;
+
+    private final FolderPane COMPLETED_FOLDER_PANE;
+    public final FolderPane INCOMPLETED_FOLDER_PANE;
+    private Pane scrollPaneWrapper;
+    private VBox nameFieldContainer;
 
     public static SidebarFolderManager getInstance() {
         if (instance == null) {
@@ -76,18 +83,6 @@ public class SidebarFolderManager extends VBox {
 
         return instance;
     }
-
-    private final InputField SEARCH_FIELD;
-    private final ScrollPane SCROLL_PANE;
-    private final VBox SCROLL_PANE_CONTENT;
-    private final LinkedList<FolderPane> FOLDER_PANES;
-    private final Label NEW_FOLDER_BTTN;
-    private final BorderPane NEW_FOLDER_BTTN_CONTAINER;
-
-    private final FolderPane COMPLETED_FOLDER_PANE;
-    public final FolderPane INCOMPLETED_FOLDER_PANE;
-    private Pane scrollPaneWrapper;
-    private VBox nameFieldContainer;
 
     private SidebarFolderManager() {
         this.scrollPaneWrapper = new Pane();
@@ -302,7 +297,7 @@ public class SidebarFolderManager extends VBox {
 
     private void configureNewFolderButtonStyle() {
         this.NEW_FOLDER_BTTN.setText("+ new folder");
-        this.NEW_FOLDER_BTTN.setFont(Font.font(FontTools.FONT_FAM, FontPosture.ITALIC, 13));
+        this.NEW_FOLDER_BTTN.setFont(FontHandler.getItalic());
         this.NEW_FOLDER_BTTN.setTextFill(RiceHandler.getColour());
         this.NEW_FOLDER_BTTN.setAlignment(Pos.CENTER);
         this.NEW_FOLDER_BTTN.setMinHeight(40);
@@ -335,14 +330,14 @@ public class SidebarFolderManager extends VBox {
         TOP_HINT.maxWidthProperty().bind(this.nameFieldContainer.widthProperty());
         TOP_HINT.minHeight(20);
         TOP_HINT.setAlignment(Pos.CENTER_LEFT);
-        TOP_HINT.setFont(Font.font(FontTools.FONT_FAM, FontPosture.ITALIC, 13));
+        TOP_HINT.setFont(FontHandler.getItalic());
         TOP_HINT.setTextFill(RiceHandler.getColour("selected"));
 
         final Label HINT = new Label();
         HINT.maxWidthProperty().bind(this.nameFieldContainer.widthProperty());
         HINT.minHeight(20);
         HINT.setAlignment(Pos.CENTER);
-        HINT.setFont(Font.font(FontTools.FONT_FAM, FontPosture.ITALIC, 13));
+        HINT.setFont(FontHandler.getItalic());
         HINT.setTextFill(RiceHandler.getColour("error"));
         HINT.setOpacity(0);
 
@@ -433,7 +428,7 @@ public class SidebarFolderManager extends VBox {
             this.setUntoggledColour(RiceHandler.getColour("ghost2"));
             this.setCursor(Cursor.DEFAULT);
             this.setMinHeight(40);
-            this.getLabel().setFont(Font.font(FontTools.FONT_FAM, 13));
+            this.getLabel().setFont(FontHandler.getNormal());
             this.setConsumeEvent(true);
             this.setAnimationsEnabled(false);
             VBox.setMargin(this, new Insets(3, 2.5, 5, 2.5));

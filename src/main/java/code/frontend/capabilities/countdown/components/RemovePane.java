@@ -6,19 +6,15 @@ package code.frontend.capabilities.countdown.components;
 
 import code.backend.data.CountdownFolder.SpecialType;
 import code.backend.utils.FolderHandler;
-import code.frontend.foundation.custom.MableBorder;
-import code.frontend.gui.pages.home.CountdownPaneView;
-import code.frontend.gui.ricing.RiceHandler;
-import code.frontend.misc.Vals.FontTools;
+import code.frontend.libs.katlaf.FontHandler;
+import code.frontend.libs.katlaf.graphics.MableBorder;
+import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
 
 public class RemovePane extends Pane {
     private final MableBorder BORDER;
@@ -86,7 +82,7 @@ public class RemovePane extends Pane {
         this.setBackground(RiceHandler.createBG(BG_COLOUR, 18, 3));
         LABEL.setTextFill(RiceHandler.getColour("bttnRemove"));
         LABEL.setText("Remove from folder");
-        LABEL.setFont(Font.font(FontTools.FONT_FAM, FontWeight.BOLD, FontPosture.ITALIC, 13));
+        LABEL.setFont(FontHandler.getHeading(3));
         CONTAINER.setCenter(LABEL);
         CONTAINER.setBackground(null);
         CONTAINER.prefWidthProperty().bind(this.widthProperty());

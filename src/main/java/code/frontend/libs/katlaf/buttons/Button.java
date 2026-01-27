@@ -4,6 +4,9 @@
 
 package code.frontend.libs.katlaf.buttons;
 
+import code.frontend.libs.katlaf.FontHandler;
+import code.frontend.libs.katlaf.graphics.MableBorder;
+import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.animation.FadeTransition;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -36,7 +39,7 @@ public abstract class Button extends Pane {
 
     public Button(String text) {
         this.consumeEvent = false;
-        this.labelFont = Vals.FontTools.getButtonFont();
+        this.labelFont = FontHandler.getNormal();
         this.feedbackColour = RiceHandler.getColour("feedback");
         this.colour = RiceHandler.getColour();
         this.enabled = true;

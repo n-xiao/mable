@@ -54,7 +54,6 @@ public class CountdownPane extends VBox {
     private final MableBorder CUSTOM_BORDER; // for selection ui indication
 
     private Countdown countdown; // points to the backend object
-    private boolean isUrgent;
     private boolean selected; // for selection detection
 
     public CountdownPane(Countdown cd, LocalDate now) {
@@ -69,7 +68,6 @@ public class CountdownPane extends VBox {
         this.CUSTOM_BORDER = new MableBorder(2.2, 0.19, 0.42);
         this.FADE_TR = new FadeTransition(Duration.millis(300), HOVER_HBOX);
         this.countdown = cd;
-        this.isUrgent = false;
         this.selected = false;
         this.setAlignment(Pos.CENTER);
         initContentHBox(now);
@@ -202,34 +200,27 @@ public class CountdownPane extends VBox {
         return display;
     }
 
-    private void configureLabelsForUrgency(Countdown countdown, LocalDate now) {
+    private void configureStatus(Countdown countdown, LocalDate now) {
         String statusString = "Ongoing";
         String dateString = "Due: " + countdown.getStringDueDate(now);
-        Color colour = RiceHandler.getColour();
         final Urgency URGENCY = countdown.getUrgency(now);
-        this.isUrgent = true;
         switch (URGENCY) {
             case OVERDUE:
                 statusString = "Overdue";
-                colour = RiceHandler.getColour("cdOverdue");
                 break;
             case TODAY:
                 statusString = "Due today";
-                colour = RiceHandler.getColour("cdToday");
                 break;
             case TOMORROW:
                 statusString = "Due tomorrow";
-                colour = RiceHandler.getColour("cdTomorrow");
                 break;
             case COMPLETED:
                 statusString = "Completed";
             default:
-                this.isUrgent = false;
                 break;
         }
         this.STATUS_LABEL.setText(statusString);
         this.END_DATE_LABEL.setText(dateString);
-        this.setPriorityColour(colour);
     }
 
     private void configureCountdownLabelsText(Countdown countdown, LocalDate now) {
@@ -391,14 +382,11 @@ public class CountdownPane extends VBox {
         LocalDate now = LocalDate.now();
         NAME_LABEL.setText(this.countdown.getName());
         configureCountdownLabelsText(this.countdown, now);
-        configureLabelsForUrgency(this.countdown, now);
+        configureStatus(this.countdown, now);
     }
 
-    private void setPriorityColour(Color colour) {
-        if (this.isUrgent)
-            CONTENT_HBOX.setBackground(
-                RiceHandler.createBG(RiceHandler.adjustOpacity(colour, 0.2), 14, 3.5));
-        else
-            CONTENT_HBOX.setBackground(null);
+    public void setColour(Color colour) {
+        CONTENT_HBOX.setBackground(
+            RiceHandler.createBG(RiceHandler.adjustOpacity(colour, 0.2), 14, 3.5));
     }
 }

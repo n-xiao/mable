@@ -4,7 +4,7 @@
         "background1" : "rgb(20, 20, 30)",
         "background2" : "rgb(10, 2, 22)",
         "background3" : "rgb(0, 0, 0)",
-        "feedback" : "rgb(75, 148, 174)",
+        "feedback" : "rgb(6, 58, 163)",
         "selected" : "rgb(136, 175, 252)",
         "selected2" : "rgb(95, 122, 176)",
         "error" : "rgb(250, 11, 11)",

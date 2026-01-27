@@ -17,6 +17,7 @@ public abstract class ToggleButton extends Button {
         this.toggledColour = Color.WHITE;
         this.untoggledColour = Color.GRAY;
         super(name);
+        this.setFeedbackBackground(null);
     }
 
     public boolean getIsToggled() {

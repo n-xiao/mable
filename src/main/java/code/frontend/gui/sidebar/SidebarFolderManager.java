@@ -424,7 +424,6 @@ public class SidebarFolderManager extends VBox {
         protected FolderPane(CountdownFolder folder) {
             super(folder.getName());
             this.FOLDER = folder;
-            this.setFeedbackColour(RiceHandler.getColour("selected"));
             this.getLabel().setAlignment(Pos.CENTER_LEFT);
             this.getLabel().relocate(15, 0);
             this.getCustomBorder().setThickness(1.5);
@@ -436,6 +435,7 @@ public class SidebarFolderManager extends VBox {
             this.setMinHeight(40);
             this.getLabel().setFont(Font.font(FontTools.FONT_FAM, 13));
             this.setConsumeEvent(true);
+            this.setAnimationsEnabled(false);
             VBox.setMargin(this, new Insets(3, 2.5, 5, 2.5));
             if (!FOLDER.isProtectedFolder()) // for now, it's easier to just do this
                 this.configureDrop();

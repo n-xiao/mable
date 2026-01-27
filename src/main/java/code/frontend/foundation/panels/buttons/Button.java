@@ -23,8 +23,6 @@ import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 public abstract class Button extends Pane {
-    private final double HOVER_OPACITY = 0.1;
-
     private Font labelFont;
     private Color feedbackColour;
     private Color colour;
@@ -61,7 +59,7 @@ public abstract class Button extends Pane {
 
         Insets animPaneInsets = new Insets(border.getPaddingDist());
         BackgroundFill bgFill =
-            new BackgroundFill(feedbackColour, new CornerRadii(12), animPaneInsets);
+            new BackgroundFill(feedbackColour, new CornerRadii(7), animPaneInsets);
         this.animPane.setBackground(new Background(bgFill));
         this.animPane.prefWidthProperty().bind(this.widthProperty());
         this.animPane.prefHeightProperty().bind(this.heightProperty());
@@ -80,7 +78,6 @@ public abstract class Button extends Pane {
                     event.consume();
                 if (enabled) {
                     executeOnClick(event);
-                    playClickAnim();
                 }
             }
         });
@@ -104,16 +101,6 @@ public abstract class Button extends Pane {
 
     public abstract void executeOnClick(MouseEvent event);
 
-    protected void playClickAnim() {
-        if (!animationsEnabled)
-            return;
-        this.ft.stop();
-        this.ft.setDuration(Duration.millis(200));
-        this.ft.setFromValue(HOVER_OPACITY);
-        this.ft.setToValue(0);
-        this.ft.playFromStart();
-    }
-
     protected void playMouseEnterAnim() {
         if (!animationsEnabled) {
             this.animPane.setOpacity(1);
@@ -122,7 +109,7 @@ public abstract class Button extends Pane {
         this.ft.stop();
         this.ft.setDuration(Duration.millis(300));
         this.ft.setFromValue(0);
-        this.ft.setToValue(HOVER_OPACITY);
+        this.ft.setToValue(1);
         this.ft.playFromStart();
     }
 
@@ -133,7 +120,7 @@ public abstract class Button extends Pane {
         }
         this.ft.stop();
         this.ft.setDuration(Duration.millis(300));
-        this.ft.setFromValue(HOVER_OPACITY);
+        this.ft.setFromValue(1);
         this.ft.setToValue(0);
         this.ft.playFromStart();
     }
@@ -142,28 +129,24 @@ public abstract class Button extends Pane {
         return label;
     }
 
-    protected double getHoverOpacity() {
-        return this.HOVER_OPACITY;
-    }
-
     public MableBorder getCustomBorder() {
         return border;
     }
 
     public void setFeedbackColour(Color feedbackColour) {
-        this.feedbackColour = feedbackColour;
-        Insets animPaneInsets = new Insets(border.getPaddingDist() - 0.5);
-        BackgroundFill bgFill =
-            new BackgroundFill(this.feedbackColour, new CornerRadii(12), animPaneInsets);
-        this.animPane.setBackground(new Background(bgFill));
+        if (feedbackColour == null) {
+            this.animPane.setBackground(null);
+        } else {
+            this.feedbackColour = feedbackColour;
+            Insets animPaneInsets = new Insets(border.getPaddingDist() - 0.5);
+            BackgroundFill bgFill =
+                new BackgroundFill(this.feedbackColour, new CornerRadii(12), animPaneInsets);
+            this.animPane.setBackground(new Background(bgFill));
+        }
     }
 
     public void setFeedbackBackground(Background bg) {
         this.animPane.setBackground(bg);
-    }
-
-    protected Pane getFeedbackBackground() {
-        return this.animPane;
     }
 
     public void setColour(Color colour) {

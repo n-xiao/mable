@@ -5,19 +5,24 @@
 package code;
 
 import code.backend.utils.StorageHandler;
-import code.frontend.gui.containers.MainContainer;
-import code.frontend.gui.ricing.RiceHandler;
-import code.frontend.misc.Vals;
-import code.frontend.misc.Watchdog;
+import code.frontend.MainContainer;
+import code.frontend.capabilities.countdown.concurrency.Watchdog;
+import code.frontend.libs.katlaf.FontHandler;
+import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Launcher extends Application {
+    // public static final int PREF_WIDTH = 1170;
+    // public static final int PREF_HEIGHT = 730;
+    private static final int MIN_WIDTH = 890;
+    private static final int MIN_HEIGHT = 600;
+
     @Override
     public void init() throws Exception {
-        Vals.FontTools.initFonts();
+        FontHandler.initFonts();
         StorageHandler.init();
     }
 
@@ -26,10 +31,8 @@ public class Launcher extends Application {
         RiceHandler.updatePalette("DARK");
 
         stage.setTitle("Mable");
-        stage.setMinWidth(Vals.GraphicalUI.MIN_WIDTH);
-        stage.setMinHeight(Vals.GraphicalUI.MIN_HEIGHT);
-        stage.setWidth(Vals.GraphicalUI.PREF_WIDTH);
-        stage.setHeight(Vals.GraphicalUI.PREF_HEIGHT);
+        stage.setMinWidth(MIN_WIDTH);
+        stage.setMinHeight(MIN_HEIGHT);
         stage.setOnCloseRequest((event) -> { Platform.exit(); });
 
         MainContainer root = MainContainer.getInstance();

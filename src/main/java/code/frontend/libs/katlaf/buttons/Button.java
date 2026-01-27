@@ -1,0 +1,176 @@
+/*
+   Copyright (C) 2026  Nicholas Siow <nxiao.dev@gmail.com>
+*/
+
+package code.frontend.libs.katlaf.buttons;
+
+import javafx.animation.FadeTransition;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Cursor;
+import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.util.Duration;
+
+public abstract class Button extends Pane {
+    private Font labelFont;
+    private Color feedbackColour;
+    private Color colour;
+
+    private Pane animPane = new Pane();
+    private FadeTransition ft = new FadeTransition();
+    private boolean animationsEnabled;
+
+    private Label label;
+    private MableBorder border;
+
+    private boolean enabled;
+    private boolean consumeEvent;
+
+    public Button(String text) {
+        this.consumeEvent = false;
+        this.labelFont = Vals.FontTools.getButtonFont();
+        this.feedbackColour = RiceHandler.getColour("feedback");
+        this.colour = RiceHandler.getColour();
+        this.enabled = true;
+        this.animationsEnabled = true;
+
+        this.border = new MableBorder(1.5, 0.3, 0.35);
+        MableBorder.applyToPane(this, border);
+
+        this.label = new Label(text);
+        this.label.setTextFill(colour);
+        this.label.setAlignment(Pos.CENTER);
+        this.label.setFont(labelFont);
+        this.label.prefWidthProperty().bind(this.widthProperty());
+        this.label.prefHeightProperty().bind(this.heightProperty());
+        this.label.relocate(0, 0);
+        this.label.setViewOrder(0);
+
+        Insets animPaneInsets = new Insets(border.getPaddingDist());
+        BackgroundFill bgFill =
+            new BackgroundFill(feedbackColour, new CornerRadii(7), animPaneInsets);
+        this.animPane.setBackground(new Background(bgFill));
+        this.animPane.prefWidthProperty().bind(this.widthProperty());
+        this.animPane.prefHeightProperty().bind(this.heightProperty());
+        this.animPane.relocate(0, 0);
+        this.animPane.setOpacity(0);
+        this.animPane.setViewOrder(1);
+        this.ft.setNode(animPane);
+
+        this.getChildren().addAll(label, animPane);
+
+        this.setCursor(Cursor.HAND);
+        this.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (consumeEvent)
+                    event.consume();
+                if (enabled) {
+                    executeOnClick(event);
+                }
+            }
+        });
+        this.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (enabled) {
+                    playMouseEnterAnim();
+                }
+            }
+        });
+        this.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (enabled) {
+                    playMouseExitAnim();
+                }
+            }
+        });
+    }
+
+    public abstract void executeOnClick(MouseEvent event);
+
+    protected void playMouseEnterAnim() {
+        if (!animationsEnabled) {
+            this.animPane.setOpacity(1);
+            return;
+        }
+        this.ft.stop();
+        this.ft.setDuration(Duration.millis(300));
+        this.ft.setFromValue(0);
+        this.ft.setToValue(1);
+        this.ft.playFromStart();
+    }
+
+    protected void playMouseExitAnim() {
+        if (!animationsEnabled) {
+            this.animPane.setOpacity(0);
+            return;
+        }
+        this.ft.stop();
+        this.ft.setDuration(Duration.millis(300));
+        this.ft.setFromValue(1);
+        this.ft.setToValue(0);
+        this.ft.playFromStart();
+    }
+
+    public Label getLabel() {
+        return label;
+    }
+
+    public MableBorder getCustomBorder() {
+        return border;
+    }
+
+    public void setFeedbackColour(Color feedbackColour) {
+        if (feedbackColour == null) {
+            this.animPane.setBackground(null);
+        } else {
+            this.feedbackColour = feedbackColour;
+            Insets animPaneInsets = new Insets(border.getPaddingDist() - 0.5);
+            BackgroundFill bgFill =
+                new BackgroundFill(this.feedbackColour, new CornerRadii(12), animPaneInsets);
+            this.animPane.setBackground(new Background(bgFill));
+        }
+    }
+
+    public void setFeedbackBackground(Background bg) {
+        this.animPane.setBackground(bg);
+    }
+
+    public void setColour(Color colour) {
+        this.colour = colour;
+        this.border.setStrokeColour(colour);
+    }
+
+    public void setTextLabel(String text) {
+        this.label.setText(text);
+    }
+
+    public void setEnabled(boolean enabled) {
+        if (enabled) {
+            this.border.setStrokeColour(colour);
+            this.label.setTextFill(colour);
+        } else {
+            this.border.setStrokeColour(RiceHandler.getColour("disabled"));
+            this.label.setTextFill(RiceHandler.getColour("disabled"));
+        }
+        this.enabled = enabled;
+    }
+
+    public void setConsumeEvent(boolean consumeEvent) {
+        this.consumeEvent = consumeEvent;
+    }
+
+    public void setAnimationsEnabled(boolean animationsEnabled) {
+        this.animationsEnabled = animationsEnabled;
+    }
+}

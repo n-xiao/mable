@@ -1,0 +1,79 @@
+/*
+   Copyright (C) 2026  Nicholas Siow <nxiao.dev@gmail.com>
+*/
+
+package code.frontend.libs.katlaf.graphics;
+
+import javafx.scene.Group;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Control;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+
+/**
+ * Allows drawings on a Canvas to be resized if necessary.
+ * However, resizing should be kept to a minimum because
+ * it causes many re-drawings to occur, causing UI lag.
+ */
+public abstract class ResizableCanvas extends Canvas {
+    private Color strokeColour = Color.WHITE;
+
+    public ResizableCanvas() {
+        widthProperty().addListener(event -> resizeAndDraw(true));
+        heightProperty().addListener(event -> resizeAndDraw(true));
+    }
+
+    protected void resizeAndDraw(boolean recompute) {
+        double width = this.getWidth();
+        double height = this.getHeight();
+        if (width > 0 && height > 0) {
+            GraphicsContext gc = getGraphicsContext2D();
+            gc.setImageSmoothing(true);
+            gc.clearRect(0, 0, width, height);
+            gc.setStroke(this.strokeColour);
+            draw(gc, recompute);
+        }
+        this.setManaged(false); // this stops layouts from messing with it
+    }
+
+    protected abstract void draw(GraphicsContext gc, boolean recompute);
+
+    public static void applyToPane(Pane p, ResizableCanvas canvas) {
+        p.getChildren().add(canvas);
+        canvas.widthProperty().bind(p.widthProperty());
+        canvas.heightProperty().bind(p.heightProperty());
+    }
+
+    public static Group applyToControl(Control control, ResizableCanvas canvas) {
+        Group group = new Group();
+        canvas.widthProperty().bind(control.widthProperty());
+        canvas.heightProperty().bind(control.heightProperty());
+        group.getChildren().addAll(control, canvas);
+        return group;
+    }
+
+    public void setStrokeColour(Color strokeColour) {
+        this.strokeColour = strokeColour;
+        resizeAndDraw(false);
+    }
+
+    public Color getStrokeColour() {
+        return strokeColour;
+    }
+
+    @Override
+    public boolean isResizable() {
+        return true;
+    }
+
+    @Override
+    public double prefWidth(double height) {
+        return getWidth();
+    }
+
+    @Override
+    public double prefHeight(double width) {
+        return getHeight();
+    }
+}

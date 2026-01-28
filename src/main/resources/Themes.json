@@ -25,6 +25,7 @@
         "ghost2" : "rgb(30, 30, 42)",
         "txtGhost" : "rgb(200, 200, 230)",
         "txtGhost2" : "rgb(170, 170, 220)",
+        "dullgrey" : "rgb(130, 130, 130)",
         "labelDragndrop" : "rgb(0, 0, 0)",
         "txtDragndrop" : "rgb(255, 255, 255)",
         "hoverDragndrop" : "rgb(247, 144, 54)",

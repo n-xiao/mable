@@ -47,11 +47,11 @@ import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
 public class CountdownPane extends VBox {
-    public static final double WIDTH = 280;
-    public static final double HEIGHT = 130;
-    public static final double NAME_WIDTH = 150;
-    public static final double DIV_WIDTH = 10;
-    public static final double CONTENT_HEIGHT = 100;
+    public static final double WIDTH = 250;
+    public static final double HEIGHT = 110;
+    public static final double NAME_WIDTH = 130;
+    public static final double DIV_WIDTH = 8;
+    public static final double CONTENT_HEIGHT = 90;
 
     private final Label CD_DESC_LABEL;
     private final Label CD_DAYS_LABEL;

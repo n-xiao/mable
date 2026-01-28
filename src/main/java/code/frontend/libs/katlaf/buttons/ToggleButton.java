@@ -49,6 +49,20 @@ public abstract class ToggleButton extends Button {
         super.onMousePress(event);
     }
 
+    @Override
+    protected void onMouseEnter(MouseEvent event) {
+        if (this.isToggled || this.getHoverColour() == null)
+            return;
+        useHoverStyle();
+    }
+
+    @Override
+    protected void onMouseLeave(MouseEvent event) {
+        if (this.isToggled || this.getHoverColour() == null)
+            return;
+        useUntoggledStyle();
+    }
+
     /**
      * This is only called by the program.
      * It should not be called by a user click or press,
@@ -74,11 +88,20 @@ public abstract class ToggleButton extends Button {
         this.getLabel().setTextFill(this.getToggledColour());
     }
 
+    private void useHoverStyle() {
+        this.getCustomBorder().setStrokeColour(this.getHoverColour());
+        this.getLabel().setTextFill(this.getHoverColour());
+    }
+
     protected Color getUntoggledColour() {
         return RiceHandler.getColour("ghost2");
     }
 
     protected Color getToggledColour() {
         return RiceHandler.getColour("selected");
+    }
+
+    protected Color getHoverColour() {
+        return RiceHandler.getColour("dullgrey");
     }
 }

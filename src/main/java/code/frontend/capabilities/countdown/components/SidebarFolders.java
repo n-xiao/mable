@@ -85,7 +85,7 @@ public class SidebarFolders extends VBox {
             });
             instance.heightProperty().addListener((event) -> { instance.moveNewFolderButton(); });
             instance.NEW_FOLDER_BTTN.setOnMouseEntered(event -> {
-                instance.NEW_FOLDER_BTTN.setTextFill(RiceHandler.getColour("bttnCreate"));
+                instance.NEW_FOLDER_BTTN.setTextFill(RiceHandler.getColour("selected"));
             });
             instance.NEW_FOLDER_BTTN.setOnMouseExited(event -> {
                 instance.NEW_FOLDER_BTTN.setTextFill(RiceHandler.getColour("txtGhost"));
@@ -142,7 +142,7 @@ public class SidebarFolders extends VBox {
         this.SEARCH_FIELD.setCustomBorder(border);
         this.SEARCH_FIELD.enableManualActivation();
         this.SEARCH_FIELD.setFieldMargins(new Insets(5, 7, 5, 7));
-        VBox.setMargin(this.SEARCH_FIELD, new Insets(0, 0, 5, 0));
+        VBox.setMargin(this.SEARCH_FIELD, new Insets(3, 0, 8, 0));
     }
 
     private void configureScrollPaneStyle() {
@@ -168,7 +168,7 @@ public class SidebarFolders extends VBox {
         this.SCROLL_PANE_CONTENT.setBackground(
             RiceHandler.createBG(RiceHandler.getColour("background3"), 13, 8));
         this.SCROLL_PANE_CONTENT.setFillWidth(true);
-        this.SCROLL_PANE_CONTENT.setPadding(new Insets(4, 5, 0, 5));
+        this.SCROLL_PANE_CONTENT.setPadding(new Insets(0, 5, 0, 5));
         this.SCROLL_PANE_CONTENT.setMaxHeight(Double.MAX_VALUE);
         this.SCROLL_PANE.setContent(SCROLL_PANE_CONTENT); // dont move this; don't even think
     }
@@ -495,6 +495,11 @@ public class SidebarFolders extends VBox {
         @Override
         protected Color getUntoggledColour() {
             return RiceHandler.getColour("disabled");
+        }
+
+        @Override
+        protected Color getToggledColour() {
+            return RiceHandler.getColour();
         }
 
         public String getName() {

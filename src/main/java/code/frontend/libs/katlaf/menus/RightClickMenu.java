@@ -21,7 +21,7 @@ package code.frontend.libs.katlaf.menus;
 import code.frontend.MainContainer;
 import code.frontend.capabilities.countdown.components.CountdownRCM;
 import code.frontend.capabilities.countdown.components.FolderRCM;
-import code.frontend.libs.katlaf.FontHandler;
+import code.frontend.libs.katlaf.buttons.BasicButton;
 import code.frontend.libs.katlaf.buttons.Button;
 import code.frontend.libs.katlaf.graphics.CustomLine;
 import code.frontend.libs.katlaf.graphics.CustomLine.Type;
@@ -29,7 +29,6 @@ import code.frontend.libs.katlaf.graphics.MableBorder;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -50,12 +49,12 @@ public abstract class RightClickMenu extends VBox {
 
     private final double WIDTH;
     private final double HEIGHT;
-    private final Button[] BUTTONS;
+    private final BasicButton[] BUTTONS;
     private final Color[] COLOURS;
 
     private MableBorder border;
 
-    public RightClickMenu(double width, double height, Button[] buttons, Color[] colours) {
+    public RightClickMenu(double width, double height, BasicButton[] buttons, Color[] colours) {
         this.WIDTH = width;
         this.HEIGHT = height;
         this.BUTTONS = buttons;
@@ -99,16 +98,11 @@ public abstract class RightClickMenu extends VBox {
             if (button != null) {
                 button.setPrefSize(WIDTH, BUTTON_HEIGHT);
                 button.setMaxSize(WIDTH, BUTTON_HEIGHT);
-                button.setAnimationsEnabled(false);
-                button.getCustomBorder().setVisible(false);
                 button.getLabel().setAlignment(Pos.CENTER_LEFT);
-                button.getLabel().setFont(FontHandler.getNormal());
-                button.setConsumeEvent(true);
-                button.setCursor(Cursor.DEFAULT);
                 VBox.setMargin(button, new Insets(0, RIGHTLEFT_INSET, 0, RIGHTLEFT_INSET));
                 // colouring
                 BackgroundFill fill = new BackgroundFill(this.COLOURS[i], CORNER_RADII, INSETS);
-                button.setFeedbackBackground(new Background(fill));
+                button.setCustomBackground(new Background(fill));
                 this.getChildren().add(button);
             } else {
                 this.getChildren().add(createDivider());

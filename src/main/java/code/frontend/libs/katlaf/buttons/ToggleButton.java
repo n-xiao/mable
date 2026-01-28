@@ -18,20 +18,16 @@
 
 package code.frontend.libs.katlaf.buttons;
 
+import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 
 public abstract class ToggleButton extends Button {
     private boolean isToggled;
-    private Color toggledColour;
-    private Color untoggledColour;
 
     public ToggleButton(String name) {
         this.isToggled = false;
-        this.toggledColour = Color.WHITE;
-        this.untoggledColour = Color.GRAY;
         super(name);
-        this.setFeedbackBackground(null);
+        this.setCustomBackground(null);
     }
 
     public boolean getIsToggled() {
@@ -39,26 +35,15 @@ public abstract class ToggleButton extends Button {
     }
 
     @Override
-    protected void playMouseExitAnim() {
-        if (!isToggled)
-            super.playMouseExitAnim();
-    }
-
-    @Override
-    protected void playMouseEnterAnim() {
-        if (!isToggled)
-            super.playMouseEnterAnim();
-    }
-
-    @Override
-    public void executeOnClick(MouseEvent event) {
+    protected void onMousePress(MouseEvent event) {
         this.isToggled = !this.isToggled;
         if (this.isToggled) {
             // if toggled on, apply toggle style
-            this.getCustomBorder().setStrokeColour(this.toggledColour);
+            this.useToggledStyle();
         } else {
-            this.getCustomBorder().setStrokeColour(this.untoggledColour);
+            this.useUntoggledStyle();
         }
+        super.onMousePress(event);
     }
 
     /**
@@ -68,31 +53,21 @@ public abstract class ToggleButton extends Button {
      */
     public void untoggle() {
         this.isToggled = false;
-        this.getCustomBorder().setStrokeColour(this.untoggledColour);
+        this.useUntoggledStyle();
     }
 
     public void toggle() {
         this.isToggled = true;
-        this.getCustomBorder().setStrokeColour(this.toggledColour);
+        this.useToggledStyle();
     }
 
-    public void setToggledColour(Color toggledColour) {
-        this.toggledColour = toggledColour;
-        if (this.isToggled)
-            this.getCustomBorder().setStrokeColour(this.toggledColour);
+    protected void useUntoggledStyle() {
+        this.getCustomBorder().setStrokeColour(RiceHandler.getColour("ghost2"));
+        this.getLabel().setTextFill(RiceHandler.getColour("ghost2"));
     }
 
-    public void setUntoggledColour(Color untoggledColour) {
-        this.untoggledColour = untoggledColour;
-        if (!this.isToggled)
-            this.getCustomBorder().setStrokeColour(this.untoggledColour);
-    }
-
-    public Color getToggledColour() {
-        return toggledColour;
-    }
-
-    public Color getUntoggledColour() {
-        return untoggledColour;
+    protected void useToggledStyle() {
+        this.getCustomBorder().setStrokeColour(RiceHandler.getColour("selected"));
+        this.getLabel().setTextFill(RiceHandler.getColour("selected"));
     }
 }

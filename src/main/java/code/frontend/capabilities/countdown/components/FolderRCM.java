@@ -20,7 +20,7 @@ package code.frontend.capabilities.countdown.components;
 
 import code.backend.data.CountdownFolder.SpecialType;
 import code.backend.utils.FolderHandler;
-import code.frontend.libs.katlaf.buttons.Button;
+import code.frontend.libs.katlaf.buttons.BasicButton;
 import code.frontend.libs.katlaf.menus.RightClickMenu;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.scene.input.MouseEvent;
@@ -49,11 +49,11 @@ public class FolderRCM extends RightClickMenu {
     private static final double WIDTH = 160;
     private static final double HEIGHT = 85;
 
-    private final Button EDIT;
-    private final Button REMOVE;
+    private final BasicButton EDIT;
+    private final BasicButton REMOVE;
 
     private FolderRCM() {
-        Button edit = new Button("Edit name") {
+        BasicButton edit = new BasicButton("Edit name") {
             @Override
             public void executeOnClick(MouseEvent event) {
                 SidebarFolders.getInstance().editSelectedFolder();
@@ -61,7 +61,7 @@ public class FolderRCM extends RightClickMenu {
             }
         };
 
-        Button remove = new Button("Remove folder") {
+        BasicButton remove = new BasicButton("Remove folder") {
             @Override
             public void executeOnClick(MouseEvent event) {
                 SidebarFolders.getInstance().deleteSelectedFolder();
@@ -69,7 +69,7 @@ public class FolderRCM extends RightClickMenu {
             }
         };
 
-        Button[] buttons = {edit, remove};
+        BasicButton[] buttons = {edit, remove};
         Color[] colours = {RiceHandler.getColour("bttnEdit"), RiceHandler.getColour("bttnRemove")};
 
         super(WIDTH, HEIGHT, buttons, colours);

@@ -20,7 +20,7 @@ package code.frontend.capabilities.countdown.components;
 
 import code.frontend.capabilities.countdown.components.CountdownTable.ButtonMode;
 import code.frontend.capabilities.countdown.windows.CountdownCreator;
-import code.frontend.libs.katlaf.buttons.Button;
+import code.frontend.libs.katlaf.buttons.BasicButton;
 import code.frontend.libs.katlaf.menus.RightClickMenu;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.scene.input.MouseEvent;
@@ -46,11 +46,11 @@ public class CountdownRCM extends RightClickMenu {
     private static final double WIDTH = 180;
     private static final double HEIGHT = 200;
 
-    private final Button CREATE;
-    private final Button EDIT;
-    private final Button DELETE;
-    private final Button MARK_COMPLETE;
-    private final Button SELECTOR;
+    private final BasicButton CREATE;
+    private final BasicButton EDIT;
+    private final BasicButton DELETE;
+    private final BasicButton MARK_COMPLETE;
+    private final BasicButton SELECTOR;
 
     public static void spawnInstance(double x, double y) {
         if (instance == null)
@@ -78,7 +78,7 @@ public class CountdownRCM extends RightClickMenu {
         final String EDIT_STR = "Edit...";
         final String DELETE_STR = "Delete";
 
-        Button create = new Button(CREATE_STR) {
+        BasicButton create = new BasicButton(CREATE_STR) {
             @Override
             public void executeOnClick(MouseEvent event) {
                 CountdownCreator.getInstance();
@@ -86,7 +86,7 @@ public class CountdownRCM extends RightClickMenu {
             }
         };
 
-        Button selector = new Button(SELECTOR_STR) {
+        BasicButton selector = new BasicButton(SELECTOR_STR) {
             public void executeOnClick(MouseEvent event) {
                 if (NUM_OF_SELECTIONS > 0)
                     CountdownTable.getInstance().deselectAll();
@@ -96,21 +96,21 @@ public class CountdownRCM extends RightClickMenu {
             };
         };
 
-        Button markAsComplete = new Button(MARK_COMPLETE_STR) {
+        BasicButton markAsComplete = new BasicButton(MARK_COMPLETE_STR) {
             @Override
             public void executeOnClick(MouseEvent event) {
                 CountdownTable.getInstance().markSelectedAsComplete(!SELECTED_ARE_COMPLETED);
                 CountdownRCM.despawn();
             }
         };
-        Button edit = new Button(EDIT_STR) {
+        BasicButton edit = new BasicButton(EDIT_STR) {
             @Override
             public void executeOnClick(MouseEvent event) {
                 CountdownTable.getInstance().editSelected();
                 CountdownRCM.despawn();
             }
         };
-        Button delete = new Button(DELETE_STR) {
+        BasicButton delete = new BasicButton(DELETE_STR) {
             @Override
             public void executeOnClick(MouseEvent event) {
                 CountdownTable.getInstance().deleteSelected();
@@ -118,7 +118,7 @@ public class CountdownRCM extends RightClickMenu {
             }
         };
 
-        Button[] buttons = {create, edit, delete, null, markAsComplete, null, selector};
+        BasicButton[] buttons = {create, edit, delete, null, markAsComplete, null, selector};
         Color[] colours = {RiceHandler.getColour("bttnCreate"), RiceHandler.getColour("bttnEdit"),
             RiceHandler.getColour("bttnRemove"), null, RiceHandler.getColour("bttnMarkComplete"),
             null, RiceHandler.getColour("bttnDeselect")};

@@ -27,7 +27,8 @@
         "txtGhost2" : "rgb(170, 170, 220)",
         "labelDragndrop" : "rgb(0, 0, 0)",
         "txtDragndrop" : "rgb(255, 255, 255)",
-        "hoverDragndrop" : "rgb(247, 144, 54)"
+        "hoverDragndrop" : "rgb(247, 144, 54)",
+        "black" : "rgb(0, 0, 0)"
     },
     "LIGHT" : {
     	"primary" : "rgb(255, 255, 255)",

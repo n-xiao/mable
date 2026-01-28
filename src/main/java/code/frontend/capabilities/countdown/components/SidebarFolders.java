@@ -438,13 +438,7 @@ public class SidebarFolders extends VBox {
             this.getCustomBorder().setThickness(1.5);
             this.getCustomBorder().setCornerRadii(0.8);
             this.getCustomBorder().setMessiness(0.1);
-            this.setToggledColour(RiceHandler.getColour("selected"));
-            this.setUntoggledColour(RiceHandler.getColour("ghost2"));
-            this.setCursor(Cursor.DEFAULT);
             this.setMinHeight(40);
-            this.getLabel().setFont(FontHandler.getNormal());
-            this.setConsumeEvent(true);
-            this.setAnimationsEnabled(false);
             VBox.setMargin(this, new Insets(3, 2.5, 5, 2.5));
             if (!FOLDER.isProtectedFolder()) // for now, it's easier to just do this
                 this.configureDrop();

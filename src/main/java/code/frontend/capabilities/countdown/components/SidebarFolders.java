@@ -50,6 +50,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 public class SidebarFolders extends VBox {
@@ -489,6 +490,11 @@ public class SidebarFolders extends VBox {
 
         public boolean hasSameName(FolderPane otherPane) {
             return this.getName().equals(otherPane.getName());
+        }
+
+        @Override
+        protected Color getUntoggledColour() {
+            return RiceHandler.getColour("disabled");
         }
 
         public String getName() {

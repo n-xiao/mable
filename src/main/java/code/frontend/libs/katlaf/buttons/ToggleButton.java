@@ -19,7 +19,9 @@
 package code.frontend.libs.katlaf.buttons;
 
 import code.frontend.libs.katlaf.ricing.RiceHandler;
+import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 
 public abstract class ToggleButton extends Button {
     private boolean isToggled;
@@ -28,6 +30,7 @@ public abstract class ToggleButton extends Button {
         this.isToggled = false;
         super(name);
         this.setCustomBackground(null);
+        this.setCursor(Cursor.DEFAULT);
     }
 
     public boolean getIsToggled() {
@@ -61,13 +64,21 @@ public abstract class ToggleButton extends Button {
         this.useToggledStyle();
     }
 
-    protected void useUntoggledStyle() {
-        this.getCustomBorder().setStrokeColour(RiceHandler.getColour("ghost2"));
-        this.getLabel().setTextFill(RiceHandler.getColour("ghost2"));
+    private void useUntoggledStyle() {
+        this.getCustomBorder().setStrokeColour(this.getUntoggledColour());
+        this.getLabel().setTextFill(this.getUntoggledColour());
     }
 
-    protected void useToggledStyle() {
-        this.getCustomBorder().setStrokeColour(RiceHandler.getColour("selected"));
-        this.getLabel().setTextFill(RiceHandler.getColour("selected"));
+    private void useToggledStyle() {
+        this.getCustomBorder().setStrokeColour(this.getToggledColour());
+        this.getLabel().setTextFill(this.getToggledColour());
+    }
+
+    protected Color getUntoggledColour() {
+        return RiceHandler.getColour("ghost2");
+    }
+
+    protected Color getToggledColour() {
+        return RiceHandler.getColour("selected");
     }
 }

@@ -53,13 +53,12 @@ public abstract class Button extends TemplateButton {
         MableBorder.applyToPane(this, border);
 
         this.label = new Label(text);
-        this.label.setTextFill(RiceHandler.getColour("background1"));
+        this.label.setTextFill(RiceHandler.getColour());
         this.label.setAlignment(Pos.CENTER);
         this.label.setFont(labelFont);
         this.label.prefWidthProperty().bind(this.widthProperty());
         this.label.prefHeightProperty().bind(this.heightProperty());
         this.label.relocate(0, 0);
-        this.label.setViewOrder(0);
 
         Insets animPaneInsets = new Insets(border.getPaddingDist());
         BackgroundFill bgFill = new BackgroundFill(colour, new CornerRadii(7), animPaneInsets);
@@ -67,10 +66,12 @@ public abstract class Button extends TemplateButton {
         this.bg.prefWidthProperty().bind(this.widthProperty());
         this.bg.prefHeightProperty().bind(this.heightProperty());
         this.bg.relocate(0, 0);
-        this.bg.setViewOrder(1);
+        this.bg.setOpacity(0);
         this.ft.setNode(bg);
 
         this.getChildren().addAll(label, bg);
+        this.label.setViewOrder(0);
+        this.bg.setViewOrder(1);
 
         this.setCursor(Cursor.HAND);
     }
@@ -94,17 +95,17 @@ public abstract class Button extends TemplateButton {
 
     protected void playMouseEnterAnim() {
         this.ft.stop();
-        this.ft.setDuration(Duration.millis(300));
-        this.ft.setFromValue(1);
-        this.ft.setToValue(0.6);
+        this.ft.setDuration(Duration.millis(150));
+        this.ft.setFromValue(0);
+        this.ft.setToValue(0.1);
         this.ft.playFromStart();
     }
 
     protected void playMouseExitAnim() {
         this.ft.stop();
         this.ft.setDuration(Duration.millis(300));
-        this.ft.setFromValue(0.6);
-        this.ft.setToValue(1);
+        this.ft.setFromValue(0.1);
+        this.ft.setToValue(0);
         this.ft.playFromStart();
     }
 

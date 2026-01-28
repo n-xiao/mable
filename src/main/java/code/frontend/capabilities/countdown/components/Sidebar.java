@@ -20,15 +20,15 @@ import javafx.scene.layout.VBox;
 public class Sidebar extends VBox {
     private static Sidebar instance = null;
 
-    private final SidebarStatsPane STATS;
-    private final SidebarFolderManager FOLDER_SELECTOR;
-    private final RemovePane HOVER_REMOVE_PANE;
+    private final SidebarStats STATS;
+    private final SidebarFolders FOLDER_SELECTOR;
+    private final CountdownRemover HOVER_REMOVE_PANE;
 
     private Sidebar() {
-        this.STATS = SidebarStatsPane.getInstance();
-        this.FOLDER_SELECTOR = SidebarFolderManager.getInstance();
+        this.STATS = SidebarStats.getInstance();
+        this.FOLDER_SELECTOR = SidebarFolders.getInstance();
 
-        this.HOVER_REMOVE_PANE = RemovePane.applyTo(STATS);
+        this.HOVER_REMOVE_PANE = CountdownRemover.applyTo(STATS);
         this.setBackground(RiceHandler.createBG(RiceHandler.getColour("background2"), 0, 0));
         this.setFillWidth(true);
     }
@@ -47,7 +47,7 @@ public class Sidebar extends VBox {
 
             instance.setOnMousePressed((event) -> {
                 InputField.escapeAllInputs();
-                CountdownPaneView.getInstance().deselectAll();
+                CountdownTable.getInstance().deselectAll();
                 instance.requestFocus();
             });
         }
@@ -96,7 +96,7 @@ public class Sidebar extends VBox {
         return lineContainer;
     }
 
-    public RemovePane getRemovePane() {
+    public CountdownRemover getRemovePane() {
         return HOVER_REMOVE_PANE;
     }
 }

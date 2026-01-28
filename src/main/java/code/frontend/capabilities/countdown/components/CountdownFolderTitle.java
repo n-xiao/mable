@@ -15,12 +15,12 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public class CountdownPaneViewTitle extends VBox {
-    private static CountdownPaneViewTitle instance = null;
+public class CountdownFolderTitle extends VBox {
+    private static CountdownFolderTitle instance = null;
 
     private final Label LABEL;
 
-    private CountdownPaneViewTitle() {
+    private CountdownFolderTitle() {
         this.setBackground(null);
         this.setFillWidth(true);
         this.LABEL = new Label();
@@ -28,9 +28,9 @@ public class CountdownPaneViewTitle extends VBox {
         this.getChildren().addAll(this.LABEL, createHorizontalLine());
     }
 
-    public static CountdownPaneViewTitle getInstance() {
+    public static CountdownFolderTitle getInstance() {
         if (instance == null) {
-            instance = new CountdownPaneViewTitle();
+            instance = new CountdownFolderTitle();
         }
         return instance;
     }

@@ -10,9 +10,9 @@ import code.backend.data.CountdownFolder;
 import code.backend.data.CountdownFolder.SpecialType;
 import code.backend.utils.CountdownHandler;
 import code.backend.utils.FolderHandler;
-import code.frontend.capabilities.countdown.windows.EditWindow;
+import code.frontend.capabilities.countdown.windows.CountdownEditor;
 import code.frontend.libs.katlaf.inputfields.InputField;
-import code.frontend.libs.katlaf.menus.RightClickMenuTemplate;
+import code.frontend.libs.katlaf.menus.RightClickMenu;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -28,11 +28,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
 
-/**
- * This is the scrollable Pane that is responsible for displaying {@link CountdownPane}.
- * An instance of this class should be added to a {@link Content} instance.
- */
-public class CountdownPaneView extends ScrollPane {
+public class CountdownTable extends ScrollPane {
     public enum ButtonMode { NO_SELECT, SINGLE_SELECT, MULTI_SELECT }
     public enum DisplayOrder { ASCENDING, DESCENDING }
 
@@ -46,9 +42,9 @@ public class CountdownPaneView extends ScrollPane {
     protected DisplayOrder displayOrder;
     protected CountdownPane pivot; // for command or ctrl click
 
-    private static CountdownPaneView cpv = null;
+    private static CountdownTable cpv = null;
 
-    private CountdownPaneView() {
+    private CountdownTable() {
         this.mode = ButtonMode.NO_SELECT;
         this.PADDINGS_IN_USE = new ArrayList<Region>();
         this.displayOrder = DisplayOrder.ASCENDING;
@@ -72,9 +68,9 @@ public class CountdownPaneView extends ScrollPane {
         this.setContent(this.FLOW_PANE);
     }
 
-    public static CountdownPaneView getInstance() {
+    public static CountdownTable getInstance() {
         if (cpv == null) {
-            cpv = new CountdownPaneView();
+            cpv = new CountdownTable();
             cpv.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -84,10 +80,10 @@ public class CountdownPaneView extends ScrollPane {
 
             cpv.FLOW_PANE.setOnMousePressed(event -> {
                 if (event.getButton() == MouseButton.SECONDARY)
-                    CountdownViewRCM.spawnInstance(event.getSceneX(), event.getSceneY());
+                    CountdownRCM.spawnInstance(event.getSceneX(), event.getSceneY());
                 else {
                     cpv.deselectAll();
-                    RightClickMenuTemplate.despawnAll();
+                    RightClickMenu.despawnAll();
                 }
                 InputField.escapeAllInputs();
                 cpv.requestFocus();
@@ -170,7 +166,7 @@ public class CountdownPaneView extends ScrollPane {
             addPaddingForAlignment();
         updateMode();
 
-        CountdownPaneViewTitle.getInstance().updateTitleText();
+        CountdownFolderTitle.getInstance().updateTitleText();
     }
 
     public int getNumOfSelections() {
@@ -233,7 +229,7 @@ public class CountdownPaneView extends ScrollPane {
         // gets first selected
         for (CountdownPane countdownPane : COUNTDOWN_PANES) {
             if (countdownPane.isSelected()) {
-                EditWindow.getInstance(countdownPane.getCountdown());
+                CountdownEditor.getInstance(countdownPane.getCountdown());
                 return;
             }
         }

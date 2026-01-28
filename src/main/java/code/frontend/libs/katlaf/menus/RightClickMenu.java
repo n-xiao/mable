@@ -5,8 +5,8 @@
 package code.frontend.libs.katlaf.menus;
 
 import code.frontend.MainContainer;
-import code.frontend.capabilities.countdown.components.CountdownViewRCM;
-import code.frontend.capabilities.countdown.components.FolderManagerRCM;
+import code.frontend.capabilities.countdown.components.CountdownRCM;
+import code.frontend.capabilities.countdown.components.FolderRCM;
 import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.buttons.Button;
 import code.frontend.libs.katlaf.graphics.CustomLine;
@@ -24,7 +24,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-public abstract class RightClickMenuTemplate extends VBox {
+public abstract class RightClickMenu extends VBox {
     private static final double BG_RADIUS = 12;
     private static final double BG_INSETS = 3.5;
 
@@ -41,7 +41,7 @@ public abstract class RightClickMenuTemplate extends VBox {
 
     private MableBorder border;
 
-    public RightClickMenuTemplate(double width, double height, Button[] buttons, Color[] colours) {
+    public RightClickMenu(double width, double height, Button[] buttons, Color[] colours) {
         this.WIDTH = width;
         this.HEIGHT = height;
         this.BUTTONS = buttons;
@@ -51,13 +51,13 @@ public abstract class RightClickMenuTemplate extends VBox {
     }
 
     public static void despawnAll() {
-        CountdownViewRCM.despawn();
-        FolderManagerRCM.despawn();
+        CountdownRCM.despawn();
+        FolderRCM.despawn();
     }
 
     public void openAt(double x, double y) {
         final MainContainer MC = MainContainer.getInstance();
-        MC.getChildren().removeIf(child -> child instanceof RightClickMenuTemplate);
+        MC.getChildren().removeIf(child -> child instanceof RightClickMenu);
 
         if (x + this.WIDTH > MC.getWidth())
             x -= (x + this.WIDTH) - MC.getWidth();

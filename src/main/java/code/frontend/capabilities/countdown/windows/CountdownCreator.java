@@ -6,24 +6,24 @@ package code.frontend.capabilities.countdown.windows;
 
 import code.backend.data.Countdown;
 import code.backend.utils.CountdownHandler;
-import code.frontend.capabilities.countdown.components.CountdownPaneView;
+import code.frontend.capabilities.countdown.components.CountdownTable;
 import code.frontend.libs.katlaf.buttons.Button;
-import code.frontend.libs.katlaf.windows.ConfigWindowTemplate;
+import code.frontend.libs.katlaf.windows.CountdownModifier;
 import java.time.LocalDate;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
-public class AddWindow extends ConfigWindowTemplate {
-    private static AddWindow window = null;
+public class CountdownCreator extends CountdownModifier {
+    private static CountdownCreator window = null;
 
-    private AddWindow() {
+    private CountdownCreator() {
         super();
         this.setTitle("creating countdown");
     }
 
     public static Stage getInstance() {
         if (window == null) {
-            window = new AddWindow();
+            window = new CountdownCreator();
             window.setOnHidden(event -> { window = null; });
         }
         window.show();
@@ -41,8 +41,8 @@ public class AddWindow extends ConfigWindowTemplate {
                 if (due == null)
                     return;
                 CountdownHandler.addCountdown(new Countdown(name, due));
-                CountdownPaneView.getInstance().repopulate(LocalDate.now());
-                CountdownPaneView.getInstance().deselectAll();
+                CountdownTable.getInstance().repopulate(LocalDate.now());
+                CountdownTable.getInstance().deselectAll();
                 window.close();
                 window = null;
             }

@@ -5,29 +5,29 @@
 package code.frontend.capabilities.countdown.windows;
 
 import code.backend.data.Countdown;
-import code.frontend.capabilities.countdown.components.CountdownPaneView;
+import code.frontend.capabilities.countdown.components.CountdownTable;
 import code.frontend.libs.katlaf.buttons.Button;
 import code.frontend.libs.katlaf.inputfields.DateInputField;
 import code.frontend.libs.katlaf.inputfields.InputField;
-import code.frontend.libs.katlaf.windows.ConfigWindowTemplate;
+import code.frontend.libs.katlaf.windows.CountdownModifier;
 import java.time.LocalDate;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
-public class EditWindow extends ConfigWindowTemplate {
-    private static EditWindow window = null;
+public class CountdownEditor extends CountdownModifier {
+    private static CountdownEditor window = null;
 
     private static Countdown countdown;
 
-    private EditWindow() {
+    private CountdownEditor() {
         super();
         this.setTitle("editing countdown");
     }
 
     public static Stage getInstance(Countdown countdownToEdit) {
         if (window == null) {
-            EditWindow.countdown = countdownToEdit;
-            window = new EditWindow();
+            CountdownEditor.countdown = countdownToEdit;
+            window = new CountdownEditor();
             window.setOnHidden(event -> { window = null; });
         }
         window.show();
@@ -65,7 +65,7 @@ public class EditWindow extends ConfigWindowTemplate {
                 LocalDate newDue = getDateField().getLocalDateInput(false);
                 countdown.setName(newName);
                 countdown.setDueDate(newDue);
-                CountdownPaneView cpv = CountdownPaneView.getInstance();
+                CountdownTable cpv = CountdownTable.getInstance();
                 cpv.repopulate(LocalDate.now());
                 cpv.deselectAll();
                 window.close();

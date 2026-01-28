@@ -12,7 +12,7 @@ import code.frontend.libs.katlaf.FormatHandler;
 import code.frontend.libs.katlaf.graphics.CustomLine;
 import code.frontend.libs.katlaf.graphics.CustomLine.Type;
 import code.frontend.libs.katlaf.graphics.MableBorder;
-import code.frontend.libs.katlaf.menus.RightClickMenuTemplate;
+import code.frontend.libs.katlaf.menus.RightClickMenu;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.time.LocalDate;
 import javafx.animation.Animation.Status;
@@ -255,15 +255,15 @@ public class CountdownPane extends VBox {
      */
     private void initDraggable() {
         CONTENT_HBOX.setOnDragDetected((event) -> {
-            RightClickMenuTemplate.despawnAll();
+            RightClickMenu.despawnAll();
             this.selected = true;
             this.applySelectStyle();
-            CountdownPaneView.getInstance().updateMode();
+            CountdownTable.getInstance().updateMode();
 
             this.activateDragStyling();
 
             CONTENT_HBOX.startFullDrag();
-            DragHandler.init();
+            DragDropHandler.init();
         });
 
         CONTENT_HBOX.setOnMouseReleased((event) -> { // this is a hack... see docs
@@ -271,65 +271,64 @@ public class CountdownPane extends VBox {
                                                      // is incomplete
             CONTENT_HBOX.setMouseTransparent(false);
             this.deactivateDragStyling();
-            DragHandler.close();
+            DragDropHandler.close();
         });
     }
 
     private void activateDragStyling() {
-        CountdownPaneView.getInstance().COUNTDOWN_PANES.forEach(pane -> {
+        CountdownTable.getInstance().COUNTDOWN_PANES.forEach(pane -> {
             if (pane.isSelected())
                 pane.setOpacity(0.3);
         });
     }
 
     private void deactivateDragStyling() {
-        CountdownPaneView.getInstance().COUNTDOWN_PANES.forEach(pane -> { pane.setOpacity(1); });
+        CountdownTable.getInstance().COUNTDOWN_PANES.forEach(pane -> { pane.setOpacity(1); });
     }
 
     private void onShiftClick() {
-        if (CountdownPaneView.getInstance().pivot == null) {
-            CountdownPaneView.getInstance().selectAllBetween(
-                CountdownPaneView.getInstance().COUNTDOWN_PANES.getFirst(), this);
+        if (CountdownTable.getInstance().pivot == null) {
+            CountdownTable.getInstance().selectAllBetween(
+                CountdownTable.getInstance().COUNTDOWN_PANES.getFirst(), this);
             return;
         }
 
-        final boolean PIVOT_SELECTED = CountdownPaneView.getInstance().pivot.isSelected();
-        CountdownPaneView.getInstance().selectAllBetween(
-            CountdownPaneView.getInstance().pivot, this);
+        final boolean PIVOT_SELECTED = CountdownTable.getInstance().pivot.isSelected();
+        CountdownTable.getInstance().selectAllBetween(CountdownTable.getInstance().pivot, this);
 
         if (!PIVOT_SELECTED)
-            CountdownPaneView.getInstance().deselect(CountdownPaneView.getInstance().pivot);
+            CountdownTable.getInstance().deselect(CountdownTable.getInstance().pivot);
     }
 
     private void onMetaClick() {
         if (this.selected) {
-            CountdownPaneView.getInstance().deselect(this);
+            CountdownTable.getInstance().deselect(this);
         } else {
-            CountdownPaneView.getInstance().select(this);
+            CountdownTable.getInstance().select(this);
         }
-        CountdownPaneView.getInstance().pivot = this;
-        CountdownPaneView.getInstance().updateMode();
-        RightClickMenuTemplate.despawnAll();
+        CountdownTable.getInstance().pivot = this;
+        CountdownTable.getInstance().updateMode();
+        RightClickMenu.despawnAll();
     }
 
     private void onNormalClick() {
         if (!this.isSelected()) {
-            CountdownPaneView.getInstance().deselectAll();
-            CountdownPaneView.getInstance().select(this);
-            CountdownPaneView.getInstance().pivot = this;
-            CountdownPaneView.getInstance().updateMode();
-            RightClickMenuTemplate.despawnAll();
+            CountdownTable.getInstance().deselectAll();
+            CountdownTable.getInstance().select(this);
+            CountdownTable.getInstance().pivot = this;
+            CountdownTable.getInstance().updateMode();
+            RightClickMenu.despawnAll();
         }
     }
 
     private void onSecondaryMousePress(double x, double y) {
         if (!this.selected)
-            CountdownPaneView.getInstance().deselectAll();
+            CountdownTable.getInstance().deselectAll();
         applySelectStyle();
         this.selected = true;
-        CountdownPaneView.getInstance().updateMode(); // needs to be called before RightClickMenu
-                                                      // opens
-        CountdownViewRCM.spawnInstance(x, y);
+        CountdownTable.getInstance().updateMode(); // needs to be called before RightClickMenu
+                                                   // opens
+        CountdownRCM.spawnInstance(x, y);
     }
 
     public void applyDeselectStyle(boolean withFadeOut) {
@@ -373,7 +372,7 @@ public class CountdownPane extends VBox {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
-        CountdownPaneView.getInstance().updateMode();
+        CountdownTable.getInstance().updateMode();
     }
 
     protected void refreshContent() {

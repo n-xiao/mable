@@ -8,23 +8,23 @@ import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-public class HomePage extends VBox {
-    private static HomePage instance = null;
-    private CountdownPaneViewTitle title;
-    private CountdownPaneView view;
+public class CountdownContainer extends VBox {
+    private static CountdownContainer instance = null;
+    private CountdownFolderTitle title;
+    private CountdownTable view;
 
-    private HomePage() {
-        this.title = CountdownPaneViewTitle.getInstance();
-        this.view = CountdownPaneView.getInstance();
+    private CountdownContainer() {
+        this.title = CountdownFolderTitle.getInstance();
+        this.view = CountdownTable.getInstance();
         this.setFillWidth(true);
         VBox.setVgrow(this.view, Priority.ALWAYS);
         this.setBackground(RiceHandler.createBG(RiceHandler.getColour("background1"), 0, 0));
         this.getChildren().addAll(this.title, this.view);
     }
 
-    public static HomePage getInstance() {
+    public static CountdownContainer getInstance() {
         if (instance == null)
-            instance = new HomePage();
+            instance = new CountdownContainer();
         return instance;
     }
 }

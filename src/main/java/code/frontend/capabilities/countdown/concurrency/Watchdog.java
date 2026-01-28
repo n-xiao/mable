@@ -4,8 +4,8 @@
 
 package code.frontend.capabilities.countdown.concurrency;
 
-import code.frontend.capabilities.countdown.components.CountdownPaneView;
-import code.frontend.capabilities.countdown.components.SidebarStatsPane;
+import code.frontend.capabilities.countdown.components.CountdownTable;
+import code.frontend.capabilities.countdown.components.SidebarStats;
 import java.time.LocalDate;
 import javafx.application.Platform;
 import javafx.concurrent.ScheduledService;
@@ -30,8 +30,8 @@ public class Watchdog extends ScheduledService<Void> {
         return new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                final CountdownPaneView CPV = CountdownPaneView.getInstance();
-                final SidebarStatsPane SSP = SidebarStatsPane.getInstance();
+                final CountdownTable CPV = CountdownTable.getInstance();
+                final SidebarStats SSP = SidebarStats.getInstance();
                 Platform.runLater(() -> {
                     CPV.repopulate(LocalDate.now());
                     SSP.refreshContent();

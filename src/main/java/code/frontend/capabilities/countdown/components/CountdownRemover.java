@@ -16,12 +16,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
-public class RemovePane extends Pane {
+public class CountdownRemover extends Pane {
     private final MableBorder BORDER;
     private final Label LABEL;
     private final BorderPane CONTAINER;
 
-    private RemovePane() {
+    private CountdownRemover() {
         BORDER = new MableBorder(2, 0.2, 0.35);
         LABEL = new Label();
         CONTAINER = new BorderPane();
@@ -29,9 +29,9 @@ public class RemovePane extends Pane {
         configureStyling();
 
         this.setOnMouseDragReleased((event) -> {
-            CountdownPaneView.getInstance().removeSelectedFromFolder(
+            CountdownTable.getInstance().removeSelectedFromFolder(
                 FolderHandler.getCurrentlySelectedFolder());
-            DragHandler.close();
+            DragDropHandler.close();
         });
 
         this.setOnMouseDragEntered((event) -> {
@@ -44,8 +44,8 @@ public class RemovePane extends Pane {
         });
     }
 
-    public static RemovePane applyTo(Pane pane) {
-        RemovePane removePane = new RemovePane();
+    public static CountdownRemover applyTo(Pane pane) {
+        CountdownRemover removePane = new CountdownRemover();
         pane.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {

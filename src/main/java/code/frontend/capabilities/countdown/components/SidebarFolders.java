@@ -38,12 +38,12 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
-public class SidebarFolderManager extends VBox {
+public class SidebarFolders extends VBox {
     private static final int PREF_HEIGHT = 600;
     private static final int MIN_HEIGHT = 300;
 
     private static FolderPane selectedFolderPane;
-    private static SidebarFolderManager instance = null;
+    private static SidebarFolders instance = null;
 
     private final InputField SEARCH_FIELD;
     private final ScrollPane SCROLL_PANE;
@@ -57,9 +57,9 @@ public class SidebarFolderManager extends VBox {
     private Pane scrollPaneWrapper;
     private VBox nameFieldContainer;
 
-    public static SidebarFolderManager getInstance() {
+    public static SidebarFolders getInstance() {
         if (instance == null) {
-            instance = new SidebarFolderManager();
+            instance = new SidebarFolders();
             // defines search bar function
             instance.SEARCH_FIELD.getTextField().setOnKeyTyped(new EventHandler<KeyEvent>() {
                 @Override
@@ -84,7 +84,7 @@ public class SidebarFolderManager extends VBox {
         return instance;
     }
 
-    private SidebarFolderManager() {
+    private SidebarFolders() {
         this.scrollPaneWrapper = new Pane();
         // need to make sure searchfield is not stuck on selected
         this.SEARCH_FIELD = new InputField();
@@ -445,22 +445,21 @@ public class SidebarFolderManager extends VBox {
                     this.untoggle();
             });
             this.setOnMouseDragReleased((event) -> {
-                CountdownPaneView.getInstance().addAllSelectedToFolder(this.FOLDER);
+                CountdownTable.getInstance().addAllSelectedToFolder(this.FOLDER);
 
                 if (FolderHandler.getCurrentlySelectedFolder().equals(this.FOLDER))
                     this.toggle();
                 else
                     this.untoggle();
 
-                DragHandler.close();
+                DragDropHandler.close();
             });
         }
 
         @Override
         public void executeOnClick(MouseEvent event) {
-            CountdownPaneView.getInstance().deselectAll(); // important
-            SidebarFolderManager.getInstance().FOLDER_PANES.forEach(
-                folder -> { folder.untoggle(); });
+            CountdownTable.getInstance().deselectAll(); // important
+            SidebarFolders.getInstance().FOLDER_PANES.forEach(folder -> { folder.untoggle(); });
 
             if (!this.hasSameName(INCOMPLETED_FOLDER_PANE))
                 INCOMPLETED_FOLDER_PANE.untoggle();
@@ -468,13 +467,13 @@ public class SidebarFolderManager extends VBox {
             if (!this.hasSameName(COMPLETED_FOLDER_PANE))
                 COMPLETED_FOLDER_PANE.untoggle();
 
-            SidebarFolderManager.selectedFolderPane = this;
+            SidebarFolders.selectedFolderPane = this;
             FolderHandler.setCurrentlySelectedFolder(this.FOLDER);
-            CountdownPaneView.getInstance().repopulate(LocalDate.now());
+            CountdownTable.getInstance().repopulate(LocalDate.now());
 
             if (!this.FOLDER.isProtectedFolder() && event != null
                 && event.getButton().equals(MouseButton.SECONDARY)) {
-                FolderManagerRCM.spawnInstance(event.getSceneX(), event.getSceneY());
+                FolderRCM.spawnInstance(event.getSceneX(), event.getSceneY());
             }
 
             this.toggle();

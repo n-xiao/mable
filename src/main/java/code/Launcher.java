@@ -15,8 +15,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Launcher extends Application {
-    // public static final int PREF_WIDTH = 1170;
-    // public static final int PREF_HEIGHT = 730;
+    private static final int PREF_WIDTH = 1170;
+    private static final int PREF_HEIGHT = 730;
     private static final int MIN_WIDTH = 890;
     private static final int MIN_HEIGHT = 600;
 
@@ -33,6 +33,8 @@ public class Launcher extends Application {
         stage.setTitle("Mable");
         stage.setMinWidth(MIN_WIDTH);
         stage.setMinHeight(MIN_HEIGHT);
+        stage.setWidth(PREF_WIDTH);
+        stage.setHeight(PREF_HEIGHT);
         stage.setOnCloseRequest((event) -> { Platform.exit(); });
 
         MainContainer root = MainContainer.getInstance();

@@ -21,17 +21,17 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-public class SidebarStatsPane extends VBox {
-    private static SidebarStatsPane instance = null;
+public class SidebarStats extends VBox {
+    private static SidebarStats instance = null;
 
     private static final int LEFTRIGHT_SPACE = 15;
     private static final int TOPBOTTOM_SPACE = 10;
 
-    private RemovePane removePane;
+    private CountdownRemover removePane;
 
-    public static SidebarStatsPane getInstance() {
+    public static SidebarStats getInstance() {
         if (instance == null) {
-            instance = new SidebarStatsPane();
+            instance = new SidebarStats();
         }
         return instance;
     }
@@ -40,7 +40,7 @@ public class SidebarStatsPane extends VBox {
     private final StatPane TODAY_STAT;
     private final StatPane TOMORROW_STAT;
 
-    private SidebarStatsPane() {
+    private SidebarStats() {
         final MableBorder BORDER = new MableBorder(2, 0.2, 0.4);
         MableBorder.applyToPane(this, BORDER);
         BORDER.setStrokeColour(RiceHandler.getColour("ghost"));
@@ -58,7 +58,7 @@ public class SidebarStatsPane extends VBox {
             this.TOMORROW_STAT, new Insets(0, LEFTRIGHT_SPACE, TOPBOTTOM_SPACE, LEFTRIGHT_SPACE));
     }
 
-    public RemovePane getRemovePane() {
+    public CountdownRemover getRemovePane() {
         return removePane;
     }
 

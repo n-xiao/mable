@@ -4,10 +4,10 @@
 
 package code.frontend.capabilities.countdown.components;
 
-import code.frontend.capabilities.countdown.components.CountdownPaneView.ButtonMode;
-import code.frontend.capabilities.countdown.windows.AddWindow;
+import code.frontend.capabilities.countdown.components.CountdownTable.ButtonMode;
+import code.frontend.capabilities.countdown.windows.CountdownCreator;
 import code.frontend.libs.katlaf.buttons.Button;
-import code.frontend.libs.katlaf.menus.RightClickMenuTemplate;
+import code.frontend.libs.katlaf.menus.RightClickMenu;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -25,11 +25,9 @@ import javafx.scene.paint.Color;
  * when the user right-clicks on something. Hence, the only calls
  * to getInstance should be from right-click listeners.
  *
- * oh btw this is like the neatest class ever...
- *
  */
-public class CountdownViewRCM extends RightClickMenuTemplate {
-    private static CountdownViewRCM instance = null;
+public class CountdownRCM extends RightClickMenu {
+    private static CountdownRCM instance = null;
 
     private static final double WIDTH = 180;
     private static final double HEIGHT = 200;
@@ -42,7 +40,7 @@ public class CountdownViewRCM extends RightClickMenuTemplate {
 
     public static void spawnInstance(double x, double y) {
         if (instance == null)
-            instance = new CountdownViewRCM();
+            instance = new CountdownRCM();
         instance.openAt(x, y);
     }
 
@@ -53,10 +51,10 @@ public class CountdownViewRCM extends RightClickMenuTemplate {
         instance = null;
     }
 
-    private CountdownViewRCM() {
+    private CountdownRCM() {
         final boolean SELECTED_ARE_COMPLETED =
-            CountdownPaneView.getInstance().allSelectedAreCompleted();
-        final int NUM_OF_SELECTIONS = CountdownPaneView.getInstance().getNumOfSelections();
+            CountdownTable.getInstance().allSelectedAreCompleted();
+        final int NUM_OF_SELECTIONS = CountdownTable.getInstance().getNumOfSelections();
 
         final String CREATE_STR = "New Task...";
         final String SELECTOR_STR =
@@ -69,40 +67,40 @@ public class CountdownViewRCM extends RightClickMenuTemplate {
         Button create = new Button(CREATE_STR) {
             @Override
             public void executeOnClick(MouseEvent event) {
-                AddWindow.getInstance();
-                CountdownViewRCM.despawn();
+                CountdownCreator.getInstance();
+                CountdownRCM.despawn();
             }
         };
 
         Button selector = new Button(SELECTOR_STR) {
             public void executeOnClick(MouseEvent event) {
                 if (NUM_OF_SELECTIONS > 0)
-                    CountdownPaneView.getInstance().deselectAll();
+                    CountdownTable.getInstance().deselectAll();
                 else
-                    CountdownPaneView.getInstance().selectAll();
-                CountdownViewRCM.despawn();
+                    CountdownTable.getInstance().selectAll();
+                CountdownRCM.despawn();
             };
         };
 
         Button markAsComplete = new Button(MARK_COMPLETE_STR) {
             @Override
             public void executeOnClick(MouseEvent event) {
-                CountdownPaneView.getInstance().markSelectedAsComplete(!SELECTED_ARE_COMPLETED);
-                CountdownViewRCM.despawn();
+                CountdownTable.getInstance().markSelectedAsComplete(!SELECTED_ARE_COMPLETED);
+                CountdownRCM.despawn();
             }
         };
         Button edit = new Button(EDIT_STR) {
             @Override
             public void executeOnClick(MouseEvent event) {
-                CountdownPaneView.getInstance().editSelected();
-                CountdownViewRCM.despawn();
+                CountdownTable.getInstance().editSelected();
+                CountdownRCM.despawn();
             }
         };
         Button delete = new Button(DELETE_STR) {
             @Override
             public void executeOnClick(MouseEvent event) {
-                CountdownPaneView.getInstance().deleteSelected();
-                CountdownViewRCM.despawn();
+                CountdownTable.getInstance().deleteSelected();
+                CountdownRCM.despawn();
             }
         };
 
@@ -122,7 +120,7 @@ public class CountdownViewRCM extends RightClickMenuTemplate {
 
     @Override
     public void setMode() {
-        ButtonMode mode = CountdownPaneView.getInstance().getMode();
+        ButtonMode mode = CountdownTable.getInstance().getMode();
         this.CREATE.setEnabled(true);
         this.SELECTOR.setEnabled(true);
         switch (mode) {

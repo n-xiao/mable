@@ -27,7 +27,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public abstract class ConfigWindowTemplate extends Stage {
+public abstract class CountdownModifier extends Stage {
     public static final int WIDTH = 510;
     public static final int HEIGHT = 330;
     private static final Insets INSETS = new Insets(7);
@@ -39,7 +39,7 @@ public abstract class ConfigWindowTemplate extends Stage {
     private InputField daysField;
     private Button button;
 
-    protected ConfigWindowTemplate() {
+    protected CountdownModifier() {
         this.setStageStyling();
         this.configureChildren();
     }

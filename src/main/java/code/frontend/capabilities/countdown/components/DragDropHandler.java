@@ -20,9 +20,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Rotate;
 
-public class DragHandler extends Region {
+public class DragDropHandler extends Region {
     private static final MainContainer MC = MainContainer.getInstance();
-    private static DragHandler instance = null;
+    private static DragDropHandler instance = null;
 
     /*
      * One big note here, the drag listener MUST be attached to the scene,
@@ -31,9 +31,9 @@ public class DragHandler extends Region {
      * detection to any other node, I don't think it's possible to
      * trigger the other nodes' listeners.
      */
-    public static DragHandler init() {
+    public static DragDropHandler init() {
         if (instance == null) {
-            instance = new DragHandler();
+            instance = new DragDropHandler();
 
             instance.setMouseTransparent(true);
 
@@ -65,7 +65,7 @@ public class DragHandler extends Region {
     private final ChangeListener<Number> WIDTH_LISTENER;
     private final ChangeListener<Number> HEIGHT_LISTENER;
 
-    public DragHandler() {
+    public DragDropHandler() {
         this.WIDTH_LISTENER = new ChangeListener<Number>() {
                 @Override
                 public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -100,7 +100,7 @@ public class DragHandler extends Region {
     private void populateStack() {
         final int WIDTH = 230;
         final int HEIGHT = 90;
-        final Urgency[] URGENCIES = CountdownPaneView.getInstance().getSelectedUrgencies();
+        final Urgency[] URGENCIES = CountdownTable.getInstance().getSelectedUrgencies();
         // max of 3 "preview" panes to be generated
         for (int i = 0; i < 3 && i < URGENCIES.length; i++) {
             final MableBorder BORDER = new MableBorder(2.4, 0.2, 0.42);

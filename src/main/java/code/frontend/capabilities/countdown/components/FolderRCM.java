@@ -7,13 +7,13 @@ package code.frontend.capabilities.countdown.components;
 import code.backend.data.CountdownFolder.SpecialType;
 import code.backend.utils.FolderHandler;
 import code.frontend.libs.katlaf.buttons.Button;
-import code.frontend.libs.katlaf.menus.RightClickMenuTemplate;
+import code.frontend.libs.katlaf.menus.RightClickMenu;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
-public class FolderManagerRCM extends RightClickMenuTemplate {
-    private static FolderManagerRCM instance = null;
+public class FolderRCM extends RightClickMenu {
+    private static FolderRCM instance = null;
 
     /**
      * Important! This assumes that the current selected folder according to StorageHandler
@@ -21,7 +21,7 @@ public class FolderManagerRCM extends RightClickMenuTemplate {
      */
     public static void spawnInstance(double x, double y) {
         if (instance == null)
-            instance = new FolderManagerRCM();
+            instance = new FolderRCM();
         instance.openAt(x, y);
     }
 
@@ -38,20 +38,20 @@ public class FolderManagerRCM extends RightClickMenuTemplate {
     private final Button EDIT;
     private final Button REMOVE;
 
-    private FolderManagerRCM() {
+    private FolderRCM() {
         Button edit = new Button("Edit name") {
             @Override
             public void executeOnClick(MouseEvent event) {
-                SidebarFolderManager.getInstance().editSelectedFolder();
-                FolderManagerRCM.despawn();
+                SidebarFolders.getInstance().editSelectedFolder();
+                FolderRCM.despawn();
             }
         };
 
         Button remove = new Button("Remove folder") {
             @Override
             public void executeOnClick(MouseEvent event) {
-                SidebarFolderManager.getInstance().deleteSelectedFolder();
-                FolderManagerRCM.despawn();
+                SidebarFolders.getInstance().deleteSelectedFolder();
+                FolderRCM.despawn();
             }
         };
 

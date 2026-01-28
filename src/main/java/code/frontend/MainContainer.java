@@ -4,7 +4,7 @@
 
 package code.frontend;
 
-import code.frontend.capabilities.countdown.components.HomePage;
+import code.frontend.capabilities.countdown.components.CountdownContainer;
 import code.frontend.capabilities.countdown.components.Sidebar;
 import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
@@ -24,13 +24,13 @@ public class MainContainer extends StackPane {
         this.countdownContainer = new HBox();
         this.countdownContainer.setBackground(null);
         this.countdownContainer.setFillHeight(true);
-        HomePage homepage = HomePage.getInstance();
+        CountdownContainer cmc = CountdownContainer.getInstance();
         Sidebar sidebar = Sidebar.getInstance();
         sidebar.setMinWidth(250);
         HBox.setMargin(sidebar, new Insets(0, 5, 0, 0));
-        HBox.setMargin(homepage, new Insets(10));
-        HBox.setHgrow(homepage, Priority.ALWAYS);
-        this.countdownContainer.getChildren().addAll(sidebar, homepage);
+        HBox.setMargin(cmc, new Insets(10));
+        HBox.setHgrow(cmc, Priority.ALWAYS);
+        this.countdownContainer.getChildren().addAll(sidebar, cmc);
         this.getChildren().add(this.countdownContainer);
     }
 

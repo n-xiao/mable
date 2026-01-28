@@ -79,7 +79,7 @@ public class Sidebar extends VBox {
 
         Label label = new Label(text);
         label.setTextFill(RiceHandler.getColour("txtGhost2"));
-        label.setFont(FontHandler.getHeading(4));
+        label.setFont(FontHandler.getHeading(3));
         label.maxHeightProperty().bind(divider.heightProperty());
         label.setAlignment(Pos.CENTER);
         HBox.setMargin(label, new Insets(0, 5, 0, 5));

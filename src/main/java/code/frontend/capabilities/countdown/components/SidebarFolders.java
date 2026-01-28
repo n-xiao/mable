@@ -313,7 +313,7 @@ public class SidebarFolders extends VBox {
     private void configureNewFolderButtonStyle() {
         this.NEW_FOLDER_BTTN.setText("+ new folder");
         this.NEW_FOLDER_BTTN.setFont(FontHandler.getItalic());
-        this.NEW_FOLDER_BTTN.setTextFill(RiceHandler.getColour());
+        this.NEW_FOLDER_BTTN.setTextFill(RiceHandler.getColour("txtGhost"));
         this.NEW_FOLDER_BTTN.setAlignment(Pos.CENTER);
         this.NEW_FOLDER_BTTN.setMinHeight(40);
         this.NEW_FOLDER_BTTN.maxWidthProperty().bind(this.widthProperty());

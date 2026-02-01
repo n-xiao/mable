@@ -50,11 +50,11 @@ public class SimpleList extends BorderedRegion {
         VBox.setVgrow(this, Priority.ALWAYS);
     }
 
-    /*************************************************************************************
+    /*
+
 
      STYLING
-
-     *************************************************************************************/
+    -------------------------------------------------------------------------------------*/
 
     private void initScrollPaneStyling() {
         scrollPane.setFitToWidth(true);
@@ -73,11 +73,11 @@ public class SimpleList extends BorderedRegion {
         content.setMaxHeight(Double.MAX_VALUE);
     }
 
-    /*************************************************************************************
+    /*
 
-     PUBLIC API
 
-     *************************************************************************************/
+     PROTECTED API
+    -------------------------------------------------------------------------------------*/
 
     /**
      * Adds a node to the contents of the {@link SimpleList}.
@@ -88,6 +88,12 @@ public class SimpleList extends BorderedRegion {
     protected void addNext(Node node) {
         content.getChildren().add(node);
     }
+
+    /*
+
+
+     PUBLIC API
+    -------------------------------------------------------------------------------------*/
 
     /**
      * Resets the iterator.
@@ -110,6 +116,29 @@ public class SimpleList extends BorderedRegion {
     public void addNextListable() {
         if (hasNextListable())
             content.getChildren().add(new SimpleListButton(listableIterator.next()));
+    }
+
+    /**
+     * Clears all children from the content of this {@link SimpleList},
+     * then repopulates by iterating through all listables. Note that
+     * this method does not utilise {@link Iterator}.
+     */
+    public void repopulate() {
+        content.getChildren().clear();
+        for (Listable listable : listables)
+            content.getChildren().add(new SimpleListButton(listable));
+    }
+
+    /**
+     * Updates the styling of all {@link SimpleListButton} of this {@link SimpleList}
+     * based on evidence from the backend.
+     */
+    public void updateSelections() {
+        content.getChildren().forEach(child -> {
+            if (child instanceof SimpleListButton) {
+                ((SimpleListButton) child).updateSelection();
+            }
+        });
     }
 
     /**

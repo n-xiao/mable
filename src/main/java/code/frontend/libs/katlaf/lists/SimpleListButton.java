@@ -41,6 +41,17 @@ public class SimpleListButton extends ToggleButton {
         VBox.setMargin(this, new Insets(3, 2.5, 5, 2.5));
     }
 
+    /**
+     * Updates the styling of this {@link SimpleListButton} based on
+     * verification from the backend.
+     */
+    protected void updateSelection() {
+        if (listable.isEngaged())
+            this.toggle();
+        else
+            this.untoggle();
+    }
+
     @Override
     public void executeOnClick(MouseEvent event) {
         listable.onButtonClick();

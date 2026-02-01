@@ -34,4 +34,16 @@ public interface Listable {
      *
      */
     public void onButtonClick();
+
+    /**
+     * This method is used to verify a current selection through the backend, instead of
+     * having all logic in the frontend. For example, this method should return true
+     * to indicate that the user is currently using a {@link Listable}, such as
+     * when the currently selected {@link code.backend.data.CountdownFolder} is
+     * this {@link Listable}.
+     *
+     * @return true if this {@link Listable} is in use, false otherwise.
+     *
+     */
+    public boolean isEngaged();
 }

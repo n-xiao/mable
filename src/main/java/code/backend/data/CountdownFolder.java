@@ -19,7 +19,9 @@
 package code.backend.data;
 
 import code.backend.utils.CountdownHandler;
+import code.backend.utils.FolderHandler;
 import code.backend.utils.SortByRemainingDays;
+import code.frontend.libs.katlaf.lists.Listable;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -28,7 +30,7 @@ import java.util.TreeSet;
 import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CountdownFolder extends Identifiable {
+public class CountdownFolder extends Identifiable implements Listable {
     public enum SpecialType { ALL_INCOMPLETE, ALL_COMPLETE }
 
     private String name;
@@ -80,6 +82,23 @@ public class CountdownFolder extends Identifiable {
 
     public TreeSet<Countdown> getContents() {
         return this.CONTENTS;
+    }
+
+    @JsonIgnore
+    @Override
+    public String getDisplayLabel() {
+        return name;
+    }
+
+    @Override
+    public void onButtonClick() {
+        FolderHandler.setCurrentlySelectedFolder(this);
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isEngaged() {
+        return FolderHandler.getCurrentlySelectedFolder().equals(this);
     }
 
     @JsonProperty("name")

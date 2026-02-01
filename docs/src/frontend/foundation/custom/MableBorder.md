@@ -16,7 +16,7 @@ Note that the success criteria **does not** include self-expanatory criterions, 
 - etc.
 These points are deemed unnecessary as this documentation's purpose, like all other developer documentation for Mable,
 is to clarify advanced and difficult topics. Obtaining an understanding of aspects of the source code that are trivial
-is left as an exercise for readers. *Muahahahahaaa.*
+is left as an exercise for readers.
 
 ## Summary
 There are **two types** of bezier curves used: quadratic (for the rounded corners) and cubic (for the edges).

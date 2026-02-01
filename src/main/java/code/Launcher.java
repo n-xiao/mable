@@ -43,8 +43,10 @@ public class Launcher extends Application {
     @Override
     public void start(Stage stage) {
         RiceHandler.updatePalette("DARK");
-
-        stage.setTitle("Mable");
+        if (System.getProperty("os.name").startsWith("Windows"))
+            stage.setTitle("Mable"); // only set title if on windows
+        else
+            stage.setTitle("");
         stage.setMinWidth(MIN_WIDTH);
         stage.setMinHeight(MIN_HEIGHT);
         stage.setWidth(PREF_WIDTH);

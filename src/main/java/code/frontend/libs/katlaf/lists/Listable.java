@@ -21,7 +21,7 @@ package code.frontend.libs.katlaf.lists;
 public interface Listable {
     /**
      * The return String value will be used to display
-     * the label of a {@link SimpleListButton}
+     * the label of a {@link SimpleListMember}
      *
      * @return a String to be displayed
      */

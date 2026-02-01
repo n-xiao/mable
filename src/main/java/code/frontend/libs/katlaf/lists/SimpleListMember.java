@@ -26,10 +26,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-public class SimpleListButton extends ToggleButton {
+public class SimpleListMember extends ToggleButton {
     private final Listable listable;
 
-    protected SimpleListButton(Listable listable) {
+    protected SimpleListMember(Listable listable) {
         this.listable = listable;
         super(listable.getDisplayLabel());
         this.getLabel().setAlignment(Pos.CENTER_LEFT);
@@ -42,7 +42,7 @@ public class SimpleListButton extends ToggleButton {
     }
 
     /**
-     * Updates the styling of this {@link SimpleListButton} based on
+     * Updates the styling of this {@link SimpleListMember} based on
      * verification from the backend.
      */
     protected void updateSelection() {

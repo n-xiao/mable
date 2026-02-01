@@ -30,6 +30,10 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
+/**
+ * This facilitates a scrollable, vertical list. It is best suited for a page-selection
+ * system, where only one (button) element in the list can be selected at a time.
+ */
 public class SimpleList extends BorderedRegion {
     private final ArrayList<Listable> listables;
     private final ScrollPane scrollPane;
@@ -115,7 +119,7 @@ public class SimpleList extends BorderedRegion {
      */
     public void addNextListable() {
         if (hasNextListable())
-            content.getChildren().add(new SimpleListButton(listableIterator.next()));
+            content.getChildren().add(new SimpleListMember(listableIterator.next()));
     }
 
     /**
@@ -126,17 +130,17 @@ public class SimpleList extends BorderedRegion {
     public void repopulate() {
         content.getChildren().clear();
         for (Listable listable : listables)
-            content.getChildren().add(new SimpleListButton(listable));
+            content.getChildren().add(new SimpleListMember(listable));
     }
 
     /**
-     * Updates the styling of all {@link SimpleListButton} of this {@link SimpleList}
+     * Updates the styling of all {@link SimpleListMember} of this {@link SimpleList}
      * based on evidence from the backend.
      */
     public void updateSelections() {
         content.getChildren().forEach(child -> {
-            if (child instanceof SimpleListButton) {
-                ((SimpleListButton) child).updateSelection();
+            if (child instanceof SimpleListMember) {
+                ((SimpleListMember) child).updateSelection();
             }
         });
     }

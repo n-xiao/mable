@@ -47,9 +47,9 @@ import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
 public class CountdownPane extends VBox {
-    public static final double WIDTH = 250;
+    public static final double WIDTH = 255;
     public static final double HEIGHT = 110;
-    public static final double NAME_WIDTH = 130;
+    public static final double NAME_WIDTH = 150;
     public static final double DIV_WIDTH = 8;
     public static final double CONTENT_HEIGHT = 90;
 
@@ -207,7 +207,7 @@ public class CountdownPane extends VBox {
         configureCountdownLabelsText(countdown, now);
 
         display.getChildren().addAll(CD_DAYS_LABEL, CD_DESC_LABEL);
-        HBox.setMargin(display, new Insets(10, 10, 10, 0));
+        HBox.setMargin(display, new Insets(10, 5, 10, 0));
         HBox.setHgrow(display, Priority.ALWAYS);
         return display;
     }

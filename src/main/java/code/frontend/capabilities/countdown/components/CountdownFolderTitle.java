@@ -64,7 +64,7 @@ public class CountdownFolderTitle extends VBox {
         lineContainer.setMaxWidth(Double.MAX_VALUE);
         lineContainer.setMinHeight(5);
         lineContainer.setOpacity(0.5);
-        VBox.setMargin(lineContainer, new Insets(5, 0, 10, 0));
+        VBox.setMargin(lineContainer, new Insets(5, 0, 15, 0));
         return lineContainer;
     }
 

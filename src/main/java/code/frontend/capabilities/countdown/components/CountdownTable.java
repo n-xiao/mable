@@ -46,8 +46,8 @@ public class CountdownTable extends ScrollPane {
     public enum ButtonMode { NO_SELECT, SINGLE_SELECT, MULTI_SELECT }
     public enum DisplayOrder { ASCENDING, DESCENDING }
 
-    protected final double HGAP_BETWEEN = 30;
-    protected final double VGAP_BETWEEN = 5;
+    protected final double HGAP_BETWEEN = 35;
+    protected final double VGAP_BETWEEN = 15;
     protected final FlowPane FLOW_PANE;
     protected final LinkedHashSet<CountdownPane> COUNTDOWN_PANES;
     protected final ArrayList<Region> PADDINGS_IN_USE;

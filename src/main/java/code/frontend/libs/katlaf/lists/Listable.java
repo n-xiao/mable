@@ -51,4 +51,16 @@ public interface Listable extends Comparable<Listable> {
      *
      */
     public boolean isEngaged();
+
+    /**
+     * This method is used to set the display index (an int)
+     * of a Listable so that reordering is possible. This
+     * is an optional method, and can be implemented
+     * as an empty procedure if deemed appropriate.
+     *
+     * As an example, this method is necessary for the
+     * folder selection list as user-defined ordering is
+     * implemented with persistent storage.
+     */
+    public void setListIndex(int index);
 }

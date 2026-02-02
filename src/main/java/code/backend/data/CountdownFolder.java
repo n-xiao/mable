@@ -38,6 +38,12 @@ public class CountdownFolder extends Identifiable implements Listable {
     @JsonIgnore private final SpecialType TYPE;
     private final TreeSet<Countdown> CONTENTS;
 
+    /*
+
+
+     CONSTRUCTORS
+    -------------------------------------------------------------------------------------*/
+
     public CountdownFolder(String name) {
         this.name = name;
         this.CONTENTS = new TreeSet<Countdown>(new SortByRemainingDays());
@@ -47,11 +53,12 @@ public class CountdownFolder extends Identifiable implements Listable {
 
     @JsonCreator
     public CountdownFolder(@JsonProperty("ID") String folderId, @JsonProperty("name") String name,
-        @JsonProperty("contents") String[] contentAsIDs) {
+        @JsonProperty("contents") String[] contentAsIDs, @JsonProperty("listIndex") int index) {
         super(folderId);
         this.name = name;
         this.TYPE = null;
         this.CONTENTS = new TreeSet<Countdown>(new SortByRemainingDays());
+        this.listIndex = index;
         for (String id : contentAsIDs) {
             Countdown countdown = CountdownHandler.getCountdownByID(id);
             if (countdown != null)
@@ -60,10 +67,12 @@ public class CountdownFolder extends Identifiable implements Listable {
     }
 
     /**
-     * This constructor creates a CountdownFolder that is used by Mable. It should not be added to
-     * the set of FOLDERS to prevent accidental deletion by user actions. When instantiating through
-     * this constructor, please ensure that you hold a reference to it.
+     * Creates a "protected" {@link CountdownFolder} which is not intended
+     * to be editable by users. This design choice will be reconsidered,
+     * as creating separate classes may be more logical moving forward
+     * instead of this abomination.
      */
+    @Deprecated
     public CountdownFolder(SpecialType type) {
         assert type != null;
         switch (type) {
@@ -81,20 +90,11 @@ public class CountdownFolder extends Identifiable implements Listable {
         super(UUID.randomUUID());
     }
 
-    public TreeSet<Countdown> getContents() {
-        return this.CONTENTS;
-    }
+    /*
 
-    @JsonIgnore
-    @Override
-    public String getDisplayString() {
-        return name;
-    }
 
-    @Override
-    public void onButtonClick() {
-        FolderHandler.setCurrentlySelectedFolder(this);
-    }
+     GETTERS
+    -------------------------------------------------------------------------------------*/
 
     @JsonIgnore
     @Override
@@ -118,23 +118,57 @@ public class CountdownFolder extends Identifiable implements Listable {
         return stringIDs;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    @JsonProperty("listIndex")
+    public int getListIndex() {
+        return listIndex;
+    }
+
+    public TreeSet<Countdown> getContents() {
+        return this.CONTENTS;
     }
 
     public SpecialType getType() {
         return TYPE;
     }
 
-    @Override
-    public int compareTo(Listable o) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
     @JsonIgnore
     public boolean isProtectedFolder() {
         return this.TYPE != null;
+    }
+
+    /*
+
+
+     SETTERS
+    -------------------------------------------------------------------------------------*/
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /*
+
+
+     IMPLEMENTATIONS
+    -------------------------------------------------------------------------------------*/
+
+    @JsonIgnore
+    @Override
+    public String getDisplayString() {
+        return name;
+    }
+
+    @Override
+    public void onButtonClick() {
+        FolderHandler.setCurrentlySelectedFolder(this);
+    }
+
+    @Override
+    public int compareTo(Listable listable) {
+        if (listable instanceof CountdownFolder)
+            return this.listIndex - ((CountdownFolder) listable).listIndex;
+        else
+            return 1;
     }
 
     @Override
@@ -144,5 +178,10 @@ public class CountdownFolder extends Identifiable implements Listable {
 
         CountdownFolder other = (CountdownFolder) obj;
         return other.name.equals(this.name);
+    }
+
+    @Override
+    public void setListIndex(int index) {
+        this.listIndex = index;
     }
 }

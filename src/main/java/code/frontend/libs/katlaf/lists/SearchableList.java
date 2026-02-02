@@ -1,32 +1,58 @@
+/*
+    Copyright (C) 2026 Nicholas Siow <nxiao.dev@gmail.com>
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 package code.frontend.libs.katlaf.lists;
 
 import code.frontend.libs.katlaf.inputfields.SearchableUI;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class SearchableSimpleList extends SimpleList implements SearchableUI {
+public class SearchableList extends SimpleList implements SearchableUI {
     private boolean hideBadMatches;
 
-    public SearchableSimpleList(ArrayList<Listable> listables) {
+    public SearchableList(ArrayList<Listable> listables) {
         super(listables);
         this.hideBadMatches = false;
     }
 
+    /*
+
+
+     IMPLEMENTATIONS
+    -------------------------------------------------------------------------------------*/
+
     @Override
     public void onSearchChange(String search) {
         if (search.isEmpty()) {
-            this.getListables().sort(null);
+            this.getListables().sort(null); // use saved index
+            repopulate();
+            return;
         }
 
         this.getListables().sort(new Comparator<Listable>() {
-            @Override
+            @Override // sort by levenstein dist
             public int compare(Listable o1, Listable o2) {
                 return getLevenshteinDistance(o1.getDisplayString(), search)
                     - getLevenshteinDistance(o2.getDisplayString(), search);
             }
         });
 
-        if (hideBadMatches) {
+        if (hideBadMatches) { // do not add bad matches
             resetNextListable();
             this.getListables().forEach(listable -> {
                 if (!isBadMatch(listable, search))

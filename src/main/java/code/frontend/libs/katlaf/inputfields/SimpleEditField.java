@@ -36,6 +36,10 @@ import javafx.util.Duration;
 /**
  * A simple edit field that has one accept and one decline button,
  * located directly below the {@link InputField}.
+ *
+ * This UI component manages its own removal; its parent
+ * should be provided so that {@link SimpleEditField}
+ * is able to remove itself.
  */
 public class SimpleEditField extends Region {
     public SimpleEditField(Pane parent) {

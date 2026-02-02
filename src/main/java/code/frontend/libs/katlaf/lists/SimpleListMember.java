@@ -66,4 +66,8 @@ public class SimpleListMember extends ToggleButton {
     protected Color getToggledColour() {
         return RiceHandler.getColour();
     }
+
+    protected Listable getListable() {
+        return listable;
+    }
 }

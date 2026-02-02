@@ -137,18 +137,55 @@ public class SimpleList extends BorderedRegion {
     }
 
     /**
+     * Creates and pushes a new {@link SimpleListMember} by using the provided
+     * {@link Listable} to the start of the internal ArrayList, and adds
+     * it in a similar fashion to the content.
+     */
+    public final void pushNewListable(Listable listable) {
+        listables.addFirst(listable);
+        content.getChildren().addFirst(new SimpleListMember(listable));
+        refreshOrder();
+    }
+
+    /**
+     * Creates and appends a new {@link SimpleListMember} by using the provided
+     * {@link Listable} to the end of the internal ArrayList, and adds
+     * it in a similar fashion to the content.
+     */
+    public final void appendNewListable(Listable listable) {
+        listables.addLast(listable);
+        content.getChildren().addLast(new SimpleListMember(listable));
+        refreshOrder();
+    }
+
+    /**
+     * Removes the provided {@link Listable} from the ArrayList of listables
+     * and removes {@link SimpleListMember} associated with the provided
+     * {@link Listable} from the content's children ObservableList.
+     */
+    public final void removeListable(Listable listable) {
+        listables.remove(listable);
+        content.getChildren().removeIf(node -> {
+            return (node instanceof SimpleListMember)
+                && ((SimpleListMember) node).getListable().equals(listable);
+        });
+    }
+
+    /**
      * Clears all children from the content of this {@link SimpleList},
      * then repopulates by iterating through all listables. Note that
      * this method does not utilise {@link Iterator}.
      */
     public final void repopulate() {
         clearContent();
-        for (Listable listable : listables)
+        listables.sort(null);
+        for (Listable listable : listables) {
             content.getChildren().add(new SimpleListMember(listable));
+        }
     }
 
     /**
-     * Updates the styling of all {@link SimpleListMember} of this {@link SimpleList}
+     * Updates the selection styling of all {@link SimpleListMember} of this {@link SimpleList}
      * based on evidence from the backend.
      */
     public void updateSelections() {
@@ -157,6 +194,18 @@ public class SimpleList extends BorderedRegion {
                 ((SimpleListMember) child).updateSelection();
             }
         });
+    }
+
+    /**
+     * The indexes of each {@link Listable} the content of this {@link SimpleList}
+     * is updated based on its current index within the internal ArrayList.
+     */
+    public void refreshOrder() {
+        int index = 0;
+        for (Listable listable : listables) {
+            listable.setListIndex(index);
+            index++;
+        }
     }
 
     /**

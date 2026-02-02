@@ -39,7 +39,6 @@ public class SearchableList extends SimpleList implements SearchableUI {
     @Override
     public void onSearchChange(String search) {
         if (search.isEmpty()) {
-            this.getListables().sort(null); // use saved index
             repopulate();
             return;
         }

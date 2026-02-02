@@ -18,6 +18,11 @@
 
 package code.frontend.libs.katlaf.lists;
 
+/**
+ * This interface is used to facilitate the communication between backend
+ * and frontend components. A backend component that is Listable
+ * can be represented in a {@link SimpleList}, as a {@link SimpleListMember}
+ */
 public interface Listable {
     /**
      * The return String value will be used to display

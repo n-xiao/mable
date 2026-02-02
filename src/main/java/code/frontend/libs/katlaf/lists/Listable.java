@@ -23,7 +23,7 @@ package code.frontend.libs.katlaf.lists;
  * and frontend components. A backend component that is Listable
  * can be represented in a {@link SimpleList}, as a {@link SimpleListMember}
  */
-public interface Listable {
+public interface Listable extends Comparable<Listable> {
     /**
      * The return String value will be used to display
      * the label of a {@link SimpleListMember}

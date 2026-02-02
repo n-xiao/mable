@@ -15,6 +15,7 @@ public class SearchableSimpleList extends SimpleList implements SearchableUI {
     @Override
     public void onSearchChange(String search) {
         if (search.isEmpty()) {
+            this.getListables().sort(null);
         }
 
         this.getListables().sort(new Comparator<Listable>() {
@@ -30,6 +31,8 @@ public class SearchableSimpleList extends SimpleList implements SearchableUI {
             this.getListables().forEach(listable -> {
                 if (!isBadMatch(listable, search))
                     addNextListable();
+                else
+                    nextListable();
             });
         } else {
             repopulate();

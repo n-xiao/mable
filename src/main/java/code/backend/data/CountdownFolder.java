@@ -34,6 +34,7 @@ public class CountdownFolder extends Identifiable implements Listable {
     public enum SpecialType { ALL_INCOMPLETE, ALL_COMPLETE }
 
     private String name;
+    private int listIndex;
     @JsonIgnore private final SpecialType TYPE;
     private final TreeSet<Countdown> CONTENTS;
 
@@ -123,6 +124,12 @@ public class CountdownFolder extends Identifiable implements Listable {
 
     public SpecialType getType() {
         return TYPE;
+    }
+
+    @Override
+    public int compareTo(Listable o) {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
     @JsonIgnore

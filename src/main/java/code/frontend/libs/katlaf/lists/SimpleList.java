@@ -91,6 +91,16 @@ public class SimpleList extends BorderedRegion {
     }
 
     /**
+     * Increments the internal iterator without adding it
+     * to the content, effectively skipping a {@link Listable}
+     * while using the Iterator.
+     */
+    protected final void nextListable() {
+        if (hasNextListable())
+            listableIterator.next();
+    }
+
+    /**
      * @return the ArrayList of {@link Listable} instances of this {@link SimpleList}.
      */
     protected final ArrayList<Listable> getListables() {

@@ -30,7 +30,7 @@ public interface Listable {
      *
      * @return a String to be displayed
      */
-    public String getDisplayLabel();
+    public String getDisplayString();
 
     /**
      * This code is executed whenever the button associated with this

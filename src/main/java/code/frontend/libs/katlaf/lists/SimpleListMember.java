@@ -31,7 +31,7 @@ public class SimpleListMember extends ToggleButton {
 
     protected SimpleListMember(Listable listable) {
         this.listable = listable;
-        super(listable.getDisplayLabel());
+        super(listable.getDisplayString());
         this.getLabel().setAlignment(Pos.CENTER_LEFT);
         this.getLabel().relocate(15, 0);
         this.getCustomBorder().setThickness(1.5);

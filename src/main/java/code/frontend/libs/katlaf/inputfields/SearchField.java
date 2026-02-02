@@ -18,14 +18,35 @@
 
 package code.frontend.libs.katlaf.inputfields;
 
+import code.frontend.libs.katlaf.graphics.MableBorder;
+import code.frontend.libs.katlaf.ricing.RiceHandler;
+import javafx.geometry.Insets;
+
 /**
  * This is a special {@link InputField} which allows a {@link SearchableUI}
  * to be updated based on changes to its input.
  */
 public class SearchField extends InputField {
-    private final SearchableUI target;
-
     public SearchField(SearchableUI target) {
-        this.target = target;
+        super();
+        initStyling();
+
+        this.getTextField().setOnKeyTyped(
+            event -> target.onSearchChange(this.getTextField().getText()));
+    }
+
+    /*
+
+
+     STYLING
+    -------------------------------------------------------------------------------------*/
+
+    private void initStyling() {
+        MableBorder border = new MableBorder(1.5, 0.1, 0.8);
+        border.setStrokeColour(RiceHandler.getColour("ghost"));
+        this.enableManualActivation();
+        this.getTextField().setPromptText("Search...");
+        this.setCustomBorder(new MableBorder(1.5, 0.1, 0.8));
+        this.setFieldMargins(new Insets(5, 7, 5, 7));
     }
 }

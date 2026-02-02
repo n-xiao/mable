@@ -28,10 +28,4 @@ public interface SearchableUI {
      * @param `input` is the current text in the {@link SearchField}
      */
     void onSearchChange(String input);
-
-    /**
-     * Called when the user exits the search, usually on focus loss.
-     * @param `input` is the current text in the {@link SearchField}
-     */
-    void onSearchExit(String input);
 }

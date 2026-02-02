@@ -23,7 +23,6 @@ import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.Background;
@@ -84,13 +83,18 @@ public class SimpleList extends BorderedRegion {
     -------------------------------------------------------------------------------------*/
 
     /**
-     * Adds a node to the contents of the {@link SimpleList}.
-     * This is a convenience method for implementing dividers,
-     * or any UI elements that may not be included in a conventional
-     * {@link SimpleList}.
+     * Removes all members from the
+     * content of this {@link SimpleList}.
      */
-    protected void addNext(Node node) {
-        content.getChildren().add(node);
+    protected final void clearContent() {
+        content.getChildren().clear();
+    }
+
+    /**
+     * @return the ArrayList of {@link Listable} instances of this {@link SimpleList}.
+     */
+    protected final ArrayList<Listable> getListables() {
+        return this.listables;
     }
 
     /*
@@ -102,7 +106,7 @@ public class SimpleList extends BorderedRegion {
     /**
      * Resets the iterator.
      */
-    public void resetNextListable() {
+    public final void resetNextListable() {
         listableIterator = listables.iterator();
     }
 
@@ -110,14 +114,14 @@ public class SimpleList extends BorderedRegion {
      * A method that exposes the `hasNext()` from {@link Iterator}.
      * @return true if there is a next {@link Listable}, false otherwise.
      */
-    public boolean hasNextListable() {
+    public final boolean hasNextListable() {
         return listableIterator.hasNext();
     }
 
     /**
      * Adds the next {@link Listable} if there is one. If not, nothing happens.
      */
-    public void addNextListable() {
+    public final void addNextListable() {
         if (hasNextListable())
             content.getChildren().add(new SimpleListMember(listableIterator.next()));
     }
@@ -127,8 +131,8 @@ public class SimpleList extends BorderedRegion {
      * then repopulates by iterating through all listables. Note that
      * this method does not utilise {@link Iterator}.
      */
-    public void repopulate() {
-        content.getChildren().clear();
+    public final void repopulate() {
+        clearContent();
         for (Listable listable : listables)
             content.getChildren().add(new SimpleListMember(listable));
     }

@@ -86,7 +86,7 @@ public class CountdownFolder extends Identifiable implements Listable {
 
     @JsonIgnore
     @Override
-    public String getDisplayLabel() {
+    public String getDisplayString() {
         return name;
     }
 

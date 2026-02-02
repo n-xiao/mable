@@ -67,6 +67,11 @@ public class InputField extends BorderPane {
         this.setCursor(Cursor.TEXT);
     }
 
+    /**
+     * This is an ugly workaround to fix JavaFX's focusing.
+     * Management of focus is passed to this (container),
+     * instead of the actual text field.
+     */
     public void enableManualActivation() {
         this.textField.setFocusTraversable(false);
         this.setOnMousePressed(event -> {

@@ -87,7 +87,7 @@ public class SimpleListMember extends ToggleButton {
     @Override
     public void executeOnClick(MouseEvent event) {
         if (event.getButton() == MouseButton.PRIMARY) {
-            listable.onButtonClick();
+            listable.onSelect();
         } else {
             if (listable instanceof CountdownFolder)
                 FolderRCM.spawnInstance(event.getSceneX(), event.getSceneY());

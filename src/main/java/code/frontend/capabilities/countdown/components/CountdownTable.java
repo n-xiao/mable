@@ -82,6 +82,7 @@ public class CountdownTable extends ScrollPane {
         this.setContent(this.FLOW_PANE);
     }
 
+    @Deprecated
     public static CountdownTable getInstance() {
         if (cpv == null) {
             cpv = new CountdownTable();

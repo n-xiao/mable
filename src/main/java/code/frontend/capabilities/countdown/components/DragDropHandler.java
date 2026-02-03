@@ -34,6 +34,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Rotate;
 
+// TODO: CLEANUP
+@Deprecated
 public class DragDropHandler extends Region {
     private static final MainContainer MC = MainContainer.getInstance();
     private static DragDropHandler instance = null;
@@ -64,7 +66,7 @@ public class DragDropHandler extends Region {
     }
 
     public static void close() {
-        Sidebar.getInstance().getRemovePane().sleep();
+        // Sidebar.getInstance().getRemovePane().sleep();
         if (instance == null)
             return;
         MC.getChildren().remove(instance);
@@ -106,7 +108,7 @@ public class DragDropHandler extends Region {
         this.setViewOrder(-200);
 
         populateStack();
-        Sidebar.getInstance().getRemovePane().wake();
+        // Sidebar.getInstance().getRemovePane().wake();
 
         this.getChildren().add(this.CONTAINER);
     }

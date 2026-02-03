@@ -18,11 +18,16 @@
 
 package code.frontend.capabilities.countdown.components;
 
+import code.backend.utils.FolderHandler;
 import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.graphics.CustomLine;
 import code.frontend.libs.katlaf.graphics.CustomLine.Type;
 import code.frontend.libs.katlaf.inputfields.InputField;
+import code.frontend.libs.katlaf.inputfields.SearchField;
+import code.frontend.libs.katlaf.lists.Listable;
+import code.frontend.libs.katlaf.lists.SearchableList;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
+import java.util.ArrayList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -32,31 +37,37 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 public class Sidebar extends VBox {
-    private static Sidebar instance = null;
-
-    private final SidebarFolders FOLDER_SELECTOR;
-
     private Sidebar() {
-        this.FOLDER_SELECTOR = SidebarFolders.getInstance();
-
         this.setBackground(RiceHandler.createBG(RiceHandler.getColour("background2"), 0, 0));
         this.setFillWidth(true);
     }
 
+    /*
+
+
+     SINGLETON INSTANTIATOR
+    -------------------------------------------------------------------------------------*/
+    private static Sidebar instance = null;
+
     public static Sidebar getInstance() {
         if (instance == null) {
             instance = new Sidebar();
-            SectionHeading folderHeading = instance.new SectionHeading("Your folders");
-            instance.getChildren().addAll(folderHeading, instance.FOLDER_SELECTOR);
-            VBox.setMargin(folderHeading, new Insets(20, 0, 0, 0));
-            VBox.setMargin(instance.FOLDER_SELECTOR, new Insets(0, 10, 5, 10));
 
-            instance.setOnMousePressed((event) -> {
+            final SectionHeading folderHeading = instance.new SectionHeading("Your Folders");
+            final FolderList folderList = instance.new FolderList();
+            final FolderSearchField folderSearchField = instance.new FolderSearchField(folderList);
+            instance.getChildren().addAll(folderHeading, folderSearchField, folderList);
+
+            VBox.setMargin(folderHeading, new Insets(20, 0, 0, 0));
+            VBox.setMargin(folderList, new Insets(0, 10, 5, 10));
+
+            instance.setOnMousePressed((event) -> { // implements click-empty-space-to-deselect
                 InputField.escapeAllInputs();
                 CountdownTable.getInstance().deselectAll();
                 instance.requestFocus();
             });
         }
+
         return instance;
     }
 
@@ -66,8 +77,29 @@ public class Sidebar extends VBox {
      COMPOSITIONS
     -------------------------------------------------------------------------------------*/
 
+    private class FolderSearchField extends SearchField {
+        FolderSearchField(FolderList folderList) {
+            super(folderList);
+            this.setMaxWidth(Double.MAX_VALUE);
+            this.setMinHeight(10);
+        }
+    }
+
+    private class FolderList extends SearchableList {
+        private static final int PREF_HEIGHT = 600;
+        private static final int MIN_HEIGHT = 300;
+
+        FolderList() {
+            super(new ArrayList<Listable>(FolderHandler.getFolders()));
+            this.setHideBadMatches(true);
+            this.setPrefHeight(PREF_HEIGHT);
+            this.setMinHeight(MIN_HEIGHT);
+        }
+    }
+
     private class SectionHeading extends HBox {
-        final int MIN_HEIGHT = 20;
+        private final static int MIN_HEIGHT = 20;
+
         SectionHeading(String text) {
             this.setMinHeight(MIN_HEIGHT);
             this.maxWidthProperty().bind(instance.widthProperty());

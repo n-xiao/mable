@@ -159,7 +159,7 @@ public class CountdownFolder extends Identifiable implements Listable {
     }
 
     @Override
-    public void onButtonClick() {
+    public void onSelect() {
         FolderHandler.setCurrentlySelectedFolder(this);
     }
 

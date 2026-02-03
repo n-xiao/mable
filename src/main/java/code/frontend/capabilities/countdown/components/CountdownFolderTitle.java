@@ -42,6 +42,7 @@ public class CountdownFolderTitle extends VBox {
         this.getChildren().addAll(this.LABEL, createHorizontalLine());
     }
 
+    @Deprecated
     public static CountdownFolderTitle getInstance() {
         if (instance == null) {
             instance = new CountdownFolderTitle();

@@ -39,7 +39,7 @@ public interface Listable extends Comparable<Listable> {
      * button is now selected in a {@link SimpleList}
      *
      */
-    public void onButtonClick();
+    public void onSelect();
 
     /**
      * This method is used to verify a current selection through the backend, instead of

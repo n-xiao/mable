@@ -51,6 +51,10 @@ public class SimpleList extends BorderedRegion {
         scrollPane.setContent(content);
         this.getChildren().add(scrollPane);
         VBox.setVgrow(this, Priority.ALWAYS);
+
+        this.listables.sort(null);
+        repopulate();
+        refreshOrder();
     }
 
     /*

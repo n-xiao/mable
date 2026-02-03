@@ -17,7 +17,7 @@ public class DragDropOverlay extends Region {
     }
 
     private final DragStarter<?> dragStarter;
-    protected static DragStarter<?> getDragStarter() {
-        return activeOverlay == null ? null : activeOverlay.dragStarter;
+    protected static <E> boolean checkMatchingTypes(Class<? extends E> c) {
+        return activeOverlay.dragStarter.getData().getClass().equals(c);
     }
 }

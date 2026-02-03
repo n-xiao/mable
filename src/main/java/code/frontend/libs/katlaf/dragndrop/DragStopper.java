@@ -1,10 +1,11 @@
 package code.frontend.libs.katlaf.dragndrop;
 
-public interface DragStopper<T> {
-    void onDragStop(T data);
+public interface DragStopper {
+    void onDragStop();
     void onDragHover();
+    Class<?> getExpectedType();
 
-    default boolean verifyOverlay() {
-        return DragDropOverlay.getDragStarter().getData() instanceof T;
+    default boolean isAccepting() {
+        return DragDropOverlay.checkMatchingTypes(getExpectedType());
     }
 }

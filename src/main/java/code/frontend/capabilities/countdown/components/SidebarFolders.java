@@ -53,6 +53,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
+@Deprecated
 public class SidebarFolders extends VBox {
     private static final int PREF_HEIGHT = 600;
     private static final int MIN_HEIGHT = 300;

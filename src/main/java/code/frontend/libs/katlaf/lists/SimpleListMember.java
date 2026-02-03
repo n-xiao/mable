@@ -44,6 +44,12 @@ public class SimpleListMember extends ToggleButton {
         VBox.setMargin(this, new Insets(3, 2.5, 5, 2.5));
     }
 
+    /*
+
+
+     PROTECTED API
+    -------------------------------------------------------------------------------------*/
+
     /**
      * Updates the styling of this {@link SimpleListMember} based on
      * verification from the backend.
@@ -55,14 +61,11 @@ public class SimpleListMember extends ToggleButton {
             this.untoggle();
     }
 
-    @Override
-    public void executeOnClick(MouseEvent event) {
-        if (event.getButton() == MouseButton.PRIMARY) {
-            listable.onButtonClick();
-        } else {
-            if (listable instanceof CountdownFolder)
-                FolderRCM.spawnInstance(event.getSceneX(), event.getSceneY());
-        }
+    /**
+     * @return the {@link Listable} associated with this {@link SimpleListMember}.
+     */
+    protected final Listable getListable() {
+        return listable;
     }
 
     @Override
@@ -75,7 +78,20 @@ public class SimpleListMember extends ToggleButton {
         return RiceHandler.getColour();
     }
 
-    protected Listable getListable() {
-        return listable;
+    /*
+
+
+     PUBLIC API
+    -------------------------------------------------------------------------------------*/
+
+    @Override
+    public void executeOnClick(MouseEvent event) {
+        if (event.getButton() == MouseButton.PRIMARY) {
+            listable.onButtonClick();
+        } else {
+            if (listable instanceof CountdownFolder)
+                FolderRCM.spawnInstance(event.getSceneX(), event.getSceneY());
+        }
     }
+    // TODO: implement drag and drop reordering functionality
 }

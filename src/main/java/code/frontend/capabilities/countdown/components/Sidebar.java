@@ -34,15 +34,11 @@ import javafx.scene.layout.VBox;
 public class Sidebar extends VBox {
     private static Sidebar instance = null;
 
-    private final SidebarStats STATS;
     private final SidebarFolders FOLDER_SELECTOR;
-    private final CountdownRemover HOVER_REMOVE_PANE;
 
     private Sidebar() {
-        this.STATS = SidebarStats.getInstance();
         this.FOLDER_SELECTOR = SidebarFolders.getInstance();
 
-        this.HOVER_REMOVE_PANE = CountdownRemover.applyTo(STATS);
         this.setBackground(RiceHandler.createBG(RiceHandler.getColour("background2"), 0, 0));
         this.setFillWidth(true);
     }
@@ -50,12 +46,8 @@ public class Sidebar extends VBox {
     public static Sidebar getInstance() {
         if (instance == null) {
             instance = new Sidebar();
-            HBox hudHeading = createSectionHeading("H. U. D.");
-            HBox folderHeading = createSectionHeading("Folders");
-            instance.getChildren().addAll(
-                hudHeading, instance.STATS, folderHeading, instance.FOLDER_SELECTOR);
-            VBox.setMargin(hudHeading, new Insets(10, 0, 0, 0));
-            VBox.setMargin(instance.STATS, new Insets(0, 10, 10, 10));
+            SectionHeading folderHeading = instance.new SectionHeading("Your folders");
+            instance.getChildren().addAll(folderHeading, instance.FOLDER_SELECTOR);
             VBox.setMargin(folderHeading, new Insets(20, 0, 0, 0));
             VBox.setMargin(instance.FOLDER_SELECTOR, new Insets(0, 10, 5, 10));
 
@@ -68,49 +60,49 @@ public class Sidebar extends VBox {
         return instance;
     }
 
-    private static HBox createSectionHeading(String text) {
+    /*
+
+
+     COMPOSITIONS
+    -------------------------------------------------------------------------------------*/
+
+    private class SectionHeading extends HBox {
         final int MIN_HEIGHT = 20;
+        SectionHeading(String text) {
+            this.setMinHeight(MIN_HEIGHT);
+            this.maxWidthProperty().bind(instance.widthProperty());
+            this.setBackground(null);
+            this.setFillHeight(true);
 
-        HBox divider = new HBox();
-        divider.setMinHeight(MIN_HEIGHT);
-        divider.maxWidthProperty().bind(instance.widthProperty());
-        divider.setBackground(null);
-        divider.setFillHeight(true);
+            Label label = new Label(text);
+            label.setTextFill(RiceHandler.getColour("txtGhost2"));
+            label.setFont(FontHandler.getHeading(3));
+            label.maxHeightProperty().bind(this.heightProperty());
+            label.setAlignment(Pos.CENTER);
+            HBox.setMargin(label, new Insets(0, 5, 0, 5));
 
-        Label label = new Label(text);
-        label.setTextFill(RiceHandler.getColour("txtGhost2"));
-        label.setFont(FontHandler.getHeading(3));
-        label.maxHeightProperty().bind(divider.heightProperty());
-        label.setAlignment(Pos.CENTER);
-        HBox.setMargin(label, new Insets(0, 5, 0, 5));
+            Pane leftLine = new HorizontalLine();
+            leftLine.setMinHeight(MIN_HEIGHT);
+            leftLine.setMaxWidth(16);
+            leftLine.setMinWidth(16);
 
-        Pane leftLine = createHorizontalLine();
-        leftLine.setMinHeight(MIN_HEIGHT);
-        leftLine.setMaxWidth(16);
-        leftLine.setMinWidth(16);
+            Pane rightLine = new HorizontalLine();
+            rightLine.setMinHeight(MIN_HEIGHT);
+            rightLine.maxWidthProperty().bind(this.widthProperty());
+            rightLine.setVisible(false); // one day, a user setting can make this true :D
 
-        Pane rightLine = createHorizontalLine();
-        rightLine.setMinHeight(MIN_HEIGHT);
-        rightLine.maxWidthProperty().bind(divider.widthProperty());
-        rightLine.setVisible(false); // one day, a user setting can make this true :D
-
-        divider.getChildren().addAll(leftLine, label, rightLine);
-
-        return divider;
+            this.getChildren().addAll(leftLine, label, rightLine);
+        }
     }
 
-    private static Pane createHorizontalLine() {
-        Pane lineContainer = new Pane();
-        lineContainer.setBackground(null);
-        CustomLine line = new CustomLine(3, Type.HORIZONTAL_TYPE);
-        line.setStrokeColour(RiceHandler.getColour("txtGhost2"));
-        CustomLine.applyToPane(lineContainer, line);
-        HBox.setHgrow(lineContainer, Priority.ALWAYS);
-        lineContainer.setOpacity(0.5);
-        return lineContainer;
-    }
-
-    public CountdownRemover getRemovePane() {
-        return HOVER_REMOVE_PANE;
+    private class HorizontalLine extends Pane {
+        HorizontalLine() {
+            this.setBackground(null);
+            CustomLine line = new CustomLine(3, Type.HORIZONTAL_TYPE);
+            line.setStrokeColour(RiceHandler.getColour("txtGhost2"));
+            CustomLine.applyToPane(this, line);
+            HBox.setHgrow(this, Priority.ALWAYS);
+            this.setOpacity(0.5);
+        }
     }
 }

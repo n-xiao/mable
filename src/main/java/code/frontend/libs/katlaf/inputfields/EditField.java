@@ -38,13 +38,13 @@ import javafx.util.Duration;
  * located directly below the {@link InputField}.
  *
  * This UI component manages its own removal; its parent
- * should be provided so that {@link SimpleEditField}
+ * should be provided so that {@link EditField}
  * is able to remove itself.
  */
-public class SimpleEditField extends Region {
-    public SimpleEditField(Pane parent) {
+public class EditField extends Region {
+    public EditField(Pane parent) {
         this.parent = parent;
-        this.field = new EditField();
+        this.field = new InnerEditField();
         this.errorLabel = new ErrorLabel();
         final Container container = new Container();
         container.getChildren().addAll(this.errorLabel, this.field, new ButtonContainer());
@@ -58,7 +58,7 @@ public class SimpleEditField extends Region {
     private final Pane parent;
 
     /**
-     * Removes this {@link SimpleEditField} instance from
+     * Removes this {@link EditField} instance from
      * the parent Node.
      */
     private void removeSelf() {
@@ -143,13 +143,13 @@ public class SimpleEditField extends Region {
 
      COMPOSITIONS
     -------------------------------------------------------------------------------------*/
-    private final EditField field;
+    private final InnerEditField field;
 
-    private class EditField extends InputField {
-        private EditField() {
+    private class InnerEditField extends InputField {
+        private InnerEditField() {
             super();
             this.getTextField().setOnKeyTyped((event) -> {
-                SimpleEditField.this.errorLabel.fadeOut();
+                EditField.this.errorLabel.fadeOut();
                 onInput(event.getText());
             });
             this.getTextField().setOnAction(
@@ -166,7 +166,7 @@ public class SimpleEditField extends Region {
         }
         @Override
         public void executeOnClick(MouseEvent event) {
-            final String input = SimpleEditField.this.field.getTextField().getText();
+            final String input = EditField.this.field.getTextField().getText();
             confirmWith(input);
         }
     }
@@ -178,7 +178,7 @@ public class SimpleEditField extends Region {
         }
         @Override
         public void executeOnClick(MouseEvent event) {
-            SimpleEditField.this.removeSelf();
+            EditField.this.removeSelf();
         }
     }
 
@@ -186,7 +186,7 @@ public class SimpleEditField extends Region {
         private ButtonContainer() {
             this.setBackground(null);
             this.setFillHeight(true);
-            this.prefWidthProperty().bind(SimpleEditField.this.widthProperty());
+            this.prefWidthProperty().bind(EditField.this.widthProperty());
             this.minHeight(20);
             final AcceptButton accept = new AcceptButton();
             final CancelButton cancel = new CancelButton();
@@ -224,13 +224,13 @@ public class SimpleEditField extends Region {
     }
 
     /**
-     * This is the main container of a {@link SimpleEditField}.
+     * This is the main container of a {@link EditField}.
      */
     private class Container extends VBox {
         private Container() {
             this.setBackground(null);
-            this.prefWidthProperty().bind(SimpleEditField.this.widthProperty());
-            this.prefHeightProperty().bind(SimpleEditField.this.heightProperty());
+            this.prefWidthProperty().bind(EditField.this.widthProperty());
+            this.prefHeightProperty().bind(EditField.this.heightProperty());
             this.setFillWidth(true);
         }
     }

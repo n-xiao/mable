@@ -19,9 +19,10 @@
 package code.frontend.libs.katlaf.lists;
 
 /**
- * This interface is used to facilitate the communication between backend
- * and frontend components. A backend component that is Listable
- * can be represented in a {@link SimpleList}, as a {@link SimpleListMember}
+ * An abstract representation of a (backend) component,
+ * such as a {@link code.backend.data.CountdownFolder},
+ * such that it can be represented as a {@link SimpleListMember}
+ * in a {@link SimpleList}.
  */
 public interface Listable extends Comparable<Listable> {
     /**

@@ -22,46 +22,20 @@ import code.frontend.libs.katlaf.inputfields.SearchableUI;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+/**
+ * A list UI component which responds to changes in a
+ * {@link code.frontend.libs.katlaf.inputfields.SearchField}
+ *
+ * The members of this list would be rearranged, and possibly,
+ * hidden based on comparisons made through the use of a
+ * Levenshtein distance algorithm.
+ */
 public class SearchableList extends SimpleList implements SearchableUI {
     private boolean hideBadMatches;
 
     public SearchableList(ArrayList<Listable> listables) {
         super(listables);
         this.hideBadMatches = false;
-    }
-
-    /*
-
-
-     IMPLEMENTATIONS
-    -------------------------------------------------------------------------------------*/
-
-    @Override
-    public void onSearchChange(String search) {
-        if (search.isEmpty()) {
-            repopulate();
-            return;
-        }
-
-        this.getListables().sort(new Comparator<Listable>() {
-            @Override // sort by levenstein dist
-            public int compare(Listable o1, Listable o2) {
-                return getLevenshteinDistance(o1.getDisplayString(), search)
-                    - getLevenshteinDistance(o2.getDisplayString(), search);
-            }
-        });
-
-        if (hideBadMatches) { // do not add bad matches
-            resetNextListable();
-            this.getListables().forEach(listable -> {
-                if (!isBadMatch(listable, search))
-                    addNextListable();
-                else
-                    nextListable();
-            });
-        } else {
-            repopulate();
-        }
     }
 
     /*
@@ -126,7 +100,52 @@ public class SearchableList extends SimpleList implements SearchableUI {
      PUBLIC API
     -------------------------------------------------------------------------------------*/
 
+    /**
+     * Bad matches for the Levenshtein distance algorithm
+     * imply that all characters of the {@link Listable}
+     * display string needs to be removed or replaced.
+     * By default, hideBadMatches is `false`.
+     */
     public void setHideBadMatches(boolean hideBadMatches) {
         this.hideBadMatches = hideBadMatches;
+    }
+
+    /**
+     * This method is executed whenever there is a change in the
+     * {@link code.frontend.libs.katlaf.inputfields.SearchField}
+     * that holds its reference to this {@link SearchableList}.
+     *
+     * If `search` is empty, this will be repopulated.
+     * Otherwise, this list will be sorted using the
+     * Levenshtein distance algorithm. If a {@link Listable}
+     * is a bad match, and `hideBadMatches` is set to `true` it,
+     * will be hidden.
+     */
+    @Override
+    public void onSearchChange(String search) {
+        if (search.isEmpty()) {
+            repopulate();
+            return;
+        }
+
+        this.getListables().sort(new Comparator<Listable>() {
+            @Override // sort by levenstein dist
+            public int compare(Listable o1, Listable o2) {
+                return getLevenshteinDistance(o1.getDisplayString(), search)
+                    - getLevenshteinDistance(o2.getDisplayString(), search);
+            }
+        });
+
+        if (hideBadMatches) { // do not add bad matches
+            resetNextListable();
+            this.getListables().forEach(listable -> {
+                if (!isBadMatch(listable, search))
+                    addNextListable();
+                else
+                    nextListable();
+            });
+        } else {
+            repopulate();
+        }
     }
 }

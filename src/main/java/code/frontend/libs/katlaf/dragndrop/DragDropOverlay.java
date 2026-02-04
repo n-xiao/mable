@@ -92,6 +92,10 @@ final class DragDropOverlay extends Region {
         activeOverlay = null;
     }
 
+    public static boolean isActive() {
+        return activeOverlay != null;
+    }
+
     /**
      * A method which compares the class of the data that is being
      * transferred by the current drag and drop process with a provided

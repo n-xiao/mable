@@ -111,6 +111,17 @@ public class SimpleList extends BorderedRegion {
         return this.listables;
     }
 
+    /**
+     * This method creates a new {@link SimpleListMember}. It can be overriden
+     * to return child classes of {@link SimpleListMember} for extended
+     * functionality.
+     *
+     * @return a {@link SimpleListMember}
+     */
+    protected SimpleListMember newMember(Listable listable) {
+        return new SimpleListMember(listable);
+    }
+
     /*
 
 
@@ -137,7 +148,7 @@ public class SimpleList extends BorderedRegion {
      */
     public final void addNextListable() {
         if (hasNextListable())
-            content.getChildren().add(new SimpleListMember(listableIterator.next()));
+            content.getChildren().add(newMember(listableIterator.next()));
     }
 
     /**
@@ -147,7 +158,7 @@ public class SimpleList extends BorderedRegion {
      */
     public final void pushNewListable(Listable listable) {
         listables.addFirst(listable);
-        content.getChildren().addFirst(new SimpleListMember(listable));
+        content.getChildren().addFirst(newMember(listable));
         refreshOrder();
     }
 
@@ -158,7 +169,7 @@ public class SimpleList extends BorderedRegion {
      */
     public final void appendNewListable(Listable listable) {
         listables.addLast(listable);
-        content.getChildren().addLast(new SimpleListMember(listable));
+        content.getChildren().addLast(newMember(listable));
         refreshOrder();
     }
 
@@ -184,7 +195,7 @@ public class SimpleList extends BorderedRegion {
         clearContent();
         listables.sort(null);
         for (Listable listable : listables) {
-            content.getChildren().add(new SimpleListMember(listable));
+            content.getChildren().add(newMember(listable));
         }
     }
 

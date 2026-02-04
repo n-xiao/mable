@@ -26,11 +26,19 @@ import javafx.scene.layout.Region;
  */
 public interface DragStarter<T> {
     /**
-     * This will be called by {@link DragDropOverlay} when
-     * a drag action starts. This method does not need to
+     * This will be called when a drag action starts. This method does not need to
      * do anything.
      */
     void onDragStart();
+
+    /**
+     * This will be called be called whenever a drag
+     * action ends. Note that this could mean a successful drag
+     * or an unsuccessful drag. This method should be used to
+     * revert any temporary stylings made to the UI componenet(s)
+     * that were being dragged.
+     */
+    void onDragEnd();
 
     /**
      * Gets the data that is being transferred.

@@ -26,15 +26,28 @@ import javafx.scene.layout.Region;
  * with drag (starting) functionality. The generic
  * type should be the backend component that this
  * drag and drop operation is "transferring".
+ *
+ * Using this class as an inner class would be the
+ * preferred approach; bind the height and width of
+ * this to the parent. This preserves the meaning of
+ * classes without them all turning into Regions.
  */
 public abstract class DragStartRegion<T> extends Region implements DragStarter<T> {
     public DragStartRegion() {
         this.setBackground(null);
+        // init listener for drag starts
         this.setOnDragDetected((event) -> {
             RightClickMenu.despawnAll();
             this.startFullDrag();
             DragDropOverlay.spawnOverlay(this);
             onDragStart();
+        });
+        // init listener for drag stops
+        this.setOnMouseReleased((event) -> {
+            if (DragDropOverlay.isActive()) {
+                DragDropOverlay.killOverlay();
+                onDragEnd();
+            }
         });
     }
 }

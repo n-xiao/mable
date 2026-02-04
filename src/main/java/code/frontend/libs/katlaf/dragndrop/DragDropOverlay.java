@@ -32,7 +32,7 @@ import javafx.scene.layout.Region;
  * whilst dragging and dropping something. Hence that case
  * will not be handled unless enough geniuses convince me otherwise.
  */
-public final class DragDropOverlay extends Region {
+final class DragDropOverlay extends Region {
     private static DragDropOverlay activeOverlay = null; // max of one instance should exist
     private final DragStarter<?> dragStarter;
 

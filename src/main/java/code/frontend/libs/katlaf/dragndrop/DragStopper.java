@@ -18,6 +18,8 @@
 
 package code.frontend.libs.katlaf.dragndrop;
 
+import javafx.scene.input.MouseDragEvent;
+
 public interface DragStopper {
     /**
      * This method is called when the mouse is released
@@ -26,7 +28,7 @@ public interface DragStopper {
      * a convenience method, and could be implemented
      * to do nothing.
      */
-    void onDragStop();
+    void onDragStop(MouseDragEvent event);
 
     /**
      * This method is called whenever the mouse, while
@@ -34,15 +36,29 @@ public interface DragStopper {
      * enters this {@link DragStopper}. This is a
      * convenience method which can be used to
      * implement special highlighting or styling to
-     * provide visual indications.
+     * provide visual indicators.
+     *
+     * The MouseDragEvent is passed to this method via
+     * its parameter.
      *
      * Tip: you an use the isAccepting() method to check
      * if the current drag and drop process is transferring
      * data of relevance to this {@link DragStopper}.
      */
-    void onDragEnter();
+    void onDragEnter(MouseDragEvent event);
 
-    void onDragExit();
+    /**
+     * This method is called whenver the the mouse,
+     * while dragging with an active {@link DragDropOverlay},
+     * exits this {@link DragStopper}. This is a convenience
+     * method which can be used to implement
+     * special highlighting or styling to provide
+     * visual indicators.
+     *
+     * The MouseDragEvent is passed to this method via
+     * its parameter.
+     */
+    void onDragExit(MouseDragEvent event);
 
     /**
      * It is the implementor's responsibility to specify

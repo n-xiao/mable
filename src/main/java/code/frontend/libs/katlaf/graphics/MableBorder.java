@@ -114,9 +114,17 @@ public class MableBorder extends ResizableCanvas {
         super.resizeAndDraw(true);
     }
 
+    public double getMessiness() {
+        return messiness;
+    }
+
     public void setThickness(double thickness) {
         this.thickness = thickness;
         super.resizeAndDraw(true);
+    }
+
+    public double getThickness() {
+        return thickness;
     }
 
     public void setCornerRadii(double cornerRadii) {
@@ -124,9 +132,14 @@ public class MableBorder extends ResizableCanvas {
         super.resizeAndDraw(true);
     }
 
+    public double getCornerRadii() {
+        return cornerRadii;
+    }
+
     public double getPaddingDist() {
         return this.thickness * (this.messiness + 1);
     }
+
     private double getPaddedHeight() {
         return this.getHeight() - 2 * getPaddingDist();
     }

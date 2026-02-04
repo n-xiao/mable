@@ -29,7 +29,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-public class SimpleListMember extends ToggleButton {
+class SimpleListMember extends ToggleButton {
     private final Listable listable;
 
     protected SimpleListMember(Listable listable) {

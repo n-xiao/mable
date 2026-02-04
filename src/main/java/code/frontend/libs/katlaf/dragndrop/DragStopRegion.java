@@ -23,8 +23,8 @@ import javafx.scene.layout.Region;
 public abstract class DragStopRegion extends Region implements DragStopper {
     public DragStopRegion() {
         this.setBackground(null);
-        this.setOnMouseDragEntered(event -> onDragEnter(event));
-        this.setOnMouseDragExited(event -> onDragExit(event));
+        this.setOnMouseDragEntered(event -> onDragRegionEnter(event));
+        this.setOnMouseDragExited(event -> onDragRegionExit(event));
         this.setOnMouseDragReleased(event -> onDragStop(event));
     }
 }

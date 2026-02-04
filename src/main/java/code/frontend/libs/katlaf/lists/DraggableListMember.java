@@ -18,11 +18,20 @@
 
 package code.frontend.libs.katlaf.lists;
 
+import code.backend.data.CountdownFolder;
 import code.frontend.libs.katlaf.dragndrop.DragStartRegion;
+import code.frontend.libs.katlaf.dragndrop.DragStarter;
+import code.frontend.libs.katlaf.dragndrop.DragStopRegion;
 import code.frontend.libs.katlaf.graphics.BorderedRegion;
+import code.frontend.libs.katlaf.graphics.CustomLine;
+import code.frontend.libs.katlaf.graphics.CustomLine.Type;
+import code.frontend.libs.katlaf.ricing.RiceHandler;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
-public abstract class DraggableListMember<T> extends SimpleListMember {
+abstract class DraggableListMember<T extends Listable> extends SimpleListMember {
     public DraggableListMember(Listable listable) {
         super(listable);
         // create and attach the dragDetector
@@ -31,8 +40,6 @@ public abstract class DraggableListMember<T> extends SimpleListMember {
             (event) -> dragDetector.resizeRelocate(0, 0, this.getWidth(), this.getHeight()));
         this.heightProperty().addListener(
             (event) -> dragDetector.resizeRelocate(0, 0, this.getWidth(), this.getHeight()));
-        dragDetector.setManaged(false);
-        dragDetector.setViewOrder(-10);
         this.getChildren().add(dragDetector);
     }
 
@@ -42,7 +49,17 @@ public abstract class DraggableListMember<T> extends SimpleListMember {
      PUBLIC API
     -------------------------------------------------------------------------------------*/
 
+    /**
+     * This method exposes {@link DragStarter#getData()} to the
+     * implementor of this {@link DraggableListMember}
+     */
     abstract T getData();
+
+    /**
+     * This method exposes {@link DragStopRegion#getExpectedType()} to the
+     * implementor of this {@link DraggableListMember}
+     */
+    abstract Class<? extends Listable> getExpectedType();
 
     /*
 
@@ -51,6 +68,12 @@ public abstract class DraggableListMember<T> extends SimpleListMember {
     -------------------------------------------------------------------------------------*/
 
     private class DragDetector extends DragStartRegion<T> {
+        DragDetector() {
+            this.setOpacity(0);
+            this.setManaged(false);
+            this.setViewOrder(-10);
+        }
+
         @Override
         public T getData() {
             return DraggableListMember.this.getData(); // other guy's problem haha
@@ -76,6 +99,113 @@ public abstract class DraggableListMember<T> extends SimpleListMember {
                 super(1.5, 0.8, 0.1);
                 this.setPrefSize(90, 15);
                 // TODO properly later
+            }
+        }
+    }
+
+    private class DropDetector extends DragStopRegion {
+        DropDetector() {
+            this.setOpacity(0);
+            this.setManaged(false);
+            this.setViewOrder(-11);
+        }
+
+        @Override
+        public void onDragStop(MouseDragEvent event) {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public void onDragRegionEnter(MouseDragEvent event) {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public void onDragRegionExit(MouseDragEvent event) {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public Class<? extends Listable> getExpectedType() {
+            return DraggableListMember.this.getExpectedType();
+        }
+    }
+
+    /**
+     * When the user is hovering over this instance whilst
+     * dragging another {@link DraggableListMember}, the
+     * {@link PlacementHelper} is the UI component that
+     * facilitates highlighting that is shown inbetween
+     * members to represent where the new position of
+     * the {@link DraggableListMember} would be if it
+     * were to be dropped.
+     */
+    private class PlacementHelper extends VBox {
+        final Color highlight;
+        PlacementHelper() {
+            this.setBackground(null);
+            this.setViewOrder(-12);
+            this.highlight = RiceHandler.getColour("hoverDragndrop");
+        }
+
+        class UpperLineGuide extends LineGuide {
+            @Override
+            public void onDragStop(MouseDragEvent event) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            void positionLine(CustomLine line) {
+                line.resizeRelocate(
+                    0, 0, PlacementHelper.this.getWidth(), PlacementHelper.this.getHeight());
+            }
+        }
+
+        class LowerLineGuide extends LineGuide {
+            @Override
+            public void onDragStop(MouseDragEvent event) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            void positionLine(CustomLine line) {
+                line.resizeRelocate(0, PlacementHelper.this.getHeight() - 3,
+                    PlacementHelper.this.getWidth(), PlacementHelper.this.getHeight());
+            }
+        }
+
+        abstract class LineGuide extends DragStopRegion {
+            LineGuide() {
+                this.setBackground(null);
+                this.setOpacity(0);
+                this.prefWidthProperty().bind(PlacementHelper.this.widthProperty());
+                this.setMinHeight(3);
+                CustomLine line = new CustomLine(2, Type.HORIZONTAL_TYPE);
+                line.setStrokeColour(PlacementHelper.this.highlight);
+                this.opacityProperty().addListener(
+                    (observable, oldValue, newValue) -> { positionLine(line); });
+            }
+
+            /**
+             * Varies based on whether this instance represents the bottom or
+             * top of a {@link DraggableListMember}.
+             */
+            abstract void positionLine(CustomLine line);
+
+            @Override
+            public Class<? extends Listable> getExpectedType() {
+                return Listable.class;
+            }
+
+            @Override
+            public void onDragRegionEnter(MouseDragEvent event) {
+                if (isAccepting())
+                    this.setOpacity(1);
+            }
+
+            @Override
+            public void onDragRegionExit(MouseDragEvent event) {
+                this.setOpacity(0);
             }
         }
     }

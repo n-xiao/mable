@@ -18,6 +18,7 @@
 
 package code.frontend.libs.katlaf.dragndrop;
 
+import code.frontend.libs.katlaf.lists.Listable;
 import javafx.scene.input.MouseDragEvent;
 
 public interface DragStopper {
@@ -45,7 +46,7 @@ public interface DragStopper {
      * if the current drag and drop process is transferring
      * data of relevance to this {@link DragStopper}.
      */
-    void onDragEnter(MouseDragEvent event);
+    void onDragRegionEnter(MouseDragEvent event);
 
     /**
      * This method is called whenver the the mouse,
@@ -58,7 +59,7 @@ public interface DragStopper {
      * The MouseDragEvent is passed to this method via
      * its parameter.
      */
-    void onDragExit(MouseDragEvent event);
+    void onDragRegionExit(MouseDragEvent event);
 
     /**
      * It is the implementor's responsibility to specify
@@ -68,7 +69,7 @@ public interface DragStopper {
      *
      * @return the expected Class
      */
-    Class<?> getExpectedType();
+    Class<? extends Listable> getExpectedType();
 
     /**
      * A check to see if this {@link DragStopper} can accept

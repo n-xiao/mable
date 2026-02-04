@@ -104,8 +104,12 @@ final class DragDropOverlay extends Region {
      * @return true if the class of the data is equal to the provided class.
      */
     protected static <E> boolean checkMatchingTypes(Class<? extends E> c) {
-        if (activeOverlay.dragStarter == null || activeOverlay.dragStarter.getData() == null)
+        if (getDragStarter().getData() == null)
             return false; // if null checks fail
         return activeOverlay.dragStarter.getData().getClass().equals(c);
+    }
+
+    private static DragStarter<?> getDragStarter() {
+        return activeOverlay != null ? activeOverlay.dragStarter : null;
     }
 }

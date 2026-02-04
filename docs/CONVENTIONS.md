@@ -6,5 +6,11 @@ so I don't violate my own conventions for now (lol).
 - Class field declarations should always go before its first reference.
 - Prefer composition over hack-ish methods/functions that make edits to classes.
 
+- PUBLIC API
+- PROTECTED API
+- BEHAVIOUR
+- STYLING
+- UTILITIES
+
 
 <sub>Copyright © 2026 Nicholas Siow  <nxiao.dev@gmail.com> </sub>

@@ -93,5 +93,4 @@ class SimpleListMember extends ToggleButton {
                 FolderRCM.spawnInstance(event.getSceneX(), event.getSceneY());
         }
     }
-    // TODO: implement drag and drop reordering functionality
 }

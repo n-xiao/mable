@@ -24,7 +24,7 @@ import javafx.scene.layout.Region;
  * An abstract representation of a UI component that can be dragged (and dropped)
  * by the user.
  */
-public interface DragStarter<T extends Comparable<?>> {
+public interface DragStarter<T> {
     /**
      * This will be called when a drag action starts. This method does not need to
      * do anything.

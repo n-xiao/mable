@@ -32,8 +32,7 @@ import javafx.scene.layout.Region;
  * this to the parent. This preserves the meaning of
  * classes without them all turning into Regions.
  */
-public abstract class DragStartRegion<T extends Comparable<?>>
-    extends Region implements DragStarter<T> {
+public abstract class DragStartRegion<T> extends Region implements DragStarter<T> {
     public DragStartRegion() {
         this.setBackground(null);
         // init listener for drag starts

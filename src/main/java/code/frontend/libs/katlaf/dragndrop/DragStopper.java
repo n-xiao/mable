@@ -18,10 +18,9 @@
 
 package code.frontend.libs.katlaf.dragndrop;
 
-import code.frontend.libs.katlaf.lists.Listable;
 import javafx.scene.input.MouseDragEvent;
 
-public interface DragStopper {
+public interface DragStopper<T> {
     /**
      * This method is called when the mouse is released
      * whilst hovering over this {@link DragStopper},
@@ -69,7 +68,7 @@ public interface DragStopper {
      *
      * @return the expected Class
      */
-    Class<? extends Listable> getExpectedType();
+    Class<? extends T> getExpectedType();
 
     /**
      * A check to see if this {@link DragStopper} can accept

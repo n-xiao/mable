@@ -119,6 +119,7 @@ public class CountdownFolder extends Identifiable implements Listable {
     }
 
     @JsonProperty("listIndex")
+    @Override
     public int getListIndex() {
         return listIndex;
     }

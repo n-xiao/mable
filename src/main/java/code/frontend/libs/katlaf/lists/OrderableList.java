@@ -25,10 +25,16 @@ public abstract class OrderableList<T extends Listable> extends SearchableList {
         super(listables);
     }
 
-    abstract DraggableListMember<T> newDraggableMember(Listable listable);
+    abstract DraggableListMember newDraggableMember(Listable listable);
 
     @Override
     protected SimpleListMember newMember(Listable listable) {
         return newDraggableMember(listable);
+    }
+
+    protected void reorderMember(final Listable listable, final int index) {
+        this.getListables().remove(listable);
+        this.getListables().add(index, listable);
+        refreshOrder();
     }
 }

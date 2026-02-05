@@ -64,4 +64,6 @@ public interface Listable extends Comparable<Listable> {
      * implemented with persistent storage.
      */
     public void setListIndex(int index);
+
+    public int getListIndex();
 }

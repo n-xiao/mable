@@ -18,9 +18,7 @@
 
 package code.frontend.libs.katlaf.lists;
 
-import code.backend.data.CountdownFolder;
 import code.frontend.libs.katlaf.dragndrop.DragStartRegion;
-import code.frontend.libs.katlaf.dragndrop.DragStarter;
 import code.frontend.libs.katlaf.dragndrop.DragStopRegion;
 import code.frontend.libs.katlaf.graphics.BorderedRegion;
 import code.frontend.libs.katlaf.graphics.CustomLine;
@@ -31,7 +29,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-abstract class DraggableListMember<T extends Listable> extends SimpleListMember {
+abstract class DraggableListMember extends SimpleListMember {
     public DraggableListMember(Listable listable) {
         super(listable);
         // create and attach the dragDetector
@@ -46,28 +44,12 @@ abstract class DraggableListMember<T extends Listable> extends SimpleListMember 
     /*
 
 
-     PUBLIC API
-    -------------------------------------------------------------------------------------*/
-
-    /**
-     * This method exposes {@link DragStarter#getData()} to the
-     * implementor of this {@link DraggableListMember}
-     */
-    abstract T getData();
-
-    /**
-     * This method exposes {@link DragStopRegion#getExpectedType()} to the
-     * implementor of this {@link DraggableListMember}
-     */
-    abstract Class<? extends Listable> getExpectedType();
-
-    /*
-
-
      COMPOSITIONS
     -------------------------------------------------------------------------------------*/
-
-    private class DragDetector extends DragStartRegion<T> {
+    /**
+     * A generalised implementation of reordering of Listables.
+     */
+    private class DragDetector extends DragStartRegion<Listable> {
         DragDetector() {
             this.setOpacity(0);
             this.setManaged(false);
@@ -75,8 +57,8 @@ abstract class DraggableListMember<T extends Listable> extends SimpleListMember 
         }
 
         @Override
-        public T getData() {
-            return DraggableListMember.this.getData(); // other guy's problem haha
+        public Listable getData() {
+            return DraggableListMember.this.getListable();
         }
 
         @Override
@@ -103,34 +85,6 @@ abstract class DraggableListMember<T extends Listable> extends SimpleListMember 
         }
     }
 
-    private class DropDetector extends DragStopRegion {
-        DropDetector() {
-            this.setOpacity(0);
-            this.setManaged(false);
-            this.setViewOrder(-11);
-        }
-
-        @Override
-        public void onDragStop(MouseDragEvent event) {
-            // TODO Auto-generated method stub
-        }
-
-        @Override
-        public void onDragRegionEnter(MouseDragEvent event) {
-            // TODO Auto-generated method stub
-        }
-
-        @Override
-        public void onDragRegionExit(MouseDragEvent event) {
-            // TODO Auto-generated method stub
-        }
-
-        @Override
-        public Class<? extends Listable> getExpectedType() {
-            return DraggableListMember.this.getExpectedType();
-        }
-    }
-
     /**
      * When the user is hovering over this instance whilst
      * dragging another {@link DraggableListMember}, the
@@ -151,7 +105,7 @@ abstract class DraggableListMember<T extends Listable> extends SimpleListMember 
         class UpperLineGuide extends LineGuide {
             @Override
             public void onDragStop(MouseDragEvent event) {
-                // TODO Auto-generated method stub
+                // TODO: the target is this. the unknown is the thing being dragged
             }
 
             @Override
@@ -174,7 +128,7 @@ abstract class DraggableListMember<T extends Listable> extends SimpleListMember 
             }
         }
 
-        abstract class LineGuide extends DragStopRegion {
+        abstract class LineGuide extends DragStopRegion<Listable> {
             LineGuide() {
                 this.setBackground(null);
                 this.setOpacity(0);
@@ -193,14 +147,13 @@ abstract class DraggableListMember<T extends Listable> extends SimpleListMember 
             abstract void positionLine(CustomLine line);
 
             @Override
-            public Class<? extends Listable> getExpectedType() {
+            public Class<Listable> getExpectedType() {
                 return Listable.class;
             }
 
             @Override
             public void onDragRegionEnter(MouseDragEvent event) {
-                if (isAccepting())
-                    this.setOpacity(1);
+                this.setOpacity(1);
             }
 
             @Override

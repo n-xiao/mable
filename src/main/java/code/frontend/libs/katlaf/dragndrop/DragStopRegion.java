@@ -20,11 +20,24 @@ package code.frontend.libs.katlaf.dragndrop;
 
 import javafx.scene.layout.Region;
 
-public abstract class DragStopRegion extends Region implements DragStopper {
+/**
+ * All methods that need to be implemented will only be executed when
+ * isAccepting() is true.
+ */
+public abstract class DragStopRegion<T> extends Region implements DragStopper<T> {
     public DragStopRegion() {
         this.setBackground(null);
-        this.setOnMouseDragEntered(event -> onDragRegionEnter(event));
-        this.setOnMouseDragExited(event -> onDragRegionExit(event));
-        this.setOnMouseDragReleased(event -> onDragStop(event));
+        this.setOnMouseDragEntered(event -> {
+            if (isAccepting())
+                onDragRegionEnter(event);
+        });
+        this.setOnMouseDragExited(event -> {
+            if (isAccepting())
+                onDragRegionExit(event);
+        });
+        this.setOnMouseDragReleased(event -> {
+            if (isAccepting())
+                onDragStop(event);
+        });
     }
 }

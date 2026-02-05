@@ -36,7 +36,7 @@ final class DragDropOverlay<T> extends Region {
     private static DragDropOverlay<?> activeOverlay = null; // max of one instance should exist
     private final T data;
 
-    private DragDropOverlay(DragStarter<T> dragStarter) {
+    private DragDropOverlay(DragStartRegion<T> dragStarter) {
         DragDropOverlay.activeOverlay = this;
         this.data = dragStarter.getData();
         init(dragStarter);
@@ -51,7 +51,7 @@ final class DragDropOverlay<T> extends Region {
     /**
      * Initialises this {@link DragDropOverlay} and adds it to the {@link MainContainer}.
      */
-    private void init(DragStarter<T> dragStarter) {
+    private void init(DragStartRegion<T> dragStarter) {
         // hijack scene
         final MainContainer mc = MainContainer.getInstance();
         mc.getScene().setOnMouseDragOver((event) -> {
@@ -79,7 +79,7 @@ final class DragDropOverlay<T> extends Region {
     /**
      * Spawns a new {@link DragDropOverlay}
      */
-    public static <E> void spawnOverlay(DragStarter<E> dragStarter) {
+    public static <E> void spawnOverlay(DragStartRegion<E> dragStarter) {
         new DragDropOverlay<E>(dragStarter);
     }
 

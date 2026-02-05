@@ -32,7 +32,7 @@ import javafx.scene.layout.Region;
  * this to the parent. This preserves the meaning of
  * classes without them all turning into Regions.
  */
-public abstract class DragStartRegion<T> extends Region implements DragStarter<T> {
+public abstract class DragStartRegion<T> extends Region {
     public DragStartRegion() {
         this.setBackground(null);
         // init listener for drag starts
@@ -50,4 +50,34 @@ public abstract class DragStartRegion<T> extends Region implements DragStarter<T
             }
         });
     }
+
+    /**
+     * This will be called when a drag action starts. This method does not need to
+     * do anything.
+     */
+    protected abstract void onDragStart();
+
+    /**
+     * This will be called be called whenever a drag
+     * action ends. Note that this could mean a successful drag
+     * or an unsuccessful drag. This method should be used to
+     * revert any temporary stylings made to the UI componenet(s)
+     * that were being dragged.
+     */
+    protected abstract void cleanupOnDragEnd();
+
+    /**
+     * Gets the data that is being transferred.
+     */
+    protected abstract T getData();
+
+    /**
+     * This is the preview that will be shown when this {@link DragStarter}
+     * is being dragged across the screen. While null can be returned,
+     * it is discouraged as users like to see what they are dragging.
+     *
+     * @return a Region which is a visual representation of the component
+     * that is being dragged
+     */
+    protected abstract Region getRepresentation();
 }

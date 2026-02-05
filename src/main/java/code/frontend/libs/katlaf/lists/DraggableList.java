@@ -20,8 +20,8 @@ package code.frontend.libs.katlaf.lists;
 
 import java.util.ArrayList;
 
-public abstract class OrderableList<T extends Listable> extends SearchableList {
-    public OrderableList(ArrayList<Listable> listables) {
+public abstract class DraggableList<T extends Listable> extends SearchableList {
+    public DraggableList(ArrayList<Listable> listables) {
         super(listables);
     }
 

@@ -25,22 +25,36 @@ import code.frontend.libs.katlaf.graphics.CustomLine;
 import code.frontend.libs.katlaf.graphics.CustomLine.Type;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.scene.input.MouseDragEvent;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 abstract class DraggableListMember extends SimpleListMember {
-    private final OrderableList<?> parentList;
-    public DraggableListMember(final Listable listable, final OrderableList<?> list) {
+    private final DraggableList<?> parentList;
+    public DraggableListMember(final Listable listable, final DraggableList<?> list) {
         super(listable);
         // create and attach the dragDetector
         DragDetector dragDetector = new DragDetector();
+        PlacementHelper placementHelper = new PlacementHelper();
+
         this.parentList = list;
-        this.widthProperty().addListener(
-            (event) -> dragDetector.resizeRelocate(0, 0, this.getWidth(), this.getHeight()));
+        this.widthProperty().addListener((event) -> adjustDetectors(dragDetector, placementHelper));
         this.heightProperty().addListener(
-            (event) -> dragDetector.resizeRelocate(0, 0, this.getWidth(), this.getHeight()));
-        this.getChildren().add(dragDetector);
+            (event) -> adjustDetectors(dragDetector, placementHelper));
+        this.getChildren().addAll(dragDetector, placementHelper);
+    }
+
+    /*
+
+
+     STYLING
+    -------------------------------------------------------------------------------------*/
+
+    private void adjustDetectors(Region... regions) {
+        for (Region region : regions) {
+            region.resizeRelocate(0, 0, this.getWidth(), this.getHeight());
+        }
     }
 
     /*
@@ -48,6 +62,7 @@ abstract class DraggableListMember extends SimpleListMember {
 
      COMPOSITIONS
     -------------------------------------------------------------------------------------*/
+
     /**
      * A generalised implementation of reordering of Listables.
      */
@@ -100,8 +115,16 @@ abstract class DraggableListMember extends SimpleListMember {
         final Color highlight;
         PlacementHelper() {
             this.setBackground(null);
+            this.setFillWidth(true);
             this.setViewOrder(-12);
+            this.setManaged(false);
             this.highlight = RiceHandler.getColour("hoverDragndrop");
+
+            final UpperLineGuide upper = new UpperLineGuide();
+            final LowerLineGuide lower = new LowerLineGuide();
+            VBox.setVgrow(upper, Priority.SOMETIMES);
+            VBox.setVgrow(lower, Priority.SOMETIMES);
+            this.getChildren().addAll(upper, lower);
         }
 
         class UpperLineGuide extends LineGuide {
@@ -135,6 +158,7 @@ abstract class DraggableListMember extends SimpleListMember {
                 this.setBackground(null);
                 this.setOpacity(0);
                 this.prefWidthProperty().bind(PlacementHelper.this.widthProperty());
+                this.setMaxHeight(Double.MAX_VALUE);
                 this.setMinHeight(3);
                 CustomLine line = new CustomLine(2, Type.HORIZONTAL_TYPE);
                 line.setStrokeColour(PlacementHelper.this.highlight);

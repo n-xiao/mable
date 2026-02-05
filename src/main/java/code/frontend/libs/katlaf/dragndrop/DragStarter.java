@@ -38,7 +38,7 @@ public interface DragStarter<T> {
      * revert any temporary stylings made to the UI componenet(s)
      * that were being dragged.
      */
-    void onDragEnd();
+    void cleanupOnDragEnd();
 
     /**
      * Gets the data that is being transferred.

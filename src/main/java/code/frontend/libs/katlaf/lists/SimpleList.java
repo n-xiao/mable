@@ -54,7 +54,7 @@ public class SimpleList extends BorderedRegion {
 
         this.listables.sort(null);
         repopulate();
-        refreshOrder();
+        refreshIndexes();
     }
 
     /*
@@ -159,7 +159,7 @@ public class SimpleList extends BorderedRegion {
     public final void pushNewListable(Listable listable) {
         listables.addFirst(listable);
         content.getChildren().addFirst(newMember(listable));
-        refreshOrder();
+        refreshIndexes();
     }
 
     /**
@@ -170,7 +170,7 @@ public class SimpleList extends BorderedRegion {
     public final void appendNewListable(Listable listable) {
         listables.addLast(listable);
         content.getChildren().addLast(newMember(listable));
-        refreshOrder();
+        refreshIndexes();
     }
 
     /**
@@ -215,7 +215,7 @@ public class SimpleList extends BorderedRegion {
      * The indexes of each {@link Listable} the content of this {@link SimpleList}
      * is updated based on its current index within the internal ArrayList.
      */
-    public void refreshOrder() {
+    public void refreshIndexes() {
         int index = 0;
         for (Listable listable : listables) {
             listable.setListIndex(index);

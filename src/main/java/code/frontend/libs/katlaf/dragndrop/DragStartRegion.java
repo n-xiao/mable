@@ -46,7 +46,7 @@ public abstract class DragStartRegion<T> extends Region implements DragStarter<T
         this.setOnMouseReleased((event) -> {
             if (DragDropOverlay.isActive()) {
                 DragDropOverlay.killOverlay();
-                onDragEnd();
+                cleanupOnDragEnd();
             }
         });
     }

@@ -32,9 +32,19 @@ public abstract class OrderableList<T extends Listable> extends SearchableList {
         return newDraggableMember(listable);
     }
 
+    /**
+     * Reorders members of this list. If there is a {@link Listable} already
+     * at the provided index, it and all subsequent members will be shifted
+     * right.
+     */
     protected void reorderMember(final Listable listable, final int index) {
         this.getListables().remove(listable);
-        this.getListables().add(index, listable);
-        refreshOrder();
+        if (index < 0)
+            this.getListables().addFirst(listable);
+        else if (index >= this.getListables().size())
+            this.getListables().addLast(listable);
+        else
+            this.getListables().add(index, listable);
+        refreshIndexes();
     }
 }

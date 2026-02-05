@@ -69,15 +69,4 @@ public interface DragStopper<T> {
      * @return the expected Class
      */
     Class<? extends T> getExpectedType();
-
-    /**
-     * A check to see if this {@link DragStopper} can accept
-     * the data that is currently being dragged.
-     *
-     * @return true if the data that is being dragged is of the
-     * expected type of this {@link DragStopper}, false otherwise.
-     */
-    default boolean isAccepting() {
-        return DragDropOverlay.checkMatchingTypes(getExpectedType());
-    }
 }

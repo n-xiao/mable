@@ -32,14 +32,14 @@ import javafx.scene.layout.Region;
  * whilst dragging and dropping something. Hence that case
  * will not be handled unless enough geniuses convince me otherwise.
  */
-final class DragDropOverlay extends Region {
-    private static DragDropOverlay activeOverlay = null; // max of one instance should exist
-    private final DragStarter<?> dragStarter;
+final class DragDropOverlay<T> extends Region {
+    private static DragDropOverlay<?> activeOverlay = null; // max of one instance should exist
+    private final T data;
 
-    private DragDropOverlay(DragStarter<?> dragStarter) {
+    private DragDropOverlay(DragStarter<T> dragStarter) {
         DragDropOverlay.activeOverlay = this;
-        this.dragStarter = dragStarter;
-        init();
+        this.data = dragStarter.getData();
+        init(dragStarter);
     }
 
     /*
@@ -51,7 +51,7 @@ final class DragDropOverlay extends Region {
     /**
      * Initialises this {@link DragDropOverlay} and adds it to the {@link MainContainer}.
      */
-    private void init() {
+    private void init(DragStarter<T> dragStarter) {
         // hijack scene
         final MainContainer mc = MainContainer.getInstance();
         mc.getScene().setOnMouseDragOver((event) -> {
@@ -79,8 +79,8 @@ final class DragDropOverlay extends Region {
     /**
      * Spawns a new {@link DragDropOverlay}
      */
-    public static void spawnOverlay(DragStarter<?> dragStarter) {
-        new DragDropOverlay(dragStarter);
+    public static <E> void spawnOverlay(DragStarter<E> dragStarter) {
+        new DragDropOverlay<E>(dragStarter);
     }
 
     /**
@@ -96,6 +96,10 @@ final class DragDropOverlay extends Region {
         return activeOverlay != null;
     }
 
+    protected T getTransferData() {
+        return this.data;
+    }
+
     /**
      * A method which compares the class of the data that is being
      * transferred by the current drag and drop process with a provided
@@ -104,12 +108,12 @@ final class DragDropOverlay extends Region {
      * @return true if the class of the data is equal to the provided class.
      */
     protected static <E> boolean checkMatchingTypes(Class<? extends E> c) {
-        if (getDragStarter().getData() == null)
+        if (activeOverlay == null || activeOverlay.data == null)
             return false; // if null checks fail
-        return activeOverlay.dragStarter.getData().getClass().equals(c);
+        return activeOverlay.data.getClass().equals(c);
     }
 
-    private static DragStarter<?> getDragStarter() {
-        return activeOverlay != null ? activeOverlay.dragStarter : null;
+    protected static DragDropOverlay<?> getActiveOverlay() {
+        return activeOverlay;
     }
 }

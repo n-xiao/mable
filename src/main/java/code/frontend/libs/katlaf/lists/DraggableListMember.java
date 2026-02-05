@@ -30,10 +30,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 abstract class DraggableListMember extends SimpleListMember {
-    public DraggableListMember(Listable listable) {
+    private final OrderableList<?> parentList;
+    public DraggableListMember(final Listable listable, final OrderableList<?> list) {
         super(listable);
         // create and attach the dragDetector
         DragDetector dragDetector = new DragDetector();
+        this.parentList = list;
         this.widthProperty().addListener(
             (event) -> dragDetector.resizeRelocate(0, 0, this.getWidth(), this.getHeight()));
         this.heightProperty().addListener(
@@ -67,7 +69,7 @@ abstract class DraggableListMember extends SimpleListMember {
         }
 
         @Override
-        public void onDragEnd() {
+        public void cleanupOnDragEnd() {
             DraggableListMember.this.setOpacity(1);
         }
 
@@ -105,7 +107,7 @@ abstract class DraggableListMember extends SimpleListMember {
         class UpperLineGuide extends LineGuide {
             @Override
             public void onDragStop(MouseDragEvent event) {
-                // TODO: the target is this. the unknown is the thing being dragged
+                reorder(getListable().getListIndex());
             }
 
             @Override
@@ -118,7 +120,7 @@ abstract class DraggableListMember extends SimpleListMember {
         class LowerLineGuide extends LineGuide {
             @Override
             public void onDragStop(MouseDragEvent event) {
-                // TODO Auto-generated method stub
+                reorder(getListable().getListIndex() + 1);
             }
 
             @Override
@@ -145,6 +147,13 @@ abstract class DraggableListMember extends SimpleListMember {
              * top of a {@link DraggableListMember}.
              */
             abstract void positionLine(CustomLine line);
+
+            protected void reorder(int index) {
+                final Listable receivedListable = retrieveData();
+                if (receivedListable != null) {
+                    DraggableListMember.this.parentList.reorderMember(receivedListable, index);
+                }
+            }
 
             @Override
             public Class<Listable> getExpectedType() {

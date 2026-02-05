@@ -40,4 +40,27 @@ public abstract class DragStopRegion<T> extends Region implements DragStopper<T>
                 onDragStop(event);
         });
     }
+
+    /**
+     * A check to see if this {@link DragStopper} can accept
+     * the data that is currently being dragged.
+     *
+     * @return true if the data that is being dragged is of the
+     * expected type of this {@link DragStopper}, false otherwise.
+     */
+    protected boolean isAccepting() {
+        return DragDropOverlay.checkMatchingTypes(getExpectedType());
+    }
+
+    /**
+     * This should provide the DragStopper with the data that has
+     * been transferred.
+     *
+     * @return the transferred data
+     */
+    protected final T retrieveData() {
+        return isAccepting()
+            ? getExpectedType().cast(DragDropOverlay.getActiveOverlay().getTransferData())
+            : null;
+    }
 }

@@ -19,11 +19,9 @@
 package code.frontend.libs.katlaf.tables;
 
 import code.frontend.libs.katlaf.inputfields.InputField;
+import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.util.ArrayList;
-import java.util.Iterator;
-import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.FlowPane;
@@ -35,6 +33,9 @@ public class SimpleTable extends Region {
     public SimpleTable() {
         this.members = new ArrayList<SimpleTableMember>();
         this.table = new Table();
+        this.table.prefWidthProperty().bind(this.widthProperty());
+        this.table.prefHeightProperty().bind(this.heightProperty());
+        this.getChildren().add(this.table);
     }
 
     /*
@@ -43,6 +44,9 @@ public class SimpleTable extends Region {
      BEHAVIOUR
     -------------------------------------------------------------------------------------*/
 
+    /**
+     * Deselects all members of this table.
+     */
     private void deselectAllMembers() {
         members.forEach(member -> member.setSelected(false));
     }
@@ -50,7 +54,8 @@ public class SimpleTable extends Region {
     private SimpleTableMember lastSelectedMember;
     /**
      * Called when user selects a {@link SimpleTableMember member} while
-     * holding their shift key.
+     * holding their shift key. This selects all members in between the
+     * last selected member and the (caller) member that was just shift-clicked on.
      */
     private void shiftSelectMember(final SimpleTableMember tableMember) {
         // error & edge case handlings
@@ -74,6 +79,10 @@ public class SimpleTable extends Region {
         }
     }
 
+    /**
+     * Sets a given member as selected and stores a reference to it
+     * as the last selected member.
+     */
     private void selectMember(final SimpleTableMember tableMember) {
         tableMember.setSelected(true);
         lastSelectedMember = tableMember;
@@ -84,13 +93,16 @@ public class SimpleTable extends Region {
 
      PROTECTED API
     -------------------------------------------------------------------------------------*/
+    private final Table table;
 
     protected void setHgap(final double hgap) {
-        // TODO
+        table.contents.setHgap(hgap);
+        table.requestAlign();
     }
 
     protected void setVgap(final double vgap) {
-        // TODO
+        table.contents.setVgap(vgap);
+        table.requestAlign();
     }
 
     protected ArrayList<SimpleTableMember> getMembers() {
@@ -111,7 +123,6 @@ public class SimpleTable extends Region {
 
      PUBLIC API
     -------------------------------------------------------------------------------------*/
-    private final Table table;
 
     /**
      * Adds a {@link SimpleTableMember member} to this table,
@@ -143,22 +154,13 @@ public class SimpleTable extends Region {
         members.sort(null);
 
         table.contents.getChildren().add(tableMember);
-        table.doAlignment();
+        table.requestAlign();
     }
 
     public void removeMember(SimpleTableMember tableMember) {
         members.remove(tableMember);
         table.contents.getChildren().remove(tableMember);
-        table.doAlignment();
-    }
-
-    public void replaceMember(SimpleTableMember newTableMember, SimpleTableMember oldTableMember) {
-        if (members.contains(oldTableMember)) {
-            members.remove(oldTableMember);
-            table.contents.getChildren().remove(oldTableMember);
-            members.add(newTableMember);
-            table.contents.getChildren().add(newTableMember);
-        }
+        table.requestAlign();
     }
 
     /*
@@ -177,6 +179,8 @@ public class SimpleTable extends Region {
             this.setFitToWidth(true);
             this.setHbarPolicy(ScrollBarPolicy.NEVER);
             this.setVbarPolicy(ScrollBarPolicy.NEVER); // TODO: implement custom scrollbar later
+            this.heightProperty().addListener((observable, oldValue, newValue) -> requestAlign());
+            this.widthProperty().addListener((observable, oldValue, newValue) -> requestAlign());
         }
 
         /**
@@ -192,7 +196,7 @@ public class SimpleTable extends Region {
          * affect the scrolling experience of the user. (as in, the invisible
          * paddings will probably not let the user scroll down to nothing)
          */
-        void doAlignment() {
+        void requestAlign() {
             this.getChildren().removeIf(child -> child instanceof FakeMember);
 
             final int totalWidth = (int) this.getBoundsInParent().getWidth();
@@ -223,7 +227,10 @@ public class SimpleTable extends Region {
                 this.prefWrapLengthProperty().bind(Table.this.widthProperty());
                 this.minHeightProperty().bind(Table.this.heightProperty().add(-2));
                 this.setMaxHeight(Double.MAX_VALUE);
+                this.setMaxWidth(Double.MAX_VALUE);
                 this.setAlignment(Pos.TOP_CENTER);
+                this.setBackground(
+                    RiceHandler.createBG(RiceHandler.getColour("background1"), 0, 0));
                 this.setOnMousePressed(event -> {
                     SimpleTable.this.deselectAllMembers();
                     InputField.escapeAllInputs(); // fixes stupid inputs trapping cursors

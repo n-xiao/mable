@@ -21,13 +21,19 @@ package code.frontend.capabilities.countdown.concurrency;
 import code.frontend.capabilities.countdown.components.CountdownTable;
 import code.frontend.capabilities.countdown.components.SidebarStats;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import javafx.application.Platform;
 import javafx.concurrent.ScheduledService;
 import javafx.concurrent.Task;
 import javafx.util.Duration;
 
-public class Watchdog extends ScheduledService<Void> {
+public final class Watchdog extends ScheduledService<Void> {
     private static Watchdog watchdog = null;
+
+    private static final ArrayList<Updatable> UPDATABLES;
+    static {
+        UPDATABLES = new ArrayList<Updatable>();
+    }
 
     private Watchdog() {}
 
@@ -39,16 +45,25 @@ public class Watchdog extends ScheduledService<Void> {
         watchdog.start();
     }
 
+    public static void watch(Updatable updatable) {
+        UPDATABLES.add(updatable);
+    }
+
+    /*
+
+
+     BEHAVIOUR
+    -------------------------------------------------------------------------------------*/
+
     @Override
     protected Task<Void> createTask() {
         return new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                final CountdownTable CPV = CountdownTable.getInstance();
-                final SidebarStats SSP = SidebarStats.getInstance();
                 Platform.runLater(() -> {
-                    CPV.repopulate(LocalDate.now());
-                    SSP.refreshContent();
+                    for (Updatable updatable : UPDATABLES) {
+                        updatable.update();
+                    }
                 });
                 return null;
             }

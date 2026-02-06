@@ -179,7 +179,6 @@ public class SimpleTable extends Region {
             this.setFitToWidth(true);
             this.setHbarPolicy(ScrollBarPolicy.NEVER);
             this.setVbarPolicy(ScrollBarPolicy.NEVER); // TODO: implement custom scrollbar later
-            this.heightProperty().addListener((observable, oldValue, newValue) -> requestAlign());
             this.widthProperty().addListener((observable, oldValue, newValue) -> requestAlign());
         }
 

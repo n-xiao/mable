@@ -19,7 +19,7 @@
 package code.frontend.capabilities.countdown.windows;
 
 import code.backend.data.Countdown;
-import code.frontend.capabilities.countdown.components.CountdownTable;
+import code.frontend.capabilities.countdown.components.OldCountdownTable;
 import code.frontend.libs.katlaf.buttons.Button;
 import code.frontend.libs.katlaf.inputfields.DateInputField;
 import code.frontend.libs.katlaf.inputfields.InputField;
@@ -79,7 +79,7 @@ public class CountdownEditor extends CountdownModifier {
                 LocalDate newDue = getDateField().getLocalDateInput(false);
                 countdown.setName(newName);
                 countdown.setDueDate(newDue);
-                CountdownTable cpv = CountdownTable.getInstance();
+                OldCountdownTable cpv = OldCountdownTable.getInstance();
                 cpv.repopulate(LocalDate.now());
                 cpv.deselectAll();
                 window.close();

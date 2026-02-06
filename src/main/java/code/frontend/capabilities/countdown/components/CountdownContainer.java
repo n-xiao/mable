@@ -25,11 +25,11 @@ import javafx.scene.layout.VBox;
 public class CountdownContainer extends VBox {
     private static CountdownContainer instance = null;
     private CountdownFolderTitle title;
-    private CountdownTable view;
+    private OldCountdownTable view;
 
     private CountdownContainer() {
         this.title = CountdownFolderTitle.getInstance();
-        this.view = CountdownTable.getInstance();
+        this.view = OldCountdownTable.getInstance();
         this.setFillWidth(true);
         VBox.setVgrow(this.view, Priority.ALWAYS);
         this.setBackground(RiceHandler.createBG(RiceHandler.getColour("background1"), 0, 0));

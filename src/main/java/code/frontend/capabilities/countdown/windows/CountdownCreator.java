@@ -20,7 +20,7 @@ package code.frontend.capabilities.countdown.windows;
 
 import code.backend.data.Countdown;
 import code.backend.utils.CountdownHandler;
-import code.frontend.capabilities.countdown.components.CountdownTable;
+import code.frontend.capabilities.countdown.components.OldCountdownTable;
 import code.frontend.libs.katlaf.buttons.Button;
 import code.frontend.libs.katlaf.windows.CountdownModifier;
 import java.time.LocalDate;
@@ -55,8 +55,8 @@ public class CountdownCreator extends CountdownModifier {
                 if (due == null)
                     return;
                 CountdownHandler.addCountdown(new Countdown(name, due));
-                CountdownTable.getInstance().repopulate(LocalDate.now());
-                CountdownTable.getInstance().deselectAll();
+                OldCountdownTable.getInstance().repopulate(LocalDate.now());
+                OldCountdownTable.getInstance().deselectAll();
                 window.close();
                 window = null;
             }

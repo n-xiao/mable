@@ -63,7 +63,7 @@ public class Sidebar extends VBox {
 
             instance.setOnMousePressed((event) -> { // implements click-empty-space-to-deselect
                 InputField.escapeAllInputs();
-                CountdownTable.getInstance().deselectAll();
+                OldCountdownTable.getInstance().deselectAll();
                 instance.requestFocus();
             });
         }

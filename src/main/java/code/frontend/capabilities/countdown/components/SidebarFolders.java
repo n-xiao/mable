@@ -454,7 +454,7 @@ public class SidebarFolders extends VBox {
                     this.untoggle();
             });
             this.setOnMouseDragReleased((event) -> {
-                CountdownTable.getInstance().addAllSelectedToFolder(this.FOLDER);
+                OldCountdownTable.getInstance().addAllSelectedToFolder(this.FOLDER);
 
                 if (FolderHandler.getCurrentlySelectedFolder().equals(this.FOLDER))
                     this.toggle();
@@ -467,7 +467,7 @@ public class SidebarFolders extends VBox {
 
         @Override
         public void executeOnClick(MouseEvent event) {
-            CountdownTable.getInstance().deselectAll(); // important
+            OldCountdownTable.getInstance().deselectAll(); // important
             SidebarFolders.getInstance().FOLDER_PANES.forEach(folder -> { folder.untoggle(); });
 
             if (!this.hasSameName(INCOMPLETED_FOLDER_PANE))
@@ -478,7 +478,7 @@ public class SidebarFolders extends VBox {
 
             SidebarFolders.selectedFolderPane = this;
             FolderHandler.setCurrentlySelectedFolder(this.FOLDER);
-            CountdownTable.getInstance().repopulate(LocalDate.now());
+            OldCountdownTable.getInstance().repopulate(LocalDate.now());
 
             if (!this.FOLDER.isProtectedFolder() && event != null
                 && event.getButton().equals(MouseButton.SECONDARY)) {

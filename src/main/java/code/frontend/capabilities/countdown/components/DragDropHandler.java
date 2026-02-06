@@ -116,7 +116,7 @@ public class DragDropHandler extends Region {
     private void populateStack() {
         final int WIDTH = 230;
         final int HEIGHT = 90;
-        final Urgency[] URGENCIES = CountdownTable.getInstance().getSelectedUrgencies();
+        final Urgency[] URGENCIES = OldCountdownTable.getInstance().getSelectedUrgencies();
         // max of 3 "preview" panes to be generated
         for (int i = 0; i < 3 && i < URGENCIES.length; i++) {
             final MableBorder BORDER = new MableBorder(2.4, 0.2, 0.42);

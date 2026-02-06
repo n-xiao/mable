@@ -272,7 +272,7 @@ public class CountdownPane extends VBox {
             RightClickMenu.despawnAll();
             this.selected = true;
             this.applySelectStyle();
-            CountdownTable.getInstance().updateMode();
+            OldCountdownTable.getInstance().updateMode();
 
             this.activateDragStyling();
 
@@ -290,57 +290,57 @@ public class CountdownPane extends VBox {
     }
 
     private void activateDragStyling() {
-        CountdownTable.getInstance().COUNTDOWN_PANES.forEach(pane -> {
+        OldCountdownTable.getInstance().COUNTDOWN_PANES.forEach(pane -> {
             if (pane.isSelected())
                 pane.setOpacity(0.3);
         });
     }
 
     private void deactivateDragStyling() {
-        CountdownTable.getInstance().COUNTDOWN_PANES.forEach(pane -> { pane.setOpacity(1); });
+        OldCountdownTable.getInstance().COUNTDOWN_PANES.forEach(pane -> { pane.setOpacity(1); });
     }
 
     private void onShiftClick() {
-        if (CountdownTable.getInstance().pivot == null) {
-            CountdownTable.getInstance().selectAllBetween(
-                CountdownTable.getInstance().COUNTDOWN_PANES.getFirst(), this);
+        if (OldCountdownTable.getInstance().pivot == null) {
+            OldCountdownTable.getInstance().selectAllBetween(
+                OldCountdownTable.getInstance().COUNTDOWN_PANES.getFirst(), this);
             return;
         }
 
-        final boolean PIVOT_SELECTED = CountdownTable.getInstance().pivot.isSelected();
-        CountdownTable.getInstance().selectAllBetween(CountdownTable.getInstance().pivot, this);
+        final boolean PIVOT_SELECTED = OldCountdownTable.getInstance().pivot.isSelected();
+        OldCountdownTable.getInstance().selectAllBetween(OldCountdownTable.getInstance().pivot, this);
 
         if (!PIVOT_SELECTED)
-            CountdownTable.getInstance().deselect(CountdownTable.getInstance().pivot);
+            OldCountdownTable.getInstance().deselect(OldCountdownTable.getInstance().pivot);
     }
 
     private void onMetaClick() {
         if (this.selected) {
-            CountdownTable.getInstance().deselect(this);
+            OldCountdownTable.getInstance().deselect(this);
         } else {
-            CountdownTable.getInstance().select(this);
+            OldCountdownTable.getInstance().select(this);
         }
-        CountdownTable.getInstance().pivot = this;
-        CountdownTable.getInstance().updateMode();
+        OldCountdownTable.getInstance().pivot = this;
+        OldCountdownTable.getInstance().updateMode();
         RightClickMenu.despawnAll();
     }
 
     private void onNormalClick() {
         if (!this.isSelected()) {
-            CountdownTable.getInstance().deselectAll();
-            CountdownTable.getInstance().select(this);
-            CountdownTable.getInstance().pivot = this;
-            CountdownTable.getInstance().updateMode();
+            OldCountdownTable.getInstance().deselectAll();
+            OldCountdownTable.getInstance().select(this);
+            OldCountdownTable.getInstance().pivot = this;
+            OldCountdownTable.getInstance().updateMode();
             RightClickMenu.despawnAll();
         }
     }
 
     private void onSecondaryMousePress(double x, double y) {
         if (!this.selected)
-            CountdownTable.getInstance().deselectAll();
+            OldCountdownTable.getInstance().deselectAll();
         applySelectStyle();
         this.selected = true;
-        CountdownTable.getInstance().updateMode(); // needs to be called before RightClickMenu
+        OldCountdownTable.getInstance().updateMode(); // needs to be called before RightClickMenu
                                                    // opens
         CountdownRCM.spawnInstance(x, y);
     }
@@ -386,7 +386,7 @@ public class CountdownPane extends VBox {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
-        CountdownTable.getInstance().updateMode();
+        OldCountdownTable.getInstance().updateMode();
     }
 
     protected void refreshContent() {

@@ -43,7 +43,7 @@ public class CountdownRemover extends Pane {
         configureStyling();
 
         this.setOnMouseDragReleased((event) -> {
-            CountdownTable.getInstance().removeSelectedFromFolder(
+            OldCountdownTable.getInstance().removeSelectedFromFolder(
                 FolderHandler.getCurrentlySelectedFolder());
             DragDropHandler.close();
         });

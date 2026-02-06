@@ -20,7 +20,7 @@ package code;
 
 import code.backend.utils.StorageHandler;
 import code.frontend.MainContainer;
-import code.frontend.capabilities.countdown.concurrency.Watchdog;
+import code.frontend.capabilities.concurrency.Watchdog;
 import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.application.Application;

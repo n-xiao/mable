@@ -16,11 +16,8 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package code.frontend.capabilities.countdown.concurrency;
+package code.frontend.capabilities.concurrency;
 
-import code.frontend.capabilities.countdown.components.CountdownTable;
-import code.frontend.capabilities.countdown.components.SidebarStats;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import javafx.application.Platform;
 import javafx.concurrent.ScheduledService;

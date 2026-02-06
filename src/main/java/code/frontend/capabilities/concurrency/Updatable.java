@@ -1,4 +1,4 @@
-package code.frontend.capabilities.countdown.concurrency;
+package code.frontend.capabilities.concurrency;
 
 /**
  * This allows the {@link Watchdog} to send updates to

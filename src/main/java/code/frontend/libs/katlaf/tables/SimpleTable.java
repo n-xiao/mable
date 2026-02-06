@@ -18,7 +18,12 @@
 
 package code.frontend.libs.katlaf.tables;
 
+import code.frontend.libs.katlaf.inputfields.InputField;
 import java.util.ArrayList;
+import java.util.Iterator;
+import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.FlowPane;
@@ -28,8 +33,8 @@ public class SimpleTable extends Region {
     private ArrayList<SimpleTableMember> members;
 
     public SimpleTable() {
-        // TODO
         this.members = new ArrayList<SimpleTableMember>();
+        this.table = new Table();
     }
 
     /*
@@ -80,11 +85,11 @@ public class SimpleTable extends Region {
      PROTECTED API
     -------------------------------------------------------------------------------------*/
 
-    protected void setHgap(double hgap) {
+    protected void setHgap(final double hgap) {
         // TODO
     }
 
-    protected void setVgap(double vgap) {
+    protected void setVgap(final double vgap) {
         // TODO
     }
 
@@ -106,15 +111,14 @@ public class SimpleTable extends Region {
 
      PUBLIC API
     -------------------------------------------------------------------------------------*/
+    private final Table table;
 
     /**
      * Adds a {@link SimpleTableMember member} to this table,
      * and attaches mouse listeners to it.
      */
-    public void addMember(SimpleTableMember tableMember) {
+    public void addMember(final SimpleTableMember tableMember) {
         members.add(tableMember);
-
-        // TODO add to table UI
 
         tableMember.setOnMousePressed((event) -> {
             if (event.getButton().equals(MouseButton.SECONDARY)) {
@@ -128,17 +132,33 @@ public class SimpleTable extends Region {
                 deselectAllMembers();
                 selectMember(tableMember);
             }
+            event.consume();
         });
 
-        tableMember.setOnDragDetected(event -> tableMember.onDragStart(getSelectedMembers()));
+        tableMember.setOnDragDetected(event -> {
+            tableMember.onDragStart(getSelectedMembers());
+            event.consume();
+        });
 
         members.sort(null);
+
+        table.contents.getChildren().add(tableMember);
+        table.doAlignment();
     }
 
     public void removeMember(SimpleTableMember tableMember) {
         members.remove(tableMember);
+        table.contents.getChildren().remove(tableMember);
+        table.doAlignment();
+    }
 
-        // TODO remove from table UI
+    public void replaceMember(SimpleTableMember newTableMember, SimpleTableMember oldTableMember) {
+        if (members.contains(oldTableMember)) {
+            members.remove(oldTableMember);
+            table.contents.getChildren().remove(oldTableMember);
+            members.add(newTableMember);
+            table.contents.getChildren().add(newTableMember);
+        }
     }
 
     /*
@@ -147,7 +167,7 @@ public class SimpleTable extends Region {
      COMPOSITIONS
     -------------------------------------------------------------------------------------*/
 
-    private class Table extends ScrollPane {
+    private final class Table extends ScrollPane {
         final Contents contents;
         Table() {
             this.contents = new Contents();
@@ -159,11 +179,64 @@ public class SimpleTable extends Region {
             this.setVbarPolicy(ScrollBarPolicy.NEVER); // TODO: implement custom scrollbar later
         }
 
-        private class Contents extends FlowPane {
+        /**
+         * This allows for left to right listing of members; by
+         * adding invisible Regions that act as "spacers" or "paddings", an incomplete
+         * row of a FlowPane will be aligned to the left when all children of the
+         * FlowPane are centered. It is attached to a listener for when the window
+         * is resized.
+         *
+         * At the time of writing, I can't seem to figure out how to reliably get
+         * the extra number of paddings needed. Hence, one extra padding is added
+         * and the height of the paddings are locked to 1 pixel, so it should not
+         * affect the scrolling experience of the user. (as in, the invisible
+         * paddings will probably not let the user scroll down to nothing)
+         */
+        void doAlignment() {
+            this.getChildren().removeIf(child -> child instanceof FakeMember);
+
+            final int totalWidth = (int) this.getBoundsInParent().getWidth();
+            final int widths = (int) SimpleTable.this.getMembers().getFirst().getWidth();
+            final int numMembers = SimpleTable.this.getMembers().size();
+            final int columns = (int) (totalWidth / widths);
+
+            if (columns == 0)
+                return;
+
+            final int numLastRow = (int) (numMembers % columns); // finds num of members on last row
+            final int remainder = columns - numLastRow + 1;
+
+            for (int i = 0; i < remainder; i++) {
+                final FakeMember fakeMember = new FakeMember(widths);
+                this.getChildren().addLast(fakeMember);
+            }
+        }
+
+        /*
+
+
+         SUB-COMPOSITIONS
+        -------------------------------------------------------------------------------------*/
+
+        class Contents extends FlowPane {
             Contents() {
                 this.prefWrapLengthProperty().bind(Table.this.widthProperty());
                 this.minHeightProperty().bind(Table.this.heightProperty().add(-2));
                 this.setMaxHeight(Double.MAX_VALUE);
+                this.setAlignment(Pos.TOP_CENTER);
+                this.setOnMousePressed(event -> {
+                    SimpleTable.this.deselectAllMembers();
+                    InputField.escapeAllInputs(); // fixes stupid inputs trapping cursors
+                    event.consume();
+                });
+            }
+        }
+
+        class FakeMember extends Region {
+            FakeMember(final double width) {
+                this.setMinSize(width, 1);
+                this.setMaxSize(width, 1);
+                this.setVisible(false);
             }
         }
     }

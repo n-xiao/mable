@@ -83,6 +83,15 @@ public abstract class SimpleTableMember extends StackPane implements Comparable<
      */
     protected abstract void onDragStart(final ArrayList<SimpleTableMember> selectedMembers);
 
+    /**
+     * This method is called when the table needs to be refreshed/repopulated.
+     * This method allows implementations of this class to use more efficient
+     * or visually appealing methods to update/refresh the UI.
+     *
+     * This method CANNOT do nothing.
+     */
+    protected abstract void refresh();
+
     /*
 
 

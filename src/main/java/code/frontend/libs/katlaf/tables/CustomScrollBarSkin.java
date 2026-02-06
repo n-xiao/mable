@@ -24,6 +24,9 @@ import javafx.scene.control.ScrollBar;
 import javafx.scene.control.skin.ScrollBarSkin;
 import javafx.scene.layout.StackPane;
 
+/**
+ * Unused at this time
+ */
 public class CustomScrollBarSkin extends ScrollBarSkin {
     private final StackPane background;
     private final StackPane incremButton;

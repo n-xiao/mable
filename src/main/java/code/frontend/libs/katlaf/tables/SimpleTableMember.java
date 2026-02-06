@@ -18,20 +18,78 @@
 
 package code.frontend.libs.katlaf.tables;
 
-import javafx.scene.layout.Region;
+import java.util.ArrayList;
+import javafx.scene.layout.StackPane;
 
-public abstract class SimpleTableMember extends Region {
+public abstract class SimpleTableMember extends StackPane implements Comparable<SimpleTableMember> {
+    private boolean selected;
+
     public SimpleTableMember(final double width, final double height) {
+        this.setBackground(null);
         this.setMinWidth(width);
         this.setMaxWidth(width);
         this.setMinHeight(height);
         this.setMaxHeight(height);
-        // init listeners
+        this.selected = false;
     }
+
+    /*
+
+
+     BEHAVIOUR
+    -------------------------------------------------------------------------------------*/
+
+    void setSelected(boolean selected) {
+        this.selected = selected;
+        if (selected) {
+            onSelected();
+        } else {
+            onDeselected();
+        }
+    }
+
+    /*
+
+
+     PROTECTED API
+    -------------------------------------------------------------------------------------*/
+
+    /**
+     * This method is called when this {@link SimpleTableMember}
+     * instance is selected. Its default implementation does nothing.
+     */
+    protected void onSelected() {}
+
+    /**
+     * This method is called when this {@link SimpleTableMember}
+     * instance is deselected. Its default implementation does nothing.
+     */
+    protected void onDeselected() {}
+
+    /**
+     * This method is called when this instance is clicked on
+     * with a right mouse button.
+     *
+     * An ArrayList of selected members from the {@link SimpleTable}
+     * are provided through the parameter.
+     */
+    protected abstract void onRightClicked(final ArrayList<SimpleTableMember> selectedMembers);
+
+    /**
+     * This method is called when this instance receives a drag
+     * start. This method may not need to do anything. An ArrayList
+     * of selected members from the {@link SimpleTable} are provided
+     * through the parameter.
+     */
+    protected abstract void onDragStart(final ArrayList<SimpleTableMember> selectedMembers);
 
     /*
 
 
      PUBLIC API
     -------------------------------------------------------------------------------------*/
+
+    public boolean isSelected() {
+        return this.selected;
+    }
 }

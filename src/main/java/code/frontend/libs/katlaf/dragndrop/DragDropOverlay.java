@@ -66,6 +66,7 @@ final class DragDropOverlay<T> extends Region {
         this.setViewOrder(-200);
 
         dragStarter.getRepresentation().setCacheHint(CacheHint.SPEED);
+        dragStarter.getRepresentation().setManaged(false);
         this.getChildren().add(dragStarter.getRepresentation());
         mc.getChildren().add(this);
     }

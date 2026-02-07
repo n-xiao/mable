@@ -146,11 +146,6 @@ public class SimpleTable extends Region {
             event.consume();
         });
 
-        tableMember.setOnDragDetected(event -> {
-            tableMember.onDragStart(getSelectedMembers());
-            event.consume();
-        });
-
         members.sort(null);
 
         table.contents.getChildren().add(tableMember);

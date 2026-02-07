@@ -51,17 +51,6 @@ class SimpleListMember extends ToggleButton {
     -------------------------------------------------------------------------------------*/
 
     /**
-     * Updates the styling of this {@link SimpleListMember} based on
-     * verification from the backend.
-     */
-    protected void updateSelection() {
-        if (listable.isEngaged())
-            this.toggle();
-        else
-            this.untoggle();
-    }
-
-    /**
      * @return the {@link Listable} associated with this {@link SimpleListMember}.
      */
     protected final Listable getListable() {
@@ -70,12 +59,12 @@ class SimpleListMember extends ToggleButton {
 
     @Override
     protected Color getUntoggledColour() {
-        return RiceHandler.getColour("disabled");
+        return RiceHandler.getColour("dullgrey");
     }
 
     @Override
     protected Color getToggledColour() {
-        return RiceHandler.getColour();
+        return RiceHandler.getColour("white");
     }
 
     /*

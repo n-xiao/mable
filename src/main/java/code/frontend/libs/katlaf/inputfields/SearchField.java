@@ -43,7 +43,7 @@ public class SearchField extends InputField {
 
     private void initStyling() {
         MableBorder border = new MableBorder(1.5, 0.1, 0.8);
-        border.setStrokeColour(RiceHandler.getColour("ghost"));
+        border.setStrokeColour(RiceHandler.getColour("dullgrey"));
         this.enableManualActivation();
         this.getTextField().setPromptText("Search...");
         this.setCustomBorder(new MableBorder(1.5, 0.1, 0.8));

@@ -28,7 +28,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
 
 public class SimpleTable extends Region {
-    private ArrayList<SimpleTableMember> members;
+    private final ArrayList<SimpleTableMember> members;
 
     public SimpleTable() {
         this.members = new ArrayList<SimpleTableMember>();
@@ -223,8 +223,7 @@ public class SimpleTable extends Region {
                 this.setMaxHeight(Double.MAX_VALUE);
                 this.setMaxWidth(Double.MAX_VALUE);
                 this.setAlignment(Pos.TOP_CENTER);
-                this.setBackground(
-                    RiceHandler.createBG(RiceHandler.getColour("background1"), 0, 0));
+                this.setBackground(RiceHandler.createBG(RiceHandler.getColour("night"), 0, 0));
                 this.setOnMousePressed(event -> {
                     SimpleTable.this.deselectAllMembers();
                     InputField.escapeAllInputs(); // fixes stupid inputs trapping cursors

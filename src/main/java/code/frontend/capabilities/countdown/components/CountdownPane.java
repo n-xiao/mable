@@ -212,24 +212,8 @@ public class CountdownPane extends VBox {
     }
 
     private void configureStatus(Countdown countdown, LocalDate now) {
-        String statusString = "Ongoing";
-        String dateString = "Due: " + countdown.getStringDueDate(now);
-        final Urgency URGENCY = countdown.getUrgency(now);
-        switch (URGENCY) {
-            case OVERDUE:
-                statusString = "Overdue";
-                break;
-            case TODAY:
-                statusString = "Due today";
-                break;
-            case TOMORROW:
-                statusString = "Due tomorrow";
-                break;
-            case COMPLETED:
-                statusString = "Completed";
-            default:
-                break;
-        }
+        final String statusString = countdown.getStatus(now);
+        final String dateString = "Due: " + countdown.getStringDueDate(now);
         this.statusLabel.setText(statusString);
         this.endDateLabel.setText(dateString);
     }

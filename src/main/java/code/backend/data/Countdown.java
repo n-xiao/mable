@@ -19,6 +19,7 @@
 package code.backend.data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Duration;
@@ -29,13 +30,16 @@ import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Countdown extends Identifiable {
-    public enum Urgency { OVERDUE, TODAY, TOMORROW, ONGOING, COMPLETED }
-
-    private String name;
-    private boolean isDone;
-    private ZonedDateTime dueDateTime;
-
     private static final String ZONE_ID_STR = "UTC";
+    /**
+     * Calculates the number of days between two {@link LocalDate} instances.
+     */
+    public static int getDaysBetween(LocalDate date1, LocalDate date2) {
+        ZonedDateTime zoned1 = date1.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
+        ZonedDateTime zoned2 = date2.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
+        Duration duration = Duration.between(zoned1, zoned2);
+        return (int) duration.toDaysPart();
+    }
 
     /**
      * Creates a Countdown object. The responsibility for sanitising inputs is handed to
@@ -50,6 +54,7 @@ public class Countdown extends Identifiable {
     public Countdown(String name, LocalDate dueDate) {
         super(UUID.randomUUID());
         this.name = name;
+        this.isDone = false;
         this.dueDateTime = dueDate.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
     }
 
@@ -62,15 +67,31 @@ public class Countdown extends Identifiable {
         this.dueDateTime = ZonedDateTime.parse(due);
     }
 
-    public static int getDaysBetween(LocalDate date1, LocalDate date2) {
-        ZonedDateTime zoned1 = date1.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
-        ZonedDateTime zoned2 = date2.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
-        Duration duration = Duration.between(zoned1, zoned2);
-        return (int) duration.toDaysPart();
+    /*
+
+
+     BEHAVIOUR
+    -------------------------------------------------------------------------------------*/
+
+    /**
+     * Converts a date from the user's timezone to UTC and
+     * returns it as a ZonedDateTime.
+     */
+    private ZonedDateTime convertLocalDate(LocalDate date) {
+        return date.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
     }
 
     /*
-     * Returns days until due. Keep in mind that this is a vector.
+
+
+     PUBLIC API
+    -------------------------------------------------------------------------------------*/
+
+    private final ZonedDateTime dueDateTime;
+    /*
+     * Returns days until due. Keep in mind that this is a vector, so
+     * a Countdown that is past due will return a negative integer.
+     * Also, a day is not over until the last second of said day is over.
      */
     public int daysUntilDue(LocalDate now) {
         ZonedDateTime zonedNow = now.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
@@ -78,10 +99,21 @@ public class Countdown extends Identifiable {
         return (int) duration.toDaysPart();
     }
 
+    /**
+     * Returns a {@link LocalDate} that represents the due date.
+     * Useful for displaying the due date in the user's local date and
+     * time.
+     */
+    @JsonIgnore
     public LocalDate getLocalDueDate(LocalDate now) {
         return now.plusDays(daysUntilDue(now));
     }
 
+    /**
+     * Returns a string representation of the due date in
+     * the user's local date and time.
+     */
+    @JsonIgnore
     public String getStringDueDate(LocalDate now) {
         LocalDate localDue = getLocalDueDate(now);
         String day = Integer.toString(localDue.getDayOfMonth());
@@ -90,14 +122,43 @@ public class Countdown extends Identifiable {
         return day + "/" + month + "/" + year; // uses the correct format
     }
 
-    @JsonProperty("name")
-    public String getName() {
-        return name;
+    /**
+     * Returns a String representation of the current status
+     * of this Countdown.
+     */
+    @JsonIgnore
+    public String getStatus(LocalDate now) {
+        if (isOverdue(now))
+            return "Overdue";
+        else if (isDueToday(now))
+            return "Due today";
+        else if (isDueTomorrow(now))
+            return "Due tomorrow";
+        else
+            return "Ongoing";
     }
 
-    @JsonProperty("isDone")
-    public boolean isDone() {
-        return isDone;
+    @JsonIgnore
+    public boolean isOverdue(LocalDate now) {
+        ZonedDateTime nowDateTime = convertLocalDate(now);
+        return dueDateTime.isBefore(nowDateTime);
+    }
+
+    @JsonIgnore
+    public boolean isDueToday(LocalDate now) {
+        ZonedDateTime nowDateTime = convertLocalDate(now);
+        return dueDateTime.isEqual(nowDateTime);
+    }
+
+    @JsonIgnore
+    public boolean isDueTomorrow(LocalDate now) {
+        ZonedDateTime nowDateTime = convertLocalDate(now);
+        return dueDateTime.isEqual(nowDateTime.plusDays(1));
+    }
+
+    @JsonProperty("name") private final String name;
+    public String getName() {
+        return name;
     }
 
     @JsonProperty("due")
@@ -105,47 +166,12 @@ public class Countdown extends Identifiable {
         return dueDateTime;
     }
 
-    public Urgency getUrgency(LocalDate now) {
-        if (isOverdue(now))
-            return Urgency.OVERDUE;
-        else if (isDueToday(now))
-            return Urgency.TODAY;
-        else if (isDueTomorrow(now))
-            return Urgency.TOMORROW;
-        else if (isDone)
-            return Urgency.COMPLETED;
-        else
-            return Urgency.ONGOING;
+    @JsonProperty("isDone") private boolean isDone;
+    public boolean isDone() {
+        return this.isDone;
     }
 
-    public boolean isOverdue(LocalDate now) {
-        ZonedDateTime nowDateTime = convertLocalDate(now);
-        return dueDateTime.isBefore(nowDateTime) && !isDone;
-    }
-
-    public boolean isDueToday(LocalDate now) {
-        ZonedDateTime nowDateTime = convertLocalDate(now);
-        return dueDateTime.isEqual(nowDateTime) && !isDone;
-    }
-
-    public boolean isDueTomorrow(LocalDate now) {
-        ZonedDateTime nowDateTime = convertLocalDate(now);
-        return dueDateTime.isEqual(nowDateTime.plusDays(1)) && !isDone;
-    }
-
-    private ZonedDateTime convertLocalDate(LocalDate date) {
-        return date.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDueDate(LocalDate dueDate) {
-        this.dueDateTime = dueDate.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
-    }
-
-    public void setDone(boolean isDone) {
+    public void setDone(final boolean isDone) {
         this.isDone = isDone;
     }
 }

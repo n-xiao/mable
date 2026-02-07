@@ -85,9 +85,9 @@ public class InputField extends BorderPane {
         textField.focusedProperty().addListener(((observable, oldValue, newValue) -> {
             if (newValue) {
                 borderColour = border.getStrokeColour();
-                border.setStrokeColour(RiceHandler.getColour("selected"));
+                border.setStrokeColour(RiceHandler.getColour("blue"));
                 if (label != null)
-                    label.setTextFill(RiceHandler.getColour("selected"));
+                    label.setTextFill(RiceHandler.getColour("blue"));
             } else {
                 border.setStrokeColour(borderColour);
                 if (label != null)

@@ -19,8 +19,6 @@
 package code.backend.utils;
 
 import code.backend.data.Countdown;
-import code.backend.data.Countdown.Urgency;
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.NavigableSet;
 import java.util.Stack;
@@ -31,11 +29,11 @@ public class CountdownHandler {
         new TreeSet<Countdown>(new SortByRemainingDays());
     private static final Stack<Countdown> DELETED_COUNTDOWNS = new Stack<Countdown>();
 
-    public static TreeSet<Countdown> getCountdowns() {
+    static TreeSet<Countdown> getCountdowns() {
         return COUNTDOWNS;
     }
 
-    public static Stack<Countdown> getDeletedCountdowns() {
+    static Stack<Countdown> getDeletedCountdowns() {
         return DELETED_COUNTDOWNS;
     }
 
@@ -73,35 +71,6 @@ public class CountdownHandler {
 
     public static NavigableSet<Countdown> getAscendingCountdowns() {
         return getDescendingCountdowns().reversed();
-    }
-
-    public static int getStatistic(Urgency urgency) {
-        LocalDate now = LocalDate.now();
-        int stat = 0;
-        for (Countdown countdown : COUNTDOWNS) {
-            switch (urgency) {
-                case OVERDUE:
-                    if (countdown.isOverdue(now))
-                        stat++;
-                    break;
-                case TODAY:
-                    if (countdown.isDueToday(now))
-                        stat++;
-                    break;
-                case TOMORROW:
-                    if (countdown.isDueTomorrow(now))
-                        stat++;
-                    break;
-                case COMPLETED:
-                    if (countdown.isDone())
-                        stat++;
-                    break;
-                default:
-                    stat++;
-                    break;
-            }
-        }
-        return stat;
     }
 
     private CountdownHandler() {}

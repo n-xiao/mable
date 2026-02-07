@@ -102,12 +102,7 @@ public class StorageHandler {
      *
      * This method should only be run if the main loading method throws a
      * Jackson exception.
-     *
-     * This method has literally been deprecated just as it was created,
-     * given that it is technically unnecessary for such a young & small project.
-     * This method will be removed in the first stable release of Mable.
      */
-    @Deprecated
     private static void salvageCountdowns() {
         CountdownHandler.getCountdowns().clear(); // ensures empty
         final JsonNode JSON_ROOT = MAPPER.readTree(COUNTDOWNS_PATH);
@@ -164,8 +159,6 @@ public class StorageHandler {
             CountdownFolder cdf = MAPPER.treeToValue(v, CountdownFolder.class);
             FolderHandler.getFolders().add(cdf);
         });
-        // initialises protected folders
-        FolderHandler.organiseProtectedFolders();
     }
 
     /**
@@ -177,13 +170,8 @@ public class StorageHandler {
      *
      * This method should only be run if the main loading method throws a
      * Jackson exception.
-     *
-     * This method has literally been deprecated just as it was created,
-     * given that it is technically unnecessary for such a young & small project.
-     * This method will be removed in the first stable release of Mable.
      */
     @SuppressWarnings("unchecked")
-    @Deprecated
     private static void salvageSavedFolders() {
         FolderHandler.getFolders().clear(); // ensures empty
         final JsonNode JSON_ROOT = MAPPER.readTree(FOLDER_PATH);

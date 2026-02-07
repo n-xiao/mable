@@ -202,7 +202,7 @@ public class EditField extends Region {
             this.setMaxWidth(Double.MAX_VALUE);
             this.setFont(FontHandler.getSubtitle());
             this.setTextAlignment(TextAlignment.LEFT);
-            this.setTextFill(RiceHandler.getColour("error"));
+            this.setTextFill(RiceHandler.getColour("red"));
             this.setOpacity(0);
             this.transition = new FadeTransition();
             this.transition.setNode(this);

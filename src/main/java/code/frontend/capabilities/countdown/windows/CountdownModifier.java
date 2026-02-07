@@ -16,7 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package code.frontend.libs.katlaf.windows;
+package code.frontend.capabilities.countdown.windows;
 
 import code.backend.data.Countdown;
 import code.frontend.libs.katlaf.FontHandler;
@@ -72,7 +72,7 @@ public abstract class CountdownModifier extends Stage {
         this.root.setBackground(null);
 
         Scene scene = new Scene(this.root);
-        scene.setFill(RiceHandler.getColour("background1"));
+        scene.setFill(RiceHandler.getColour("night"));
         this.setScene(scene);
     }
 
@@ -93,7 +93,7 @@ public abstract class CountdownModifier extends Stage {
         container.setFillWidth(true);
 
         Label label = new Label(getNameInputuserHint());
-        label.setTextFill(RiceHandler.getColour());
+        label.setTextFill(RiceHandler.getColour("white"));
         label.setAlignment(Pos.CENTER_LEFT);
         label.setMaxWidth(WIDTH);
         label.setFont(FontHandler.getHeading(3));
@@ -120,7 +120,7 @@ public abstract class CountdownModifier extends Stage {
         dateLabel.setAlignment(Pos.CENTER_LEFT);
         dateLabel.setMaxWidth(WIDTH);
         dateLabel.setFont(FontHandler.getHeading(3));
-        dateLabel.setTextFill(RiceHandler.getColour());
+        dateLabel.setTextFill(RiceHandler.getColour("white"));
         dateField.setMaxWidth(300);
         dateField.setMinWidth(300);
         dateField.setFieldMargins(INSETS);
@@ -132,7 +132,7 @@ public abstract class CountdownModifier extends Stage {
         separator.setMaxHeight(HEIGHT);
         separator.setAlignment(Pos.CENTER);
         separator.setFont(FontHandler.getHeading(3));
-        separator.setTextFill(RiceHandler.getColour());
+        separator.setTextFill(RiceHandler.getColour("white"));
         separator.setMaxWidth(WIDTH);
         HBox.setHgrow(separator, Priority.ALWAYS);
         HBox.setMargin(separator, new Insets(0, 8, 0, 8));
@@ -142,7 +142,7 @@ public abstract class CountdownModifier extends Stage {
         daysLabel.setAlignment(Pos.CENTER_RIGHT);
         daysLabel.setMaxWidth(WIDTH);
         daysLabel.setFont(FontHandler.getHeading(3));
-        daysLabel.setTextFill(RiceHandler.getColour());
+        daysLabel.setTextFill(RiceHandler.getColour("white"));
         daysField.setNumInputOnly(true);
         daysField.setTextLimit(7);
         daysField.setFieldMargins(INSETS);

@@ -50,7 +50,7 @@ public class DateInputField extends VBox {
         this.setFillWidth(true);
         format = "dd-MM-yyyy"; // to be made configurable later, for the USA peeps
         hintLabel = new Label();
-        hintLabel.setTextFill(RiceHandler.getColour("error"));
+        hintLabel.setTextFill(RiceHandler.getColour("red"));
         hintLabel.setOpacity(0);
         hintLabel.setFont(FontHandler.getNormal());
         hintLabel.setAlignment(Pos.CENTER);
@@ -65,12 +65,12 @@ public class DateInputField extends VBox {
                         if (newValue) {
                             hintLabel.setText("day");
                             hintLabel.setAlignment(Pos.TOP_CENTER);
-                            hintLabel.setTextFill(RiceHandler.getColour("selected"));
+                            hintLabel.setTextFill(RiceHandler.getColour("blue"));
                             hintLabel.setOpacity(1);
-                            border.setStrokeColour(RiceHandler.getColour("selected"));
+                            border.setStrokeColour(RiceHandler.getColour("blue"));
                         } else {
                             hintLabel.setOpacity(0);
-                            border.setStrokeColour(RiceHandler.getColour());
+                            border.setStrokeColour(RiceHandler.getColour("white"));
                         }
                     }));
             }
@@ -83,12 +83,12 @@ public class DateInputField extends VBox {
                         if (newValue) {
                             hintLabel.setText("month");
                             hintLabel.setAlignment(Pos.TOP_CENTER);
-                            hintLabel.setTextFill(RiceHandler.getColour("selected"));
+                            hintLabel.setTextFill(RiceHandler.getColour("blue"));
                             hintLabel.setOpacity(1);
-                            border.setStrokeColour(RiceHandler.getColour("selected"));
+                            border.setStrokeColour(RiceHandler.getColour("blue"));
                         } else {
                             hintLabel.setOpacity(0);
-                            border.setStrokeColour(RiceHandler.getColour());
+                            border.setStrokeColour(RiceHandler.getColour("white"));
                         }
                     }));
             }
@@ -102,12 +102,12 @@ public class DateInputField extends VBox {
                         if (newValue) {
                             hintLabel.setText("year");
                             hintLabel.setAlignment(Pos.TOP_CENTER);
-                            hintLabel.setTextFill(RiceHandler.getColour("selected"));
+                            hintLabel.setTextFill(RiceHandler.getColour("blue"));
                             hintLabel.setOpacity(1);
-                            border.setStrokeColour(RiceHandler.getColour("selected"));
+                            border.setStrokeColour(RiceHandler.getColour("blue"));
                         } else {
                             hintLabel.setOpacity(0);
-                            border.setStrokeColour(RiceHandler.getColour());
+                            border.setStrokeColour(RiceHandler.getColour("white"));
                         }
                     }));
             }

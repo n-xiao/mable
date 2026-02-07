@@ -66,41 +66,11 @@ public class CountdownFolder extends Identifiable implements Listable {
         }
     }
 
-    /**
-     * Creates a "protected" {@link CountdownFolder} which is not intended
-     * to be editable by users. This design choice will be reconsidered,
-     * as creating separate classes may be more logical moving forward
-     * instead of this abomination.
-     */
-    @Deprecated
-    public CountdownFolder(SpecialType type) {
-        assert type != null;
-        switch (type) {
-            case ALL_INCOMPLETE:
-                this.name = "All Ongoing";
-                break;
-            case ALL_COMPLETE:
-                this.name = "All Completed";
-                break;
-            default:
-                break;
-        }
-        this.TYPE = type;
-        this.CONTENTS = new TreeSet<Countdown>(new SortByRemainingDays());
-        super(UUID.randomUUID());
-    }
-
     /*
 
 
-     GETTERS
+     PUBLIC API
     -------------------------------------------------------------------------------------*/
-
-    @JsonIgnore
-    @Override
-    public boolean isEngaged() {
-        return FolderHandler.getCurrentlySelectedFolder().equals(this);
-    }
 
     @JsonProperty("name")
     public String getName() {
@@ -137,12 +107,6 @@ public class CountdownFolder extends Identifiable implements Listable {
         return this.TYPE != null;
     }
 
-    /*
-
-
-     SETTERS
-    -------------------------------------------------------------------------------------*/
-
     public void setName(String name) {
         this.name = name;
     }
@@ -160,9 +124,7 @@ public class CountdownFolder extends Identifiable implements Listable {
     }
 
     @Override
-    public void onSelect() {
-        FolderHandler.setCurrentlySelectedFolder(this);
-    }
+    public void onSelect() {}
 
     @Override
     public int compareTo(Listable listable) {

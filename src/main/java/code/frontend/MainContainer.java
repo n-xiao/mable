@@ -18,10 +18,34 @@
 
 package code.frontend;
 
+import code.frontend.libs.katlaf.ricing.RiceHandler;
+import code.frontend.sidebar.Sidebar;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 
 public class MainContainer extends Region {
+    private static MainContainer instance = null;
+    public static MainContainer getInstance() {
+        if (instance == null) {
+            instance = new MainContainer();
+            instance.getChildren().add(instance.new Container());
+        }
+        return instance;
+    }
+
     private MainContainer() {
-        this.setBackground(null);
+        this.setBackground(RiceHandler.createBG(RiceHandler.getColour("night"), 0, 0));
+    }
+
+    private class Container extends HBox {
+        final Sidebar sidebar;
+        // TODO add the content!
+        Container() {
+            this.sidebar = new Sidebar();
+            this.setBackground(null);
+            this.setFillHeight(true);
+            this.prefHeightProperty().bind(MainContainer.this.heightProperty());
+            this.prefWidthProperty().bind(MainContainer.this.widthProperty());
+        }
     }
 }

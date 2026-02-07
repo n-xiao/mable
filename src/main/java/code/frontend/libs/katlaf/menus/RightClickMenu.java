@@ -115,7 +115,7 @@ public abstract class RightClickMenu extends VBox {
         MableBorder.applyToPane(this, border);
         this.setManaged(false);
         this.setBackground(
-            RiceHandler.createBG(RiceHandler.getColour("background1"), BG_RADIUS, BG_INSETS));
+            RiceHandler.createBG(RiceHandler.getColour("black"), BG_RADIUS, BG_INSETS));
         this.setFillWidth(true);
         this.resize(WIDTH, HEIGHT);
         this.setVisible(true);

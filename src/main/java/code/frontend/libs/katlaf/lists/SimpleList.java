@@ -41,7 +41,7 @@ public class SimpleList extends BorderedRegion {
 
     public SimpleList(ArrayList<Listable> listables) {
         super(2, 0.25, 0.15);
-        this.getCustomBorder().setStrokeColour(RiceHandler.getColour("ghost"));
+        this.getCustomBorder().setStrokeColour(RiceHandler.getColour("grey"));
         this.listables = listables;
         listableIterator = listables.iterator();
         scrollPane = new ScrollPane();
@@ -197,18 +197,6 @@ public class SimpleList extends BorderedRegion {
         for (Listable listable : listables) {
             content.getChildren().add(newMember(listable));
         }
-    }
-
-    /**
-     * Updates the selection styling of all {@link SimpleListMember} of this {@link SimpleList}
-     * based on evidence from the backend.
-     */
-    public void updateSelections() {
-        content.getChildren().forEach(child -> {
-            if (child instanceof SimpleListMember) {
-                ((SimpleListMember) child).updateSelection();
-            }
-        });
     }
 
     /**

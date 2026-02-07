@@ -37,38 +37,38 @@ public class Launcher extends Application {
     @Override
     public void init() throws Exception {
         FontHandler.initFonts();
-        StorageHandler.init();
+        // StorageHandler.init();
     }
 
     @Override
     public void start(Stage stage) {
-        RiceHandler.updatePalette("DARK");
-        if (System.getProperty("os.name").startsWith("Windows"))
-            stage.setTitle("Mable"); // only set title if on windows
-        else
-            stage.setTitle("");
-        stage.setMinWidth(MIN_WIDTH);
-        stage.setMinHeight(MIN_HEIGHT);
-        stage.setWidth(PREF_WIDTH);
-        stage.setHeight(PREF_HEIGHT);
-        stage.setOnCloseRequest((event) -> { Platform.exit(); });
-
-        MainContainer root = MainContainer.getInstance();
-        root.prefWidthProperty().bind(stage.widthProperty());
-        root.prefHeightProperty().bind(stage.heightProperty());
-
-        Scene scene = new Scene(root);
-        scene.setFill(RiceHandler.getColour("background1"));
-        stage.setScene(scene);
-        root.init();
-        stage.show();
-
-        Watchdog.startWatchdog();
+        // RiceHandler.updatePalette("DARK");
+        // if (System.getProperty("os.name").startsWith("Windows"))
+        //     stage.setTitle("Mable"); // only set title if on windows
+        // else
+        //     stage.setTitle("");
+        // stage.setMinWidth(MIN_WIDTH);
+        // stage.setMinHeight(MIN_HEIGHT);
+        // stage.setWidth(PREF_WIDTH);
+        // stage.setHeight(PREF_HEIGHT);
+        // stage.setOnCloseRequest((event) -> { Platform.exit(); });
+        //
+        // MainContainer root = MainContainer.getInstance();
+        // root.prefWidthProperty().bind(stage.widthProperty());
+        // root.prefHeightProperty().bind(stage.heightProperty());
+        //
+        // Scene scene = new Scene(root);
+        // scene.setFill(RiceHandler.getColour("background1"));
+        // stage.setScene(scene);
+        // root.init();
+        // stage.show();
+        //
+        // Watchdog.startWatchdog();
     }
 
     @Override
     public void stop() throws Exception {
-        StorageHandler.save(); // saves on app close
+        // StorageHandler.save(); // saves on app close
     }
 
     public static void main(String[] args) {

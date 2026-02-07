@@ -68,10 +68,6 @@ public class RiceHandler {
         return Color.web(getColourString(name));
     }
 
-    public static Color getColour() {
-        return getColour("primary");
-    }
-
     public static Background createBG(Color c, double radius, double ins) {
         BackgroundFill bgFill = new BackgroundFill(c, new CornerRadii(radius), new Insets(ins));
         return new Background(bgFill);

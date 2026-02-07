@@ -32,7 +32,7 @@ public abstract class SubtitleButton extends TemplateButton {
         this.setBackground(null);
         label = new Label(text);
         label.setFont(FontHandler.getItalic());
-        label.setTextFill(RiceHandler.getColour("txtGhost"));
+        label.setTextFill(RiceHandler.getColour("grey"));
         label.setAlignment(Pos.CENTER);
         label.maxWidthProperty().bind(this.widthProperty());
         label.maxHeightProperty().bind(this.heightProperty());
@@ -41,12 +41,12 @@ public abstract class SubtitleButton extends TemplateButton {
 
     @Override
     protected void onMouseEnter(MouseEvent event) {
-        label.setTextFill(RiceHandler.getColour("selected"));
+        label.setTextFill(RiceHandler.getColour("blue"));
     }
 
     @Override
     protected void onMouseLeave(MouseEvent event) {
-        label.setTextFill(RiceHandler.getColour("txtGhost"));
+        label.setTextFill(RiceHandler.getColour("blue"));
     }
 
     @Override

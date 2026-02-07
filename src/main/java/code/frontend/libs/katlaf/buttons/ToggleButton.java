@@ -94,11 +94,11 @@ public abstract class ToggleButton extends Button {
     }
 
     protected Color getUntoggledColour() {
-        return RiceHandler.getColour("ghost2");
+        return RiceHandler.getColour("lightgrey");
     }
 
     protected Color getToggledColour() {
-        return RiceHandler.getColour("selected");
+        return RiceHandler.getColour("blue");
     }
 
     protected Color getHoverColour() {

@@ -93,7 +93,7 @@ public class CountdownPane extends VBox {
         Font font = FontHandler.getSubtitle();
         this.statusLabel.setAlignment(Pos.BOTTOM_LEFT);
         this.statusLabel.setFont(font);
-        this.statusLabel.setTextFill(RiceHandler.getColour("txtGhost"));
+        this.statusLabel.setTextFill(RiceHandler.getColour("lightgrey"));
         this.statusLabel.setMaxSize(WIDTH / 2, height);
         HBox.setMargin(this.statusLabel, new Insets(0, 0, 0, leftRightPadding));
         Pane spacer = new Pane();
@@ -101,7 +101,7 @@ public class CountdownPane extends VBox {
         HBox.setHgrow(spacer, Priority.ALWAYS);
         this.endDateLabel.setAlignment(Pos.BOTTOM_RIGHT);
         this.endDateLabel.setFont(font);
-        this.endDateLabel.setTextFill(RiceHandler.getColour("txtGhost"));
+        this.endDateLabel.setTextFill(RiceHandler.getColour("lightgrey"));
         this.endDateLabel.setMaxSize(WIDTH / 2, height);
         HBox.setMargin(this.endDateLabel, new Insets(0, leftRightPadding, 0, 0));
         this.hoverContainer.setFillHeight(true);
@@ -148,7 +148,7 @@ public class CountdownPane extends VBox {
         content.setPrefSize(WIDTH, CONTENT_HEIGHT);
         content.setFillHeight(true);
         // adds the border
-        this.borderColour = RiceHandler.getColour(); // TODO: implement custom colour
+        this.borderColour = RiceHandler.getColour("white"); // TODO: implement custom colour
         mableBorder.setStrokeColour(this.borderColour);
         MableBorder.applyToPane(content, mableBorder);
         // adds the name display
@@ -167,7 +167,7 @@ public class CountdownPane extends VBox {
         nameLabel.setTextAlignment(TextAlignment.CENTER);
         nameLabel.setWrapText(true);
         nameLabel.setFont(nameFont);
-        nameLabel.setTextFill(RiceHandler.getColour());
+        nameLabel.setTextFill(RiceHandler.getColour("white"));
         nameLabel.setPrefWidth(NAME_WIDTH);
         nameLabel.prefHeightProperty().bind(this.heightProperty());
 
@@ -179,7 +179,7 @@ public class CountdownPane extends VBox {
     private Pane createVerticalDivider() {
         Pane pane = new Pane();
         pane.setPrefSize(DIV_WIDTH, HEIGHT);
-        divider.setStrokeColour(RiceHandler.getColour());
+        divider.setStrokeColour(RiceHandler.getColour("white"));
         divider.setOpacity(0.4);
         divider.setPadding(20);
         CustomLine.applyToPane(pane, divider);
@@ -193,14 +193,14 @@ public class CountdownPane extends VBox {
         daysLabel.setAlignment(Pos.CENTER);
         daysLabel.setTextAlignment(TextAlignment.CENTER);
         daysLabel.setFont(numFont);
-        daysLabel.setTextFill(RiceHandler.getColour());
+        daysLabel.setTextFill(RiceHandler.getColour("white"));
         daysLabel.prefWidthProperty().bind(display.widthProperty());
 
         Font textFont = FontHandler.getDedicated(DedicatedFont.COUNTDOWN_INFO);
         descriptorLabel.setAlignment(Pos.CENTER);
         descriptorLabel.setTextAlignment(TextAlignment.CENTER);
         descriptorLabel.setFont(textFont);
-        descriptorLabel.setTextFill(RiceHandler.getColour());
+        descriptorLabel.setTextFill(RiceHandler.getColour("white"));
         descriptorLabel.prefWidthProperty().bind(display.widthProperty());
 
         configureCountdownLabelsText(countdown, now);
@@ -249,17 +249,17 @@ public class CountdownPane extends VBox {
             fadeTransition.setFromValue(hoverContainer.getOpacity());
             fadeTransition.playFromStart();
         }
-        setColour(RiceHandler.getColour("background1"));
-        statusLabel.setTextFill(RiceHandler.getColour("txtGhost"));
-        endDateLabel.setTextFill(RiceHandler.getColour("txtGhost"));
+        setColour(RiceHandler.getColour("night"));
+        statusLabel.setTextFill(RiceHandler.getColour("lightgrey"));
+        endDateLabel.setTextFill(RiceHandler.getColour("lightgrey"));
     }
 
     public void applySelectStyle() {
         fadeTransition.stop();
         hoverContainer.setOpacity(1);
-        setColour(RiceHandler.getColour("selected"));
-        statusLabel.setTextFill(RiceHandler.getColour("selected"));
-        endDateLabel.setTextFill(RiceHandler.getColour("selected"));
+        setColour(RiceHandler.getColour("blue"));
+        statusLabel.setTextFill(RiceHandler.getColour("blue"));
+        endDateLabel.setTextFill(RiceHandler.getColour("blue"));
     }
 
     public void setCountdown(Countdown countdown) {

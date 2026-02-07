@@ -18,7 +18,6 @@
 
 package code.frontend.capabilities.countdown.components;
 
-import code.frontend.capabilities.countdown.components.OldCountdownTable.ButtonMode;
 import code.frontend.capabilities.countdown.windows.CountdownCreator;
 import code.frontend.libs.katlaf.buttons.BasicButton;
 import code.frontend.libs.katlaf.menus.RightClickMenu;

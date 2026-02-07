@@ -135,8 +135,8 @@ public abstract class Button extends TemplateButton {
             this.border.setStrokeColour(colour);
             this.label.setTextFill(colour);
         } else {
-            this.border.setStrokeColour(RiceHandler.getColour("disabled"));
-            this.label.setTextFill(RiceHandler.getColour("disabled"));
+            this.border.setStrokeColour(RiceHandler.getColour("darkgrey"));
+            this.label.setTextFill(RiceHandler.getColour("darkgrey"));
         }
         super.setEnabled(enabled);
     }

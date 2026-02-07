@@ -118,7 +118,7 @@ abstract class DraggableListMember extends SimpleListMember {
             this.setFillWidth(true);
             this.setViewOrder(-12);
             this.setManaged(false);
-            this.highlight = RiceHandler.getColour("hoverDragndrop");
+            this.highlight = RiceHandler.getColour("orange");
 
             final UpperLineGuide upper = new UpperLineGuide();
             final LowerLineGuide lower = new LowerLineGuide();

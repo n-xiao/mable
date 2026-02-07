@@ -68,21 +68,13 @@ public abstract class SimpleTableMember extends StackPane implements Comparable<
 
     /**
      * This method is called when this instance is clicked on
-     * with a right mouse button.
+     * with a right mouse button. This instance is marked as
+     * selected when this method is called.
      *
      * An ArrayList of selected members from the {@link SimpleTable}
      * are provided through the parameter.
      */
     protected abstract void onRightClicked(final ArrayList<SimpleTableMember> selectedMembers);
-
-    /**
-     * This method is called when the table needs to be refreshed/repopulated.
-     * This method allows implementations of this class to use more efficient
-     * or visually appealing methods to update/refresh the UI.
-     *
-     * This method CANNOT do nothing.
-     */
-    protected abstract void refresh();
 
     /*
 

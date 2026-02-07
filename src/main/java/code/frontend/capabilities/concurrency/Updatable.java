@@ -6,7 +6,13 @@ package code.frontend.capabilities.concurrency;
  */
 public interface Updatable {
     /**
-     * Will be executed by the Watchdog's concurrent thread.
+     * This method will be called by the Watchdog's thread at regular intervals.
+     * Implementations should use this method to update any UI elements that
+     * may change throughout time.
+     *
+     * Note: Implementations need to call {@link Watchdog#watch(Updatable)}
+     * and add themselves to the list of {@link Updatable} stuff that
+     * the Watchdog will watch.
      */
     public void update();
 }

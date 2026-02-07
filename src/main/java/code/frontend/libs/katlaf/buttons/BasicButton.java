@@ -27,7 +27,7 @@ public abstract class BasicButton extends Button {
         super(text);
         this.getCustomBorder().setVisible(false);
         this.getCustomBackground().setOpacity(0);
-        this.getLabel().setTextFill(RiceHandler.getColour());
+        this.getLabel().setTextFill(RiceHandler.getColour("white"));
         this.getLabel().setFont(FontHandler.getNormal());
         this.setCursor(Cursor.DEFAULT);
     }

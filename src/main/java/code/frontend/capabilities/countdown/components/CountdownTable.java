@@ -1,6 +1,8 @@
 package code.frontend.capabilities.countdown.components;
 
 import code.backend.data.Countdown;
+import code.frontend.capabilities.concurrency.Updatable;
+import code.frontend.capabilities.concurrency.Watchdog;
 import code.frontend.libs.katlaf.dragndrop.DragStartRegion;
 import code.frontend.libs.katlaf.graphics.MableBorder;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
@@ -26,13 +28,13 @@ public class CountdownTable extends SimpleTable {
      COMPOSITIONS
     -------------------------------------------------------------------------------------*/
 
-    private class Member extends SimpleTableMember {
+    private class Member extends SimpleTableMember implements Updatable {
         private final CountdownPane countdownPane;
         Member(final Countdown countdown) {
             super(CountdownPane.WIDTH, CountdownPane.HEIGHT);
             this.countdownPane = new CountdownPane(countdown, LocalDate.now());
-            StackPane.setAlignment(this.countdownPane, Pos.CENTER);
-            this.getChildren().add(this.countdownPane);
+            this.getChildren().addAll(this.countdownPane, new DragDetector());
+            Watchdog.watch(this);
         }
 
         @Override
@@ -59,15 +61,19 @@ public class CountdownTable extends SimpleTable {
                     - other.countdownPane.getCountdown().daysUntilDue(now);
             }
             throw new IllegalArgumentException(
-                "can't compare something that isn't a member of CountdownTable");
+                "can't compare something that isn't a member of this CountdownTable");
         }
 
         @Override
-        protected void refresh() {
-            countdownPane.refreshContent();
+        public void update() {
+            this.countdownPane.refreshContent();
         }
 
         private class DragDetector extends DragStartRegion<Countdown> {
+            DragDetector() {
+                super();
+                this.resize(CountdownPane.WIDTH, CountdownPane.HEIGHT);
+            }
             @Override
             protected void onDragStart() {
                 Member.this.setOpacity(0.65);

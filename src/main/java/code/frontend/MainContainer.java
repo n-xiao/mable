@@ -46,6 +46,7 @@ public class MainContainer extends Region {
             this.setFillHeight(true);
             this.prefHeightProperty().bind(MainContainer.this.heightProperty());
             this.prefWidthProperty().bind(MainContainer.this.widthProperty());
+            this.getChildren().addAll(this.sidebar);
         }
     }
 }

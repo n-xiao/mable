@@ -221,9 +221,17 @@ public class CountdownPane extends VBox {
     private void configureCountdownLabelsText(Countdown countdown, LocalDate now) {
         int daysLeft = Math.abs(countdown.daysUntilDue(now));
         daysLabel.setText(FormatHandler.intToString(daysLeft));
-        String textNoun = (daysLeft != 1) ? "DAYS" : "DAY";
-        String textAdverb = (countdown.isOverdue(now)) ? "SINCE DUE" : "LEFT";
+        String textNoun = getTextNoun(daysLeft);
+        String textAdverb = getTextAdverb(countdown.isOverdue(now));
         descriptorLabel.setText(textNoun + "\n" + textAdverb);
+    }
+
+    protected String getTextNoun(int daysLeft) {
+        return daysLeft != 1 ? "DAYS" : "DAY";
+    }
+
+    protected String getTextAdverb(boolean isOverdue) {
+        return isOverdue ? "SINCE DUE" : "LEFT";
     }
 
     public void applyDeselectStyle(boolean withFadeOut) {

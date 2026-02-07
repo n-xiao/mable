@@ -10,10 +10,8 @@ import code.frontend.libs.katlaf.tables.SimpleTable;
 import code.frontend.libs.katlaf.tables.SimpleTableMember;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import javafx.geometry.Pos;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
 import javafx.scene.transform.Rotate;
 
 public class CountdownTable extends SimpleTable {
@@ -33,6 +31,13 @@ public class CountdownTable extends SimpleTable {
         Member(final Countdown countdown) {
             super(CountdownPane.WIDTH, CountdownPane.HEIGHT);
             this.countdownPane = new CountdownPane(countdown, LocalDate.now());
+            this.getChildren().addAll(this.countdownPane, new DragDetector());
+            Watchdog.watch(this);
+        }
+
+        Member(final CountdownPane countdownPane) {
+            super(CountdownPane.WIDTH, CountdownPane.HEIGHT);
+            this.countdownPane = countdownPane;
             this.getChildren().addAll(this.countdownPane, new DragDetector());
             Watchdog.watch(this);
         }
@@ -116,6 +121,18 @@ public class CountdownTable extends SimpleTable {
             protected void cleanupOnDragEnd() {
                 Member.this.setOpacity(1);
             }
+        }
+    }
+
+    private class CompletedMember extends Member {
+        CompletedMember(final Countdown countdown) {
+            final CountdownPane countdownPane = new CountdownPane(countdown, LocalDate.now()) {
+                @Override
+                protected String getTextAdverb(boolean isOverdue) {
+                    return "SINCE DONE";
+                }
+            };
+            super(countdownPane);
         }
     }
 }

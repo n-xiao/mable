@@ -85,11 +85,11 @@ public class StorageHandler {
     }
 
     private static void loadCountdowns() throws JacksonException {
-        assert CountdownHandler.getCountdowns().isEmpty();
+        assert CountdownHandler.getAll().isEmpty();
         final JsonNode JSON_ROOT = MAPPER.readTree(COUNTDOWNS_PATH);
         JSON_ROOT.forEachEntry((_k, v) -> {
             Countdown cd = MAPPER.treeToValue(v, Countdown.class);
-            CountdownHandler.getCountdowns().add(cd);
+            CountdownHandler.getAll().add(cd);
         });
     }
 
@@ -104,14 +104,14 @@ public class StorageHandler {
      * Jackson exception.
      */
     private static void salvageCountdowns() {
-        CountdownHandler.getCountdowns().clear(); // ensures empty
+        CountdownHandler.getAll().clear(); // ensures empty
         final JsonNode JSON_ROOT = MAPPER.readTree(COUNTDOWNS_PATH);
         JSON_ROOT.forEachEntry((_k, v) -> {
             String id = MAPPER.convertValue(v.get("id"), String.class); // assumes "id", not "ID"
             String name = MAPPER.convertValue(v.get("name"), String.class);
             boolean isDone = MAPPER.convertValue(v.get("isDone"), Boolean.class).booleanValue();
             String due = MAPPER.convertValue(v.get("due"), String.class);
-            CountdownHandler.getCountdowns().add(new Countdown(id, name, isDone, due));
+            CountdownHandler.getAll().add(new Countdown(id, name, isDone, due));
         });
 
         deleteAllCountdownsSafely();
@@ -145,7 +145,7 @@ public class StorageHandler {
         final JsonNode JSON_ROOT = MAPPER.readTree(COUNTDOWNS_PATH);
         final ObjectNode OBJ_ROOT = JSON_ROOT.isObject() ? ((ObjectNode) JSON_ROOT)
                                                          : MAPPER.createObjectNode().putObject("");
-        CountdownHandler.getCountdowns().forEach(
+        CountdownHandler.getAll().forEach(
             cd -> { OBJ_ROOT.putPOJO(cd.getID().toString(), cd); });
         CountdownHandler.getDeletedCountdowns().forEach(
             cd -> { OBJ_ROOT.remove(cd.getID().toString()); });

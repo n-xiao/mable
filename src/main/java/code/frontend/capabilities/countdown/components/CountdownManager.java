@@ -19,16 +19,19 @@
 package code.frontend.capabilities.countdown.components;
 
 import code.backend.data.Countdown;
+import code.backend.utils.CountdownHandler;
 import code.frontend.libs.katlaf.dragndrop.DragStartRegion;
+import code.frontend.libs.katlaf.tables.SimpleTable;
 import code.frontend.libs.katlaf.tables.SimpleTableMember;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Region;
 
-public class CountdownControl extends ScrollPane {
-    public CountdownControl() {
+public class CountdownManager extends ScrollPane {
+    public CountdownManager() {
         this.setStyle("-fx-background: transparent;");
+        this.setFitToWidth(true);
     }
 
     /*
@@ -37,6 +40,19 @@ public class CountdownControl extends ScrollPane {
      BEHAVIOUR
     -------------------------------------------------------------------------------------*/
 
+    private void setupCountdown() {
+        final SimpleTable table = new SimpleTable();
+        CountdownHandler.getIncomplete().forEach(c
+            -> {
+
+            });
+        table.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+    }
+
+    private void setupCompletedCountdown() {
+        // TODO
+    }
+
     /*
 
 
@@ -44,10 +60,12 @@ public class CountdownControl extends ScrollPane {
     -------------------------------------------------------------------------------------*/
 
     private class Member extends SimpleTableMember {
-        final Countdown countdown;
-        Member(final Countdown countdown) {
+        final CountdownPane countdownPane;
+        Member(final CountdownPane countdownPane) {
             super(CountdownPane.WIDTH, CountdownPane.HEIGHT);
-            this.countdown = countdown;
+            this.countdownPane = countdownPane;
+            this.getChildren().addAll(
+                this.countdownPane, new DragDetector(this, countdownPane.getCountdown()));
         }
 
         @Override
@@ -55,7 +73,8 @@ public class CountdownControl extends ScrollPane {
             if (o instanceof Member) {
                 final LocalDate now = LocalDate.now();
                 final Member other = (Member) o;
-                return this.countdown.daysUntilDue(now) - other.countdown.daysUntilDue(now);
+                return this.countdownPane.getCountdown().daysUntilDue(now)
+                    - other.countdownPane.getCountdown().daysUntilDue(now);
             }
             throw new IllegalArgumentException(
                 "Cannot compare something that isn't a CountdownControl.Member");
@@ -68,25 +87,26 @@ public class CountdownControl extends ScrollPane {
     }
 
     private class DragDetector extends DragStartRegion<Countdown> {
-        final CountdownPane parent;
+        final Member parent;
+        final Countdown countdown;
 
-        DragDetector(final CountdownPane parent) {
+        DragDetector(final Member parent, final Countdown countdown) {
             this.parent = parent;
+            this.countdown = countdown;
             this.prefWidthProperty().bind(parent.widthProperty());
             this.prefHeightProperty().bind(parent.heightProperty());
             this.setViewOrder(this.parent.getViewOrder() - 1);
-            parent.getChildren().addLast(this);
         }
 
         @Override
         protected Countdown getData() {
-            return this.parent.getCountdown();
+            return this.countdown;
         }
 
         @Override
         protected Region getRepresentation() {
-            // TODO this thing properly later
-            return this.parent;
+            // TODO THIS THING LATER
+            return new Region();
         }
 
         @Override

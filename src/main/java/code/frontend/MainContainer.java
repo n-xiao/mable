@@ -24,6 +24,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 
 public class MainContainer extends Region {
+    /*
+
+
+     SINGLETON CLASS
+    -------------------------------------------------------------------------------------*/
+
     private static MainContainer instance = null;
     public static MainContainer getInstance() {
         if (instance == null) {
@@ -36,6 +42,12 @@ public class MainContainer extends Region {
     private MainContainer() {
         this.setBackground(RiceHandler.createBG(RiceHandler.getColour("night"), 0, 0));
     }
+
+    /*
+
+
+     COMPOSITIONS
+    -------------------------------------------------------------------------------------*/
 
     private class Container extends HBox {
         final Sidebar sidebar;

@@ -19,8 +19,8 @@
 package code.backend.utils;
 
 import code.backend.data.Countdown;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.NavigableSet;
 import java.util.Stack;
 import java.util.TreeSet;
 
@@ -29,11 +29,29 @@ public class CountdownHandler {
         new TreeSet<Countdown>(new SortByRemainingDays());
     private static final Stack<Countdown> DELETED_COUNTDOWNS = new Stack<Countdown>();
 
-    static TreeSet<Countdown> getCountdowns() {
+    public static TreeSet<Countdown> getAll() {
         return COUNTDOWNS;
     }
 
-    static Stack<Countdown> getDeletedCountdowns() {
+    public static ArrayList<Countdown> getIncomplete() {
+        final ArrayList<Countdown> arr = new ArrayList<Countdown>();
+        COUNTDOWNS.forEach(c -> {
+            if (!c.isDone())
+                arr.add(c);
+        });
+        return arr;
+    }
+
+    public static ArrayList<Countdown> getComplete() {
+        final ArrayList<Countdown> arr = new ArrayList<>();
+        COUNTDOWNS.forEach(c -> {
+            if (c.isDone())
+                arr.add(c);
+        });
+        return arr;
+    }
+
+    public static Stack<Countdown> getDeletedCountdowns() {
         return DELETED_COUNTDOWNS;
     }
 
@@ -44,9 +62,6 @@ public class CountdownHandler {
      */
     public static void addCountdown(Countdown c) {
         COUNTDOWNS.add(c);
-        FolderHandler.getCurrentlySelectedFolder().getContents().add(c);
-        if (FolderHandler.getCurrentlySelectedFolder().equals(FolderHandler.getCompletedFolder()))
-            c.setDone(true);
         StorageHandler.save();
     }
 
@@ -63,14 +78,6 @@ public class CountdownHandler {
                 return countdown;
         }
         return null;
-    }
-
-    public static NavigableSet<Countdown> getDescendingCountdowns() {
-        return FolderHandler.getCurrentlySelectedFolder().getContents().descendingSet();
-    }
-
-    public static NavigableSet<Countdown> getAscendingCountdowns() {
-        return getDescendingCountdowns().reversed();
     }
 
     private CountdownHandler() {}

@@ -19,7 +19,6 @@
 package code.frontend.capabilities.countdown.components;
 
 import code.backend.data.Countdown;
-import code.backend.data.Countdown.Urgency;
 import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.FontHandler.DedicatedFont;
 import code.frontend.libs.katlaf.FormatHandler;
@@ -85,6 +84,12 @@ public class CountdownPane extends VBox {
         initHoverHBox();
         this.getChildren().addAll(this.hoverContainer, this.content);
     }
+
+    /*
+
+
+     BEHAVIOUR
+    -------------------------------------------------------------------------------------*/
 
     private void initHoverHBox() {
         int leftRightPadding = 16;
@@ -226,12 +231,39 @@ public class CountdownPane extends VBox {
         descriptorLabel.setText(textNoun + "\n" + textAdverb);
     }
 
+    /*
+
+
+     PROTECTED API
+    -------------------------------------------------------------------------------------*/
+
+    protected final void refreshContent() {
+        LocalDate now = LocalDate.now();
+        nameLabel.setText(this.countdown.getName());
+        configureCountdownLabelsText(this.countdown, now);
+        configureStatus(this.countdown, now);
+    }
+
     protected String getTextNoun(int daysLeft) {
         return daysLeft != 1 ? "DAYS" : "DAY";
     }
 
     protected String getTextAdverb(boolean isOverdue) {
         return isOverdue ? "SINCE DUE" : "LEFT";
+    }
+
+    /*
+
+
+     PUBLIC API
+    -------------------------------------------------------------------------------------*/
+
+    public void applySelectStyle() {
+        fadeTransition.stop();
+        hoverContainer.setOpacity(1);
+        setColour(RiceHandler.getColour("blue"));
+        statusLabel.setTextFill(RiceHandler.getColour("blue"));
+        endDateLabel.setTextFill(RiceHandler.getColour("blue"));
     }
 
     public void applyDeselectStyle(boolean withFadeOut) {
@@ -246,34 +278,12 @@ public class CountdownPane extends VBox {
         endDateLabel.setTextFill(RiceHandler.getColour("lightgrey"));
     }
 
-    public void applySelectStyle() {
-        fadeTransition.stop();
-        hoverContainer.setOpacity(1);
-        setColour(RiceHandler.getColour("blue"));
-        statusLabel.setTextFill(RiceHandler.getColour("blue"));
-        endDateLabel.setTextFill(RiceHandler.getColour("blue"));
-    }
-
     public void setCountdown(Countdown countdown) {
         this.countdown = countdown;
     }
 
-    protected void setCountdownAndRefresh(Countdown countdown) {
-        if (countdown == null)
-            return;
-        this.countdown = countdown;
-        refreshContent();
-    }
-
     public Countdown getCountdown() {
         return countdown;
-    }
-
-    protected void refreshContent() {
-        LocalDate now = LocalDate.now();
-        nameLabel.setText(this.countdown.getName());
-        configureCountdownLabelsText(this.countdown, now);
-        configureStatus(this.countdown, now);
     }
 
     public void setColour(Color colour) {

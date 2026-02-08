@@ -22,20 +22,23 @@ import code.frontend.libs.katlaf.inputfields.InputField;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.util.ArrayList;
 import javafx.geometry.Pos;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
 
-public class SimpleTable extends Region {
+public class SimpleTable extends FlowPane {
     private final ArrayList<SimpleTableMember> members;
-
     public SimpleTable() {
         this.members = new ArrayList<SimpleTableMember>();
-        this.table = new Table();
-        this.table.prefWidthProperty().bind(this.widthProperty());
-        this.table.prefHeightProperty().bind(this.heightProperty());
-        this.getChildren().add(this.table);
+        this.setMaxHeight(Double.MAX_VALUE);
+        this.setMaxWidth(Double.MAX_VALUE);
+        this.setAlignment(Pos.TOP_CENTER);
+        this.setBackground(RiceHandler.createBG(RiceHandler.getColour("night"), 0, 0));
+        this.setOnMousePressed(event -> {
+            deselectAllMembers();
+            InputField.escapeAllInputs(); // fixes stupid inputs trapping cursors
+            event.consume();
+        });
     }
 
     /*
@@ -88,34 +91,52 @@ public class SimpleTable extends Region {
         lastSelectedMember = tableMember;
     }
 
+    /**
+     * This allows for left to right listing of members; by
+     * adding invisible Regions that act as "spacers" or "paddings", an incomplete
+     * row of a FlowPane will be aligned to the left when all children of the
+     * FlowPane are centered. It is attached to a listener for when the window
+     * is resized.
+     *
+     * At the time of writing, I can't seem to figure out how to reliably get
+     * the extra number of paddings needed. Hence, one extra padding is added
+     * and the height of the paddings are locked to 1 pixel, so it should not
+     * affect the scrolling experience of the user. (as in, the invisible
+     * paddings will probably not let the user scroll down to nothing)
+     */
+    void requestAlign() {
+        this.getChildren().removeIf(child -> child instanceof FakeMember);
+
+        final int totalWidth = (int) this.getBoundsInParent().getWidth();
+        final int widths = (int) members.getFirst().getWidth();
+        final int numMembers = members.size();
+        final int columns = (int) (totalWidth / widths);
+
+        if (columns == 0)
+            return;
+
+        final int numLastRow = (int) (numMembers % columns); // finds num of members on last row
+        final int remainder = columns - numLastRow + 1;
+
+        for (int i = 0; i < remainder; i++) {
+            final FakeMember fakeMember = new FakeMember(widths);
+            this.getChildren().addLast(fakeMember);
+        }
+    }
+
     /*
 
 
      PROTECTED API
     -------------------------------------------------------------------------------------*/
-    private final Table table;
-
-    protected void setHgap(final double hgap) {
-        table.contents.setHgap(hgap);
-        table.requestAlign();
-    }
-
-    protected void setVgap(final double vgap) {
-        table.contents.setVgap(vgap);
-        table.requestAlign();
-    }
-
-    protected ArrayList<SimpleTableMember> getMembers() {
-        return this.members;
-    }
 
     protected ArrayList<SimpleTableMember> getSelectedMembers() {
-        final ArrayList<SimpleTableMember> selectedMembers = new ArrayList<SimpleTableMember>();
-        this.members.forEach(member -> {
+        final ArrayList<SimpleTableMember> selected = new ArrayList<SimpleTableMember>();
+        members.forEach(member -> {
             if (member.isSelected())
-                selectedMembers.add(member);
+                selected.add(member);
         });
-        return selectedMembers;
+        return selected;
     }
 
     /*
@@ -127,13 +148,19 @@ public class SimpleTable extends Region {
     /**
      * Adds a {@link SimpleTableMember member} to this table,
      * and attaches mouse listeners to it.
+     *
+     * This method will realign the members by
+     * calling `requestAlign()`
      */
     public void addMember(final SimpleTableMember tableMember) {
         members.add(tableMember);
 
         tableMember.setOnMousePressed((event) -> {
             if (event.getButton().equals(MouseButton.SECONDARY)) {
-                selectMember(tableMember);
+                if (!tableMember.isSelected()) {
+                    deselectAllMembers();
+                    selectMember(tableMember);
+                }
                 tableMember.onRightClicked(getSelectedMembers());
             } else if (event.isShiftDown()) {
                 shiftSelectMember(tableMember);
@@ -148,14 +175,19 @@ public class SimpleTable extends Region {
 
         members.sort(null);
 
-        table.contents.getChildren().add(tableMember);
-        table.requestAlign();
+        this.getChildren().add(tableMember);
+        this.requestAlign();
     }
 
+    /**
+     * Removes the provided member from this table.
+     * This method will realign the members by
+     * calling `requestAlign()`
+     */
     public void removeMember(SimpleTableMember tableMember) {
         members.remove(tableMember);
-        table.contents.getChildren().remove(tableMember);
-        table.requestAlign();
+        this.getChildren().remove(tableMember);
+        this.requestAlign();
     }
 
     /*
@@ -164,80 +196,11 @@ public class SimpleTable extends Region {
      COMPOSITIONS
     -------------------------------------------------------------------------------------*/
 
-    private final class Table extends ScrollPane {
-        final Contents contents;
-        Table() {
-            this.contents = new Contents();
-            this.setContent(this.contents);
-            this.setBackground(null);
-            this.setStyle("-fx-background: transparent;");
-            this.setFitToWidth(true);
-            this.setHbarPolicy(ScrollBarPolicy.NEVER);
-            this.setVbarPolicy(ScrollBarPolicy.NEVER); // TODO: implement custom scrollbar later
-            this.widthProperty().addListener((observable, oldValue, newValue) -> requestAlign());
-        }
-
-        /**
-         * This allows for left to right listing of members; by
-         * adding invisible Regions that act as "spacers" or "paddings", an incomplete
-         * row of a FlowPane will be aligned to the left when all children of the
-         * FlowPane are centered. It is attached to a listener for when the window
-         * is resized.
-         *
-         * At the time of writing, I can't seem to figure out how to reliably get
-         * the extra number of paddings needed. Hence, one extra padding is added
-         * and the height of the paddings are locked to 1 pixel, so it should not
-         * affect the scrolling experience of the user. (as in, the invisible
-         * paddings will probably not let the user scroll down to nothing)
-         */
-        void requestAlign() {
-            this.getChildren().removeIf(child -> child instanceof FakeMember);
-
-            final int totalWidth = (int) this.getBoundsInParent().getWidth();
-            final int widths = (int) SimpleTable.this.getMembers().getFirst().getWidth();
-            final int numMembers = SimpleTable.this.getMembers().size();
-            final int columns = (int) (totalWidth / widths);
-
-            if (columns == 0)
-                return;
-
-            final int numLastRow = (int) (numMembers % columns); // finds num of members on last row
-            final int remainder = columns - numLastRow + 1;
-
-            for (int i = 0; i < remainder; i++) {
-                final FakeMember fakeMember = new FakeMember(widths);
-                this.getChildren().addLast(fakeMember);
-            }
-        }
-
-        /*
-
-
-         SUB-COMPOSITIONS
-        -------------------------------------------------------------------------------------*/
-
-        class Contents extends FlowPane {
-            Contents() {
-                this.prefWrapLengthProperty().bind(Table.this.widthProperty());
-                this.minHeightProperty().bind(Table.this.heightProperty().add(-2));
-                this.setMaxHeight(Double.MAX_VALUE);
-                this.setMaxWidth(Double.MAX_VALUE);
-                this.setAlignment(Pos.TOP_CENTER);
-                this.setBackground(RiceHandler.createBG(RiceHandler.getColour("night"), 0, 0));
-                this.setOnMousePressed(event -> {
-                    SimpleTable.this.deselectAllMembers();
-                    InputField.escapeAllInputs(); // fixes stupid inputs trapping cursors
-                    event.consume();
-                });
-            }
-        }
-
-        class FakeMember extends Region {
-            FakeMember(final double width) {
-                this.setMinSize(width, 1);
-                this.setMaxSize(width, 1);
-                this.setVisible(false);
-            }
+    class FakeMember extends Region {
+        FakeMember(final double width) {
+            this.setMinSize(width, 1);
+            this.setMaxSize(width, 1);
+            this.setVisible(false);
         }
     }
 }

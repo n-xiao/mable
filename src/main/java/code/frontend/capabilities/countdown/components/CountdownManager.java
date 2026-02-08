@@ -40,17 +40,30 @@ public class CountdownManager extends ScrollPane {
      BEHAVIOUR
     -------------------------------------------------------------------------------------*/
 
-    private void setupCountdown() {
+    private void setupCountdowns() {
         final SimpleTable table = new SimpleTable();
-        CountdownHandler.getIncomplete().forEach(c
-            -> {
-
-            });
+        CountdownHandler.getIncomplete().forEach(c -> {
+            final CountdownPane countdownPane = new CountdownPane(c, LocalDate.now());
+            table.getChildren().add(countdownPane);
+        });
         table.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        this.getChildren().add(table);
     }
 
-    private void setupCompletedCountdown() {
-        // TODO
+    private void setupCompletedCountdowns() {
+        // TODO requires horizontal divider here
+        final SimpleTable table = new SimpleTable();
+        CountdownHandler.getComplete().forEach(c -> {
+            final CountdownPane countdownPane = new CountdownPane(c, LocalDate.now()) {
+                @Override
+                protected String getTextAdverb(boolean isOverdue) {
+                    return "AGO"; // x days ago
+                }
+            };
+            table.getChildren().add(countdownPane);
+        });
+        table.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        this.getChildren().add(table);
     }
 
     /*
@@ -73,8 +86,8 @@ public class CountdownManager extends ScrollPane {
             if (o instanceof Member) {
                 final LocalDate now = LocalDate.now();
                 final Member other = (Member) o;
-                return this.countdownPane.getCountdown().daysUntilDue(now)
-                    - other.countdownPane.getCountdown().daysUntilDue(now);
+                return this.countdownPane.getCountdown().getDaysUntilDue(now)
+                    - other.countdownPane.getCountdown().getDaysUntilDue(now);
             }
             throw new IllegalArgumentException(
                 "Cannot compare something that isn't a CountdownControl.Member");

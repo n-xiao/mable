@@ -145,8 +145,7 @@ public class StorageHandler {
         final JsonNode JSON_ROOT = MAPPER.readTree(COUNTDOWNS_PATH);
         final ObjectNode OBJ_ROOT = JSON_ROOT.isObject() ? ((ObjectNode) JSON_ROOT)
                                                          : MAPPER.createObjectNode().putObject("");
-        CountdownHandler.getAll().forEach(
-            cd -> { OBJ_ROOT.putPOJO(cd.getID().toString(), cd); });
+        CountdownHandler.getAll().forEach(cd -> { OBJ_ROOT.putPOJO(cd.getID().toString(), cd); });
         CountdownHandler.getDeletedCountdowns().forEach(
             cd -> { OBJ_ROOT.remove(cd.getID().toString()); });
         MAPPER.writeValue(COUNTDOWNS_PATH, OBJ_ROOT);

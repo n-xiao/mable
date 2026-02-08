@@ -217,14 +217,14 @@ public class CountdownPane extends VBox {
     }
 
     private void configureStatus(Countdown countdown, LocalDate now) {
-        final String statusString = countdown.getStatus(now);
-        final String dateString = "Due: " + countdown.getStringDueDate(now);
+        final String statusString = getStatusString(now);
+        final String dateString = getDueString(now);
         this.statusLabel.setText(statusString);
         this.endDateLabel.setText(dateString);
     }
 
     private void configureCountdownLabelsText(Countdown countdown, LocalDate now) {
-        int daysLeft = Math.abs(countdown.daysUntilDue(now));
+        int daysLeft = Math.abs(countdown.getDaysUntilDue(now));
         daysLabel.setText(FormatHandler.intToString(daysLeft));
         String textNoun = getTextNoun(daysLeft);
         String textAdverb = getTextAdverb(countdown.isOverdue(now));
@@ -249,7 +249,15 @@ public class CountdownPane extends VBox {
     }
 
     protected String getTextAdverb(boolean isOverdue) {
-        return isOverdue ? "SINCE DUE" : "LEFT";
+        return isOverdue ? "OVERDUE" : "LEFT";
+    }
+
+    protected String getStatusString(final LocalDate now) {
+        return countdown.getStatus(now);
+    }
+
+    protected String getDueString(final LocalDate now) {
+        return "Due: " + countdown.getStringDueDate(now);
     }
 
     /*

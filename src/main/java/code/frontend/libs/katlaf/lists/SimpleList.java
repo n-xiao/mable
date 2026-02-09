@@ -39,10 +39,10 @@ public class SimpleList extends BorderedRegion {
     private final VBox content;
     private Iterator<Listable> listableIterator;
 
-    public SimpleList(ArrayList<Listable> listables) {
+    public SimpleList() {
         super(2, 0.25, 0.15);
         this.getCustomBorder().setStrokeColour(RiceHandler.getColour("grey"));
-        this.listables = listables;
+        this.listables = new ArrayList<Listable>();
         listableIterator = listables.iterator();
         scrollPane = new ScrollPane();
         content = new VBox();
@@ -109,17 +109,6 @@ public class SimpleList extends BorderedRegion {
      */
     protected final ArrayList<Listable> getListables() {
         return this.listables;
-    }
-
-    /**
-     * This method creates a new {@link SimpleListMember}. It can be overriden
-     * to return child classes of {@link SimpleListMember} for extended
-     * functionality.
-     *
-     * @return a {@link SimpleListMember}
-     */
-    protected SimpleListMember newMember(Listable listable) {
-        return new SimpleListMember(listable);
     }
 
     /*
@@ -193,9 +182,9 @@ public class SimpleList extends BorderedRegion {
      */
     public final void repopulate() {
         clearContent();
-        listables.sort(null);
-        for (Listable listable : listables) {
-            content.getChildren().add(newMember(listable));
+        this.listables.sort(null);
+        for (Listable listable : this.listables) {
+            this.content.getChildren().add(newMember(listable));
         }
     }
 

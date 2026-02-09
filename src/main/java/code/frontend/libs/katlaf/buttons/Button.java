@@ -47,13 +47,13 @@ public abstract class Button extends TemplateButton {
 
     public Button(String text) {
         this.labelFont = FontHandler.getNormal();
-        this.colour = RiceHandler.getColour();
+        this.colour = RiceHandler.getColour("white");
 
         this.border = new MableBorder(1.5, 0.3, 0.35);
         MableBorder.applyToPane(this, border);
 
         this.label = new Label(text);
-        this.label.setTextFill(RiceHandler.getColour());
+        this.label.setTextFill(RiceHandler.getColour("white"));
         this.label.setAlignment(Pos.CENTER);
         this.label.setFont(labelFont);
         this.label.prefWidthProperty().bind(this.widthProperty());

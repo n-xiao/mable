@@ -22,7 +22,7 @@ import code.backend.data.Countdown;
 import code.frontend.libs.katlaf.FormatHandler;
 import java.time.LocalDate;
 
-public class CompletedPane extends CountdownPane {
+class CompletedPane extends CountdownPane {
     public CompletedPane(final Countdown cd, final LocalDate now) {
         super(cd, now);
     }

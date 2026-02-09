@@ -43,7 +43,7 @@ abstract class TemplateButton extends Pane {
     }
     protected void onMouseEnter(MouseEvent event) {}
     protected void onMouseLeave(MouseEvent event) {}
-    protected void onMousePress(MouseEvent event) {}
+    protected abstract void onMousePress(MouseEvent event);
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;

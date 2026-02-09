@@ -18,8 +18,6 @@
 
 package code.frontend.libs.katlaf.lists;
 
-import code.backend.data.CountdownFolder;
-import code.frontend.capabilities.countdown.components.FolderRCM;
 import code.frontend.libs.katlaf.buttons.ToggleButton;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.geometry.Insets;
@@ -29,10 +27,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-class SimpleListMember extends ToggleButton {
+public abstract class SimpleListMember extends ToggleButton {
     private final Listable listable;
 
-    protected SimpleListMember(Listable listable) {
+    public SimpleListMember(Listable listable) {
         this.listable = listable;
         super(listable.getDisplayString());
         this.getLabel().setAlignment(Pos.CENTER_LEFT);
@@ -49,6 +47,8 @@ class SimpleListMember extends ToggleButton {
 
      PROTECTED API
     -------------------------------------------------------------------------------------*/
+
+    protected abstract void onSelect();
 
     /**
      * @return the {@link Listable} associated with this {@link SimpleListMember}.
@@ -76,10 +76,9 @@ class SimpleListMember extends ToggleButton {
     @Override
     public void executeOnClick(MouseEvent event) {
         if (event.getButton() == MouseButton.PRIMARY) {
-            listable.onSelect();
+            this.onSelect();
         } else {
-            if (listable instanceof CountdownFolder)
-                FolderRCM.spawnInstance(event.getSceneX(), event.getSceneY());
+            // TODO
         }
     }
 }

@@ -55,11 +55,11 @@ public class FolderHandler {
         FOLDERS.removeIf(folder -> folder.getName().equals(name));
     }
 
-    static TreeSet<CountdownFolder> getFolders() {
+    public static TreeSet<CountdownFolder> getFolders() {
         return FOLDERS;
     }
 
-    static Stack<CountdownFolder> getDeletedFolders() {
+    public static Stack<CountdownFolder> getDeletedFolders() {
         return DELETED_FOLDERS;
     }
 

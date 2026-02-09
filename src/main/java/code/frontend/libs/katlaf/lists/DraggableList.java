@@ -21,10 +21,6 @@ package code.frontend.libs.katlaf.lists;
 import java.util.ArrayList;
 
 public abstract class DraggableList<T extends Listable> extends SearchableList {
-    public DraggableList(ArrayList<Listable> listables) {
-        super(listables);
-    }
-
     abstract DraggableListMember newDraggableMember(Listable listable);
 
     @Override

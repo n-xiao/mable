@@ -43,7 +43,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
-public class CountdownPane extends VBox {
+class CountdownPane extends VBox {
     public static final double WIDTH = 255;
     public static final double HEIGHT = 110;
     public static final double NAME_WIDTH = 150;

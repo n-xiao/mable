@@ -123,19 +123,6 @@ public class Countdown extends Identifiable {
     }
 
     /**
-     * Returns a string representation of the due date in
-     * the user's local date and time.
-     */
-    @JsonIgnore
-    public String getStringDueDate(LocalDate now) {
-        final LocalDate localDue = getLocalDueDate(now);
-        final String day = Integer.toString(localDue.getDayOfMonth());
-        final String month = Integer.toString(localDue.getMonthValue());
-        final String year = Integer.toString(localDue.getYear());
-        return day + "/" + month + "/" + year; // uses the correct format
-    }
-
-    /**
      * Returns a String representation of the current status
      * of this Countdown.
      */

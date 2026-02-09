@@ -218,14 +218,14 @@ public class CountdownPane extends VBox {
 
     private void configureStatus(Countdown countdown, LocalDate now) {
         final String statusString = getStatusString(now);
-        final String dateString = getDueString(now);
+        final String dateString = getStringDueDate(now);
         this.statusLabel.setText(statusString);
         this.endDateLabel.setText(dateString);
     }
 
     private void configureCountdownLabelsText(Countdown countdown, LocalDate now) {
         int daysLeft = Math.abs(countdown.getDaysUntilDue(now));
-        daysLabel.setText(FormatHandler.intToString(daysLeft));
+        daysLabel.setText(getDaysLeftString(now));
         String textNoun = getTextNoun(daysLeft);
         String textAdverb = getTextAdverb(countdown.isOverdue(now));
         descriptorLabel.setText(textNoun + "\n" + textAdverb);
@@ -256,8 +256,21 @@ public class CountdownPane extends VBox {
         return countdown.getStatus(now);
     }
 
-    protected String getDueString(final LocalDate now) {
-        return "Due: " + countdown.getStringDueDate(now);
+    /**
+     * Returns a string representation of the due date in
+     * the user's local date and time.
+     */
+    protected String getStringDueDate(LocalDate now) {
+        final LocalDate localDue = countdown.getLocalDueDate(now);
+        final String day = Integer.toString(localDue.getDayOfMonth());
+        final String month = Integer.toString(localDue.getMonthValue());
+        final String year = Integer.toString(localDue.getYear());
+        return "Due: " + day + "/" + month + "/" + year; // uses the correct format
+    }
+
+    protected String getDaysLeftString(final LocalDate now) {
+        final int days = Math.abs(countdown.getDaysUntilDue(now));
+        return FormatHandler.intToString(days);
     }
 
     /*

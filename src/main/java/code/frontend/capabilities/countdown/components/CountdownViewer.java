@@ -21,49 +21,36 @@ package code.frontend.capabilities.countdown.components;
 import code.backend.data.Countdown;
 import code.backend.utils.CountdownHandler;
 import code.frontend.libs.katlaf.dragndrop.DragStartRegion;
+import code.frontend.libs.katlaf.ricing.RiceHandler;
 import code.frontend.libs.katlaf.tables.SimpleTable;
 import code.frontend.libs.katlaf.tables.SimpleTableMember;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 
-public class CountdownManager extends ScrollPane {
-    public CountdownManager() {
+public class CountdownViewer extends ScrollPane {
+    private final VBox container;
+    private final SimpleTable table;
+    private final SimpleTable completedTable;
+
+    public CountdownViewer() {
         this.setStyle("-fx-background: transparent;");
         this.setFitToWidth(true);
-    }
+        this.container = new VBox();
+        this.container.setBackground(RiceHandler.createBG(RiceHandler.getColour("night"), 12, 0));
 
-    /*
+        final LocalDate now = LocalDate.now();
 
+        this.table = new SimpleTable();
+        CountdownHandler.getIncomplete().forEach(
+            countdown -> { this.table.addMember(new Member(new CountdownPane(countdown, now))); });
 
-     BEHAVIOUR
-    -------------------------------------------------------------------------------------*/
-
-    private void setupCountdowns() {
-        final SimpleTable table = new SimpleTable();
-        CountdownHandler.getIncomplete().forEach(c -> {
-            final CountdownPane countdownPane = new CountdownPane(c, LocalDate.now());
-            table.getChildren().add(countdownPane);
+        this.completedTable = new SimpleTable();
+        CountdownHandler.getComplete().forEach(countdown -> {
+            this.completedTable.addMember(new Member(new CompletedPane(countdown, now)));
         });
-        table.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        this.getChildren().add(table);
-    }
-
-    private void setupCompletedCountdowns() {
-        // TODO requires horizontal divider here
-        final SimpleTable table = new SimpleTable();
-        CountdownHandler.getComplete().forEach(c -> {
-            final CountdownPane countdownPane = new CountdownPane(c, LocalDate.now()) {
-                @Override
-                protected String getTextAdverb(boolean isOverdue) {
-                    return "AGO"; // x days ago
-                }
-            };
-            table.getChildren().add(countdownPane);
-        });
-        table.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        this.getChildren().add(table);
     }
 
     /*
@@ -79,6 +66,16 @@ public class CountdownManager extends ScrollPane {
             this.countdownPane = countdownPane;
             this.getChildren().addAll(
                 this.countdownPane, new DragDetector(this, countdownPane.getCountdown()));
+        }
+
+        @Override
+        protected void onSelected() {
+            this.countdownPane.applySelectStyle();
+        }
+
+        @Override
+        protected void onDeselected() {
+            this.countdownPane.applyDeselectStyle(true);
         }
 
         @Override

@@ -29,6 +29,14 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 
+/**
+ * A horizontal divider which extends a Region. This should be used to visually
+ * separate different parts of the user interface to the user. This consists
+ * of a left horizontal line, a Label and a right horizontal line. The
+ * left horizontal line has a length of 20 by default, but can be set. The
+ * right horizontal line will fill the remaining space after the left
+ * horizontal line and the Label is added.
+ */
 public class HorizontalDivider extends Region {
     private final HBox container;
     private final double thickness;
@@ -46,24 +54,24 @@ public class HorizontalDivider extends Region {
     }
 
     private void init() {
-        container.setBackground(null);
-        container.setFillHeight(true);
+        this.container.setBackground(null);
+        this.container.setFillHeight(true);
 
         final Line leftLine = new Line();
         leftLine.setPrefWidth(left);
 
-        label.setFont(FontHandler.getHeading(3));
-        label.setTextFill(colour);
-        label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        this.label.setFont(FontHandler.getHeading(3));
+        this.label.setTextFill(colour);
+        this.label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         HBox.setMargin(label, new Insets(0, 10, 0, 10));
 
         final Line rightLine = new Line();
         HBox.setHgrow(rightLine, Priority.ALWAYS);
 
-        container.getChildren().addAll(leftLine, label, rightLine);
-        container.prefWidthProperty().bind(this.widthProperty());
-        container.prefHeightProperty().bind(this.heightProperty());
-        this.getChildren().add(container);
+        this.container.getChildren().addAll(leftLine, label, rightLine);
+        this.container.prefWidthProperty().bind(this.widthProperty());
+        this.container.prefHeightProperty().bind(this.heightProperty());
+        this.getChildren().add(this.container);
     }
 
     /*
@@ -72,10 +80,14 @@ public class HorizontalDivider extends Region {
      PUBLIC API
     -------------------------------------------------------------------------------------*/
 
+    /**
+     * Sets the length of the left horizontal line and redraws all
+     * visual components of this.
+     */
     public final void setLeft(double left) {
         this.left = left;
         this.getChildren().clear();
-        init();
+        this.init();
     }
 
     /*

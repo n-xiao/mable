@@ -280,23 +280,23 @@ public class CountdownPane extends VBox {
     -------------------------------------------------------------------------------------*/
 
     public void applySelectStyle() {
-        fadeTransition.stop();
-        hoverContainer.setOpacity(1);
+        this.fadeTransition.stop();
+        this.hoverContainer.setOpacity(1);
         setColour(RiceHandler.getColour("blue"));
-        statusLabel.setTextFill(RiceHandler.getColour("blue"));
-        endDateLabel.setTextFill(RiceHandler.getColour("blue"));
+        this.statusLabel.setTextFill(RiceHandler.getColour("blue"));
+        this.endDateLabel.setTextFill(RiceHandler.getColour("blue"));
     }
 
     public void applyDeselectStyle(boolean withFadeOut) {
         if (withFadeOut) {
-            fadeTransition.stop();
-            fadeTransition.setToValue(0);
-            fadeTransition.setFromValue(hoverContainer.getOpacity());
-            fadeTransition.playFromStart();
+            this.fadeTransition.stop();
+            this.fadeTransition.setToValue(0);
+            this.fadeTransition.setFromValue(this.hoverContainer.getOpacity());
+            this.fadeTransition.playFromStart();
         }
-        setColour(RiceHandler.getColour("night"));
-        statusLabel.setTextFill(RiceHandler.getColour("lightgrey"));
-        endDateLabel.setTextFill(RiceHandler.getColour("lightgrey"));
+        this.setColour(RiceHandler.getColour("night"));
+        this.statusLabel.setTextFill(RiceHandler.getColour("lightgrey"));
+        this.endDateLabel.setTextFill(RiceHandler.getColour("lightgrey"));
     }
 
     public void setCountdown(Countdown countdown) {

@@ -20,12 +20,14 @@ package code.frontend.capabilities.countdown.components;
 
 import code.backend.data.Countdown;
 import code.backend.utils.CountdownHandler;
+import code.frontend.libs.katlaf.dividers.HorizontalDivider;
 import code.frontend.libs.katlaf.dragndrop.DragStartRegion;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import code.frontend.libs.katlaf.tables.SimpleTable;
 import code.frontend.libs.katlaf.tables.SimpleTableMember;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -51,6 +53,13 @@ public class CountdownViewer extends ScrollPane {
         CountdownHandler.getComplete().forEach(countdown -> {
             this.completedTable.addMember(new Member(new CompletedPane(countdown, now)));
         });
+
+        final HorizontalDivider divider =
+            new HorizontalDivider(2, "Completed", RiceHandler.getColour("dullgrey"));
+        VBox.setMargin(divider, new Insets(5, 0, 5, 0));
+
+        this.container.getChildren().addAll(this.table, divider, this.completedTable);
+        this.getChildren().add(this.container);
     }
 
     /*
@@ -80,14 +89,14 @@ public class CountdownViewer extends ScrollPane {
 
         @Override
         public int compareTo(SimpleTableMember o) {
-            if (o instanceof Member) {
+            if (o instanceof Member other) {
                 final LocalDate now = LocalDate.now();
-                final Member other = (Member) o;
                 return this.countdownPane.getCountdown().getDaysUntilDue(now)
                     - other.countdownPane.getCountdown().getDaysUntilDue(now);
+            } else {
+                throw new IllegalArgumentException(
+                    "Cannot compare something that isn't a CountdownControl.Member");
             }
-            throw new IllegalArgumentException(
-                "Cannot compare something that isn't a CountdownControl.Member");
         }
 
         @Override

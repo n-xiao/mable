@@ -19,7 +19,6 @@
 package code.backend.data;
 
 import code.backend.utils.CountdownHandler;
-import code.backend.utils.FolderHandler;
 import code.backend.utils.SortByRemainingDays;
 import code.frontend.libs.katlaf.lists.Listable;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -31,11 +30,8 @@ import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CountdownFolder extends Identifiable implements Listable {
-    public enum SpecialType { ALL_INCOMPLETE, ALL_COMPLETE }
-
     private String name;
     private int listIndex;
-    @JsonIgnore private final SpecialType TYPE;
     private final TreeSet<Countdown> CONTENTS;
 
     /*
@@ -47,7 +43,6 @@ public class CountdownFolder extends Identifiable implements Listable {
     public CountdownFolder(String name) {
         this.name = name;
         this.CONTENTS = new TreeSet<Countdown>(new SortByRemainingDays());
-        this.TYPE = null;
         super(UUID.randomUUID());
     }
 
@@ -56,7 +51,6 @@ public class CountdownFolder extends Identifiable implements Listable {
         @JsonProperty("contents") String[] contentAsIDs, @JsonProperty("listIndex") int index) {
         super(folderId);
         this.name = name;
-        this.TYPE = null;
         this.CONTENTS = new TreeSet<Countdown>(new SortByRemainingDays());
         this.listIndex = index;
         for (String id : contentAsIDs) {
@@ -98,15 +92,6 @@ public class CountdownFolder extends Identifiable implements Listable {
         return this.CONTENTS;
     }
 
-    public SpecialType getType() {
-        return TYPE;
-    }
-
-    @JsonIgnore
-    public boolean isProtectedFolder() {
-        return this.TYPE != null;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -122,9 +107,6 @@ public class CountdownFolder extends Identifiable implements Listable {
     public String getDisplayString() {
         return name;
     }
-
-    @Override
-    public void onSelect() {}
 
     @Override
     public int compareTo(Listable listable) {

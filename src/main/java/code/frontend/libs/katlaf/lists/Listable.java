@@ -18,38 +18,20 @@
 
 package code.frontend.libs.katlaf.lists;
 
-/**
- * An abstract representation of a (backend) component,
- * such as a {@link code.backend.data.CountdownFolder},
- * such that it can be represented as a {@link SimpleListMember}
- * in a {@link SimpleList}.
- */
 public interface Listable extends Comparable<Listable> {
     /**
      * The return String value will be used to display
-     * the label of a {@link SimpleListMember}
+     * the label of a SimpleListMember.
      *
      * @return a String to be displayed
      */
     public String getDisplayString();
 
     /**
-     * This code is executed whenever the button associated with this
-     * {@link Listable} is clicked. This usually means that the
-     * button is now selected in a {@link SimpleList}
-     *
-     */
-    public void onSelect();
-
-    /**
      * This method is used to set the display index (an int)
      * of a Listable so that reordering is possible. This
      * is an optional method, and can be implemented
      * as an empty procedure if deemed appropriate.
-     *
-     * As an example, this method is necessary for the
-     * folder selection list as user-defined ordering is
-     * implemented with persistent storage.
      */
     public void setListIndex(int index);
 

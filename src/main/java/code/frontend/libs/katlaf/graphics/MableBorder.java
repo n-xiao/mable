@@ -22,19 +22,34 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 
+/**
+ * This is the {@link ResizableCanvas} which implements custom border
+ * graphics. A MableBorder is comprised, internally, of
+ * four quadratic bezier curves that make up each corner and four
+ * cubic bezier curves that make up its four sides.
+ *
+ * @since v2.1.0-beta
+ */
 public class MableBorder extends ResizableCanvas {
     private static final int EDGES = 4;
     private static final int PASSES = 3;
 
-    private final Corner[][] CORNERS;
-    private final CubicBezierData[][] CONNECTIONS;
+    private final Corner[][] corners;
+    private final CubicBezierData[][] connections;
     private double thickness;
     private double messiness;
     private double cornerRadii;
 
+    /**
+     * Creates a new MableBorder.
+     *
+     * @param thickness     specifies the thickness of the border
+     * @param messiness     specifies how messy the border is.
+     *
+     */
     public MableBorder(double thickness, double messiness, double cornerRadii) {
-        this.CORNERS = new Corner[PASSES][EDGES];
-        this.CONNECTIONS = new CubicBezierData[PASSES][EDGES];
+        this.corners = new Corner[PASSES][EDGES];
+        this.connections = new CubicBezierData[PASSES][EDGES];
         this.thickness = thickness;
         this.messiness = messiness;
         this.cornerRadii = cornerRadii;
@@ -43,22 +58,22 @@ public class MableBorder extends ResizableCanvas {
     @Override
     protected void draw(GraphicsContext gc, boolean recompute) {
         for (int p = 0; p < PASSES; p++) {
-            if (recompute || !notNull((Object[]) this.CORNERS)
-                || !notNull((Object[]) this.CONNECTIONS)) {
-                this.CORNERS[p][0] = new Corner(this, p, 0);
-                this.CORNERS[p][0].recompute();
+            if (recompute || !notNull((Object[]) this.corners)
+                || !notNull((Object[]) this.connections)) {
+                this.corners[p][0] = new Corner(this, p, 0);
+                this.corners[p][0].recompute();
 
                 for (int i = 1; i < EDGES; i++) {
-                    this.CORNERS[p][i] = new Corner(this, p, i);
-                    this.CORNERS[p][i].recompute();
+                    this.corners[p][i] = new Corner(this, p, i);
+                    this.corners[p][i].recompute();
 
-                    Corner prev = this.CORNERS[p][i - 1];
-                    Coordinate[] ctrls = joinCorners(prev, this.CORNERS[p][i]);
-                    this.CONNECTIONS[p][i - 1] = new CubicBezierData(ctrls[0], ctrls[1]);
+                    Corner prev = this.corners[p][i - 1];
+                    Coordinate[] ctrls = joinCorners(prev, this.corners[p][i]);
+                    this.connections[p][i - 1] = new CubicBezierData(ctrls[0], ctrls[1]);
                 }
 
-                Coordinate[] ctrls = joinCorners(this.CORNERS[p][EDGES - 1], this.CORNERS[p][0]);
-                this.CONNECTIONS[p][EDGES - 1] = new CubicBezierData(ctrls[0], ctrls[1]);
+                Coordinate[] ctrls = joinCorners(this.corners[p][EDGES - 1], this.corners[p][0]);
+                this.connections[p][EDGES - 1] = new CubicBezierData(ctrls[0], ctrls[1]);
             }
 
             gc.setLineWidth(this.thickness);
@@ -68,18 +83,18 @@ public class MableBorder extends ResizableCanvas {
             gc.beginPath();
 
             for (int i = 0; i < EDGES - 1; i++) {
-                this.CORNERS[p][i].draw(gc);
-                CubicBezierData cbd = this.CONNECTIONS[p][i];
+                this.corners[p][i].draw(gc);
+                CubicBezierData cbd = this.connections[p][i];
                 if (p < 2)
                     gc.bezierCurveTo(cbd.c1().x, cbd.c1().y, cbd.c2().x, cbd.c2().y,
-                        this.CORNERS[p][i + 1].start.x, this.CORNERS[p][i + 1].start.y);
+                        this.corners[p][i + 1].start.x, this.corners[p][i + 1].start.y);
             }
 
-            this.CORNERS[p][EDGES - 1].draw(gc);
-            CubicBezierData cbd = this.CONNECTIONS[p][EDGES - 1];
+            this.corners[p][EDGES - 1].draw(gc);
+            CubicBezierData cbd = this.connections[p][EDGES - 1];
             if (p < 2)
                 gc.bezierCurveTo(cbd.c1().x, cbd.c1().y, cbd.c2().x, cbd.c2().y,
-                    this.CORNERS[p][0].start.x, this.CORNERS[p][0].start.y);
+                    this.corners[p][0].start.x, this.corners[p][0].start.y);
 
             gc.stroke();
             gc.closePath();
@@ -114,26 +129,14 @@ public class MableBorder extends ResizableCanvas {
         super.resizeAndDraw(true);
     }
 
-    public double getMessiness() {
-        return messiness;
-    }
-
     public void setThickness(double thickness) {
         this.thickness = thickness;
         super.resizeAndDraw(true);
     }
 
-    public double getThickness() {
-        return thickness;
-    }
-
     public void setCornerRadii(double cornerRadii) {
         this.cornerRadii = cornerRadii;
         super.resizeAndDraw(true);
-    }
-
-    public double getCornerRadii() {
-        return cornerRadii;
     }
 
     public double getPaddingDist() {
@@ -174,9 +177,9 @@ public class MableBorder extends ResizableCanvas {
     }
 
     private static class Corner {
-        final MableBorder BORDER;
-        final boolean IS_DECOR;
-        final int INDEX; // used for bitmask
+        final MableBorder border;
+        final boolean isDecor;
+        final int index; // used for bitmask
 
         Coordinate origin;
         Coordinate start;
@@ -184,9 +187,9 @@ public class MableBorder extends ResizableCanvas {
         ControlCoordinate ctrl;
 
         Corner(final MableBorder BORDER, int pass, int index) {
-            this.BORDER = BORDER;
-            this.IS_DECOR = Math.random() < 0.5 && pass > 1;
-            this.INDEX = index;
+            this.border = BORDER;
+            this.isDecor = Math.random() < 0.5 && pass > 1;
+            this.index = index;
         }
 
         void draw(GraphicsContext gc) {
@@ -205,10 +208,10 @@ public class MableBorder extends ResizableCanvas {
 
         private Coordinate newOrigin() {
             double ox, oy;
-            ox = this.isRight() ? BORDER.getWidth() - BORDER.getPaddingDist()
-                                : BORDER.getPaddingDist();
-            oy = this.isBottom() ? BORDER.getHeight() - BORDER.getPaddingDist()
-                                 : BORDER.getPaddingDist();
+            ox = this.isRight() ? border.getWidth() - border.getPaddingDist()
+                                : border.getPaddingDist();
+            oy = this.isBottom() ? border.getHeight() - border.getPaddingDist()
+                                 : border.getPaddingDist();
 
             return new Coordinate(ox, oy);
         }
@@ -249,29 +252,29 @@ public class MableBorder extends ResizableCanvas {
         }
 
         private boolean isRight() {
-            return Integer.bitCount(this.INDEX) == 1;
+            return Integer.bitCount(this.index) == 1;
         }
 
         private boolean isBottom() {
-            return Integer.highestOneBit(this.INDEX) == 2;
+            return Integer.highestOneBit(this.index) == 2;
         }
 
         private double getCornerDelta() {
-            double len = Math.min(this.BORDER.getPaddedWidth(), this.BORDER.getPaddedHeight());
+            double len = Math.min(this.border.getPaddedWidth(), this.border.getPaddedHeight());
             return Math.min(0.5 * len, 0.5 * this.getCornerRadii() * len);
         }
 
         private double getCtrlDelta() {
-            return this.getMessiness() * (this.BORDER.thickness + this.getCornerDelta());
+            return this.getMessiness() * (this.border.thickness + this.getCornerDelta());
         }
 
         private double getMessiness() {
-            return BORDER.messiness;
+            return border.messiness;
         }
 
         private double getCornerRadii() {
-            return this.IS_DECOR ? this.BORDER.cornerRadii * getRandom(1.05, 1.2)
-                                 : this.BORDER.cornerRadii;
+            return this.isDecor ? this.border.cornerRadii * getRandom(1.05, 1.2)
+                                : this.border.cornerRadii;
         }
     }
 

@@ -31,7 +31,7 @@ import javafx.scene.text.Font;
  *
  * @see ButtonLogic
  */
-public abstract class LabelledButton extends ButtonLogic {
+public abstract class LabelledButtonLogic extends ButtonLogic {
     private final Label label;
 
     /**
@@ -43,7 +43,7 @@ public abstract class LabelledButton extends ButtonLogic {
      * Also, the Label has its preferred width and height bound to the width and height property
      * of this instance.
      */
-    public LabelledButton() {
+    public LabelledButtonLogic() {
         this.label = new Label();
         this.label.setBackground(null);
         this.label.setTextFill(RiceHandler.getColour("white")); // default value

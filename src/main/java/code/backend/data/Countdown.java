@@ -18,6 +18,7 @@
 
 package code.backend.data;
 
+import code.frontend.libs.katlaf.ricing.RiceHandler;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -57,17 +58,19 @@ public class Countdown extends Identifiable {
         this.isDone = false;
         this.dueDateTime = dueDate.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
         this.completionDate = null;
+        this.colour = RiceHandler.getColourString("white");
     }
 
     @JsonCreator
     public Countdown(@JsonProperty("ID") String id, @JsonProperty("name") String name,
         @JsonProperty("isDone") boolean isDone, @JsonProperty("due") String due,
-        @JsonProperty("completed") String completed) {
+        @JsonProperty("completed") String completed, @JsonProperty("colour") String colour) {
         super(id);
         this.name = name;
         this.isDone = isDone;
         this.dueDateTime = ZonedDateTime.parse(due);
         this.completionDate = ZonedDateTime.parse(completed);
+        this.colour = colour;
     }
 
     /*
@@ -181,5 +184,18 @@ public class Countdown extends Identifiable {
             this.completionDate = convertLocalDate(LocalDate.now());
         }
         this.isDone = isDone;
+    }
+
+    /**
+     * This is the custom colour that is picked by the user for
+     * this Countdown. The default value is "white".
+     */
+    @JsonProperty("colour") private String colour;
+    public String getColour() {
+        return this.colour;
+    }
+
+    public void setColour(final String colour) {
+        this.colour = colour;
     }
 }

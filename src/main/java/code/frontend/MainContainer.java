@@ -21,9 +21,9 @@ package code.frontend;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import code.frontend.sidebar.Sidebar;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.Pane;
 
-public class MainContainer extends Region {
+public class MainContainer extends Pane {
     /*
 
 

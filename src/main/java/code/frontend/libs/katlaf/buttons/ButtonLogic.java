@@ -1,0 +1,121 @@
+/*
+    Copyright (C) 2026 Nicholas Siow <nxiao.dev@gmail.com>
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+package code.frontend.libs.katlaf.buttons;
+
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
+
+/**
+ * This is the foundation class of all buttons. It implements button click logic
+ * and toggle button logic. Implementations of this class do not need to utilise
+ * all of its features; it is only present to maximise extensibility.
+ *
+ * This class inherits a(n) (empty) StackPane as child classes may wish
+ * to add other UI effects to this class.
+ *
+ * @since v3.0.0-beta
+ * @see StackPane
+ */
+public abstract class ButtonLogic extends StackPane {
+    private boolean toggled;
+    private boolean enabled;
+
+    public ButtonLogic() {
+        this.enabled = true;
+        this.setBackground(null);
+        // set up the click detection stuff
+        this.setOnMousePressed(this::toggle);
+        this.setOnMouseReleased(this::onMouseReleased);
+        this.setOnMouseEntered(this::onMouseEntered);
+        this.setOnMouseExited(this::onMouseExited);
+    }
+
+    /**
+     * When this button is active, the toggle property will be replaced with the opposite
+     * of its previous value - NOT will be applied to it. The abstract method for onMousePressed
+     * will then be called, regardless of whether this button is enabled or not.
+     */
+    private void toggle(final MouseEvent event) {
+        if (this.enabled)
+            this.toggled = !this.toggled;
+        onMousePressed(event); // will be executed regardless of enabled value
+    }
+
+    /*
+
+
+     PUBLIC API
+    -------------------------------------------------------------------------------------*/
+
+    /**
+     * Executed when this button is pressed, but not released.
+     */
+    public abstract void onMousePressed(final MouseEvent event);
+
+    /**
+     * Executed when this button is released from a mouse press.
+     */
+    public abstract void onMouseReleased(final MouseEvent event);
+
+    /**
+     * Executed when a mouse enters this button.
+     */
+    public abstract void onMouseEntered(final MouseEvent event);
+
+    /**
+     * Executed when a mouse leaves this button.
+     */
+    public abstract void onMouseExited(final MouseEvent event);
+
+    /**
+     * Returns true if this button is toggled. False otherwise.
+     * A button is not toggled by default. The user will have to click
+     * the button in order to toggle it. If the button is already toggled when
+     * a user clicks it, the button will be untoggled.
+     *
+     * @return true if this is toggled
+     */
+    public final boolean isToggled() {
+        return this.toggled;
+    }
+
+    /**
+     * Returns true if this button is enabled. False otherwise.
+     * By default, this property and method does nothing. However, child classes
+     * should use this method for checks when implementing the abstract methods of
+     * this class.
+     */
+    public final boolean isEnabled() {
+        return this.enabled;
+    }
+
+    /**
+     * This method just sets the enabled property to the provided value. It is up to
+     * implementations of this class to utilise the isEnabled() method within the
+     * implementations of the abstract methods.
+     * <p>
+     * By default, the only time that the value of this property matters is during the
+     * onMousePressed event, since this button will be toggled if enabled.
+     *
+     * @param true if this button should be marked as enabled.
+     */
+    public void setEnabled(final boolean enabled) {
+        this.enabled = enabled;
+    }
+}

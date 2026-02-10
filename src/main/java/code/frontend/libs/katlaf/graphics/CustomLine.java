@@ -22,15 +22,26 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 
-public class CustomLine extends ResizableCanvas {
-    public enum Type { VERTICAL_TYPE, HORIZONTAL_TYPE }
+/**
+ * This is the {@link ResizableCanvas} that implements a messy, horizontal or
+ * vertical line. A CustomLine is made up of one straight line and one
+ * quadratic bezier curve. The quadratic bezier curve is responsible for
+ * producing the appearance of a line with varying thickness.
+ * <p>
+ * When a CustomLine has more canvas space than what its line width requires,
+ * it will either be vertically centered or horizontally centered.
+ *
+ * @since v1.0.1
+ */
+public final class CustomLine extends ResizableCanvas {
+    public enum Type { VERTICAL, HORIZONTAL }
 
     private Coordinate start;
     private Coordinate end;
     private Coordinate mid;
     private Coordinate midVar;
     private double thickness;
-    private Type lineType;
+    private final Type lineType;
     private double startPadding;
     private double endPadding;
     private final double DEVIATION; // determined using thickness
@@ -53,11 +64,11 @@ public class CustomLine extends ResizableCanvas {
         double height = this.getHeight();
 
         switch (this.lineType) {
-            case VERTICAL_TYPE:
+            case VERTICAL:
                 this.start = new Coordinate(width / 2, startPadding);
                 this.end = new Coordinate(width / 2, height - endPadding);
                 break;
-            case HORIZONTAL_TYPE:
+            case HORIZONTAL:
                 this.start = new Coordinate(startPadding, height / 2);
                 this.end = new Coordinate(width - endPadding, height / 2);
                 break;
@@ -82,18 +93,31 @@ public class CustomLine extends ResizableCanvas {
         gc.stroke();
     }
 
+    /**
+     * Sets how much empty space there should be before the beginning of the line
+     * and the actual start of the canvas. The default value is 0.
+     *
+     * @param startPadding  the amount of empty space before the start of this line.
+     */
     public void setStartPadding(double startPadding) {
         this.startPadding = startPadding;
         resizeAndDraw(true);
     }
 
+    /**
+     * Sets how much empty space there should be after the end of the line and
+     * the actual end of the canvas. The default value is 0.
+     *
+     * @param startPadding  the amount of empty space after the end of this line.
+     */
     public void setEndPadding(double endPadding) {
         this.endPadding = endPadding;
         resizeAndDraw(true);
     }
 
     /*
-     * Convenience method
+     * Convenience method which adds the same padding to both the start and end
+     * of this line.
      */
     public void setPadding(double startEndPadding) {
         this.startPadding = startEndPadding;

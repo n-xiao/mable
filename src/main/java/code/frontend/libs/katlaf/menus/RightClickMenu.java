@@ -129,7 +129,7 @@ public abstract class RightClickMenu extends VBox {
         divider.setMaxSize(WIDTH, DIVIDER_HEIGHT);
         divider.setBackground(null);
         divider.setOpacity(0.3);
-        CustomLine line = new CustomLine(BORDER_THICKNESS, Type.HORIZONTAL_TYPE);
+        CustomLine line = new CustomLine(BORDER_THICKNESS, Type.HORIZONTAL);
         line.setPadding(RIGHTLEFT_INSET);
         line.setStrokeColour(RiceHandler.getColour());
         CustomLine.applyToPane(divider, line);

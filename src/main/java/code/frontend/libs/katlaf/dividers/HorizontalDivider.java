@@ -100,7 +100,7 @@ public class HorizontalDivider extends Region {
         Line() {
             this.setBackground(null);
             this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-            final CustomLine customLine = new CustomLine(thickness, Type.HORIZONTAL_TYPE);
+            final CustomLine customLine = new CustomLine(thickness, Type.HORIZONTAL);
             CustomLine.applyToPane(this, customLine);
         }
     }

@@ -160,7 +160,7 @@ abstract class DraggableListMember extends SimpleListMember {
                 this.prefWidthProperty().bind(PlacementHelper.this.widthProperty());
                 this.setMaxHeight(Double.MAX_VALUE);
                 this.setMinHeight(3);
-                CustomLine line = new CustomLine(2, Type.HORIZONTAL_TYPE);
+                CustomLine line = new CustomLine(2, Type.HORIZONTAL);
                 line.setStrokeColour(PlacementHelper.this.highlight);
                 this.opacityProperty().addListener(
                     (observable, oldValue, newValue) -> { positionLine(line); });

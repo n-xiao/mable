@@ -27,10 +27,13 @@ import javafx.scene.shape.StrokeLineJoin;
  * graphics. A MableBorder is comprised, internally, of
  * four quadratic bezier curves that make up each corner and four
  * cubic bezier curves that make up its four sides.
+ * <p>
+ * There is a more in-depth explanation in the developer documentation.
+ * Please read it.
  *
  * @since v2.1.0-beta
  */
-public class MableBorder extends ResizableCanvas {
+public final class MableBorder extends ResizableCanvas {
     private static final int EDGES = 4;
     private static final int PASSES = 3;
 
@@ -47,7 +50,7 @@ public class MableBorder extends ResizableCanvas {
      * @param messiness     specifies how messy the border is.
      *
      */
-    public MableBorder(double thickness, double messiness, double cornerRadii) {
+    public MableBorder(final double thickness, final double messiness, final double cornerRadii) {
         this.corners = new Corner[PASSES][EDGES];
         this.connections = new CubicBezierData[PASSES][EDGES];
         this.thickness = thickness;
@@ -55,8 +58,21 @@ public class MableBorder extends ResizableCanvas {
         this.cornerRadii = cornerRadii;
     }
 
+    /*
+
+
+     BEHAVIOUR
+    -------------------------------------------------------------------------------------*/
+
+    /**
+     * Draws the border using the provided canvas. The previous calculation is stored in
+     * an array during runtime so that, when recompute is false, the border can be redrawn
+     * without any recalculations. This means that the user should not see any changes to
+     * the shape of the path. Useful when changing anything besides the size of this
+     * MableBorder, like its colour.
+     */
     @Override
-    protected void draw(GraphicsContext gc, boolean recompute) {
+    protected void draw(final GraphicsContext gc, final boolean recompute) {
         for (int p = 0; p < PASSES; p++) {
             if (recompute || !notNull((Object[]) this.corners)
                 || !notNull((Object[]) this.connections)) {
@@ -101,7 +117,19 @@ public class MableBorder extends ResizableCanvas {
         }
     }
 
-    private Coordinate[] joinCorners(Corner corner1, Corner corner2) {
+    /**
+     * Connects one Corner with another Corner by computing and drawing a cubic
+     * bezier curve from the end (or start) of one corner to the start (or end)
+     * of the other corner. The cubic bezier curve takes the messiness of each
+     * corner into account.
+     * <p>
+     * This ensures that the shape of the MableBorder remains consistent, as
+     * the sides are directly affected by the corners.
+     *
+     * @param corner1       the corner that should be drawn from
+     * @param corner2       the corner that should be drawn to
+     */
+    private Coordinate[] joinCorners(final Corner corner1, final Corner corner2) {
         final boolean H_MATCH = !(corner1.isBottom() ^ corner2.isBottom());
         final boolean V_MATCH = !(corner1.isRight() ^ corner2.isRight());
         if (!(H_MATCH ^ V_MATCH))
@@ -124,6 +152,52 @@ public class MableBorder extends ResizableCanvas {
         return coords;
     }
 
+    private double getPaddedHeight() {
+        return this.getHeight() - 2 * getPaddingDist();
+    }
+
+    private double getPaddedWidth() {
+        return this.getWidth() - 2 * getPaddingDist();
+    }
+
+    private static boolean notNull(Object... objects) {
+        for (Object object : objects) {
+            if (object == null)
+                return false;
+        }
+        return true;
+    }
+
+    private static double getRandom(double d1, double d2) {
+        double diff = d2 - d1;
+        return d1 + diff * Math.random();
+    }
+
+    private static double plusMinus(double d, boolean b) {
+        return b ? d : -d;
+    }
+
+    private static double extrapolateCornerDeltaX(Corner corner, Coordinate coord) {
+        return coord.x - plusMinus(corner.getCornerDelta(), corner.isRight());
+    }
+
+    private static double extrapolateCornerDeltaY(Corner corner, Coordinate coord) {
+        return coord.y - plusMinus(corner.getCornerDelta(), corner.isBottom());
+    }
+
+    /*
+
+
+     PUBLIC API
+    -------------------------------------------------------------------------------------*/
+
+    /**
+     * Sets the messiness of this MableBorder. Note that the messiness
+     * is multiplied by the stroke width of this MableBorder to calculate how
+     * much a corner should deviate by.
+     * <p>
+     * This method will redraw and recompute this MableBorder.
+     */
     public void setMessiness(double messiness) {
         this.messiness = messiness;
         super.resizeAndDraw(true);
@@ -134,6 +208,14 @@ public class MableBorder extends ResizableCanvas {
         super.resizeAndDraw(true);
     }
 
+    /**
+     * Determines how much a MableBorder's corners are curved. This method will
+     * redraw and recompute this MableBorder.
+     *
+     * @param cornerRadii   a value from 0.0 to 1.0, inclusively. Any value
+     *                      greater than 1.0 will be ignored. Any value less
+     *                      than 0.0 will produce undefined behaviour.
+     */
     public void setCornerRadii(double cornerRadii) {
         this.cornerRadii = cornerRadii;
         super.resizeAndDraw(true);
@@ -143,38 +225,11 @@ public class MableBorder extends ResizableCanvas {
         return this.thickness * (this.messiness + 1);
     }
 
-    private double getPaddedHeight() {
-        return this.getHeight() - 2 * getPaddingDist();
-    }
+    /*
 
-    private double getPaddedWidth() {
-        return this.getWidth() - 2 * getPaddingDist();
-    }
 
-    protected static boolean notNull(Object... objects) {
-        for (Object object : objects) {
-            if (object == null)
-                return false;
-        }
-        return true;
-    }
-
-    protected static double getRandom(double d1, double d2) {
-        double diff = d2 - d1;
-        return d1 + diff * Math.random();
-    }
-
-    protected static double plusMinus(double d, boolean b) {
-        return b ? d : -d;
-    }
-
-    protected static double extrapolateCornerDeltaX(Corner corner, Coordinate coord) {
-        return coord.x - plusMinus(corner.getCornerDelta(), corner.isRight());
-    }
-
-    protected static double extrapolateCornerDeltaY(Corner corner, Coordinate coord) {
-        return coord.y - plusMinus(corner.getCornerDelta(), corner.isBottom());
-    }
+     COMPOSITIONS
+    -------------------------------------------------------------------------------------*/
 
     private static class Corner {
         final MableBorder border;

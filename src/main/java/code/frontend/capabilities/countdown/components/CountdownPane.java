@@ -69,7 +69,7 @@ class CountdownPane extends VBox {
     public CountdownPane(Countdown cd, LocalDate now) {
         this.hoverContainer = new HBox();
         this.content = new HBox();
-        this.divider = new CustomLine(2, Type.VERTICAL_TYPE);
+        this.divider = new CustomLine(2, Type.VERTICAL);
         this.descriptorLabel = new Label();
         this.daysLabel = new Label();
         this.statusLabel = new Label();

@@ -20,15 +20,23 @@ package code.frontend.libs.katlaf.graphics;
 
 import javafx.scene.layout.Region;
 
-public abstract class BorderedRegion extends Region {
+/**
+ * A wrapper Region which has a MableBorder as a child node.
+ *
+ * @see MableBorder
+ */
+public class BorderedRegion extends Region {
     private final MableBorder border;
 
-    public BorderedRegion(double thickness, double messiness, double cornerRadii) {
+    public BorderedRegion(
+        final double thickness, final double messiness, final double cornerRadii) {
         border = new MableBorder(thickness, messiness, cornerRadii);
+        border.widthProperty().bind(this.widthProperty());
+        border.heightProperty().bind(this.heightProperty());
         this.getChildren().add(border);
     }
 
     public MableBorder getCustomBorder() {
-        return border;
+        return this.border;
     }
 }

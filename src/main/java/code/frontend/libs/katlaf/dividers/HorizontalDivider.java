@@ -24,7 +24,6 @@ import code.frontend.libs.katlaf.graphics.CustomLine.Type;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
@@ -96,12 +95,14 @@ public class HorizontalDivider extends Region {
      COMPOSITIONS
     -------------------------------------------------------------------------------------*/
 
-    private class Line extends Pane {
+    private class Line extends Region {
         Line() {
             this.setBackground(null);
             this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
             final CustomLine customLine = new CustomLine(thickness, Type.HORIZONTAL);
-            CustomLine.applyToPane(this, customLine);
+            this.getChildren().add(customLine);
+            customLine.widthProperty().bind(this.widthProperty());
+            customLine.heightProperty().bind(this.heightProperty());
         }
     }
 }

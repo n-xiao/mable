@@ -48,7 +48,7 @@ public class InputField extends BorderPane {
     private Label label = null;
 
     public InputField() {
-        borderColour = RiceHandler.getColour();
+        borderColour = RiceHandler.getColour("white");
         border = new MableBorder(1.8, 0.3, 0.38);
         MableBorder.applyToPane(this, border);
         textField = new TextField();
@@ -117,12 +117,14 @@ public class InputField extends BorderPane {
         return this.border;
     }
 
-    public void setCustomBorder(MableBorder border) {
+    public void setCustomBorder(final MableBorder border) {
         this.getChildren().remove(this.border);
         this.border.widthProperty().unbind();
         this.border.heightProperty().unbind();
         this.border = border;
-        MableBorder.applyToPane(this, this.border);
+        this.border.widthProperty().bind(this.widthProperty());
+        this.border.heightProperty().bind(this.heightProperty());
+        this.getChildren().add(this.border);
     }
 
     /**

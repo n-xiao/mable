@@ -44,16 +44,23 @@ public final class CustomLine extends ResizableCanvas {
     private final Type lineType;
     private double startPadding;
     private double endPadding;
-    private final double DEVIATION; // determined using thickness
+    private final double messiness; // determined using thickness
 
     public CustomLine(double thickness, Type type) {
-        this.DEVIATION = 0.5;
+        this.messiness = 0.5;
         this.thickness = thickness;
         this.lineType = type;
         this.startPadding = 0;
         this.endPadding = 0;
     }
 
+    /**
+     * Draws a horizontal or vertical line. The messiness of the line is 0.5
+     * by default. This particular implementation of custom graphics does not
+     * implement recomputations.
+     *
+     * @see ResizableCanvas
+     */
     @Override
     protected void draw(GraphicsContext gc, boolean recompute) {
         gc.setLineWidth(this.thickness);
@@ -79,7 +86,7 @@ public final class CustomLine extends ResizableCanvas {
         double midX = (this.start.x + this.end.x) / 2;
         double midY = (this.start.y + this.end.y) / 2;
         this.mid = new Coordinate(midX, midY);
-        mid.setDeviations(DEVIATION * thickness);
+        mid.setDeviations(messiness * thickness);
         gc.beginPath();
         // adds straight line first
         gc.moveTo(start.x, start.y);

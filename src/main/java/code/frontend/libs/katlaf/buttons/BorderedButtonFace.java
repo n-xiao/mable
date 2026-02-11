@@ -24,12 +24,12 @@ import code.frontend.libs.katlaf.graphics.MableBorder;
 /**
  * This is a child class of LabelledButtonLogic, but with a MableBorder as a child node.
  *
- * @see LabelledButtonLogic
+ * @see LabelledButtonFace
  */
-public abstract class BorderedButton extends LabelledButtonLogic {
+public abstract class BorderedButtonFace extends LabelledButtonFace {
     private final BorderedRegion borderRegion;
 
-    public BorderedButton(
+    public BorderedButtonFace(
         final double thickness, final double messiness, final double cornerRadii) {
         this.borderRegion = new BorderedRegion(thickness, messiness, cornerRadii);
         this.borderRegion.prefWidthProperty().bind(this.widthProperty());

@@ -32,13 +32,12 @@ import javafx.scene.layout.StackPane;
  * @since v3.0.0-beta
  * @see StackPane
  */
-public abstract class ButtonLogic extends StackPane {
+public abstract class ButtonFoundation extends StackPane {
     private boolean toggled;
     private boolean enabled;
 
-    public ButtonLogic() {
+    public ButtonFoundation() {
         this.enabled = true;
-        this.setBackground(null);
         // set up the click detection stuff
         this.setOnMousePressed(this::toggle);
         this.setOnMouseReleased(this::onMouseReleased);

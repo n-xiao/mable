@@ -29,9 +29,9 @@ import javafx.scene.text.Font;
  * This is literally just an extension of ButtonLogic, but with a label
  * component added, with appropriate fonts and colouring stuff.
  *
- * @see ButtonLogic
+ * @see ButtonFoundation
  */
-public abstract class LabelledButtonLogic extends ButtonLogic {
+public abstract class LabelledButtonFace extends ButtonFoundation {
     private final Label label;
 
     /**
@@ -43,7 +43,7 @@ public abstract class LabelledButtonLogic extends ButtonLogic {
      * Also, the Label has its preferred width and height bound to the width and height property
      * of this instance.
      */
-    public LabelledButtonLogic() {
+    public LabelledButtonFace() {
         this.label = new Label();
         this.label.setBackground(null);
         this.label.setTextFill(RiceHandler.getColour("white")); // default value

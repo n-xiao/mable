@@ -30,9 +30,16 @@ public class BorderedRegion extends Region {
 
     public BorderedRegion(
         final double thickness, final double messiness, final double cornerRadii) {
-        border = new MableBorder(thickness, messiness, cornerRadii);
-        border.widthProperty().bind(this.widthProperty());
-        border.heightProperty().bind(this.heightProperty());
+        this.border = new MableBorder(thickness, messiness, cornerRadii);
+        this.border.widthProperty().bind(this.widthProperty());
+        this.border.heightProperty().bind(this.heightProperty());
+        this.getChildren().add(border);
+    }
+
+    public BorderedRegion(final MableBorder mableBorder) {
+        this.border = mableBorder;
+        this.border.widthProperty().bind(this.widthProperty());
+        this.border.heightProperty().bind(this.heightProperty());
         this.getChildren().add(border);
     }
 

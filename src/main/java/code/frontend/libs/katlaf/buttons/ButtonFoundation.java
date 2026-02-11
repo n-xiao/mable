@@ -45,6 +45,12 @@ public abstract class ButtonFoundation extends StackPane {
         this.setOnMouseExited(this::onMouseExited);
     }
 
+    /*
+
+
+     PRIVATE API
+    -------------------------------------------------------------------------------------*/
+
     /**
      * When this button is active, the toggle property will be replaced with the opposite
      * of its previous value - NOT will be applied to it. The abstract method for onMousePressed

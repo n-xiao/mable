@@ -61,7 +61,7 @@ public final class MableBorder extends ResizableCanvas {
     /*
 
 
-     BEHAVIOUR
+     PROTECTED
     -------------------------------------------------------------------------------------*/
 
     /**
@@ -116,6 +116,12 @@ public final class MableBorder extends ResizableCanvas {
             gc.closePath();
         }
     }
+
+    /*
+
+
+     PRIVATE
+    -------------------------------------------------------------------------------------*/
 
     /**
      * Connects one Corner with another Corner by computing and drawing a cubic
@@ -188,7 +194,7 @@ public final class MableBorder extends ResizableCanvas {
     /*
 
 
-     PUBLIC API
+     PUBLIC
     -------------------------------------------------------------------------------------*/
 
     /**

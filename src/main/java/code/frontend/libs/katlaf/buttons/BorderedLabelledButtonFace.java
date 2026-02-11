@@ -20,22 +20,28 @@ package code.frontend.libs.katlaf.buttons;
 
 import code.frontend.libs.katlaf.graphics.BorderedRegion;
 import code.frontend.libs.katlaf.graphics.MableBorder;
+import javafx.scene.paint.Color;
 
 /**
  * This is a child class of LabelledButtonLogic, but with a MableBorder as a child node.
  *
  * @see LabelledButtonFace
  */
-public abstract class BorderedButtonFace extends LabelledButtonFace {
+public abstract class BorderedLabelledButtonFace extends LabelledButtonFace {
     private final BorderedRegion borderRegion;
 
-    public BorderedButtonFace(
-        final double thickness, final double messiness, final double cornerRadii) {
-        this.borderRegion = new BorderedRegion(thickness, messiness, cornerRadii);
+    public BorderedLabelledButtonFace(final MableBorder mableBorder) {
+        this.borderRegion = new BorderedRegion(mableBorder);
         this.borderRegion.prefWidthProperty().bind(this.widthProperty());
         this.borderRegion.prefHeightProperty().bind(this.heightProperty());
         this.borderRegion.setMouseTransparent(true);
         this.getChildren().add(this.borderRegion);
+    }
+
+    public BorderedLabelledButtonFace(
+        final double thickness, final double messiness, final double cornerRadii) {
+        final MableBorder mableBorder = new MableBorder(thickness, messiness, cornerRadii);
+        this(mableBorder);
     }
 
     /*
@@ -49,5 +55,16 @@ public abstract class BorderedButtonFace extends LabelledButtonFace {
      */
     protected final MableBorder getMableBorder() {
         return this.borderRegion.getCustomBorder();
+    }
+
+    /*
+
+
+     PUBLIC
+    -------------------------------------------------------------------------------------*/
+
+    public final void setColour(final Color colour) {
+        this.getMableBorder().setStrokeColour(colour);
+        this.setTextFill(colour);
     }
 }

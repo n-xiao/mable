@@ -214,6 +214,10 @@ public final class MableBorder extends ResizableCanvas {
         super.resizeAndDraw(true);
     }
 
+    public double getThickness() {
+        return thickness;
+    }
+
     /**
      * Determines how much a MableBorder's corners are curved. This method will
      * redraw and recompute this MableBorder.
@@ -225,6 +229,10 @@ public final class MableBorder extends ResizableCanvas {
     public void setCornerRadii(double cornerRadii) {
         this.cornerRadii = cornerRadii;
         super.resizeAndDraw(true);
+    }
+
+    public double getCornerRadii() {
+        return cornerRadii;
     }
 
     public double getPaddingDist() {

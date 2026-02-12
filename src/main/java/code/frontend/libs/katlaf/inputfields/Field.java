@@ -20,12 +20,14 @@ package code.frontend.libs.katlaf.inputfields;
 
 import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.FontHandler.DedicatedFont;
+import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.util.function.UnaryOperator;
 import javafx.scene.Cursor;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextFormatter.Change;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
 
 /**
  * This class is a wrapper class for javafx.scene.control.TextField
@@ -49,7 +51,8 @@ public class Field extends Region {
         this.textField.setBackground(null);
         this.textField.setBorder(null);
         this.textField.setFont(FontHandler.getDedicated(DedicatedFont.USER_INPUT));
-        this.textField.setStyle("-fx-text-fill: white; user-select: none;");
+        this.textField.setStyle(
+            "-fx-text-fill: " + RiceHandler.getColourString("white") + "; user-select: none;");
         this.textField.setFocusTraversable(false);
         this.textField.prefWidthProperty().bind(this.widthProperty());
         this.textField.prefHeightProperty().bind(this.heightProperty());
@@ -85,6 +88,33 @@ public class Field extends Region {
      */
     public final void setMaxInputLength(final int length) {
         this.filter.maxLength = length;
+    }
+
+    /**
+     * Sets the value of the text field's text property.
+     *
+     * @param text      the text that should be set
+     */
+    public final void setFieldText(final String text) {
+        this.textField.setText(text);
+    }
+
+    /**
+     * Turns out, the TextField doesn't even have a Java text fill setter. What is this?
+     * So, I implemented it myself. I hate touching CSS. Doing it from Java is a war crime.
+     *
+     * @param colour    the colour that the text of the TextField should be set to
+     * @see TextField
+     */
+    public final void setTextFill(final Color colour) {
+        final int red = (int) colour.getRed();
+        final int green = (int) colour.getGreen();
+        final int blue = (int) colour.getBlue();
+        final double alpha = colour.getOpacity();
+        final String fill = "rgba(" + Integer.toString(red) + "," + Integer.toString(green) + ","
+            + Integer.toString(blue) + "," + Double.toString(alpha) + ")";
+
+        this.textField.setStyle("-fx-text-fill: " + fill + "; user-select: none;");
     }
 
     /*

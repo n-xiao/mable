@@ -18,6 +18,88 @@
 
 package code.frontend.libs.katlaf.inputfields;
 
-public class BorderedField extends Field {
-    // TODO
+import code.frontend.libs.katlaf.graphics.LabelledBorderedRegion;
+import code.frontend.libs.katlaf.graphics.MableBorder;
+import code.frontend.libs.katlaf.ricing.RiceHandler;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+
+/**
+ * This UI component presents itself as a Field within a LabelledBorderedRegion.
+ * The LabelledBorderedRegion will indicate when the Field has the user focus by being
+ * recoloured to the "selected" colour, specified by the current theme.
+ *
+ * @see LabelledBorderedRegion
+ * @see Field
+ * @since v3.0.0-beta
+ */
+public class BorderedField extends StackPane {
+    private final Field field;
+    private final LabelledBorderedRegion border;
+
+    /**
+     * Creates a new BorderedField instance.
+     *
+     * @param label     the text to be used by the label of the border
+     * @param bg        the background colour that should be used
+     * @see LabelledBorderedRegion
+     */
+    public BorderedField(final String label, final Color bg) {
+        this.field = new Field();
+
+        final MableBorder mableBorder = new MableBorder(1.5, 0.25, 0.35);
+        this.border = new LabelledBorderedRegion(mableBorder, label, bg);
+        this.border.setMouseTransparent(true); // to be used for cosmetic purposes only
+
+        this.setBackground(null);
+        this.field.focusedProperty().addListener(((observable, oldValue, newValue) -> {
+            final Color colour =
+                newValue ? RiceHandler.getColour("skyblue") : RiceHandler.getColour("white");
+            this.border.getCustomBorder().setStrokeColour(colour);
+            this.field.setTextFill(colour);
+        }));
+
+        this.getChildren().addAll(this.border, this.field);
+    }
+
+    /*
+
+
+     PUBLIC API
+    -------------------------------------------------------------------------------------*/
+
+    /**
+     * Wrapper method which just forwards the call to the Field.
+     * <p>
+     * Sets whether or not the InputField accepts only numerical characters or not.
+     * The user's input will simply be ignored if it violates this property.
+     *
+     * @param numOnly   true if only characters from 0-9 inclusive should be committed
+     */
+    public final void setNumOnly(final boolean numOnly) {
+        this.field.setNumOnly(numOnly);
+    }
+
+    /**
+     * Wrapper method which just forwards the call to the Field.
+     * <p>
+     * Sets the maximum number of characters this InputField will accept.
+     * The user's input will simply be ignored if it violates this property.
+     *
+     * @param length    the maximum number of characters allowed
+     */
+    public final void setMaxInputLength(final int length) {
+        this.field.setMaxInputLength(length);
+    }
+
+    /**
+     * Wrapper method which just forwards the call to the Field.
+     * <p>
+     * Sets the value of the text field's text property.
+     *
+     * @param text      the text that should be set
+     */
+    public final void setFieldText(final String text) {
+        this.field.setFieldText(text);
+    }
 }

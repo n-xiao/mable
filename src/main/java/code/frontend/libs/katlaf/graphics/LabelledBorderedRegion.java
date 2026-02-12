@@ -18,6 +18,7 @@
 
 package code.frontend.libs.katlaf.graphics;
 
+import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -44,20 +45,19 @@ public class LabelledBorderedRegion extends BorderedRegion {
      *
      * @param mableBorder   the MableBorder that should be used for this LabelledBorderedRegion
      * @param text          the text that should be displayed by the Label
-     * @param font          the Font that should be used by the Label
      * @param bg            the background colour of the label. Non-null values are highly
      *                      encouraged, and should match the background colour of its parent
      *                      node's background, since the background hides part of the MableBorder's
      *                      stroke.
      */
     public LabelledBorderedRegion(
-        final MableBorder mableBorder, final String text, final Font font, final Color bg) {
+        final MableBorder mableBorder, final String text, final Color bg) {
         super(mableBorder);
         final BackgroundFill fill = new BackgroundFill(bg, null, new Insets(0, 10, 0, 10));
         this.label = new Label(text);
         this.label.setBackground(new Background(fill));
         this.label.setTextFill(RiceHandler.getColour("white"));
-        this.label.setFont(font);
+        this.label.setFont(FontHandler.getHeading(3));
         this.label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         this.label.setViewOrder(-0.1); // above MableBorders
         // add listeners

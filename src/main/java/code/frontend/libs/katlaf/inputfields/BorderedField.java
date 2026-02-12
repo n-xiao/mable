@@ -21,6 +21,7 @@ package code.frontend.libs.katlaf.inputfields;
 import code.frontend.libs.katlaf.graphics.LabelledBorderedRegion;
 import code.frontend.libs.katlaf.graphics.MableBorder;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
@@ -47,7 +48,7 @@ public class BorderedField extends StackPane {
     public BorderedField(final String label, final Color bg) {
         this.field = new Field();
 
-        final MableBorder mableBorder = new MableBorder(1.5, 0.25, 0.35);
+        final MableBorder mableBorder = new MableBorder(1.5, 0.2, 0.35);
         this.border = new LabelledBorderedRegion(mableBorder, label, bg);
         this.border.setMouseTransparent(true); // to be used for cosmetic purposes only
 
@@ -60,6 +61,16 @@ public class BorderedField extends StackPane {
         }));
 
         this.getChildren().addAll(this.border, this.field);
+    }
+
+    /*
+
+
+     PROTECTED API
+    -------------------------------------------------------------------------------------*/
+
+    protected final TextField getTextField() {
+        return this.field.getTextField();
     }
 
     /*

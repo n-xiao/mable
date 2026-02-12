@@ -18,35 +18,30 @@
 
 package code.frontend.libs.katlaf.inputfields;
 
-import code.frontend.libs.katlaf.graphics.MableBorder;
-import code.frontend.libs.katlaf.ricing.RiceHandler;
-import javafx.geometry.Insets;
+import javafx.scene.paint.Color;
 
 /**
- * This is a special {@link InputField} which allows a {@link SearchableUI}
+ * This is a special BorderedField which allows a SearchableUI
  * to be updated based on changes to its input.
+ *
+ * @see BorderedField
+ * @since v3.0.0-beta
  */
-public class SearchField extends InputField {
-    public SearchField(SearchableUI target) {
-        super();
-        initStyling();
-
-        this.getTextField().setOnKeyTyped(
-            event -> target.onSearchChange(this.getTextField().getText()));
-    }
-
-    /*
-
-
-     STYLING
-    -------------------------------------------------------------------------------------*/
-
-    private void initStyling() {
-        MableBorder border = new MableBorder(1.5, 0.1, 0.8);
-        border.setStrokeColour(RiceHandler.getColour("dullgrey"));
-        this.enableManualActivation();
-        this.getTextField().setPromptText("Search...");
-        this.setCustomBorder(new MableBorder(1.5, 0.1, 0.8));
-        this.setFieldMargins(new Insets(5, 7, 5, 7));
+public class SearchField extends BorderedField {
+    /**
+     * Creates a new SearchField instance.
+     *
+     * @param prompt    the prompt text that should be displayed to the user
+     *                  when the text field is unfocused.
+     * @param target    the target that should react based on the key typed
+     *                  event of the created instance
+     * @param bg        the background colour which is forwarded to the BorderedField
+     *                  constructor.
+     * @see BorderedField
+     */
+    public SearchField(final String prompt, final SearchableUI target, final Color bg) {
+        super("SEARCH", bg);
+        this.setOnKeyTyped(event -> target.onSearchChange(this.getTextField().getText()));
+        this.getTextField().setPromptText(prompt);
     }
 }

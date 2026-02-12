@@ -28,7 +28,13 @@ import javafx.scene.text.FontWeight;
 
 public class FontHandler {
     public static final String FONT_FAM = "Shantell Sans";
-    public static enum DedicatedFont { COUNTDOWN_NAME, COUNTDOWN_NUM, COUNTDOWN_INFO, USER_INPUT }
+    public static enum DedicatedFont {
+        COUNTDOWN_NAME,
+        COUNTDOWN_NUM,
+        COUNTDOWN_INFO,
+        USER_INPUT,
+        BORDER
+    }
 
     @Deprecated
     public static Font getButtonFont() {
@@ -91,6 +97,8 @@ public class FontHandler {
                 return Font.font(FONT_FAM, FontWeight.BOLD, FontPosture.ITALIC, 12);
             case USER_INPUT:
                 return Font.font(FONT_FAM + " Medium", 14);
+            case BORDER:
+                return Font.font(FONT_FAM, FontWeight.BLACK, FontPosture.ITALIC, 12);
             default:
                 return getNormal();
         }

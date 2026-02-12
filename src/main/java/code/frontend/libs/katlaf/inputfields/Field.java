@@ -66,6 +66,16 @@ public class Field extends Region {
     /*
 
 
+     PROTECTED API
+    -------------------------------------------------------------------------------------*/
+
+    protected final TextField getTextField() {
+        return this.textField;
+    }
+
+    /*
+
+
      PUBLIC API
     -------------------------------------------------------------------------------------*/
     private final InputFilter filter;

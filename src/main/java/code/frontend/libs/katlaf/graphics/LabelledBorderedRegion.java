@@ -19,6 +19,7 @@
 package code.frontend.libs.katlaf.graphics;
 
 import code.frontend.libs.katlaf.FontHandler;
+import code.frontend.libs.katlaf.FontHandler.DedicatedFont;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -57,7 +58,7 @@ public class LabelledBorderedRegion extends BorderedRegion {
         this.label = new Label(text);
         this.label.setBackground(new Background(fill));
         this.label.setTextFill(RiceHandler.getColour("white"));
-        this.label.setFont(FontHandler.getHeading(3));
+        this.label.setFont(FontHandler.getDedicated(DedicatedFont.BORDER));
         this.label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         this.label.setViewOrder(-0.1); // above MableBorders
         // add listeners

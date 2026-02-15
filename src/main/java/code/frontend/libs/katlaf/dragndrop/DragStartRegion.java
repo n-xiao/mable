@@ -18,7 +18,6 @@
 
 package code.frontend.libs.katlaf.dragndrop;
 
-import code.frontend.libs.katlaf.menus.RightClickMenu;
 import javafx.scene.layout.Region;
 
 /**
@@ -37,7 +36,7 @@ public abstract class DragStartRegion<T> extends Region {
         this.setBackground(null);
         // init listener for drag starts
         this.setOnDragDetected((event) -> {
-            RightClickMenu.despawnAll();
+            // RightClickMenu.despawnAll(); // TODO REIMPLEMENT THIS LATER
             this.startFullDrag();
             DragDropOverlay.spawnOverlay(this);
             onDragStart();

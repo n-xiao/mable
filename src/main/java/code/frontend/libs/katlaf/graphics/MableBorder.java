@@ -56,6 +56,7 @@ public final class MableBorder extends ResizableCanvas {
         this.thickness = thickness;
         this.messiness = messiness;
         this.cornerRadii = cornerRadii;
+        this.setMouseTransparent(true);
     }
 
     /*

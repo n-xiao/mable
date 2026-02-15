@@ -18,8 +18,10 @@
 
 package code.frontend.libs.katlaf.buttons;
 
+import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 
 /**
  * This is the foundation class of all buttons. It implements button click logic
@@ -33,16 +35,17 @@ import javafx.scene.layout.StackPane;
  * @see StackPane
  */
 public abstract class ButtonFoundation extends StackPane {
+    static final Color DISABLED_COLOUR = RiceHandler.getColour("dullgrey");
     private boolean toggled;
     private boolean enabled;
 
     public ButtonFoundation() {
         this.enabled = true;
         // set up the click detection stuff
-        this.setOnMousePressed(this::toggle);
-        this.setOnMouseReleased(this::onMouseReleased);
-        this.setOnMouseEntered(this::onMouseEntered);
-        this.setOnMouseExited(this::onMouseExited);
+        setOnMousePressed(this::toggle);
+        setOnMouseReleased(this::onMouseReleased);
+        setOnMouseEntered(this::onMouseEntered);
+        setOnMouseExited(this::onMouseExited);
     }
 
     /*
@@ -60,6 +63,14 @@ public abstract class ButtonFoundation extends StackPane {
         if (this.enabled)
             this.toggled = !this.toggled;
         onMousePressed(event); // will be executed regardless of enabled value
+    }
+
+    /**
+     * Sets the boolean value for the property of the button. Note that this is a plain
+     * setter, and does not call any additional methods.
+     */
+    void setToggle(final boolean toggled) {
+        this.toggled = toggled;
     }
 
     /*

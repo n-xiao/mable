@@ -18,7 +18,6 @@
 
 package code.frontend.libs.katlaf.tables;
 
-import code.frontend.libs.katlaf.inputfields.InputField;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.util.ArrayList;
 import javafx.geometry.Pos;
@@ -36,7 +35,6 @@ public class SimpleTable extends FlowPane {
         this.setBackground(RiceHandler.createBG(RiceHandler.getColour("night"), 0, 0));
         this.setOnMousePressed(event -> {
             deselectAllMembers();
-            InputField.escapeAllInputs(); // fixes stupid inputs trapping cursors
             event.consume();
         });
     }
@@ -44,7 +42,7 @@ public class SimpleTable extends FlowPane {
     /*
 
 
-     BEHAVIOUR
+     PRIVATE API
     -------------------------------------------------------------------------------------*/
 
     /**

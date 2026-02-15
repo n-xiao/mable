@@ -18,97 +18,94 @@
 
 package code.frontend.libs.katlaf.lists;
 
-import code.frontend.libs.katlaf.graphics.BorderedRegion;
-import code.frontend.libs.katlaf.ricing.RiceHandler;
-import java.util.ArrayList;
-import java.util.Iterator;
-import javafx.geometry.Insets;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.Priority;
+import java.util.LinkedHashSet;
+import java.util.Stack;
 import javafx.scene.layout.VBox;
 
 /**
- * This facilitates a scrollable, vertical list. It is best suited for a page-selection
- * system, where only one (button) element in the list can be selected at a time.
+ * An implementation of a list. The appearance of members are unknown to the list,
+ * since the list only handles add and remove operations as well as some animations.
+ *
+ * @since v3.0.0-beta
+ * @see SimpleListMember
  */
-public class SimpleList extends BorderedRegion {
-    private final ArrayList<Listable> listables;
-    private final ScrollPane scrollPane;
-    private final VBox content;
-    private Iterator<Listable> listableIterator;
+public class SimpleList extends VBox {
+    private final LinkedHashSet<SimpleListMember> members;
+    private final Stack<SimpleListMember> selected;
+    private double spacing; // vertical spacing in between each member
 
+    /**
+     * Creates a new instance of an empty SimpleList.
+     */
     public SimpleList() {
-        super(2, 0.25, 0.15);
-        this.getCustomBorder().setStrokeColour(RiceHandler.getColour("grey"));
-        this.listables = new ArrayList<Listable>();
-        listableIterator = listables.iterator();
-        scrollPane = new ScrollPane();
-        content = new VBox();
-        initScrollPaneStyling();
-        initContentStyling();
-        scrollPane.setContent(content);
-        this.getChildren().add(scrollPane);
-        VBox.setVgrow(this, Priority.ALWAYS);
-
-        this.listables.sort(null);
-        repopulate();
-        refreshIndexes();
+        this.setBackground(null);
+        this.setMouseTransparent(true);
+        this.members = new LinkedHashSet<SimpleListMember>();
+        this.selected = new Stack<SimpleListMember>();
+        this.spacing = 0;
     }
 
     /*
 
 
-     STYLING
-    -------------------------------------------------------------------------------------*/
-
-    private void initScrollPaneStyling() {
-        scrollPane.setFitToWidth(true);
-        scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
-        scrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
-        scrollPane.setBackground(null);
-        scrollPane.setMinHeight(200);
-        scrollPane.prefWidthProperty().bind(this.widthProperty());
-        scrollPane.prefHeightProperty().bind(this.heightProperty());
-        scrollPane.setStyle("-fx-background: transparent;");
-    }
-
-    private void initContentStyling() {
-        content.setFillWidth(true);
-        content.setPadding(new Insets(0, 5, 0, 5));
-        content.setMaxHeight(Double.MAX_VALUE);
-    }
-
-    /*
-
-
-     PROTECTED API
+     PRIVATE API
     -------------------------------------------------------------------------------------*/
 
     /**
-     * Removes all members from the
-     * content of this {@link SimpleList}.
+     * A SimpleListMember should call this method when it detects
+     * a shift select on it. If there are no other members that are currently
+     * selected, then this method will just forward the call to the selected() method.
+     * <p>
+     * Otherwise, the last member that was selected before the calling of this method
+     * will be used as a "pivot". All members inclusively between the pivot and the member which
+     * issued this method call will be selected. All other members will be deselected.
+     *
+     * @param member    the member that this method call originated from
      */
-    protected final void clearContent() {
-        content.getChildren().clear();
+
+    final void shiftSelected(final SimpleListMember member) {
+        if (this.selected.isEmpty()) {
+            selected(member);
+            return;
+        }
+
+        final SimpleListMember pivot = this.selected.peek();
+        boolean selecting = false;
+        for (SimpleListMember mem : members) {
+            if (mem.equals(member) || mem.equals(pivot))
+                selecting = !selecting;
+
+            if (selecting && !selected.contains(mem)) {
+                mem.setToggle(true);
+                selected.push(mem);
+            } else if (!selecting) {
+                mem.setToggle(false);
+                selected.remove(mem);
+            }
+        }
     }
 
     /**
-     * Increments the internal iterator without adding it
-     * to the content, effectively skipping a {@link Listable}
-     * while using the Iterator.
+     * A SimpleListMember should call this method when it detects
+     * a meta select on itself. It will be pushed to the stack of selected
+     * SimpleListMember instances of this SimpleList instance.
+     *
+     * @param member    the SimpleListMember which should be pushed to the stack.
      */
-    protected final void nextListable() {
-        if (hasNextListable())
-            listableIterator.next();
+    final void metaSelected(final SimpleListMember member) {
+        // TODO
     }
 
     /**
-     * @return the ArrayList of {@link Listable} instances of this {@link SimpleList}.
+     * A SimpleListMember should call this method when it detects
+     * a click on itself. The selected stack will be emptied before the member is added
+     * to the stack.
+     *
+     * @param member    the member of this SimpleList instance which will become the only element
+     *                  in the stack of this SimpleList instance
      */
-    protected final ArrayList<Listable> getListables() {
-        return this.listables;
+    final void selected(final SimpleListMember member) {
+        // TODO
     }
 
     /*
@@ -116,94 +113,4 @@ public class SimpleList extends BorderedRegion {
 
      PUBLIC API
     -------------------------------------------------------------------------------------*/
-
-    /**
-     * Resets the iterator.
-     */
-    public final void resetNextListable() {
-        listableIterator = listables.iterator();
-    }
-
-    /**
-     * A method that exposes the `hasNext()` from {@link Iterator}.
-     * @return true if there is a next {@link Listable}, false otherwise.
-     */
-    public final boolean hasNextListable() {
-        return listableIterator.hasNext();
-    }
-
-    /**
-     * Adds the next {@link Listable} if there is one. If not, nothing happens.
-     */
-    public final void addNextListable() {
-        if (hasNextListable())
-            content.getChildren().add(newMember(listableIterator.next()));
-    }
-
-    /**
-     * Creates and pushes a new {@link SimpleListMember} by using the provided
-     * {@link Listable} to the start of the internal ArrayList, and adds
-     * it in a similar fashion to the content.
-     */
-    public final void pushNewListable(Listable listable) {
-        listables.addFirst(listable);
-        content.getChildren().addFirst(newMember(listable));
-        refreshIndexes();
-    }
-
-    /**
-     * Creates and appends a new {@link SimpleListMember} by using the provided
-     * {@link Listable} to the end of the internal ArrayList, and adds
-     * it in a similar fashion to the content.
-     */
-    public final void appendNewListable(Listable listable) {
-        listables.addLast(listable);
-        content.getChildren().addLast(newMember(listable));
-        refreshIndexes();
-    }
-
-    /**
-     * Removes the provided {@link Listable} from the ArrayList of listables
-     * and removes {@link SimpleListMember} associated with the provided
-     * {@link Listable} from the content's children ObservableList.
-     */
-    public final void removeListable(Listable listable) {
-        listables.remove(listable);
-        content.getChildren().removeIf(node -> {
-            return (node instanceof SimpleListMember)
-                && ((SimpleListMember) node).getListable().equals(listable);
-        });
-    }
-
-    /**
-     * Clears all children from the content of this {@link SimpleList},
-     * then repopulates by iterating through all listables. Note that
-     * this method does not utilise {@link Iterator}.
-     */
-    public final void repopulate() {
-        clearContent();
-        this.listables.sort(null);
-        for (Listable listable : this.listables) {
-            this.content.getChildren().add(newMember(listable));
-        }
-    }
-
-    /**
-     * The indexes of each {@link Listable} the content of this {@link SimpleList}
-     * is updated based on its current index within the internal ArrayList.
-     */
-    public void refreshIndexes() {
-        int index = 0;
-        for (Listable listable : listables) {
-            listable.setListIndex(index);
-            index++;
-        }
-    }
-
-    /**
-     * Sets the background of the content.
-     */
-    public void setContentBackground(Background bg) {
-        content.setBackground(bg);
-    }
 }

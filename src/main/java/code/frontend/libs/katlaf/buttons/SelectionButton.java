@@ -78,8 +78,14 @@ public class SelectionButton extends BorderedLabelledButtonFace {
      */
     @Override
     public void onMousePressed(MouseEvent event) {
-        if (this.isEnabled()) {
+        if (this.isEnabled() && this.isToggled()) {
             this.setColour(this.active);
+        } else if (this.isEnabled() && this.isHover()) {
+            this.setColour(this.hover);
+        } else if (this.isEnabled()) {
+            this.setColour(this.idle);
+        } else {
+            this.setColour(DISABLED_COLOUR);
         }
     }
 
@@ -100,5 +106,18 @@ public class SelectionButton extends BorderedLabelledButtonFace {
     @Override
     public final void onMouseReleased(MouseEvent event) {
         // does nothing
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setToggle(final boolean toggled) {
+        if (toggled) {
+            this.setColour(this.active);
+        } else {
+            this.setColour(this.idle);
+        }
+        super.setToggle(toggled);
     }
 }

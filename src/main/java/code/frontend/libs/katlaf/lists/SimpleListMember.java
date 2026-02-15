@@ -18,67 +18,54 @@
 
 package code.frontend.libs.katlaf.lists;
 
-import code.frontend.libs.katlaf.buttons.ToggleButton;
-import code.frontend.libs.katlaf.ricing.RiceHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import code.frontend.libs.katlaf.buttons.SelectionButton;
+import code.frontend.libs.katlaf.graphics.MableBorder;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 
-public abstract class SimpleListMember extends ToggleButton {
-    private final Listable listable;
-
-    public SimpleListMember(Listable listable) {
-        this.listable = listable;
-        super(listable.getDisplayString());
-        this.getLabel().setAlignment(Pos.CENTER_LEFT);
-        this.getLabel().relocate(15, 0);
-        this.getCustomBorder().setThickness(1.5);
-        this.getCustomBorder().setCornerRadii(0.8);
-        this.getCustomBorder().setMessiness(0.1);
-        this.setMinHeight(40);
-        VBox.setMargin(this, new Insets(3, 2.5, 5, 2.5));
-    }
-
-    /*
-
-
-     PROTECTED API
-    -------------------------------------------------------------------------------------*/
-
-    protected abstract void onSelect();
+public class SimpleListMember extends SelectionButton {
+    private final SimpleList parent; // keeps reference of parent
 
     /**
-     * @return the {@link Listable} associated with this {@link SimpleListMember}.
+     * Creates a new instance of a SimpleListMember without a border.
+     * Technically, a border is still created and added but it is invisible.
+     *
+     * @param parent    the SimpleList that this instance is part of. A reference
+     *                  needs to be held by each SimpleListMember instance in order
+     *                  to call methods from it.
      */
-    protected final Listable getListable() {
-        return listable;
+    public SimpleListMember(final SimpleList parent) {
+        final MableBorder dummy = new MableBorder(1, 0.1, 0.1);
+        dummy.setVisible(false);
+        this(dummy, parent); // just to satisfy the super class haha
+    }
+
+    /**
+     * Creates a new instance of a SimpleListMember with a border.
+     *
+     * @param border    the MableBorder to use
+     * @param parent    the SimpleList that this instance is part of. A reference
+     *                  needs to be held by each SimpleListMember instance in order
+     *                  to call methods from it.
+     * @see MableBorder
+     * @see SelectionButton
+     */
+    public SimpleListMember(final MableBorder border, final SimpleList parent) {
+        super(border);
+        this.parent = parent;
     }
 
     @Override
-    protected Color getUntoggledColour() {
-        return RiceHandler.getColour("dullgrey");
-    }
-
-    @Override
-    protected Color getToggledColour() {
-        return RiceHandler.getColour("white");
-    }
-
-    /*
-
-
-     PUBLIC API
-    -------------------------------------------------------------------------------------*/
-
-    @Override
-    public void executeOnClick(MouseEvent event) {
-        if (event.getButton() == MouseButton.PRIMARY) {
-            this.onSelect();
+    public void onMousePressed(final MouseEvent event) {
+        if (event.getButton() == MouseButton.SECONDARY) {
+            // TODO THIS THINGY?
+        } else if (event.isShiftDown()) {
+            parent.shiftSelected(this);
+        } else if (event.isMetaDown()) {
+            parent.metaSelected(this);
         } else {
-            // TODO
+            parent.selected(this);
         }
+        super.onMousePressed(event);
     }
 }

@@ -18,6 +18,7 @@
 
 package code.frontend.libs.katlaf.buttons;
 
+import code.frontend.libs.katlaf.faces.LabelFace;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.animation.FadeTransition;
 import javafx.scene.input.MouseEvent;
@@ -32,10 +33,11 @@ import javafx.util.Duration;
  * the button.
  *
  * @since v3.0.0-beta
- * @see LabelledButtonFace
+ * @see LabelFace
  */
-public abstract class FilledButton extends LabelledButtonFace {
+public abstract class FilledButton extends ButtonFoundation {
     private static final double RADIUS = 14;
+    private final LabelFace face;
     private final Color normal;
     private final Color hover;
     private final Region hoverRegion;
@@ -50,6 +52,11 @@ public abstract class FilledButton extends LabelledButtonFace {
      *                  hovering their mouse over it
      */
     public FilledButton(final Color normal, final Color hover) {
+        this.face = new LabelFace();
+        this.face.prefWidthProperty().bind(this.widthProperty());
+        this.face.prefHeightProperty().bind(this.heightProperty());
+        this.getChildren().addFirst(this.face);
+
         this.normal = normal;
         this.hover = hover;
 
@@ -57,7 +64,7 @@ public abstract class FilledButton extends LabelledButtonFace {
         this.hoverRegion.setOpacity(0);
         this.hoverRegion.prefWidthProperty().bind(this.widthProperty());
         this.hoverRegion.prefHeightProperty().bind(this.heightProperty());
-        this.getChildren().addFirst(this.hoverRegion); // stackpane child must be below the label
+        this.getChildren().addLast(this.hoverRegion); // stackpane child must be below the label
 
         this.transition = new FadeTransition();
         this.transition.setDuration(Duration.millis(200));
@@ -91,10 +98,10 @@ public abstract class FilledButton extends LabelledButtonFace {
         this.transition.stop();
         if (!enabled) {
             this.setBackground(RiceHandler.createBG(DISABLED, RADIUS, 0));
-            this.setTextFill(DISABLED_TXT);
+            this.face.setTextFill(DISABLED_TXT);
         } else {
             this.setBackground(RiceHandler.createBG(normal, RADIUS, 0));
-            this.setTextFill(RiceHandler.getColour("white"));
+            this.face.setTextFill(RiceHandler.getColour("white"));
         }
         super.setEnabled(enabled);
     }

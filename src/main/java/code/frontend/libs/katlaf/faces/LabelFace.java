@@ -16,22 +16,20 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package code.frontend.libs.katlaf.buttons;
+package code.frontend.libs.katlaf.faces;
 
 import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 /**
- * This is literally just an extension of ButtonLogic, but with a label
- * component added, with appropriate fonts and colouring stuff.
- *
- * @see ButtonFoundation
+ * This is a class that serves cosmetic purposes. It implements a StackPane with a label on it.
  */
-public abstract class LabelledButtonFace extends ButtonFoundation {
+public class LabelFace extends StackPane {
     private final Label label;
 
     /**
@@ -43,7 +41,7 @@ public abstract class LabelledButtonFace extends ButtonFoundation {
      * Also, the Label has its preferred width and height bound to the width and height property
      * of this instance.
      */
-    public LabelledButtonFace() {
+    public LabelFace() {
         this.label = new Label();
         this.label.setBackground(null);
         this.label.setTextFill(RiceHandler.getColour("white")); // default value

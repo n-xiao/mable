@@ -16,21 +16,21 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package code.frontend.libs.katlaf.buttons;
+package code.frontend.libs.katlaf.faces;
 
 import code.frontend.libs.katlaf.graphics.BorderedRegion;
 import code.frontend.libs.katlaf.graphics.MableBorder;
 import javafx.scene.paint.Color;
 
 /**
- * This is a child class of LabelledButtonLogic, but with a MableBorder as a child node.
+ * A LabelFace with a MableBorder.
  *
- * @see LabelledButtonFace
+ * @see LabelFace
  */
-public abstract class BorderedLabelledButtonFace extends LabelledButtonFace {
+public class BorderLabelFace extends LabelFace {
     private final BorderedRegion borderRegion;
 
-    public BorderedLabelledButtonFace(final MableBorder mableBorder) {
+    public BorderLabelFace(final MableBorder mableBorder) {
         this.borderRegion = new BorderedRegion(mableBorder);
         this.borderRegion.prefWidthProperty().bind(this.widthProperty());
         this.borderRegion.prefHeightProperty().bind(this.heightProperty());
@@ -38,7 +38,7 @@ public abstract class BorderedLabelledButtonFace extends LabelledButtonFace {
         this.getChildren().add(this.borderRegion);
     }
 
-    public BorderedLabelledButtonFace(
+    public BorderLabelFace(
         final double thickness, final double messiness, final double cornerRadii) {
         final MableBorder mableBorder = new MableBorder(thickness, messiness, cornerRadii);
         this(mableBorder);

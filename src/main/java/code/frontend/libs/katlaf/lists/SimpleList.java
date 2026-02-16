@@ -18,8 +18,7 @@
 
 package code.frontend.libs.katlaf.lists;
 
-import java.util.LinkedHashSet;
-import java.util.Stack;
+import java.util.ArrayList;
 import javafx.scene.layout.VBox;
 
 /**
@@ -30,9 +29,8 @@ import javafx.scene.layout.VBox;
  * @see SimpleListMember
  */
 public class SimpleList extends VBox {
-    private final LinkedHashSet<SimpleListMember> members;
-    private final Stack<SimpleListMember> selected;
-    private double spacing; // vertical spacing in between each member
+    private final ArrayList<SimpleListMember> members;
+    private SimpleListMember pivot; // this is the last selected member
 
     /**
      * Creates a new instance of an empty SimpleList.
@@ -40,9 +38,13 @@ public class SimpleList extends VBox {
     public SimpleList() {
         this.setBackground(null);
         this.setMouseTransparent(true);
-        this.members = new LinkedHashSet<SimpleListMember>();
-        this.selected = new Stack<SimpleListMember>();
-        this.spacing = 0;
+        /*
+         * a list shall always be ordered based on a listable's priority
+         * (priority being an abstract concept). lower priority comes first.
+         * easier to implement when counting down days
+         */
+        this.members = new ArrayList<SimpleListMember>();
+        this.pivot = null;
     }
 
     /*
@@ -50,6 +52,29 @@ public class SimpleList extends VBox {
 
      PRIVATE API
     -------------------------------------------------------------------------------------*/
+
+    /**
+     * Deselects every single member of this list except for the member provided in the
+     * parameter. That is ignored. If the member is not toggled already, then this method
+     * will leave the list with all members deselected (untoggled).
+     *
+     * @param member    the member that should not be untoggled
+     */
+    private void deselectAllExcept(final SimpleListMember member) {
+        members.forEach(m -> {
+            if (!m.equals(member))
+                m.setToggle(false);
+        });
+    }
+
+    /**
+     * Updates the list obtained by the getChildren() method with the data in the
+     * members collection. This method helps keep both lists hold the same references
+     * to members.
+     */
+    private void updateList() {
+        // TODO
+    }
 
     /**
      * A SimpleListMember should call this method when it detects
@@ -64,23 +89,21 @@ public class SimpleList extends VBox {
      */
 
     final void shiftSelected(final SimpleListMember member) {
-        if (this.selected.isEmpty()) {
+        /*
+         * can't do this with null pivot
+         * OR can't do this if pivot is not even toggled
+         * OR can't do this if user is dum dum and shift selects THE SAME DARN THING??
+         */
+        if (this.pivot == null || !this.pivot.isToggled() || member.equals(this.pivot)) {
             selected(member);
             return;
         }
 
-        final SimpleListMember pivot = this.selected.peek();
         boolean selecting = false;
         for (SimpleListMember mem : members) {
-            if (mem.equals(member) || mem.equals(pivot))
+            if (mem.equals(member) || mem.equals(this.pivot))
                 selecting = !selecting;
-
-            if (selecting && !selected.contains(mem)) {
-                mem.setToggle(true);
-                selected.push(mem);
-            } else if (!selecting) {
-                mem.setToggle(false);
-                selected.remove(mem);
+            if (selecting && !mem.isToggled()) {
             }
         }
     }
@@ -93,19 +116,18 @@ public class SimpleList extends VBox {
      * @param member    the SimpleListMember which should be pushed to the stack.
      */
     final void metaSelected(final SimpleListMember member) {
-        // TODO
+        this.pivot = member;
     }
 
     /**
-     * A SimpleListMember should call this method when it detects
-     * a click on itself. The selected stack will be emptied before the member is added
-     * to the stack.
+     * Given that the member that has been clicked on (and selected) has already
+     * been toggled (selected), all this method does is deselect all other members.
      *
-     * @param member    the member of this SimpleList instance which will become the only element
-     *                  in the stack of this SimpleList instance
+     * @param member    the member that is to be selected
      */
     final void selected(final SimpleListMember member) {
-        // TODO
+        deselectAllExcept(member);
+        this.pivot = member;
     }
 
     /*
@@ -113,4 +135,8 @@ public class SimpleList extends VBox {
 
      PUBLIC API
     -------------------------------------------------------------------------------------*/
+
+    public void addMember(final SimpleListMember member) {
+        this.members.add(member);
+    }
 }

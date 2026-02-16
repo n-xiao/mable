@@ -42,7 +42,10 @@ public abstract class ButtonFoundation extends StackPane {
     public ButtonFoundation() {
         this.enabled = true;
         // set up the click detection stuff
-        setOnMousePressed(this::toggle);
+        setOnMousePressed(event -> {
+            toggle();
+            onMousePressed(event);
+        });
         setOnMouseReleased(this::onMouseReleased);
         setOnMouseEntered(this::onMouseEntered);
         setOnMouseExited(this::onMouseExited);
@@ -56,21 +59,11 @@ public abstract class ButtonFoundation extends StackPane {
 
     /**
      * When this button is active, the toggle property will be replaced with the opposite
-     * of its previous value - NOT will be applied to it. The abstract method for onMousePressed
-     * will then be called, regardless of whether this button is enabled or not.
-     */
-    private void toggle(final MouseEvent event) {
+     * of its previous value - NOT will be applied to it.
+     * */
+    final void toggle() {
         if (this.enabled)
             this.toggled = !this.toggled;
-        onMousePressed(event); // will be executed regardless of enabled value
-    }
-
-    /**
-     * Sets the boolean value for the property of the button. Note that this is a plain
-     * setter, and does not call any additional methods.
-     */
-    void setToggle(final boolean toggled) {
-        this.toggled = toggled;
     }
 
     /*
@@ -78,6 +71,19 @@ public abstract class ButtonFoundation extends StackPane {
 
      PUBLIC API
     -------------------------------------------------------------------------------------*/
+
+    /**
+     * This method provides a way to set the toggle value of this button
+     * during runtime. It should not be called by user input. Please
+     * use the toggle() method for that. Note that this method does not
+     * check if the button is enabled or not. It will be executed even if the
+     * button has been disabled.
+     *
+     * @param toggled   true if the button should be toggled
+     */
+    public void setToggle(final boolean toggled) {
+        this.toggled = toggled;
+    }
 
     /**
      * Executed when this button is pressed, but not released.

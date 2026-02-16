@@ -20,11 +20,16 @@ package code.frontend.libs.katlaf.lists;
 
 import code.frontend.libs.katlaf.buttons.SelectionButton;
 import code.frontend.libs.katlaf.graphics.MableBorder;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
-public class SimpleListMember extends SelectionButton {
+public abstract class SimpleListMember extends SelectionButton implements Listable {
     private final SimpleList parent; // keeps reference of parent
+
+    /*
+
+
+     CONSTRUCTORS
+    -------------------------------------------------------------------------------------*/
 
     /**
      * Creates a new instance of a SimpleListMember without a border.
@@ -55,11 +60,21 @@ public class SimpleListMember extends SelectionButton {
         this.parent = parent;
     }
 
+    /*
+
+
+     PUBLIC API
+    -------------------------------------------------------------------------------------*/
+
+    /**
+     * Since a member cannot access other members in the same list, calls which affect
+     * other members must be forwarded to the parent.
+     * <p>
+     * {@inheritDoc}
+     */
     @Override
-    public void onMousePressed(final MouseEvent event) {
-        if (event.getButton() == MouseButton.SECONDARY) {
-            // TODO THIS THINGY?
-        } else if (event.isShiftDown()) {
+    public final void onMousePressed(final MouseEvent event) {
+        if (event.isShiftDown()) {
             parent.shiftSelected(this);
         } else if (event.isMetaDown()) {
             parent.metaSelected(this);

@@ -18,32 +18,64 @@
 
 package code.frontend.libs.katlaf.buttons;
 
+import code.frontend.libs.katlaf.faces.BorderLabelFace;
 import code.frontend.libs.katlaf.graphics.MableBorder;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 /**
- * A BorderedLabelledButtonFace that reacts to user mouse actions. This class holds
+ * A button that reacts to user mouse actions. This class holds
  * references to three colours: idle, hover and active. All selection buttons are
  * first coloured using idle. On mouse hover, the colour of the button will be
  * changed to the hover colour. When the user clicks on this button, the
  * active colour will be used.
  *
- * @see BorderedLabelledButtonFace
+ * @see ButtonFoundation
  */
-public class SelectionButton extends BorderedLabelledButtonFace {
+public class SelectionButton extends ButtonFoundation {
+    private final BorderLabelFace face;
     private Color idle;
     private Color hover; // colour of button when mouse hovers over
     private Color active; // colour of button when it has been clicked or selected
 
     public SelectionButton(final MableBorder mableBorder) {
-        super(mableBorder);
-        // set default values
+        /*
+         * set the default values
+         */
         this.idle = RiceHandler.getColour("dullgrey");
         this.hover = RiceHandler.getColour("lightgrey");
         this.active = RiceHandler.getColour("white");
-        this.setColour(this.idle);
+        /*
+         * then set up the face of this Button
+         */
+        this.face = new BorderLabelFace(mableBorder);
+        this.face.prefWidthProperty().bind(this.widthProperty());
+        this.face.prefHeightProperty().bind(this.heightProperty());
+        this.getChildren().addFirst(this.face);
+        this.face.setColour(this.idle);
+    }
+
+    /*
+
+
+     PRIVATE API
+    -------------------------------------------------------------------------------------*/
+
+    /**
+     * Responsible for colouring the appearance of this button based on
+     * runtime properties.
+     */
+    private void style() {
+        if (this.isEnabled() && this.isToggled()) {
+            this.face.setColour(this.active);
+        } else if (this.isEnabled() && this.isHover()) {
+            this.face.setColour(this.hover);
+        } else if (this.isEnabled()) {
+            this.face.setColour(this.idle);
+        } else {
+            this.face.setColour(DISABLED_COLOUR);
+        }
     }
 
     /*
@@ -71,6 +103,15 @@ public class SelectionButton extends BorderedLabelledButtonFace {
     -------------------------------------------------------------------------------------*/
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setToggle(final boolean toggled) {
+        super.setToggle(toggled);
+        style();
+    }
+
+    /**
      * Implements styling when clicked. When overriding this method, please
      * remember to call the superclass method or the styling will not be applied.
      * <p>
@@ -78,46 +119,28 @@ public class SelectionButton extends BorderedLabelledButtonFace {
      */
     @Override
     public void onMousePressed(MouseEvent event) {
-        if (this.isEnabled() && this.isToggled()) {
-            this.setColour(this.active);
-        } else if (this.isEnabled() && this.isHover()) {
-            this.setColour(this.hover);
-        } else if (this.isEnabled()) {
-            this.setColour(this.idle);
-        } else {
-            this.setColour(DISABLED_COLOUR);
-        }
+        /*
+         * button toggling logic occurs before the code below.
+         */
+        style();
     }
 
     @Override
     public final void onMouseEntered(MouseEvent event) {
         if (this.isEnabled() && !this.isToggled()) {
-            this.setColour(this.hover);
+            this.face.setColour(this.hover);
         }
     }
 
     @Override
     public final void onMouseExited(MouseEvent event) {
         if (this.isEnabled() && !this.isToggled()) {
-            this.setColour(this.idle);
+            this.face.setColour(this.idle);
         }
     }
 
     @Override
     public final void onMouseReleased(MouseEvent event) {
         // does nothing
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setToggle(final boolean toggled) {
-        if (toggled) {
-            this.setColour(this.active);
-        } else {
-            this.setColour(this.idle);
-        }
-        super.setToggle(toggled);
     }
 }

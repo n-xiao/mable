@@ -34,6 +34,4 @@ public interface Listable extends Comparable<Listable> {
      * as an empty procedure if deemed appropriate.
      */
     public void setListIndex(int index);
-
-    public int getListIndex();
 }

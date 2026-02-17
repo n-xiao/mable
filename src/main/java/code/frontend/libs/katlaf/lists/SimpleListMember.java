@@ -58,6 +58,7 @@ public abstract class SimpleListMember extends SelectionButton implements Listab
     public SimpleListMember(final MableBorder border, final SimpleList parent) {
         super(border);
         this.parent = parent;
+        this.setMaxWidth(Double.MAX_VALUE);
     }
 
     /*

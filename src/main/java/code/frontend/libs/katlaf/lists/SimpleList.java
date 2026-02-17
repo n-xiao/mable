@@ -19,6 +19,11 @@
 package code.frontend.libs.katlaf.lists;
 
 import java.util.ArrayList;
+import java.util.List;
+import javafx.animation.ParallelTransition;
+import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 
 /**
@@ -30,6 +35,7 @@ import javafx.scene.layout.VBox;
  */
 public class SimpleList extends VBox {
     private final ArrayList<SimpleListMember> members;
+    private double spacing;
     private SimpleListMember pivot; // this is the last selected member
 
     /**
@@ -38,12 +44,14 @@ public class SimpleList extends VBox {
     public SimpleList() {
         this.setBackground(null);
         this.setMouseTransparent(true);
+        this.setFillWidth(true);
         /*
          * a list shall always be ordered based on a listable's priority
          * (priority being an abstract concept). lower priority comes first.
          * easier to implement when counting down days
          */
         this.members = new ArrayList<SimpleListMember>();
+        this.spacing = 0;
         this.pivot = null;
     }
 
@@ -52,29 +60,6 @@ public class SimpleList extends VBox {
 
      PRIVATE API
     -------------------------------------------------------------------------------------*/
-
-    /**
-     * Deselects every single member of this list except for the member provided in the
-     * parameter. That is ignored. If the member is not toggled already, then this method
-     * will leave the list with all members deselected (untoggled).
-     *
-     * @param member    the member that should not be untoggled
-     */
-    private void deselectAllExcept(final SimpleListMember member) {
-        members.forEach(m -> {
-            if (!m.equals(member))
-                m.setToggle(false);
-        });
-    }
-
-    /**
-     * Updates the list obtained by the getChildren() method with the data in the
-     * members collection. This method helps keep both lists hold the same references
-     * to members.
-     */
-    private void updateList() {
-        // TODO
-    }
 
     /**
      * A SimpleListMember should call this method when it detects
@@ -130,13 +115,87 @@ public class SimpleList extends VBox {
         this.pivot = member;
     }
 
+    /**
+     * Deselects every single member of this list except for the member provided in the
+     * parameter. That is ignored. If the member is not toggled already, then this method
+     * will leave the list with all members deselected (untoggled).
+     *
+     * @param member    the member that should not be untoggled
+     */
+    private void deselectAllExcept(final SimpleListMember member) {
+        members.forEach(m -> {
+            if (!m.equals(member))
+                m.setToggle(false);
+        });
+    }
+
+    /*
+
+
+     PROTECTED API
+    -------------------------------------------------------------------------------------*/
+
+    protected final ArrayList<SimpleListMember> getMembers() {
+        return this.members;
+    }
+
+    protected final void syncMembers() {
+        this.getChildren().clear();
+        this.members.forEach(member -> { this.getChildren().add(member); });
+    }
+
+    protected void setVspacing(final double spacing) {
+        final ObservableList<Node> children = this.getChildren();
+        if (children.isEmpty())
+            return;
+        for (Node node : children) {
+            if (!children.getFirst().equals(node)) {
+                VBox.setMargin(node, new Insets(spacing, 0, 0, 0));
+            }
+        }
+        this.spacing = spacing;
+    }
+
+    protected void setVspacing() {
+        setVspacing(this.spacing);
+    }
+
     /*
 
 
      PUBLIC API
     -------------------------------------------------------------------------------------*/
 
+    /**
+     * This method is called during runtime, usually when a user adds a new member to this
+     * list.
+     */
     public void addMember(final SimpleListMember member) {
         this.members.add(member);
+        this.members.sort(null);
+        if (this.members.getLast().equals(member)) {
+            this.getChildren().addLast(member);
+        } else {
+            this.getChildren().add(this.members.indexOf(member), member);
+        }
+        setVspacing();
+    }
+
+    public void addMembers(final List<SimpleListMember> membersToAdd) {
+        for (SimpleListMember simpleListMember : membersToAdd) {
+            addMember(simpleListMember);
+        }
+    }
+
+    public void removeMember(final SimpleListMember member) {
+        this.members.remove(member);
+        this.getChildren().removeIf(
+            m -> (m instanceof SimpleListMember currentMember && currentMember.equals(member)));
+    }
+
+    public void removeMembers(final List<SimpleListMember> membersToRemove) {
+        for (SimpleListMember simpleListMember : membersToRemove) {
+            removeMember(simpleListMember);
+        }
     }
 }

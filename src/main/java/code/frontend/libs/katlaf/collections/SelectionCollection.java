@@ -1,0 +1,120 @@
+/*
+    Copyright (C) 2026 Nicholas Siow <nxiao.dev@gmail.com>
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+package code.frontend.libs.katlaf.collections;
+
+import code.frontend.libs.katlaf.buttons.SelectionButton;
+import java.util.List;
+
+/**
+ * This class is a wrapper for a  collection of SelectionButton instances which support
+ * actions like shift-click, meta-click, deselect all, select all and
+ * click to select.
+ *
+ * @see SelectionButton
+ * @since v3.0.0-beta
+ */
+public class SelectionCollection {
+    private final List<SelectionChild> children;
+    private SelectionChild pivot;
+
+    /**
+     * Creates a new SelectionCollection instance, backed by the provided
+     * List.
+     *
+     * @param children      the list that backs this instance
+     */
+    public SelectionCollection(final List<SelectionChild> children) {
+        this.children = children;
+        this.pivot = null;
+    }
+
+    /*
+
+
+     PRIVATE API
+    -------------------------------------------------------------------------------------*/
+
+    /**
+     * A SimpleListMember should call this method when it detects
+     * a shift select on it. If there are no other children that are currently
+     * selected, then this method will just forward the call to the selected() method.
+     * <p>
+     * Otherwise, the last child that was selected before the calling of this method
+     * will be used as a "pivot". All children inclusively between the pivot and the child which
+     * issued this method call will be selected. All other children will be deselected.
+     *
+     * @param child    the child that this method call originated from
+     */
+
+    final void shiftSelected(final SelectionChild child) {
+        /*
+         * can't do this with null pivot
+         * OR can't do this if pivot is not even toggled
+         * OR can't do this if user is dum dum and shift selects THE SAME DARN THING??
+         */
+        if (this.pivot == null || !this.pivot.isToggled() || child.equals(this.pivot)) {
+            selected(child);
+            return;
+        }
+
+        boolean selecting = false;
+        for (SelectionChild mem : this.children) {
+            if (mem.equals(child) || mem.equals(this.pivot))
+                selecting = !selecting;
+            if (selecting && !mem.isToggled()) {
+            }
+        }
+    }
+
+    /**
+     * A SimpleListMember should call this method when it detects
+     * a meta select on itself. It will be pushed to the stack of selected
+     * SimpleListMember instances of this SimpleList instance.
+     *
+     * @param child    the SimpleListMember which should be pushed to the stack.
+     */
+    final void metaSelected(final SelectionChild child) {
+        this.pivot = child;
+    }
+
+    /**
+     * Given that the child that has been clicked on (and selected) has already
+     * been toggled (selected), all this method does is deselect all other children.
+     *
+     * @param child    the child that is to be selected
+     */
+    final void selected(final SelectionChild child) {
+        deselectAllExcept(child);
+        this.pivot = child;
+    }
+
+    /**
+     * Deselects every single child of this collection except for the child provided in the
+     * parameter. That is ignored. If the child is not toggled already, then this method
+     * will leave the collection with all children deselected (untoggled).
+     *
+     * @param child    the child that should not be untoggled
+     */
+    private void deselectAllExcept(final SelectionChild child) {
+        this.children.forEach(c -> {
+            if (!c.equals(child))
+                c.setToggle(false);
+        });
+    }
+}

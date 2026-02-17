@@ -20,7 +20,6 @@ package code.frontend.libs.katlaf.lists;
 
 import java.util.ArrayList;
 import java.util.List;
-import javafx.animation.ParallelTransition;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;

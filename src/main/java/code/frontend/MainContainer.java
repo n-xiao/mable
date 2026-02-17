@@ -19,11 +19,10 @@
 package code.frontend;
 
 import code.frontend.libs.katlaf.ricing.RiceHandler;
-import code.frontend.sidebar.Sidebar;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
-public class MainContainer extends Pane {
+public final class MainContainer extends Pane {
     /*
 
 
@@ -50,15 +49,12 @@ public class MainContainer extends Pane {
     -------------------------------------------------------------------------------------*/
 
     private class Container extends HBox {
-        final Sidebar sidebar;
         // TODO add the content!
         Container() {
-            this.sidebar = new Sidebar();
             this.setBackground(null);
             this.setFillHeight(true);
             this.prefHeightProperty().bind(MainContainer.this.heightProperty());
             this.prefWidthProperty().bind(MainContainer.this.widthProperty());
-            this.getChildren().addAll(this.sidebar);
         }
     }
 }

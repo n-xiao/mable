@@ -18,71 +18,38 @@
 
 package code.frontend.libs.katlaf.tables;
 
-import java.util.ArrayList;
+import code.frontend.libs.katlaf.collections.SelectionChild;
+import code.frontend.libs.katlaf.collections.SelectionCollection;
 import javafx.scene.layout.StackPane;
 
-public abstract class SimpleTableMember extends StackPane implements Comparable<SimpleTableMember> {
-    private boolean selected;
-
-    public SimpleTableMember(final double width, final double height) {
+/**
+ * A SimpleTableMember has a fixed width and height. This class provides selection implementations
+ * by extending SelectionChild.
+ *
+ * @see SelectionChild
+ * @since v3.0.0-beta
+ */
+public abstract class SimpleTableMember
+    extends SelectionChild implements Comparable<SimpleTableMember> {
+    /**
+     * Creates a new instance of this class. This constructor calls the hideFace() method
+     * of the superclass, so as to provide implementations of this class the equivalent of
+     * an empty StackPane.
+     *
+     * @param parent    the SelectionCollection that this SelectionChild instance belongs to
+     * @param width     the width of this instance
+     * @param height    the height of this instance
+     * @see SelectionCollection
+     * @see StackPane
+     */
+    public SimpleTableMember(final SelectionCollection<? extends SelectionChild> parent,
+        final double width, final double height) {
+        super(parent);
         this.setBackground(null);
         this.setMinWidth(width);
         this.setMaxWidth(width);
         this.setMinHeight(height);
         this.setMaxHeight(height);
-        this.selected = false;
-    }
-
-    /*
-
-
-     BEHAVIOUR
-    -------------------------------------------------------------------------------------*/
-
-    void setSelected(boolean selected) {
-        this.selected = selected;
-        if (selected) {
-            onSelected();
-        } else {
-            onDeselected();
-        }
-    }
-
-    /*
-
-
-     PROTECTED API
-    -------------------------------------------------------------------------------------*/
-
-    /**
-     * This method is called when this {@link SimpleTableMember}
-     * instance is selected. Its default implementation does nothing.
-     */
-    protected void onSelected() {}
-
-    /**
-     * This method is called when this {@link SimpleTableMember}
-     * instance is deselected. Its default implementation does nothing.
-     */
-    protected void onDeselected() {}
-
-    /**
-     * This method is called when this instance is clicked on
-     * with a right mouse button. This instance is marked as
-     * selected when this method is called.
-     *
-     * An ArrayList of selected members from the {@link SimpleTable}
-     * are provided through the parameter.
-     */
-    protected abstract void onRightClicked(final ArrayList<SimpleTableMember> selectedMembers);
-
-    /*
-
-
-     PUBLIC API
-    -------------------------------------------------------------------------------------*/
-
-    public boolean isSelected() {
-        return this.selected;
+        this.hideFace();
     }
 }

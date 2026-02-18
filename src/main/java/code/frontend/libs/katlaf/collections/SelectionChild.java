@@ -23,14 +23,15 @@ import code.frontend.libs.katlaf.graphics.MableBorder;
 import javafx.scene.input.MouseEvent;
 
 public class SelectionChild extends SelectionButton {
-    private final SelectionCollection parent;
-    public SelectionChild(final SelectionCollection parent) {
+    private final SelectionCollection<? extends SelectionChild> parent;
+    public SelectionChild(final SelectionCollection<? extends SelectionChild> parent) {
         final MableBorder dummy = new MableBorder(1, 0.1, 0.1);
         dummy.setVisible(false);
         this(dummy, parent); // just to satisfy the super class haha
     }
 
-    public SelectionChild(final MableBorder border, final SelectionCollection parent) {
+    public SelectionChild(
+        final MableBorder border, final SelectionCollection<? extends SelectionChild> parent) {
         super(border);
         this.parent = parent;
     }
@@ -42,8 +43,8 @@ public class SelectionChild extends SelectionButton {
     -------------------------------------------------------------------------------------*/
 
     /**
-     * Since a member cannot access other members in the same list, calls which affect
-     * other members must be forwarded to the parent.
+     * Since a child cannot access other children in the same list, calls which affect
+     * other children must be forwarded to the parent.
      * <p>
      * {@inheritDoc}
      */

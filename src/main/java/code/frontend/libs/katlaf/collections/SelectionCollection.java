@@ -25,12 +25,15 @@ import java.util.List;
  * This class is a wrapper for a  collection of SelectionButton instances which support
  * actions like shift-click, meta-click, deselect all, select all and
  * click to select.
+ * <p>
+ * It acts as a command and control "server" for its children, allowing the children
+ * to interact with other children of the same collection.
  *
  * @see SelectionButton
  * @since v3.0.0-beta
  */
-public class SelectionCollection {
-    private final List<SelectionChild> children;
+public class SelectionCollection<E extends SelectionChild> {
+    private final List<E> children;
     private SelectionChild pivot;
 
     /**
@@ -39,7 +42,7 @@ public class SelectionCollection {
      *
      * @param children      the list that backs this instance
      */
-    public SelectionCollection(final List<SelectionChild> children) {
+    public SelectionCollection(final List<E> children) {
         this.children = children;
         this.pivot = null;
     }
@@ -51,7 +54,7 @@ public class SelectionCollection {
     -------------------------------------------------------------------------------------*/
 
     /**
-     * A SimpleListMember should call this method when it detects
+     * A child should call this method when it detects
      * a shift select on it. If there are no other children that are currently
      * selected, then this method will just forward the call to the selected() method.
      * <p>
@@ -83,11 +86,11 @@ public class SelectionCollection {
     }
 
     /**
-     * A SimpleListMember should call this method when it detects
+     * A child should call this method when it detects
      * a meta select on itself. It will be pushed to the stack of selected
-     * SimpleListMember instances of this SimpleList instance.
+     * child instances of this SimpleList instance.
      *
-     * @param child    the SimpleListMember which should be pushed to the stack.
+     * @param child    the child which should be pushed to the stack.
      */
     final void metaSelected(final SelectionChild child) {
         this.pivot = child;
@@ -116,5 +119,15 @@ public class SelectionCollection {
             if (!c.equals(child))
                 c.setToggle(false);
         });
+    }
+
+    /*
+
+
+     PUBLIC API
+    -------------------------------------------------------------------------------------*/
+
+    public void deselectAll() {
+        this.children.forEach(child -> child.setToggle(false));
     }
 }

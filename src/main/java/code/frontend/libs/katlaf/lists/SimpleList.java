@@ -18,6 +18,7 @@
 
 package code.frontend.libs.katlaf.lists;
 
+import code.frontend.libs.katlaf.collections.SelectionCollection;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.ObservableList;
@@ -34,8 +35,8 @@ import javafx.scene.layout.VBox;
  */
 public class SimpleList extends VBox {
     private final ArrayList<SimpleListMember> members;
+    private final SelectionCollection<SimpleListMember> selcol;
     private double spacing;
-    private SimpleListMember pivot; // this is the last selected member
 
     /**
      * Creates a new instance of an empty SimpleList.
@@ -50,82 +51,8 @@ public class SimpleList extends VBox {
          * easier to implement when counting down days
          */
         this.members = new ArrayList<SimpleListMember>();
+        this.selcol = new SelectionCollection<SimpleListMember>(this.members);
         this.spacing = 0;
-        this.pivot = null;
-    }
-
-    /*
-
-
-     PRIVATE API
-    -------------------------------------------------------------------------------------*/
-
-    /**
-     * A SimpleListMember should call this method when it detects
-     * a shift select on it. If there are no other members that are currently
-     * selected, then this method will just forward the call to the selected() method.
-     * <p>
-     * Otherwise, the last member that was selected before the calling of this method
-     * will be used as a "pivot". All members inclusively between the pivot and the member which
-     * issued this method call will be selected. All other members will be deselected.
-     *
-     * @param member    the member that this method call originated from
-     */
-
-    final void shiftSelected(final SimpleListMember member) {
-        /*
-         * can't do this with null pivot
-         * OR can't do this if pivot is not even toggled
-         * OR can't do this if user is dum dum and shift selects THE SAME DARN THING??
-         */
-        if (this.pivot == null || !this.pivot.isToggled() || member.equals(this.pivot)) {
-            selected(member);
-            return;
-        }
-
-        boolean selecting = false;
-        for (SimpleListMember mem : members) {
-            if (mem.equals(member) || mem.equals(this.pivot))
-                selecting = !selecting;
-            if (selecting && !mem.isToggled()) {
-            }
-        }
-    }
-
-    /**
-     * A SimpleListMember should call this method when it detects
-     * a meta select on itself. It will be pushed to the stack of selected
-     * SimpleListMember instances of this SimpleList instance.
-     *
-     * @param member    the SimpleListMember which should be pushed to the stack.
-     */
-    final void metaSelected(final SimpleListMember member) {
-        this.pivot = member;
-    }
-
-    /**
-     * Given that the member that has been clicked on (and selected) has already
-     * been toggled (selected), all this method does is deselect all other members.
-     *
-     * @param member    the member that is to be selected
-     */
-    final void selected(final SimpleListMember member) {
-        deselectAllExcept(member);
-        this.pivot = member;
-    }
-
-    /**
-     * Deselects every single member of this list except for the member provided in the
-     * parameter. That is ignored. If the member is not toggled already, then this method
-     * will leave the list with all members deselected (untoggled).
-     *
-     * @param member    the member that should not be untoggled
-     */
-    private void deselectAllExcept(final SimpleListMember member) {
-        members.forEach(m -> {
-            if (!m.equals(member))
-                m.setToggle(false);
-        });
     }
 
     /*
@@ -196,5 +123,16 @@ public class SimpleList extends VBox {
         for (SimpleListMember simpleListMember : membersToRemove) {
             removeMember(simpleListMember);
         }
+    }
+
+    /**
+     * When creating SimpleListMember instances for this list, the SelectionCollection (parent)
+     * needs to be obtained.
+     *
+     * @returns the SelectionCollection contained within this SimpleList
+     * @see SelectionCollection
+     */
+    public SelectionCollection<SimpleListMember> getSelcol() {
+        return selcol;
     }
 }

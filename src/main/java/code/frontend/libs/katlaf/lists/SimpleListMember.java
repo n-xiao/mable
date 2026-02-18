@@ -19,12 +19,11 @@
 package code.frontend.libs.katlaf.lists;
 
 import code.frontend.libs.katlaf.buttons.SelectionButton;
+import code.frontend.libs.katlaf.collections.SelectionChild;
+import code.frontend.libs.katlaf.collections.SelectionCollection;
 import code.frontend.libs.katlaf.graphics.MableBorder;
-import javafx.scene.input.MouseEvent;
 
-public abstract class SimpleListMember extends SelectionButton implements Listable {
-    private final SimpleList parent; // keeps reference of parent
-
+public abstract class SimpleListMember extends SelectionChild implements Listable {
     /*
 
 
@@ -39,10 +38,9 @@ public abstract class SimpleListMember extends SelectionButton implements Listab
      *                  needs to be held by each SimpleListMember instance in order
      *                  to call methods from it.
      */
-    public SimpleListMember(final SimpleList parent) {
-        final MableBorder dummy = new MableBorder(1, 0.1, 0.1);
-        dummy.setVisible(false);
-        this(dummy, parent); // just to satisfy the super class haha
+    public SimpleListMember(final SelectionCollection<? extends SelectionChild> parent) {
+        super(parent);
+        this.setMaxWidth(Double.MAX_VALUE);
     }
 
     /**
@@ -55,33 +53,9 @@ public abstract class SimpleListMember extends SelectionButton implements Listab
      * @see MableBorder
      * @see SelectionButton
      */
-    public SimpleListMember(final MableBorder border, final SimpleList parent) {
-        super(border);
-        this.parent = parent;
+    public SimpleListMember(
+        final MableBorder border, final SelectionCollection<? extends SelectionChild> parent) {
+        super(border, parent);
         this.setMaxWidth(Double.MAX_VALUE);
-    }
-
-    /*
-
-
-     PUBLIC API
-    -------------------------------------------------------------------------------------*/
-
-    /**
-     * Since a member cannot access other members in the same list, calls which affect
-     * other members must be forwarded to the parent.
-     * <p>
-     * {@inheritDoc}
-     */
-    @Override
-    public final void onMousePressed(final MouseEvent event) {
-        if (event.isShiftDown()) {
-            parent.shiftSelected(this);
-        } else if (event.isMetaDown()) {
-            parent.metaSelected(this);
-        } else {
-            parent.selected(this);
-        }
-        super.onMousePressed(event);
     }
 }

@@ -18,75 +18,29 @@
 
 package code.frontend.libs.katlaf.tables;
 
+import code.frontend.libs.katlaf.collections.SelectionCollection;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.util.ArrayList;
+import java.util.List;
 import javafx.geometry.Pos;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
 
 public class SimpleTable extends FlowPane {
     private final ArrayList<SimpleTableMember> members;
+    private final SelectionCollection<SimpleTableMember> selcol;
+
     public SimpleTable() {
         this.members = new ArrayList<SimpleTableMember>();
+        this.selcol = new SelectionCollection<SimpleTableMember>(this.members);
         this.setMaxHeight(Double.MAX_VALUE);
         this.setMaxWidth(Double.MAX_VALUE);
         this.setAlignment(Pos.TOP_CENTER);
         this.setBackground(RiceHandler.createBG(RiceHandler.getColour("night"), 0, 0));
-        this.setOnMousePressed(event -> {
-            deselectAllMembers();
+        this.setOnMousePressed(event -> { // click anywhere to deselect
+            this.selcol.deselectAll();
             event.consume();
         });
-    }
-
-    /*
-
-
-     PRIVATE API
-    -------------------------------------------------------------------------------------*/
-
-    /**
-     * Deselects all members of this table.
-     */
-    private void deselectAllMembers() {
-        members.forEach(member -> member.setSelected(false));
-    }
-
-    private SimpleTableMember lastSelectedMember;
-    /**
-     * Called when user selects a {@link SimpleTableMember member} while
-     * holding their shift key. This selects all members in between the
-     * last selected member and the (caller) member that was just shift-clicked on.
-     */
-    private void shiftSelectMember(final SimpleTableMember tableMember) {
-        // error & edge case handlings
-        if (members.isEmpty()) {
-            throw new IllegalStateException("shift selected on an empty table?!");
-        } else if (lastSelectedMember == null || !lastSelectedMember.isSelected()
-            || tableMember.equals(lastSelectedMember) && lastSelectedMember.isSelected()) {
-            deselectAllMembers();
-            selectMember(tableMember);
-            return;
-        }
-
-        selectMember(tableMember);
-        boolean selecting = false;
-        for (SimpleTableMember member : members) {
-            if (member.equals(tableMember) || member.equals(lastSelectedMember)) {
-                selecting = !selecting;
-            } else if (selecting) {
-                selectMember(member);
-            }
-        }
-    }
-
-    /**
-     * Sets a given member as selected and stores a reference to it
-     * as the last selected member.
-     */
-    private void selectMember(final SimpleTableMember tableMember) {
-        tableMember.setSelected(true);
-        lastSelectedMember = tableMember;
     }
 
     /**
@@ -131,7 +85,7 @@ public class SimpleTable extends FlowPane {
     protected ArrayList<SimpleTableMember> getSelectedMembers() {
         final ArrayList<SimpleTableMember> selected = new ArrayList<SimpleTableMember>();
         members.forEach(member -> {
-            if (member.isSelected())
+            if (member.isToggled())
                 selected.add(member);
         });
         return selected;
@@ -151,29 +105,21 @@ public class SimpleTable extends FlowPane {
      * calling `requestAlign()`
      */
     public void addMember(final SimpleTableMember tableMember) {
-        members.add(tableMember);
+        this.selcol.deselectAll();
+        this.members.add(tableMember);
+        this.members.sort(null);
+        this.getChildren().add(this.members.indexOf(tableMember), tableMember);
+        this.requestAlign();
+    }
 
-        tableMember.setOnMousePressed((event) -> {
-            if (event.getButton().equals(MouseButton.SECONDARY)) {
-                if (!tableMember.isSelected()) {
-                    deselectAllMembers();
-                    selectMember(tableMember);
-                }
-                tableMember.onRightClicked(getSelectedMembers());
-            } else if (event.isShiftDown()) {
-                shiftSelectMember(tableMember);
-            } else if (event.isMetaDown()) {
-                selectMember(tableMember);
-            } else {
-                deselectAllMembers();
-                selectMember(tableMember);
-            }
-            event.consume();
-        });
-
-        members.sort(null);
-
-        this.getChildren().add(tableMember);
+    public void addMembers(final List<SimpleTableMember> tableMembers) {
+        this.selcol.deselectAll();
+        for (SimpleTableMember simpleTableMember : tableMembers) {
+            this.members.add(simpleTableMember);
+        }
+        this.members.sort(null);
+        this.getChildren().clear();
+        this.getChildren().addAll(this.members);
         this.requestAlign();
     }
 
@@ -182,9 +128,16 @@ public class SimpleTable extends FlowPane {
      * This method will realign the members by
      * calling `requestAlign()`
      */
-    public void removeMember(SimpleTableMember tableMember) {
-        members.remove(tableMember);
+    public void removeMember(final SimpleTableMember tableMember) {
+        this.members.remove(tableMember);
         this.getChildren().remove(tableMember);
+        this.requestAlign();
+    }
+
+    public void removeMembers(final List<SimpleTableMember> tableMembers) {
+        this.members.removeAll(tableMembers);
+        this.getChildren().clear();
+        this.getChildren().addAll(this.members);
         this.requestAlign();
     }
 

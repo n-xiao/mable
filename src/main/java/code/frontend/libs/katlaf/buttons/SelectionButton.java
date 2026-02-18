@@ -96,6 +96,14 @@ public class SelectionButton extends ButtonFoundation {
         this.active = active;
     }
 
+    /**
+     * Makes the face of this instance invisible. Note that the effect of this method cannot be
+     * undone, and is a convenience method to get rid of styling if needed.
+     */
+    protected final void hideFace() {
+        this.face.setVisible(false);
+    }
+
     /*
 
 

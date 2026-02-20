@@ -16,9 +16,8 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package code.backend.utils;
+package code.backend.data;
 
-import code.backend.data.Countdown;
 import java.time.LocalDate;
 import java.util.Comparator;
 

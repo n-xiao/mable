@@ -16,10 +16,8 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package code.backend.utils;
+package code.backend.data;
 
-import code.backend.data.Countdown;
-import code.backend.data.CountdownFolder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import tools.jackson.core.JacksonException;
@@ -34,7 +32,7 @@ import tools.jackson.databind.node.ObjectNode;
  *  (resources are handled by Vals) since data in resouces are
  *  immutable by a user.
  */
-public class StorageHandler {
+public final class StorageHandler {
     private static final Path DATA_DIR = Path.of(System.getProperty("user.home") + "/mable_data");
     private static final Path COUNTDOWNS_PATH = Path.of(DATA_DIR.toString() + "/countdowns.json");
     private static final Path FOLDER_PATH = Path.of(DATA_DIR.toString() + "/folders.json");

@@ -46,10 +46,4 @@ public interface Tablet {
      * @param pos   the index of this instance
      */
     public void setPosition(int pos);
-
-    /**
-     * This method will be executed when the frontend representation of this instance
-     * is removed by user command.
-     */
-    public void onRemoved();
 }

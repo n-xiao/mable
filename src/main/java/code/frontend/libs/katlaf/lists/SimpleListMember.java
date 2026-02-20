@@ -23,7 +23,7 @@ import code.frontend.libs.katlaf.collections.SelectionChild;
 import code.frontend.libs.katlaf.collections.SelectionCollection;
 import code.frontend.libs.katlaf.graphics.MableBorder;
 
-public abstract class SimpleListMember extends SelectionChild implements Listable {
+public abstract class SimpleListMember extends SelectionChild {
     /*
 
 

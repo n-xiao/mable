@@ -16,14 +16,15 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package code.frontend.libs.katlaf.lists;
+package code.frontend.capabilities.countdowns;
 
-public interface Listable<T> extends Comparable<T> {
-    /**
-     * The return String value will be used to display
-     * the label of a SimpleListMember.
-     *
-     * @return a String to be displayed
-     */
-    public String getDisplayString();
-}
+import code.backend.data.Countdown;
+import code.frontend.libs.katlaf.lists.SimpleList;
+
+/**
+ * The UI component that displays a set of Countdowns.
+ *
+ * @since v3.0.0-beta
+ * @see Countdown
+ */
+public class CountdownList extends SimpleList {}

@@ -16,14 +16,8 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package code.frontend.libs.katlaf.lists;
+package code.backend.data;
 
-public interface Listable<T> extends Comparable<T> {
-    /**
-     * The return String value will be used to display
-     * the label of a SimpleListMember.
-     *
-     * @return a String to be displayed
-     */
-    public String getDisplayString();
+public interface Recoverable extends Deletable {
+    public void recover();
 }

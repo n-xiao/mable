@@ -16,24 +16,23 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package code.backend.utils;
+package code.backend.data;
 
-import code.backend.data.Countdown;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Stack;
 import java.util.TreeSet;
 
-public class CountdownHandler {
+final class CountdownHandler {
     private static final TreeSet<Countdown> COUNTDOWNS =
         new TreeSet<Countdown>(new SortByRemainingDays());
     private static final Stack<Countdown> DELETED_COUNTDOWNS = new Stack<Countdown>();
 
-    public static TreeSet<Countdown> getAll() {
+    static TreeSet<Countdown> getAll() {
         return COUNTDOWNS;
     }
 
-    public static ArrayList<Countdown> getIncomplete() {
+    static ArrayList<Countdown> getIncomplete() {
         final ArrayList<Countdown> arr = new ArrayList<Countdown>();
         COUNTDOWNS.forEach(c -> {
             if (!c.isDone())
@@ -42,7 +41,7 @@ public class CountdownHandler {
         return arr;
     }
 
-    public static ArrayList<Countdown> getComplete() {
+    static ArrayList<Countdown> getComplete() {
         final ArrayList<Countdown> arr = new ArrayList<>();
         COUNTDOWNS.forEach(c -> {
             if (c.isDone())
@@ -51,7 +50,7 @@ public class CountdownHandler {
         return arr;
     }
 
-    public static Stack<Countdown> getDeletedCountdowns() {
+    static Stack<Countdown> getDeletedCountdowns() {
         return DELETED_COUNTDOWNS;
     }
 
@@ -60,19 +59,30 @@ public class CountdownHandler {
      * It should never be called during load operations. Use the getCountdowns.add()
      * method for that.
      */
-    public static void addCountdown(Countdown c) {
+    static void addCountdown(Countdown c) {
         COUNTDOWNS.add(c);
         StorageHandler.save();
     }
 
-    public static void deleteCountdowns(Collection<Countdown> countdowns) {
-        COUNTDOWNS.removeAll(countdowns);
-        FolderHandler.getFolders().forEach(
-            folder -> { folder.getContents().removeAll(countdowns); });
-        DELETED_COUNTDOWNS.addAll(countdowns);
+    static void deleteCountdown(final Countdown countdown) {
+        COUNTDOWNS.remove(countdown);
+        DELETED_COUNTDOWNS.add(countdown);
     }
 
-    public static Countdown getCountdownByID(String id) {
+    static void recoverCountdown(final Countdown countdown) {
+        DELETED_COUNTDOWNS.remove(countdown);
+        COUNTDOWNS.add(countdown);
+    }
+
+    static void deleteCountdowns(final Collection<Countdown> countdowns) {
+        countdowns.forEach(CountdownHandler::deleteCountdown);
+    }
+
+    static boolean isCountdownDeleted(final Countdown countdown) {
+        return DELETED_COUNTDOWNS.contains(countdown);
+    }
+
+    static Countdown getCountdownByID(String id) {
         for (Countdown countdown : COUNTDOWNS) {
             if (countdown.getID().toString().equals(id))
                 return countdown;

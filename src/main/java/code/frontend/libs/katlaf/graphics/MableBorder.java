@@ -18,6 +18,8 @@
 
 package code.frontend.libs.katlaf.graphics;
 
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
@@ -238,6 +240,18 @@ public final class MableBorder extends ResizableCanvas {
 
     public double getPaddingDist() {
         return this.thickness * (this.messiness + 1);
+    }
+
+    /**
+     * Binds the width and height properties of this border to the provided ReadOnlyDoubleProperty
+     * parameters of a parent's width and height.
+     *
+     * @param width     the ReadOnlyDoubleProperty of the parent's width
+     * @param height    the ReadOnlyDoubleProperty of the parent's height
+     */
+    public void bindSize(final ReadOnlyDoubleProperty width, final ReadOnlyDoubleProperty height) {
+        this.widthProperty().bind(width);
+        this.heightProperty().bind(height);
     }
 
     /*

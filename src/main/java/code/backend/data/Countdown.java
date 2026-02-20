@@ -18,7 +18,7 @@
 
 package code.backend.data;
 
-import code.frontend.libs.katlaf.ricing.RiceHandler;
+import code.frontend.libs.katlaf.lists.Listable;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -30,17 +30,12 @@ import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Countdown extends Identifiable {
-    private static final String ZONE_ID_STR = "UTC";
-    /**
-     * Calculates the number of days between two {@link LocalDate} instances.
-     */
-    public static int getDaysBetween(LocalDate date1, LocalDate date2) {
-        ZonedDateTime zoned1 = date1.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
-        ZonedDateTime zoned2 = date2.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
-        Duration duration = Duration.between(zoned1, zoned2);
-        return (int) duration.toDaysPart();
-    }
+public class Countdown extends Identifiable implements Listable<Countdown>, Recoverable {
+    /*
+
+
+     CONSTRUCTORS
+    -------------------------------------------------------------------------------------*/
 
     /**
      * Creates a Countdown object. The responsibility for sanitising inputs is handed to
@@ -58,26 +53,31 @@ public class Countdown extends Identifiable {
         this.isDone = false;
         this.dueDateTime = dueDate.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
         this.completionDate = null;
-        this.colour = RiceHandler.getColourString("white");
     }
 
     @JsonCreator
     public Countdown(@JsonProperty("ID") String id, @JsonProperty("name") String name,
         @JsonProperty("isDone") boolean isDone, @JsonProperty("due") String due,
-        @JsonProperty("completed") String completed, @JsonProperty("colour") String colour) {
+        @JsonProperty("completed") String completed) {
         super(id);
         this.name = name;
         this.isDone = isDone;
         this.dueDateTime = ZonedDateTime.parse(due);
         this.completionDate = ZonedDateTime.parse(completed);
-        this.colour = colour;
     }
 
     /*
 
 
-     BEHAVIOUR
+     PRIVATE API
     -------------------------------------------------------------------------------------*/
+    private static final String ZONE_ID_STR = "UTC";
+
+    private static int getDaysUntilDate(final LocalDate now, final ZonedDateTime zonedDateTime) {
+        final ZonedDateTime zonedNow = now.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
+        final Duration duration = Duration.between(zonedNow, zonedDateTime);
+        return (int) duration.toDaysPart();
+    }
 
     /**
      * Converts a date from the user's timezone to UTC and
@@ -109,12 +109,6 @@ public class Countdown extends Identifiable {
         return getDaysUntilDate(now, this.completionDate);
     }
 
-    public int getDaysUntilDate(final LocalDate now, final ZonedDateTime zonedDateTime) {
-        final ZonedDateTime zonedNow = now.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
-        final Duration duration = Duration.between(zonedNow, zonedDateTime);
-        return (int) duration.toDaysPart();
-    }
-
     /**
      * Returns a {@link LocalDate} that represents the due date.
      * Useful for displaying the due date in the user's local date and
@@ -123,22 +117,6 @@ public class Countdown extends Identifiable {
     @JsonIgnore
     public LocalDate getLocalDueDate(LocalDate now) {
         return now.plusDays(getDaysUntilDue(now));
-    }
-
-    /**
-     * Returns a String representation of the current status
-     * of this Countdown.
-     */
-    @JsonIgnore
-    public String getStatus(LocalDate now) {
-        if (isOverdue(now))
-            return "Overdue";
-        else if (isDueToday(now))
-            return "Due today";
-        else if (isDueTomorrow(now))
-            return "Due tomorrow";
-        else
-            return "Ongoing";
     }
 
     @JsonIgnore
@@ -153,11 +131,32 @@ public class Countdown extends Identifiable {
         return this.dueDateTime.isEqual(nowDateTime);
     }
 
-    @JsonIgnore
-    public boolean isDueTomorrow(LocalDate now) {
-        ZonedDateTime nowDateTime = convertLocalDate(now);
-        return this.dueDateTime.isEqual(nowDateTime.plusDays(1));
+    public void setDone(final boolean isDone) {
+        this.isDone = isDone;
+        if (this.isDone)
+            this.completionDate = convertLocalDate(LocalDate.now());
     }
+
+    @Override
+    public void delete() {
+        CountdownHandler.deleteCountdown(this);
+    }
+
+    @Override
+    public boolean isDeleted() {
+        return CountdownHandler.isCountdownDeleted(this);
+    }
+
+    @Override
+    public void recover() {
+        CountdownHandler.recoverCountdown(this);
+    }
+
+    /*
+
+
+     JSON PROPERTIES
+    -------------------------------------------------------------------------------------*/
 
     @JsonProperty("name") private final String name;
     public String getName() {
@@ -179,23 +178,21 @@ public class Countdown extends Identifiable {
         return this.isDone;
     }
 
-    public void setDone(final boolean isDone) {
-        if (!this.isDone && isDone) {
-            this.completionDate = convertLocalDate(LocalDate.now());
-        }
-        this.isDone = isDone;
+    /*
+
+
+     IMPLEMENTATIONS
+    -------------------------------------------------------------------------------------*/
+
+    @Override
+    public int compareTo(Countdown other) {
+        final LocalDate now = LocalDate.now();
+        final int daysDiff = this.getDaysUntilDue(now) - other.getDaysUntilDue(now);
+        return daysDiff == 0 ? this.getID().compareTo(other.getID()) : daysDiff;
     }
 
-    /**
-     * This is the custom colour that is picked by the user for
-     * this Countdown. The default value is "white".
-     */
-    @JsonProperty("colour") private String colour;
-    public String getColour() {
-        return this.colour;
-    }
-
-    public void setColour(final String colour) {
-        this.colour = colour;
+    @Override
+    public String getDisplayString() {
+        return this.getName();
     }
 }

@@ -43,7 +43,6 @@ public class SimpleList extends VBox {
      */
     public SimpleList() {
         this.setBackground(null);
-        this.setMouseTransparent(true);
         this.setFillWidth(true);
         /*
          * a list shall always be ordered based on a listable's priority

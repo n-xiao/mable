@@ -18,20 +18,16 @@
 
 package code.backend.data;
 
-import code.backend.utils.CountdownHandler;
-import code.backend.utils.SortByRemainingDays;
-import code.frontend.libs.katlaf.lists.Listable;
+import code.frontend.libs.katlaf.tables.Tablet;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.TreeSet;
 import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CountdownFolder extends Identifiable implements Listable {
+public class CountdownFolder extends Identifiable implements Tablet {
     private String name;
-    private int listIndex;
     private final TreeSet<Countdown> CONTENTS;
 
     /*
@@ -48,11 +44,11 @@ public class CountdownFolder extends Identifiable implements Listable {
 
     @JsonCreator
     public CountdownFolder(@JsonProperty("ID") String folderId, @JsonProperty("name") String name,
-        @JsonProperty("contents") String[] contentAsIDs, @JsonProperty("listIndex") int index) {
+        @JsonProperty("contents") String[] contentAsIDs, @JsonProperty("pos") int pos) {
         super(folderId);
         this.name = name;
         this.CONTENTS = new TreeSet<Countdown>(new SortByRemainingDays());
-        this.listIndex = index;
+        this.pos = pos;
         for (String id : contentAsIDs) {
             Countdown countdown = CountdownHandler.getCountdownByID(id);
             if (countdown != null)
@@ -71,6 +67,10 @@ public class CountdownFolder extends Identifiable implements Listable {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @JsonProperty("contents")
     public String[] getContentsAsIDs() {
         String[] stringIDs = new String[this.CONTENTS.size()];
@@ -82,18 +82,8 @@ public class CountdownFolder extends Identifiable implements Listable {
         return stringIDs;
     }
 
-    @JsonProperty("listIndex")
-    @Override
-    public int getPriority() {
-        return listIndex;
-    }
-
     public TreeSet<Countdown> getContents() {
         return this.CONTENTS;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     /*
@@ -101,32 +91,16 @@ public class CountdownFolder extends Identifiable implements Listable {
 
      IMPLEMENTATIONS
     -------------------------------------------------------------------------------------*/
+    private int pos;
 
-    @JsonIgnore
+    @JsonProperty("pos")
     @Override
-    public String getDisplayString() {
-        return name;
+    public int getPosition() {
+        return this.pos;
     }
 
     @Override
-    public int compareTo(Listable listable) {
-        if (listable instanceof CountdownFolder)
-            return this.listIndex - ((CountdownFolder) listable).listIndex;
-        else
-            return 1;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof CountdownFolder))
-            return false;
-
-        CountdownFolder other = (CountdownFolder) obj;
-        return other.name.equals(this.name);
-    }
-
-    @Override
-    public void setListIndex(int index) {
-        this.listIndex = index;
+    public void setPosition(int pos) {
+        this.pos = pos;
     }
 }

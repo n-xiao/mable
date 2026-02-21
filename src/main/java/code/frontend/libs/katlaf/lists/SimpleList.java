@@ -131,7 +131,7 @@ public class SimpleList extends VBox {
      * @returns the SelectionCollection contained within this SimpleList
      * @see SelectionCollection
      */
-    public SelectionCollection<SimpleListMember> getSelcol() {
+    public SelectionCollection<SimpleListMember> getSelector() {
         return selcol;
     }
 }

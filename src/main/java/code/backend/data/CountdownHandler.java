@@ -78,6 +78,11 @@ final class CountdownHandler {
         countdowns.forEach(CountdownHandler::deleteCountdown);
     }
 
+    static void eraseCountdown(final Countdown countdown) {
+        COUNTDOWNS.removeIf(c -> c.equals(countdown));
+        DELETED_COUNTDOWNS.removeIf(c -> c.equals(countdown));
+    }
+
     static boolean isCountdownDeleted(final Countdown countdown) {
         return DELETED_COUNTDOWNS.contains(countdown);
     }

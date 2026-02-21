@@ -19,6 +19,8 @@
 package code.frontend.capabilities.countdowns;
 
 import code.backend.data.Countdown;
+import code.frontend.capabilities.concurrency.Updatable;
+import code.frontend.capabilities.concurrency.Watchdog;
 import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.FormatHandler;
 import code.frontend.libs.katlaf.buttons.ButtonFoundation;
@@ -26,24 +28,62 @@ import code.frontend.libs.katlaf.graphics.MableBorder;
 import code.frontend.libs.katlaf.lists.SimpleListMember;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.time.LocalDate;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 
-public class CountdownListMember extends SimpleListMember {
+public class CountdownListMember extends SimpleListMember implements Updatable {
     private final Countdown countdown;
+    private final CountdownList list;
+    private final Counter counter;
+    private final CompleteButton completeButton;
 
-    public CountdownListMember(final Countdown countdown, final CountdownList parent) {
-        super(parent.getSelcol());
+    public CountdownListMember(final Countdown countdown, final CountdownList list) {
+        super(list.getSelector());
         this.countdown = countdown;
+        this.list = list;
+        this.counter = new Counter();
+        this.completeButton = new CompleteButton();
+
+        final var container = new HBox();
+        final var spacer = new Pane();
+        spacer.setVisible(false);
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        container.setPadding(new Insets(0, 5, 0, 5));
     }
+
+    /**
+     * Increments (and/or changes) the number of days which remains for this instance
+     * as time passes.
+     * <p>
+     * {@inheritDoc}
+     */
+    @Override
+    public void update() {
+        this.counter.label.setText(this.counter.getText());
+    }
+
+    /*
+
+
+     COMPOSITIONS
+    -------------------------------------------------------------------------------------*/
 
     /**
      * This is the display for the number of days remaining, overdue, since deletion or
      * since completion.
      */
     private class Counter extends StackPane {
+        final Label label;
         Counter() {
             this.setMouseTransparent(true);
             this.setBackground(null);
@@ -53,6 +93,17 @@ public class CountdownListMember extends SimpleListMember {
             /*
              * set up the text thingy now
              */
+
+            this.label = new Label(getText());
+            this.label.setFont(FontHandler.getNormal());
+            this.label.setTextFill(RiceHandler.getColour("white"));
+            this.label.setBackground(null);
+            this.label.setAlignment(Pos.CENTER);
+            this.label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+            this.getChildren().addLast(label);
+        }
+
+        String getText() {
             String num;
             String post;
             final Countdown countdown = CountdownListMember.this.countdown;
@@ -62,7 +113,7 @@ public class CountdownListMember extends SimpleListMember {
             num = days > 9999 ? FormatHandler.intToString(days) : Integer.toString(days);
             post = "days left";
 
-            if (countdown.isDone() || countdown.getMarkedForDeletion()) {
+            if (countdown.isDone() || countdown.isDeleted()) {
                 days = Math.abs(countdown.getDaysUntilCompletion(now));
                 num = FormatHandler.intToString(days);
                 post = "days ago";
@@ -70,29 +121,78 @@ public class CountdownListMember extends SimpleListMember {
                 post = "days overdue";
             }
 
-            final String result = num + " " + post;
-            final Label label = new Label(result);
-            label.setFont(FontHandler.getNormal());
-            label.setTextFill(RiceHandler.getColour("white"));
-            label.setBackground(null);
-            label.setAlignment(Pos.CENTER);
-            label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-            this.getChildren().addLast(label);
+            return num + " " + post;
         }
     }
 
+    /**
+     * The circular button which resembles a bullet point. It is empty if the countdown
+     * is incomplete, filled otherwise.
+     */
     private class CompleteButton extends ButtonFoundation {
         private final MableBorder border;
+        private final Region fill;
         CompleteButton() {
-            this.setBackground(null);
+            /*
+             * set the border up first
+             */
             this.border = new MableBorder(1, 0.2, 1);
             this.border.bindSize(this.widthProperty(), this.heightProperty());
-            this.getChildren().addLast(this.border);
+            /*
+             * set the fill up now
+             */
+            this.fill = new Region();
+            this.fill.prefWidthProperty().bind(this.widthProperty());
+            this.fill.prefHeightProperty().bind(this.heightProperty());
+            // TODO figure out how to create a circular bg fill
+            final var backgroundFill = new BackgroundFill(
+                RiceHandler.getColour("blue"), new CornerRadii(5), new Insets(5));
+            this.fill.setBackground(new Background(backgroundFill));
+            this.fill.setOpacity(0);
+            /*
+             * set the other weird stuff thingy up
+             */
+            this.setBackground(null);
+            this.getChildren().addAll(this.border, this.fill);
         }
 
+        /**
+         * Marks the Countdown of this CountdownListMember as done (completed) if it is
+         * not done. Marks the Countdown of this CountdownListMember as undone if it is
+         * done.
+         * <p>
+         * Logically speaking, this call should always remove the CountdownListMember
+         * from its current CountdownList because the list for completed Countdowns and
+         * the list for incomplete Countdowns are different, and one one of such list(s)
+         * should be displayed at any given moment.
+         * <p>
+         * Lastly, this method consumes the event so that is does not propagate and trigger
+         * an unnecessary selection.
+         *
+         * @see Countdown
+         * @see CountdownList
+         *
+         * @throws IllegalCallerException      although technically possible, this method should
+         *                                     never be called on a Countdown that has already been
+         *                                     deleted. It doesn't make sense.
+         */
         @Override
         public void onMousePressed(MouseEvent event) {
-            // TODO Auto-generated method stub
+            if (countdown.isDeleted())
+                throw new IllegalCallerException(
+                    "a deleted Countdown shouldn't be set as done or not done. what r u doing?");
+
+            list.getSelector().deselectAll();
+            if (countdown.isDone()) {
+                this.fill.setOpacity(0);
+            } else {
+                this.fill.setOpacity(1);
+                countdown.updateCompletionDateTime();
+            }
+            countdown.setDone(!countdown.isDone());
+            list.removeMember(CountdownListMember.this);
+
+            event.consume();
         }
 
         @Override

@@ -19,7 +19,9 @@
 package code.frontend.capabilities.countdowns;
 
 import code.backend.data.Countdown;
+import code.frontend.capabilities.concurrency.Updatable;
 import code.frontend.libs.katlaf.lists.SimpleList;
+import java.util.List;
 
 /**
  * The UI component that displays a set of Countdowns.
@@ -27,4 +29,44 @@ import code.frontend.libs.katlaf.lists.SimpleList;
  * @since v3.0.0-beta
  * @see Countdown
  */
-public class CountdownList extends SimpleList {}
+public final class CountdownList extends SimpleList implements Updatable {
+    private boolean populated;
+
+    public CountdownList() {
+        this.populated = false;
+    }
+
+    /*
+
+
+     PUBLIC API
+    -------------------------------------------------------------------------------------*/
+
+    /**
+     * Populates the current CountdownList, usually when it is empty (after instantiation)
+     * <p>
+     * This method can only be run once per CountdownList instance.
+     * Any further calls to this method after it has been run will be ignored.
+     */
+    public void populate(final List<Countdown> countdowns) {
+        if (this.populated)
+            return;
+        else
+            this.populated = true;
+
+        for (Countdown countdown : countdowns) {
+            if (!countdown.isDeleted() && !countdown.isDone()) {
+                this.addMember(new CountdownListMember(countdown, this));
+            }
+        }
+    }
+
+    @Override
+    public void update() {
+        this.getMembers().forEach(member -> {
+            if (member instanceof CountdownListMember countdownListMember) {
+                countdownListMember.update();
+            }
+        });
+    }
+}

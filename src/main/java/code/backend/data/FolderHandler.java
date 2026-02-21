@@ -18,17 +18,11 @@
 
 package code.backend.data;
 
-import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Stack;
-import java.util.TreeSet;
 
-final class FolderHandler {
-    private static final TreeSet<CountdownFolder> FOLDERS =
-        new TreeSet<CountdownFolder>(new Comparator<CountdownFolder>() {
-            public int compare(CountdownFolder o1, CountdownFolder o2) {
-                return o1.getName().compareTo(o2.getName());
-            };
-        });
+public final class FolderHandler {
+    private static final HashSet<CountdownFolder> FOLDERS = new HashSet<CountdownFolder>();
     private static final Stack<CountdownFolder> DELETED_FOLDERS = new Stack<CountdownFolder>();
 
     static CountdownFolder createFolder(final String name) {
@@ -42,7 +36,7 @@ final class FolderHandler {
         FOLDERS.remove(folder);
     }
 
-    static TreeSet<CountdownFolder> getFolders() {
+    static HashSet<CountdownFolder> getFolders() {
         return FOLDERS;
     }
 
@@ -50,8 +44,9 @@ final class FolderHandler {
         return DELETED_FOLDERS;
     }
 
-    static void cleanup() {
-        // TODO
+    static void eraseCountdown(final Countdown countdown) {
+        FOLDERS.forEach(folder -> folder.getContents().removeIf(c -> c.equals(countdown)));
+        DELETED_FOLDERS.forEach(folder -> folder.getContents().removeIf(c -> c.equals(countdown)));
     }
 
     private FolderHandler() {}

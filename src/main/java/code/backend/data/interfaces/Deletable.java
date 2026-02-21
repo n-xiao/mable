@@ -16,9 +16,10 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package code.backend.data;
+package code.backend.data.interfaces;
 
 public interface Deletable {
     public void delete();
+    public void deleteForever();
     public boolean isDeleted();
 }

@@ -49,14 +49,6 @@ public abstract class Identifiable {
         return ID;
     }
 
-    public void setMarkForDeletion(final boolean MARK) {
-        this.markedForDeletion = MARK;
-    }
-
-    public boolean getMarkedForDeletion() {
-        return this.markedForDeletion;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Identifiable))

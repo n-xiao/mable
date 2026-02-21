@@ -18,6 +18,7 @@
 
 package code.backend.data;
 
+import code.backend.data.interfaces.Recoverable;
 import code.frontend.libs.katlaf.lists.Listable;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -131,33 +132,6 @@ public class Countdown extends Identifiable implements Listable<Countdown>, Reco
         return this.dueDateTime.isEqual(nowDateTime);
     }
 
-    public void setDone(final boolean isDone) {
-        this.isDone = isDone;
-        if (this.isDone)
-            this.completionDate = convertLocalDate(LocalDate.now());
-    }
-
-    @Override
-    public void delete() {
-        CountdownHandler.deleteCountdown(this);
-    }
-
-    @Override
-    public boolean isDeleted() {
-        return CountdownHandler.isCountdownDeleted(this);
-    }
-
-    @Override
-    public void recover() {
-        CountdownHandler.recoverCountdown(this);
-    }
-
-    /*
-
-
-     JSON PROPERTIES
-    -------------------------------------------------------------------------------------*/
-
     @JsonProperty("name") private final String name;
     public String getName() {
         return this.name;
@@ -173,9 +147,22 @@ public class Countdown extends Identifiable implements Listable<Countdown>, Reco
         return this.completionDate;
     }
 
+    /**
+     * Updates the completion date to the return value of LocalDate.now().
+     */
+    public void updateCompletionDateTime() {
+        this.completionDate = convertLocalDate(LocalDate.now());
+    }
+
     @JsonProperty("isDone") private boolean isDone;
     public boolean isDone() {
         return this.isDone;
+    }
+
+    public void setDone(final boolean isDone) {
+        this.isDone = isDone;
+        if (this.isDone)
+            this.completionDate = convertLocalDate(LocalDate.now());
     }
 
     /*
@@ -183,6 +170,41 @@ public class Countdown extends Identifiable implements Listable<Countdown>, Reco
 
      IMPLEMENTATIONS
     -------------------------------------------------------------------------------------*/
+
+    @Override
+    public void delete() {
+        CountdownHandler.deleteCountdown(this);
+    }
+
+    /**
+     * Removes this Countdown instance from all possible storage mediums. Note that this method
+     * should only be called on a Countdown that has already been deleted. This operation cannot be
+     * undone.
+     * <p>
+     * Note that a save to persistent storage is done before erasing the runtime storage
+     * because the save procedure utilises the collection of deleted Countdowns to remove it from
+     * the json file.
+     *
+     * @see StorageHandler#save()
+     */
+    @Override
+    public void deleteForever() {
+        if (this.isDeleted()) {
+            StorageHandler.save();
+            CountdownHandler.eraseCountdown(this);
+            FolderHandler.eraseCountdown(this);
+        }
+    }
+
+    @Override
+    public boolean isDeleted() {
+        return CountdownHandler.isCountdownDeleted(this);
+    }
+
+    @Override
+    public void recover() {
+        CountdownHandler.recoverCountdown(this);
+    }
 
     @Override
     public int compareTo(Countdown other) {

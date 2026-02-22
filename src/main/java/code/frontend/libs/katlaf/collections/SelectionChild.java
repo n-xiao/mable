@@ -35,7 +35,8 @@ public abstract class SelectionChild extends ButtonFoundation {
 
     /**
      * Since a child cannot access other children in the same list, calls which affect
-     * other children must be forwarded to the parent.
+     * other children must be forwarded to the parent. The MouseEvent is consumed
+     * at the end of this method.
      * <p>
      * {@inheritDoc}
      */
@@ -48,5 +49,6 @@ public abstract class SelectionChild extends ButtonFoundation {
         } else {
             parent.selected(this);
         }
+        event.consume();
     }
 }

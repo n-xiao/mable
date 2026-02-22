@@ -22,6 +22,7 @@ import code.backend.data.Countdown;
 import code.frontend.capabilities.concurrency.Updatable;
 import code.frontend.libs.katlaf.lists.SimpleList;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * The UI component that displays a set of Countdowns.
@@ -30,10 +31,18 @@ import java.util.List;
  * @see Countdown
  */
 public final class CountdownList extends SimpleList implements Updatable {
+    public enum CountdownFilter { ONGOING, COMPLETED, DELETED }
+
     private boolean populated;
+    private final CountdownFilter filter;
 
     public CountdownList() {
+        this(CountdownFilter.ONGOING);
+    }
+
+    public CountdownList(final CountdownFilter filter) {
         this.populated = false;
+        this.filter = filter;
     }
 
     /*
@@ -54,8 +63,18 @@ public final class CountdownList extends SimpleList implements Updatable {
         else
             this.populated = true;
 
+        /*
+         * muahahaha functional go brrr
+         */
+        final Function<Countdown, Boolean> verification = switch (this.filter) {
+            case ONGOING -> countdown -> !countdown.isDone() && !countdown.isDeleted();
+            case COMPLETED -> countdown -> countdown.isDone() && !countdown.isDeleted();
+            case DELETED -> countdown -> countdown.isDeleted();
+            default -> countdown -> false;
+        };
+
         for (Countdown countdown : countdowns) {
-            if (!countdown.isDeleted() && !countdown.isDone()) {
+            if (verification.apply(countdown)) {
                 this.addMember(new CountdownListMember(countdown, this));
             }
         }

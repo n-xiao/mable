@@ -25,6 +25,7 @@ import code.frontend.libs.katlaf.FontHandler.DedicatedFont;
 import code.frontend.libs.katlaf.FormatHandler;
 import code.frontend.libs.katlaf.buttons.ButtonFoundation;
 import code.frontend.libs.katlaf.graphics.MableBorder;
+import code.frontend.libs.katlaf.interfaces.Colourable;
 import code.frontend.libs.katlaf.lists.SimpleListMember;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.time.LocalDate;
@@ -40,17 +41,24 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 
-public final class CountdownListMember extends SimpleListMember implements Updatable {
+public final class CountdownListMember extends SimpleListMember implements Updatable, Colourable {
     private final Countdown countdown;
     private final CountdownList list;
+    private final HBox container;
+    private final CompleteButton completeButton;
+    private final Nameplate nameplate;
+    private final Dateplate dateplate;
+    private final Counter counter;
 
     public CountdownListMember(final Countdown countdown, final CountdownList list) {
         super(list.getSelector());
         this.countdown = countdown;
         this.list = list;
 
-        final var container = new HBox();
+        this.container = new HBox();
+        this.container.setBackground(null);
         final var spacer = new Pane();
         spacer.setVisible(false);
         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -58,25 +66,16 @@ public final class CountdownListMember extends SimpleListMember implements Updat
         /*
          * add the children now
          */
-        var completeButton = new CompleteButton();
-        var nameplate = new Nameplate();
+        this.completeButton = new CompleteButton();
+        this.nameplate = new Nameplate();
         HBox.setMargin(nameplate, new Insets(0, 0, 0, 5));
-        var dateplate = new Dateplate();
+        this.dateplate = new Dateplate();
         HBox.setMargin(dateplate, new Insets(0, 5, 0, 0));
-        var counter = new Counter();
-        this.getChildren().addAll(completeButton, nameplate, spacer, dateplate, counter);
-    }
-
-    /*
-
-
-     PRIVATE API
-    -------------------------------------------------------------------------------------*/
-
-    private void style() {
-        if (this.isToggled()) {
-            // TODO
-        }
+        this.counter = new Counter();
+        this.container.getChildren().addAll(completeButton, nameplate, spacer, dateplate, counter);
+        this.container.prefWidthProperty().bind(this.widthProperty());
+        this.container.prefHeightProperty().bind(this.heightProperty());
+        this.getChildren().add(this.container);
     }
 
     /*
@@ -93,7 +92,7 @@ public final class CountdownListMember extends SimpleListMember implements Updat
      */
     @Override
     public void update() {
-        this.getChildren().forEach(child -> {
+        this.container.getChildren().forEach(child -> {
             if (child instanceof Updatable updatable) {
                 updatable.update();
             }
@@ -101,24 +100,31 @@ public final class CountdownListMember extends SimpleListMember implements Updat
     }
 
     @Override
+    public void setColour(Color colour) {
+        this.container.getChildren().forEach(child -> {
+            if (child instanceof Colourable colourable) {
+                colourable.setColour(colour);
+            }
+        });
+    }
+
+    @Override
+    public void resetColour() {
+        this.container.getChildren().forEach(child -> {
+            if (child instanceof Colourable colourable) {
+                colourable.resetColour();
+            }
+        });
+    }
+
+    @Override
     public void setToggle(boolean toggled) {
         super.setToggle(toggled);
-        this.style();
-    }
-
-    @Override
-    public void onMouseEntered(MouseEvent event) {
-        // do nothin
-    }
-
-    @Override
-    public void onMouseExited(MouseEvent event) {
-        // do nothin
-    }
-
-    @Override
-    public void onMouseReleased(MouseEvent event) {
-        // do nothin
+        if (this.isToggled()) {
+            this.setBackground(RiceHandler.createBG(RiceHandler.getColour("dullgrey"), 0, 0));
+        } else {
+            this.setBackground(null);
+        }
     }
 
     /*
@@ -127,7 +133,7 @@ public final class CountdownListMember extends SimpleListMember implements Updat
      COMPOSITIONS
     -------------------------------------------------------------------------------------*/
 
-    private class Nameplate extends Label implements Updatable {
+    private class Nameplate extends Label implements Updatable, Colourable {
         Nameplate() {
             this.setAlignment(Pos.CENTER_LEFT);
             this.setTextFill(RiceHandler.getColour("white"));
@@ -139,6 +145,16 @@ public final class CountdownListMember extends SimpleListMember implements Updat
         @Override
         public void update() {
             this.setText(countdown.getName());
+        }
+
+        @Override
+        public void setColour(Color colour) {
+            this.setTextFill(colour);
+        }
+
+        @Override
+        public void resetColour() {
+            setColour("white");
         }
     }
 
@@ -155,13 +171,14 @@ public final class CountdownListMember extends SimpleListMember implements Updat
      * This is the display for the number of days remaining, overdue, since deletion or
      * since completion.
      */
-    private class Counter extends StackPane implements Updatable {
+    private class Counter extends StackPane implements Updatable, Colourable {
         final Label label;
+        final MableBorder border;
         Counter() {
             this.setMouseTransparent(true);
             this.setBackground(null);
-            final MableBorder border = new MableBorder(1, 0.2, 0.25);
-            border.bindSize(this.widthProperty(), this.heightProperty());
+            this.border = new MableBorder(1, 0.2, 0.25);
+            this.border.bindSize(this.widthProperty(), this.heightProperty());
             this.getChildren().add(border);
             /*
              * set up the text thingy now
@@ -196,6 +213,17 @@ public final class CountdownListMember extends SimpleListMember implements Updat
             }
 
             this.label.setText(num + " " + post);
+        }
+
+        @Override
+        public void setColour(Color colour) {
+            this.border.setStrokeColour(colour);
+            this.label.setTextFill(colour);
+        }
+
+        @Override
+        public void resetColour() {
+            setColour("white");
         }
     }
 
@@ -267,21 +295,6 @@ public final class CountdownListMember extends SimpleListMember implements Updat
             list.removeMember(CountdownListMember.this);
 
             event.consume();
-        }
-
-        @Override
-        public final void onMouseEntered(MouseEvent event) {
-            this.border.setStrokeColour(RiceHandler.getColour("lightblue"));
-        }
-
-        @Override
-        public final void onMouseExited(MouseEvent event) {
-            this.border.setStrokeColour(RiceHandler.getColour("white"));
-        }
-
-        @Override
-        public final void onMouseReleased(MouseEvent event) {
-            // does nothing
         }
     }
 }

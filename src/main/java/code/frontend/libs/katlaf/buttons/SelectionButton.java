@@ -146,9 +146,4 @@ public class SelectionButton extends ButtonFoundation {
             this.face.setColour(this.idle);
         }
     }
-
-    @Override
-    public final void onMouseReleased(MouseEvent event) {
-        // does nothing
-    }
 }

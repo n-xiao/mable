@@ -88,22 +88,22 @@ public abstract class ButtonFoundation extends StackPane {
     /**
      * Executed when this button is pressed, but not released.
      */
-    public abstract void onMousePressed(final MouseEvent event);
+    public void onMousePressed(final MouseEvent event){};
 
     /**
      * Executed when this button is released from a mouse press.
      */
-    public abstract void onMouseReleased(final MouseEvent event);
+    public void onMouseReleased(final MouseEvent event){};
 
     /**
      * Executed when a mouse enters this button.
      */
-    public abstract void onMouseEntered(final MouseEvent event);
+    public void onMouseEntered(final MouseEvent event){};
 
     /**
      * Executed when a mouse leaves this button.
      */
-    public abstract void onMouseExited(final MouseEvent event);
+    public void onMouseExited(final MouseEvent event){};
 
     /**
      * Returns true if this button is toggled. False otherwise.

@@ -18,7 +18,6 @@
 
 package code.frontend.libs.katlaf.graphics;
 
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.StrokeLineCap;
@@ -58,6 +57,7 @@ public final class MableBorder extends ResizableCanvas {
         this.thickness = thickness;
         this.messiness = messiness;
         this.cornerRadii = cornerRadii;
+        this.setManaged(false);
         this.setMouseTransparent(true);
     }
 

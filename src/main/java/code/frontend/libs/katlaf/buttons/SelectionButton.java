@@ -134,14 +134,14 @@ public class SelectionButton extends ButtonFoundation {
     }
 
     @Override
-    public final void onMouseEntered(MouseEvent event) {
+    public void onMouseEntered(MouseEvent event) {
         if (this.isEnabled() && !this.isToggled()) {
             this.face.setColour(this.hover);
         }
     }
 
     @Override
-    public final void onMouseExited(MouseEvent event) {
+    public void onMouseExited(MouseEvent event) {
         if (this.isEnabled() && !this.isToggled()) {
             this.face.setColour(this.idle);
         }

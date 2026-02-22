@@ -18,21 +18,12 @@
 
 package code.frontend.libs.katlaf.collections;
 
-import code.frontend.libs.katlaf.buttons.SelectionButton;
-import code.frontend.libs.katlaf.graphics.MableBorder;
+import code.frontend.libs.katlaf.buttons.ButtonFoundation;
 import javafx.scene.input.MouseEvent;
 
-public class SelectionChild extends SelectionButton {
+public abstract class SelectionChild extends ButtonFoundation {
     private final SelectionCollection<? extends SelectionChild> parent;
     public SelectionChild(final SelectionCollection<? extends SelectionChild> parent) {
-        final MableBorder dummy = new MableBorder(1, 0.1, 0.1);
-        dummy.setVisible(false);
-        this(dummy, parent); // just to satisfy the super class haha
-    }
-
-    public SelectionChild(
-        final MableBorder border, final SelectionCollection<? extends SelectionChild> parent) {
-        super(border);
         this.parent = parent;
     }
 
@@ -57,6 +48,5 @@ public class SelectionChild extends SelectionButton {
         } else {
             parent.selected(this);
         }
-        super.onMousePressed(event);
     }
 }

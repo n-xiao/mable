@@ -20,8 +20,8 @@ package code.frontend.capabilities.countdowns;
 
 import code.backend.data.Countdown;
 import code.frontend.capabilities.concurrency.Updatable;
-import code.frontend.capabilities.concurrency.Watchdog;
 import code.frontend.libs.katlaf.FontHandler;
+import code.frontend.libs.katlaf.FontHandler.DedicatedFont;
 import code.frontend.libs.katlaf.FormatHandler;
 import code.frontend.libs.katlaf.buttons.ButtonFoundation;
 import code.frontend.libs.katlaf.graphics.MableBorder;
@@ -41,25 +41,49 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 
-public class CountdownListMember extends SimpleListMember implements Updatable {
+public final class CountdownListMember extends SimpleListMember implements Updatable {
     private final Countdown countdown;
     private final CountdownList list;
-    private final Counter counter;
-    private final CompleteButton completeButton;
 
     public CountdownListMember(final Countdown countdown, final CountdownList list) {
         super(list.getSelector());
         this.countdown = countdown;
         this.list = list;
-        this.counter = new Counter();
-        this.completeButton = new CompleteButton();
 
         final var container = new HBox();
         final var spacer = new Pane();
         spacer.setVisible(false);
         HBox.setHgrow(spacer, Priority.ALWAYS);
         container.setPadding(new Insets(0, 5, 0, 5));
+        /*
+         * add the children now
+         */
+        var completeButton = new CompleteButton();
+        var nameplate = new Nameplate();
+        HBox.setMargin(nameplate, new Insets(0, 0, 0, 5));
+        var dateplate = new Dateplate();
+        HBox.setMargin(dateplate, new Insets(0, 5, 0, 0));
+        var counter = new Counter();
+        this.getChildren().addAll(completeButton, nameplate, spacer, dateplate, counter);
     }
+
+    /*
+
+
+     PRIVATE API
+    -------------------------------------------------------------------------------------*/
+
+    private void style() {
+        if (this.isToggled()) {
+            // TODO
+        }
+    }
+
+    /*
+
+
+     PUBLIC API
+    -------------------------------------------------------------------------------------*/
 
     /**
      * Increments (and/or changes) the number of days which remains for this instance
@@ -69,7 +93,32 @@ public class CountdownListMember extends SimpleListMember implements Updatable {
      */
     @Override
     public void update() {
-        this.counter.label.setText(this.counter.getText());
+        this.getChildren().forEach(child -> {
+            if (child instanceof Updatable updatable) {
+                updatable.update();
+            }
+        });
+    }
+
+    @Override
+    public void setToggle(boolean toggled) {
+        super.setToggle(toggled);
+        this.style();
+    }
+
+    @Override
+    public void onMouseEntered(MouseEvent event) {
+        // do nothin
+    }
+
+    @Override
+    public void onMouseExited(MouseEvent event) {
+        // do nothin
+    }
+
+    @Override
+    public void onMouseReleased(MouseEvent event) {
+        // do nothin
     }
 
     /*
@@ -78,11 +127,35 @@ public class CountdownListMember extends SimpleListMember implements Updatable {
      COMPOSITIONS
     -------------------------------------------------------------------------------------*/
 
+    private class Nameplate extends Label implements Updatable {
+        Nameplate() {
+            this.setAlignment(Pos.CENTER_LEFT);
+            this.setTextFill(RiceHandler.getColour("white"));
+            this.setFont(FontHandler.getDedicated(DedicatedFont.COUNTDOWN_NAME));
+            this.setMaxHeight(Double.MAX_VALUE);
+            update();
+        }
+
+        @Override
+        public void update() {
+            this.setText(countdown.getName());
+        }
+    }
+
+    private class Dateplate extends Label {
+        Dateplate() {
+            this.setAlignment(Pos.CENTER);
+            this.setTextFill(RiceHandler.getColour("grey"));
+            this.setFont(FontHandler.getSubtitle());
+            this.setMaxHeight(Double.MAX_VALUE);
+        }
+    }
+
     /**
      * This is the display for the number of days remaining, overdue, since deletion or
      * since completion.
      */
-    private class Counter extends StackPane {
+    private class Counter extends StackPane implements Updatable {
         final Label label;
         Counter() {
             this.setMouseTransparent(true);
@@ -93,17 +166,18 @@ public class CountdownListMember extends SimpleListMember implements Updatable {
             /*
              * set up the text thingy now
              */
-
-            this.label = new Label(getText());
+            this.label = new Label();
             this.label.setFont(FontHandler.getNormal());
             this.label.setTextFill(RiceHandler.getColour("white"));
             this.label.setBackground(null);
             this.label.setAlignment(Pos.CENTER);
             this.label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+            update();
             this.getChildren().addLast(label);
         }
 
-        String getText() {
+        @Override
+        public void update() {
             String num;
             String post;
             final Countdown countdown = CountdownListMember.this.countdown;
@@ -121,7 +195,7 @@ public class CountdownListMember extends SimpleListMember implements Updatable {
                 post = "days overdue";
             }
 
-            return num + " " + post;
+            this.label.setText(num + " " + post);
         }
     }
 
@@ -146,11 +220,11 @@ public class CountdownListMember extends SimpleListMember implements Updatable {
             this.fill.prefHeightProperty().bind(this.heightProperty());
             // TODO figure out how to create a circular bg fill
             final var backgroundFill = new BackgroundFill(
-                RiceHandler.getColour("blue"), new CornerRadii(5), new Insets(5));
+                RiceHandler.getColour("blue"), new CornerRadii(5), new Insets(1.5));
             this.fill.setBackground(new Background(backgroundFill));
             this.fill.setOpacity(0);
             /*
-             * set the other weird stuff thingy up
+             * lastly, take the daily dose of boilerplate
              */
             this.setBackground(null);
             this.getChildren().addAll(this.border, this.fill);

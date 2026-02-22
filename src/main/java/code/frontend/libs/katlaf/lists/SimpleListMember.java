@@ -55,7 +55,8 @@ public abstract class SimpleListMember extends SelectionChild {
      */
     public SimpleListMember(
         final MableBorder border, final SelectionCollection<? extends SelectionChild> parent) {
-        super(border, parent);
-        this.setMaxWidth(Double.MAX_VALUE);
+        this(parent);
+        border.bindSize(this.widthProperty(), this.heightProperty());
+        this.getChildren().add(border);
     }
 }

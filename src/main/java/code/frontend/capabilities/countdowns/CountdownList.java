@@ -64,8 +64,8 @@ public final class CountdownList extends SimpleList implements Updatable {
     @Override
     public void update() {
         this.getMembers().forEach(member -> {
-            if (member instanceof CountdownListMember countdownListMember) {
-                countdownListMember.update();
+            if (member instanceof Updatable updatable) {
+                updatable.update();
             }
         });
     }

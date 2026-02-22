@@ -81,6 +81,9 @@ public class SelectionCollection<E extends SelectionChild> {
             if (mem.equals(child) || mem.equals(this.pivot))
                 selecting = !selecting;
             if (selecting && !mem.isToggled()) {
+                mem.setToggle(true);
+            } else {
+                mem.setToggle(false);
             }
         }
     }

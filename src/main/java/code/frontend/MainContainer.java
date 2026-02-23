@@ -23,8 +23,9 @@ import code.frontend.capabilities.countdowns.CountdownList;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.util.ArrayList;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 
 public final class MainContainer extends Pane {
     /*
@@ -37,7 +38,7 @@ public final class MainContainer extends Pane {
     public static MainContainer getInstance() {
         if (instance == null) {
             instance = new MainContainer();
-            instance.getChildren().add(instance.new Container());
+            instance.getChildren().add(instance.new CountdownListContainer());
         }
         return instance;
     }
@@ -52,18 +53,22 @@ public final class MainContainer extends Pane {
      COMPOSITIONS
     -------------------------------------------------------------------------------------*/
 
-    private class Container extends HBox {
-        Container() {
+    private class CountdownListContainer extends Region {
+        CountdownListContainer() {
             this.setBackground(null);
-            this.setFillHeight(true);
             this.prefHeightProperty().bind(MainContainer.this.heightProperty());
             this.prefWidthProperty().bind(MainContainer.this.widthProperty());
 
             final CountdownList countdownList = new CountdownList();
             final ScrollPane scrollpane = new ScrollPane();
             scrollpane.setStyle("-fx-background: transparent;");
+            scrollpane.setBackground(null);
             scrollpane.setContent(countdownList);
             scrollpane.setFitToWidth(true);
+            scrollpane.prefWidthProperty().bind(this.widthProperty());
+            scrollpane.prefHeightProperty().bind(this.heightProperty());
+            scrollpane.setHbarPolicy(ScrollBarPolicy.NEVER);
+            scrollpane.setVbarPolicy(ScrollBarPolicy.NEVER);
             this.getChildren().add(scrollpane);
 
             /*

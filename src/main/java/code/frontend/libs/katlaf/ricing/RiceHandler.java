@@ -38,8 +38,6 @@ public class RiceHandler {
 
     private RiceHandler() {}
 
-    public static void init() {}
-
     public static void updatePalette(final String THEME_NAME) {
         InputStream stream =
             Thread.currentThread().getContextClassLoader().getResourceAsStream("Themes.json");

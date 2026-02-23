@@ -67,14 +67,16 @@ final class CountdownListMember extends SimpleListMember implements Updatable, C
          * add the children now
          */
         this.completeButton = new CompleteButton();
+        HBox.setMargin(completeButton, new Insets(3, 2, 3, 2));
         this.nameplate = new Nameplate();
-        HBox.setMargin(nameplate, new Insets(0, 0, 0, 5));
+        HBox.setMargin(nameplate, new Insets(0, 0, 0, 8));
         this.dateplate = new Dateplate();
-        HBox.setMargin(dateplate, new Insets(0, 5, 0, 0));
+        HBox.setMargin(dateplate, new Insets(0, 8, 0, 0));
         this.counter = new Counter();
         this.container.getChildren().addAll(completeButton, nameplate, spacer, dateplate, counter);
         this.container.prefWidthProperty().bind(this.widthProperty());
         this.container.prefHeightProperty().bind(this.heightProperty());
+        this.container.setPadding(new Insets(1));
         this.getChildren().add(this.container);
     }
 
@@ -205,18 +207,18 @@ final class CountdownListMember extends SimpleListMember implements Updatable, C
         Counter() {
             this.setMouseTransparent(true);
             this.setBackground(null);
-            this.border = new MableBorder(1, 0.2, 0.25);
+            this.border = new MableBorder(1, 0.2, 0.4);
             this.border.bindSize(this.widthProperty(), this.heightProperty());
             this.getChildren().add(border);
             /*
              * set up the text thingy now
              */
             this.label = new Label();
-            this.label.setFont(FontHandler.getNormal());
+            this.label.setFont(FontHandler.getDedicated(DedicatedFont.COUNTDOWN_NUM));
             this.label.setTextFill(RiceHandler.getColour("white"));
             this.label.setBackground(null);
             this.label.setAlignment(Pos.CENTER);
-            this.label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+            StackPane.setMargin(this.label, new Insets(0, 6, 0, 6));
             update();
             this.getChildren().addLast(label);
         }
@@ -275,10 +277,11 @@ final class CountdownListMember extends SimpleListMember implements Updatable, C
             this.fill.prefWidthProperty().bind(this.widthProperty());
             this.fill.prefHeightProperty().bind(this.heightProperty());
             final var backgroundFill =
-                new BackgroundFill(countdown.getColour(), new CornerRadii(5), new Insets(1.5));
+                new BackgroundFill(countdown.getColour(), new CornerRadii(12), new Insets(4));
             this.fill.setBackground(new Background(backgroundFill));
             this.fill.setOpacity(0);
             this.setBackground(null);
+            this.setMinSize(16, 16);
             this.getChildren().addAll(this.border, this.fill);
         }
 
@@ -325,10 +328,11 @@ final class CountdownListMember extends SimpleListMember implements Updatable, C
                 countdown.updateCompletionDateTime();
             }
 
-            if (countdown.isDeleted()) {
-            }
             countdown.setDone(!countdown.isDone());
-            list.removeMember(CountdownListMember.this);
+            if (!countdown.isDeleted()) {
+                // TODO: add a delay
+                list.removeMember(CountdownListMember.this);
+            }
 
             event.consume();
         }

@@ -96,7 +96,12 @@ public class SelectionCollection<E extends SelectionChild> {
      * @param child    the child which should be pushed to the stack.
      */
     final void metaSelected(final SelectionChild child) {
-        this.pivot = child;
+        if (child.isToggled()) {
+            child.setToggle(false);
+        } else {
+            this.pivot = child;
+            child.setToggle(true);
+        }
     }
 
     /**
@@ -108,6 +113,7 @@ public class SelectionCollection<E extends SelectionChild> {
     final void selected(final SelectionChild child) {
         deselectAllExcept(child);
         this.pivot = child;
+        child.setToggle(true);
     }
 
     /**
@@ -132,5 +138,6 @@ public class SelectionCollection<E extends SelectionChild> {
 
     public void deselectAll() {
         this.children.forEach(child -> child.setToggle(false));
+        this.pivot = null;
     }
 }

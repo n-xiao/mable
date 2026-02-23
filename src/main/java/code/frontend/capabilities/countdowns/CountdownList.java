@@ -44,7 +44,7 @@ public final class CountdownList extends SimpleList implements Updatable {
     public CountdownList(final CountdownFilter filter) {
         this.populated = false;
         this.filter = filter;
-        this.setOnMouseClicked(event -> {
+        this.setOnMousePressed(event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
                 this.getSelector().deselectAll();
                 event.consume();

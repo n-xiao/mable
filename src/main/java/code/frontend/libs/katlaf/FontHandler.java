@@ -92,7 +92,7 @@ public class FontHandler {
             case COUNTDOWN_NAME:
                 return Font.font(FONT_FAM, FontWeight.SEMI_BOLD, 15);
             case COUNTDOWN_NUM:
-                return Font.font(FONT_FAM, FontWeight.BOLD, FontPosture.ITALIC, 25);
+                return Font.font(FONT_FAM, 11);
             case COUNTDOWN_INFO:
                 return Font.font(FONT_FAM, FontWeight.BOLD, FontPosture.ITALIC, 12);
             case USER_INPUT:

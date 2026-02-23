@@ -62,38 +62,38 @@ public class SelectionCollection<E extends SelectionChild> {
      * will be used as a "pivot". All children inclusively between the pivot and the child which
      * issued this method call will be selected. All other children will be deselected.
      *
-     * @param child    the child that this method call originated from
+     * @param caller    the child that this method call originated from
      */
 
-    final void shiftSelected(final SelectionChild child) {
+    final void shiftSelected(final SelectionChild caller) {
         /*
          * can't do this with null pivot
          * OR can't do this if pivot is not even toggled
          * OR can't do this if user is dum dum and shift selects THE SAME DARN THING??
          */
-        if (this.pivot == null || !this.pivot.isToggled() || child.equals(this.pivot)) {
-            selected(child);
+        if (this.pivot == null || !this.pivot.isToggled() || caller.equals(this.pivot)) {
+            selected(caller);
             return;
         }
 
         boolean selecting = false;
-        for (SelectionChild mem : this.children) {
-            if (mem.equals(child) || mem.equals(this.pivot))
+        for (SelectionChild child : this.children) {
+            if (child.equals(caller) || child.equals(this.pivot)) {
                 selecting = !selecting;
-            if (selecting && !mem.isToggled()) {
-                mem.setToggle(true);
+                child.setToggle(true);
+            } else if (selecting && !child.isToggled()) {
+                child.setToggle(true);
             } else {
-                mem.setToggle(false);
+                child.setToggle(false);
             }
         }
     }
 
     /**
      * A child should call this method when it detects
-     * a meta select on itself. It will be pushed to the stack of selected
-     * child instances of this SimpleList instance.
+     * a meta select on itself.
      *
-     * @param child    the child which should be pushed to the stack.
+     * @param child    the child which incurred the user click
      */
     final void metaSelected(final SelectionChild child) {
         if (child.isToggled()) {

@@ -42,28 +42,10 @@ public abstract class ButtonFoundation extends StackPane {
     public ButtonFoundation() {
         this.enabled = true;
         // set up the click detection stuff
-        setOnMousePressed(event -> {
-            toggle();
-            onMousePressed(event);
-        });
+        setOnMousePressed(this::onMousePressed);
         setOnMouseReleased(this::onMouseReleased);
         setOnMouseEntered(this::onMouseEntered);
         setOnMouseExited(this::onMouseExited);
-    }
-
-    /*
-
-
-     PRIVATE API
-    -------------------------------------------------------------------------------------*/
-
-    /**
-     * When this button is active, the toggle property will be replaced with the opposite
-     * of its previous value - NOT will be applied to it.
-     * */
-    final void toggle() {
-        if (this.enabled)
-            this.toggled = !this.toggled;
     }
 
     /*
@@ -74,8 +56,7 @@ public abstract class ButtonFoundation extends StackPane {
 
     /**
      * This method provides a way to set the toggle value of this button
-     * during runtime. It should not be called by user input. Please
-     * use the toggle() method for that. Note that this method does not
+     * during runtime. Note that this method does not
      * check if the button is enabled or not. It will be executed even if the
      * button has been disabled.
      *

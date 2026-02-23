@@ -24,6 +24,9 @@ import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.FontHandler.DedicatedFont;
 import code.frontend.libs.katlaf.FormatHandler;
 import code.frontend.libs.katlaf.buttons.ButtonFoundation;
+import code.frontend.libs.katlaf.dividers.HorizontalDivider;
+import code.frontend.libs.katlaf.graphics.CustomLine;
+import code.frontend.libs.katlaf.graphics.CustomLine.Type;
 import code.frontend.libs.katlaf.graphics.MableBorder;
 import code.frontend.libs.katlaf.interfaces.Colourable;
 import code.frontend.libs.katlaf.lists.SimpleListMember;
@@ -41,31 +44,26 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 final class CountdownListMember
     extends SimpleListMember implements Updatable, Colourable, Comparable<CountdownListMember> {
     private final Countdown countdown;
     private final CountdownList list;
-    private final HBox container;
+    private final HBox content;
     private final CompleteButton completeButton;
     private final Nameplate nameplate;
     private final Dateplate dateplate;
     private final Counter counter;
+    private final VBox container;
 
     CountdownListMember(final Countdown countdown, final CountdownList list) {
         super(list.getSelector());
         this.countdown = countdown;
         this.list = list;
-
-        this.container = new HBox();
-        this.container.setBackground(null);
-        final var spacer = new Pane();
-        spacer.setVisible(false);
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-        container.setPadding(new Insets(0, 5, 0, 5));
         /*
-         * add the children now
+         * init the children
          */
         this.completeButton = new CompleteButton();
         HBox.setMargin(completeButton, new Insets(3, 2, 3, 2));
@@ -74,10 +72,32 @@ final class CountdownListMember
         this.dateplate = new Dateplate();
         HBox.setMargin(dateplate, new Insets(0, 8, 0, 0));
         this.counter = new Counter();
-        this.container.getChildren().addAll(completeButton, nameplate, spacer, dateplate, counter);
+        this.counter.setPrefHeight(25);
+        /*
+         * init the content
+         */
+        this.content = new HBox();
+        this.content.setBackground(null);
+        final var spacer = new Pane();
+        spacer.setVisible(false);
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        this.content.setFillHeight(false);
+        this.content.setAlignment(Pos.CENTER);
+        this.content.setMinHeight(35);
+        this.content.getChildren().addAll(completeButton, nameplate, spacer, dateplate, counter);
+        /*
+         * configure the vbox container
+         */
+        this.container = new VBox();
+        this.container.setFillWidth(true);
         this.container.prefWidthProperty().bind(this.widthProperty());
         this.container.prefHeightProperty().bind(this.heightProperty());
-        this.container.setPadding(new Insets(1));
+        this.container.setBackground(null);
+        final var divider = new CustomLine(0.5, Type.HORIZONTAL);
+        divider.widthProperty().bind(this.container.widthProperty());
+        divider.setHeight(1);
+        divider.setColour("grey");
+        this.container.getChildren().addAll(this.content, divider);
         this.getChildren().add(this.container);
     }
 
@@ -92,7 +112,7 @@ final class CountdownListMember
      * countdown mode.
      */
     protected final void removeCounter() {
-        this.container.getChildren().remove(this.counter);
+        this.content.getChildren().remove(this.counter);
     }
 
     protected final Countdown getCountdown() {
@@ -113,7 +133,7 @@ final class CountdownListMember
      */
     @Override
     public void update() {
-        this.container.getChildren().forEach(child -> {
+        this.content.getChildren().forEach(child -> {
             if (child instanceof Updatable updatable) {
                 updatable.update();
             }
@@ -122,7 +142,7 @@ final class CountdownListMember
 
     @Override
     public void setColour(Color colour) {
-        this.container.getChildren().forEach(child -> {
+        this.content.getChildren().forEach(child -> {
             if (child instanceof Colourable colourable) {
                 colourable.setColour(colour);
             }
@@ -131,7 +151,7 @@ final class CountdownListMember
 
     @Override
     public void resetColour() {
-        this.container.getChildren().forEach(child -> {
+        this.content.getChildren().forEach(child -> {
             if (child instanceof Colourable colourable) {
                 colourable.resetColour();
             }
@@ -142,9 +162,10 @@ final class CountdownListMember
     public void setToggle(boolean toggled) {
         super.setToggle(toggled);
         if (this.isToggled()) {
-            this.setBackground(RiceHandler.createBG(RiceHandler.getColour("dullgrey"), 0, 0));
+            this.content.setBackground(
+                RiceHandler.createBG(RiceHandler.getColour("dullgrey"), 0, 0));
         } else {
-            this.setBackground(null);
+            this.content.setBackground(null);
         }
     }
 
@@ -187,7 +208,7 @@ final class CountdownListMember
     private class Dateplate extends Label {
         Dateplate() {
             this.setAlignment(Pos.CENTER);
-            this.setTextFill(RiceHandler.getColour("grey"));
+            this.setTextFill(RiceHandler.getColour("lightgrey"));
             this.setFont(FontHandler.getSubtitle());
             this.setMaxHeight(Double.MAX_VALUE);
             final LocalDate now = LocalDate.now();
@@ -274,7 +295,7 @@ final class CountdownListMember
             /*
              * set the border up first
              */
-            this.border = new MableBorder(1, 0.2, 1);
+            this.border = new MableBorder(1, 0.05, 1);
             this.border.bindSize(this.widthProperty(), this.heightProperty());
             /*
              * set the fill up now
@@ -287,8 +308,8 @@ final class CountdownListMember
             this.fill.setBackground(new Background(backgroundFill));
             this.fill.setOpacity(0);
             this.setBackground(null);
-            this.setMinSize(16, 16);
             this.getChildren().addAll(this.border, this.fill);
+            this.resize(16, 16);
         }
 
         @Override
@@ -341,6 +362,11 @@ final class CountdownListMember
             }
 
             event.consume();
+        }
+
+        @Override
+        public boolean isResizable() {
+            return false;
         }
     }
 }

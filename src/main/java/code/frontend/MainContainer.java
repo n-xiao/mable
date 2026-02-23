@@ -24,6 +24,7 @@ import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.util.ArrayList;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 
@@ -70,6 +71,16 @@ public final class MainContainer extends Pane {
             scrollpane.setHbarPolicy(ScrollBarPolicy.NEVER);
             scrollpane.setVbarPolicy(ScrollBarPolicy.NEVER);
             this.getChildren().add(scrollpane);
+
+            /*
+             * click "anywhere" to deselect
+             */
+            scrollpane.setOnMousePressed(event -> {
+                if (event.getButton() == MouseButton.PRIMARY) {
+                    countdownList.getSelector().deselectAll();
+                    event.consume();
+                }
+            });
 
             /*
              * test

@@ -18,8 +18,10 @@
 
 package code.backend.data;
 
+import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.util.HashSet;
 import java.util.Stack;
+import javafx.scene.paint.Color;
 
 public final class FolderHandler {
     private static final HashSet<CountdownFolder> FOLDERS = new HashSet<CountdownFolder>();
@@ -47,6 +49,14 @@ public final class FolderHandler {
     static void eraseCountdown(final Countdown countdown) {
         FOLDERS.forEach(folder -> folder.getContents().removeIf(c -> c.equals(countdown)));
         DELETED_FOLDERS.forEach(folder -> folder.getContents().removeIf(c -> c.equals(countdown)));
+    }
+
+    static Color lookupColour(final Countdown countdown) {
+        for (CountdownFolder countdownFolder : FOLDERS) {
+            if (countdownFolder.getContents().contains(countdown))
+                return countdownFolder.getColour();
+        }
+        return RiceHandler.getColour("white");
     }
 
     private FolderHandler() {}

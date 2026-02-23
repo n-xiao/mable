@@ -20,15 +20,19 @@ package code.backend.data;
 
 import code.frontend.libs.katlaf.tables.Tablet;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.TreeSet;
 import java.util.UUID;
+import javafx.scene.paint.Color;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CountdownFolder extends Identifiable implements Tablet {
     private String name;
-    private final TreeSet<Countdown> CONTENTS;
+    private String rbgString;
+    private int pos;
+    private final TreeSet<Countdown> contents;
 
     /*
 
@@ -38,21 +42,24 @@ public class CountdownFolder extends Identifiable implements Tablet {
 
     public CountdownFolder(String name) {
         this.name = name;
-        this.CONTENTS = new TreeSet<Countdown>(new SortByRemainingDays());
+        this.contents = new TreeSet<Countdown>(new SortByRemainingDays());
+        this.rbgString = "rgb(0, 0, 0)";
         super(UUID.randomUUID());
     }
 
     @JsonCreator
     public CountdownFolder(@JsonProperty("ID") String folderId, @JsonProperty("name") String name,
-        @JsonProperty("contents") String[] contentAsIDs, @JsonProperty("pos") int pos) {
+        @JsonProperty("contents") String[] contentAsIDs, @JsonProperty("pos") int pos,
+        @JsonProperty("colour") String colour) {
         super(folderId);
         this.name = name;
-        this.CONTENTS = new TreeSet<Countdown>(new SortByRemainingDays());
+        this.contents = new TreeSet<Countdown>(new SortByRemainingDays());
         this.pos = pos;
+        this.rbgString = colour;
         for (String id : contentAsIDs) {
             Countdown countdown = CountdownHandler.getCountdownByID(id);
             if (countdown != null)
-                this.CONTENTS.add(countdown);
+                this.contents.add(countdown);
         }
     }
 
@@ -73,9 +80,9 @@ public class CountdownFolder extends Identifiable implements Tablet {
 
     @JsonProperty("contents")
     public String[] getContentsAsIDs() {
-        String[] stringIDs = new String[this.CONTENTS.size()];
+        String[] stringIDs = new String[this.contents.size()];
         int index = 0;
-        for (Countdown countdown : this.CONTENTS) {
+        for (Countdown countdown : this.contents) {
             stringIDs[index] = countdown.getID().toString();
             index++;
         }
@@ -83,15 +90,25 @@ public class CountdownFolder extends Identifiable implements Tablet {
     }
 
     public TreeSet<Countdown> getContents() {
-        return this.CONTENTS;
+        return this.contents;
     }
 
-    /*
+    @JsonProperty("colour")
+    public String getColourString() {
+        return this.rbgString;
+    }
 
+    @JsonIgnore
+    public Color getColour() {
+        return Color.web(this.rbgString);
+    }
 
-     IMPLEMENTATIONS
-    -------------------------------------------------------------------------------------*/
-    private int pos;
+    public void setColour(final Color colour) {
+        final String red = Integer.toString((int) colour.getRed());
+        final String green = Integer.toString((int) colour.getGreen());
+        final String blue = Integer.toString((int) colour.getBlue());
+        this.rbgString = "rgb(" + red + ", " + green + ", " + blue + ")";
+    }
 
     @JsonProperty("pos")
     @Override

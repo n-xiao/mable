@@ -56,7 +56,7 @@ public class BorderedField extends StackPane {
         this.field.focusedProperty().addListener(((observable, oldValue, newValue) -> {
             final Color colour =
                 newValue ? RiceHandler.getColour("skyblue") : RiceHandler.getColour("white");
-            this.border.getCustomBorder().setStrokeColour(colour);
+            this.border.getCustomBorder().setColour(colour);
             this.field.setTextFill(colour);
         }));
 

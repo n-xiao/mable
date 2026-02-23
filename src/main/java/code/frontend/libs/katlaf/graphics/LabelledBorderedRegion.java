@@ -118,7 +118,7 @@ public class LabelledBorderedRegion extends BorderedRegion {
      * @param colour    the colour that this component should use
      */
     public final void setColour(final Color colour) {
-        this.getCustomBorder().setStrokeColour(colour);
+        this.getCustomBorder().setColour(colour);
         this.label.setTextFill(colour);
     }
 

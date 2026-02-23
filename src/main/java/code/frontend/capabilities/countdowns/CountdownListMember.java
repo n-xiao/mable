@@ -43,7 +43,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
-public final class CountdownListMember extends SimpleListMember implements Updatable, Colourable {
+final class CountdownListMember extends SimpleListMember implements Updatable, Colourable {
     private final Countdown countdown;
     private final CountdownList list;
     private final HBox container;
@@ -52,7 +52,7 @@ public final class CountdownListMember extends SimpleListMember implements Updat
     private final Dateplate dateplate;
     private final Counter counter;
 
-    public CountdownListMember(final Countdown countdown, final CountdownList list) {
+    CountdownListMember(final Countdown countdown, final CountdownList list) {
         super(list.getSelector());
         this.countdown = countdown;
         this.list = list;
@@ -76,6 +76,24 @@ public final class CountdownListMember extends SimpleListMember implements Updat
         this.container.prefWidthProperty().bind(this.widthProperty());
         this.container.prefHeightProperty().bind(this.heightProperty());
         this.getChildren().add(this.container);
+    }
+
+    /*
+
+
+     PROTECTED API
+    -------------------------------------------------------------------------------------*/
+
+    /**
+     * Useful when trying to implement a custom counter, such as for a "relative"
+     * countdown mode.
+     */
+    protected final void removeCounter() {
+        this.container.getChildren().remove(this.counter);
+    }
+
+    protected final Countdown getCountdown() {
+        return this.countdown;
     }
 
     /*
@@ -154,7 +172,7 @@ public final class CountdownListMember extends SimpleListMember implements Updat
 
         @Override
         public void resetColour() {
-            setColour("white");
+            this.setTextFill(countdown.getColour());
         }
     }
 
@@ -164,6 +182,16 @@ public final class CountdownListMember extends SimpleListMember implements Updat
             this.setTextFill(RiceHandler.getColour("grey"));
             this.setFont(FontHandler.getSubtitle());
             this.setMaxHeight(Double.MAX_VALUE);
+            final LocalDate now = LocalDate.now();
+            final LocalDate localDate = countdown.isDone() ? countdown.getLocalCompletionDate(now)
+                                                           : countdown.getLocalDueDate(now);
+            final String pretext = countdown.isDone() ? "Completed: " : "Due: ";
+            final String day = Integer.toString(localDate.getDayOfMonth());
+            final String month = Integer.toString(localDate.getMonthValue());
+            final String year = Integer.toString(localDate.getYear());
+
+            final String text = pretext + day + "/" + month + "/" + year;
+            this.setText(text);
         }
     }
 
@@ -217,13 +245,13 @@ public final class CountdownListMember extends SimpleListMember implements Updat
 
         @Override
         public void setColour(Color colour) {
-            this.border.setStrokeColour(colour);
+            this.border.setColour(colour);
             this.label.setTextFill(colour);
         }
 
         @Override
         public void resetColour() {
-            setColour("white");
+            setColour(countdown.getColour());
         }
     }
 
@@ -231,7 +259,7 @@ public final class CountdownListMember extends SimpleListMember implements Updat
      * The circular button which resembles a bullet point. It is empty if the countdown
      * is incomplete, filled otherwise.
      */
-    private class CompleteButton extends ButtonFoundation {
+    private class CompleteButton extends ButtonFoundation implements Colourable {
         private final MableBorder border;
         private final Region fill;
         CompleteButton() {
@@ -247,15 +275,25 @@ public final class CountdownListMember extends SimpleListMember implements Updat
             this.fill.prefWidthProperty().bind(this.widthProperty());
             this.fill.prefHeightProperty().bind(this.heightProperty());
             // TODO figure out how to create a circular bg fill
-            final var backgroundFill = new BackgroundFill(
-                RiceHandler.getColour("blue"), new CornerRadii(5), new Insets(1.5));
+            final var backgroundFill =
+                new BackgroundFill(countdown.getColour(), new CornerRadii(5), new Insets(1.5));
             this.fill.setBackground(new Background(backgroundFill));
             this.fill.setOpacity(0);
-            /*
-             * lastly, take the daily dose of boilerplate
-             */
             this.setBackground(null);
             this.getChildren().addAll(this.border, this.fill);
+        }
+
+        @Override
+        public void setColour(Color colour) {
+            final var backgroundFill =
+                new BackgroundFill(colour, new CornerRadii(5), new Insets(1.5));
+            this.fill.setBackground(new Background(backgroundFill));
+            this.border.setColour(colour);
+        }
+
+        @Override
+        public void resetColour() {
+            setColour(countdown.getColour());
         }
 
         /**

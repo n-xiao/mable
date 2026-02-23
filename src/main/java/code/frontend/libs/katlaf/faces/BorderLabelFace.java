@@ -64,7 +64,7 @@ public class BorderLabelFace extends LabelFace {
     -------------------------------------------------------------------------------------*/
 
     public final void setColour(final Color colour) {
-        this.getMableBorder().setStrokeColour(colour);
+        this.getMableBorder().setColour(colour);
         this.setTextFill(colour);
     }
 }

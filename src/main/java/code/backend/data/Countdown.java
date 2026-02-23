@@ -29,6 +29,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.UUID;
+import javafx.scene.paint.Color;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Countdown extends Identifiable implements Listable<Countdown>, Recoverable {
@@ -120,6 +121,10 @@ public class Countdown extends Identifiable implements Listable<Countdown>, Reco
         return now.plusDays(getDaysUntilDue(now));
     }
 
+    public LocalDate getLocalCompletionDate(LocalDate now) {
+        return now.plusDays(getDaysUntilCompletion(now));
+    }
+
     @JsonIgnore
     public boolean isOverdue(LocalDate now) {
         ZonedDateTime nowDateTime = convertLocalDate(now);
@@ -165,11 +170,10 @@ public class Countdown extends Identifiable implements Listable<Countdown>, Reco
             this.completionDate = convertLocalDate(LocalDate.now());
     }
 
-    /*
-
-
-     IMPLEMENTATIONS
-    -------------------------------------------------------------------------------------*/
+    @JsonIgnore
+    public Color getColour() {
+        return FolderHandler.lookupColour(this);
+    }
 
     @Override
     public void delete() {

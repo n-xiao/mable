@@ -23,6 +23,11 @@ import code.frontend.libs.katlaf.collections.SelectionChild;
 import code.frontend.libs.katlaf.collections.SelectionCollection;
 import code.frontend.libs.katlaf.graphics.MableBorder;
 
+/**
+ * REMINDER TO SELF:
+ *
+ * OVERRIDE setToggle() TO IMPLEMENT TOGGLE EFFECTS
+ */
 public abstract class SimpleListMember extends SelectionChild {
     /*
 

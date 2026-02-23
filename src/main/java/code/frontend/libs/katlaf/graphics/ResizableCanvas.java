@@ -18,6 +18,7 @@
 
 package code.frontend.libs.katlaf.graphics;
 
+import code.frontend.libs.katlaf.interfaces.Colourable;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -33,7 +34,7 @@ import javafx.scene.paint.Color;
  *
  * @since 3.0.0-beta
  */
-abstract class ResizableCanvas extends Canvas {
+abstract class ResizableCanvas extends Canvas implements Colourable {
     private Color strokeColour = RiceHandler.getColour("white"); // default colour
 
     public ResizableCanvas() {
@@ -100,8 +101,15 @@ abstract class ResizableCanvas extends Canvas {
      *
      * @param strokeColour      the colour that the graphics should be changed to
      */
-    public final void setStrokeColour(final Color strokeColour) {
+    @Override
+    public final void setColour(final Color strokeColour) {
         this.strokeColour = strokeColour;
+        resizeAndDraw(false);
+    }
+
+    @Override
+    public final void resetColour() {
+        this.strokeColour = RiceHandler.getColour("white");
         resizeAndDraw(false);
     }
 

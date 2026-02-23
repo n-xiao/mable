@@ -50,6 +50,5 @@ public abstract class SimpleTableMember
         this.setMaxWidth(width);
         this.setMinHeight(height);
         this.setMaxHeight(height);
-        this.hideFace();
     }
 }

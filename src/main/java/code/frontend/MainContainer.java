@@ -18,7 +18,11 @@
 
 package code.frontend;
 
+import code.backend.data.Countdown;
+import code.frontend.capabilities.countdowns.CountdownList;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
+import java.util.ArrayList;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
@@ -49,12 +53,25 @@ public final class MainContainer extends Pane {
     -------------------------------------------------------------------------------------*/
 
     private class Container extends HBox {
-        // TODO add the content!
         Container() {
             this.setBackground(null);
             this.setFillHeight(true);
             this.prefHeightProperty().bind(MainContainer.this.heightProperty());
             this.prefWidthProperty().bind(MainContainer.this.widthProperty());
+
+            final CountdownList countdownList = new CountdownList();
+            final ScrollPane scrollpane = new ScrollPane();
+            scrollpane.setStyle("-fx-background: transparent;");
+            scrollpane.setContent(countdownList);
+            scrollpane.setFitToWidth(true);
+            this.getChildren().add(scrollpane);
+
+            /*
+             * test
+             */
+            ArrayList<Countdown> test = new ArrayList<Countdown>();
+            test.add(new Countdown("test", 1, 12, 2026));
+            countdownList.populate(test);
         }
     }
 }

@@ -274,7 +274,6 @@ final class CountdownListMember extends SimpleListMember implements Updatable, C
             this.fill = new Region();
             this.fill.prefWidthProperty().bind(this.widthProperty());
             this.fill.prefHeightProperty().bind(this.heightProperty());
-            // TODO figure out how to create a circular bg fill
             final var backgroundFill =
                 new BackgroundFill(countdown.getColour(), new CornerRadii(5), new Insets(1.5));
             this.fill.setBackground(new Background(backgroundFill));
@@ -318,16 +317,15 @@ final class CountdownListMember extends SimpleListMember implements Updatable, C
          */
         @Override
         public void onMousePressed(MouseEvent event) {
-            if (countdown.isDeleted())
-                throw new IllegalCallerException(
-                    "a deleted Countdown shouldn't be set as done or not done. what r u doing?");
-
             list.getSelector().deselectAll();
             if (countdown.isDone()) {
                 this.fill.setOpacity(0);
             } else {
                 this.fill.setOpacity(1);
                 countdown.updateCompletionDateTime();
+            }
+
+            if (countdown.isDeleted()) {
             }
             countdown.setDone(!countdown.isDone());
             list.removeMember(CountdownListMember.this);

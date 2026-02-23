@@ -23,6 +23,7 @@ import code.frontend.capabilities.concurrency.Updatable;
 import code.frontend.libs.katlaf.lists.SimpleList;
 import java.util.List;
 import java.util.function.Function;
+import javafx.scene.input.MouseButton;
 
 /**
  * The UI component that displays a set of Countdowns.
@@ -43,6 +44,12 @@ public final class CountdownList extends SimpleList implements Updatable {
     public CountdownList(final CountdownFilter filter) {
         this.populated = false;
         this.filter = filter;
+        this.setOnMouseClicked(event -> {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                this.getSelector().deselectAll();
+                event.consume();
+            }
+        });
     }
 
     /*

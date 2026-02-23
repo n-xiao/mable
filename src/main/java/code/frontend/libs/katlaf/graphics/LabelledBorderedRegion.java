@@ -26,7 +26,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
 /**
  * This is a labelled version of a BorderedRegion which is composed of a MableBorder.

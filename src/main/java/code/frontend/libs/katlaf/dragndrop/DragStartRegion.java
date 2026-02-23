@@ -36,7 +36,7 @@ public abstract class DragStartRegion<T> extends Region {
         this.setBackground(null);
         // init listener for drag starts
         this.setOnDragDetected((event) -> {
-            // RightClickMenu.despawnAll(); // TODO REIMPLEMENT THIS LATER
+            // RightClickMenu.despawnAll(); // TODO REIMPLEMENT RIGHTCLICK LATER
             this.startFullDrag();
             DragDropOverlay.spawnOverlay(this);
             onDragStart();

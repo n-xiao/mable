@@ -97,7 +97,9 @@ public class SimpleList extends VBox {
      */
     public void addMember(final SimpleListMember member) {
         this.members.add(member);
-        this.members.sort(null);
+        if (member instanceof Comparable) {
+            this.members.sort(null);
+        }
         if (this.members.getLast().equals(member)) {
             this.getChildren().addLast(member);
         } else {

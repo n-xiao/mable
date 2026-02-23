@@ -75,6 +75,7 @@ public final class MainContainer extends Pane {
              * test
              */
             ArrayList<Countdown> test = new ArrayList<Countdown>();
+            test.add(new Countdown("testOverdue", 1, 1, 2025));
             test.add(new Countdown("test", 1, 12, 2026));
             countdownList.populate(test);
         }

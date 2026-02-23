@@ -43,7 +43,8 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
-final class CountdownListMember extends SimpleListMember implements Updatable, Colourable {
+final class CountdownListMember
+    extends SimpleListMember implements Updatable, Colourable, Comparable<CountdownListMember> {
     private final Countdown countdown;
     private final CountdownList list;
     private final HBox container;
@@ -145,6 +146,11 @@ final class CountdownListMember extends SimpleListMember implements Updatable, C
         } else {
             this.setBackground(null);
         }
+    }
+
+    @Override
+    public int compareTo(CountdownListMember o) {
+        return this.countdown.compareTo(o.countdown);
     }
 
     /*

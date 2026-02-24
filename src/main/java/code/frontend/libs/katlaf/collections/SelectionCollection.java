@@ -93,14 +93,14 @@ public class SelectionCollection<E extends SelectionChild> {
      * A child should call this method when it detects
      * a meta select on itself.
      *
-     * @param child    the child which incurred the user click
+     * @param caller    the child which incurred the user click
      */
-    final void metaSelected(final SelectionChild child) {
-        if (child.isToggled()) {
-            child.setToggle(false);
+    final void metaSelected(final SelectionChild caller) {
+        if (caller.isToggled()) {
+            caller.setToggle(false);
         } else {
-            this.pivot = child;
-            child.setToggle(true);
+            this.pivot = caller;
+            caller.setToggle(true);
         }
     }
 
@@ -108,12 +108,12 @@ public class SelectionCollection<E extends SelectionChild> {
      * Given that the child that has been clicked on (and selected) has already
      * been toggled (selected), all this method does is deselect all other children.
      *
-     * @param child    the child that is to be selected
+     * @param caller    the child that is to be selected
      */
-    final void selected(final SelectionChild child) {
-        deselectAllExcept(child);
-        this.pivot = child;
-        child.setToggle(true);
+    final void selected(final SelectionChild caller) {
+        deselectAllExcept(caller);
+        this.pivot = caller;
+        caller.setToggle(true);
     }
 
     /**

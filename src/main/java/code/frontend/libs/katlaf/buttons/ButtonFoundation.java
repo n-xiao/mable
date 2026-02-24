@@ -41,7 +41,6 @@ public abstract class ButtonFoundation extends StackPane {
 
     public ButtonFoundation() {
         this.enabled = true;
-        // set up the click detection stuff
         setOnMousePressed(this::onMousePressed);
         setOnMouseReleased(this::onMouseReleased);
         setOnMouseEntered(this::onMouseEntered);

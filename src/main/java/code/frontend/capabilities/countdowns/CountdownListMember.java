@@ -24,7 +24,6 @@ import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.FontHandler.DedicatedFont;
 import code.frontend.libs.katlaf.FormatHandler;
 import code.frontend.libs.katlaf.buttons.ButtonFoundation;
-import code.frontend.libs.katlaf.dividers.HorizontalDivider;
 import code.frontend.libs.katlaf.graphics.CustomLine;
 import code.frontend.libs.katlaf.graphics.CustomLine.Type;
 import code.frontend.libs.katlaf.graphics.MableBorder;
@@ -32,6 +31,9 @@ import code.frontend.libs.katlaf.interfaces.Colourable;
 import code.frontend.libs.katlaf.lists.SimpleListMember;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.time.LocalDate;
+import javafx.animation.FadeTransition;
+import javafx.animation.PauseTransition;
+import javafx.animation.SequentialTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -46,6 +48,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 final class CountdownListMember
     extends SimpleListMember implements Updatable, Colourable, Comparable<CountdownListMember> {
@@ -291,6 +294,9 @@ final class CountdownListMember
     private class CompleteButton extends ButtonFoundation implements Colourable {
         private final MableBorder border;
         private final Region fill;
+        private final FadeTransition fadeTransition;
+        private final SequentialTransition seqTransition;
+        private boolean tempIsDone;
         CompleteButton() {
             /*
              * set the border up first
@@ -309,7 +315,12 @@ final class CountdownListMember
             this.fill.setOpacity(0);
             this.setBackground(null);
             this.getChildren().addAll(this.border, this.fill);
-            this.resize(16, 16);
+            this.resize(18, 18);
+
+            this.fadeTransition = new FadeTransition(Duration.millis(200), this.fill);
+            this.seqTransition = new SequentialTransition(
+                this.fadeTransition, new PauseTransition(Duration.millis(1300)));
+            this.tempIsDone = countdown.isDone();
         }
 
         @Override
@@ -347,19 +358,33 @@ final class CountdownListMember
          */
         @Override
         public void onMousePressed(MouseEvent event) {
-            list.getSelector().deselectAll();
-            if (countdown.isDone()) {
-                this.fill.setOpacity(0);
-            } else {
-                this.fill.setOpacity(1);
-                countdown.updateCompletionDateTime();
-            }
+            if (!this.isEnabled())
+                return;
 
-            countdown.setDone(!countdown.isDone());
-            if (!countdown.isDeleted()) {
-                // TODO: add a delay
-                list.removeMember(CountdownListMember.this);
+            this.seqTransition.pause();
+            list.getSelector().deselectAll();
+
+            if (this.tempIsDone) {
+                this.fadeTransition.setToValue(0);
+            } else {
+                countdown.updateCompletionDateTime();
+                this.fadeTransition.setToValue(1);
             }
+            this.tempIsDone = !this.tempIsDone;
+            this.seqTransition.setOnFinished(e -> {
+                if (this.tempIsDone == countdown.isDone())
+                    return;
+
+                countdown.setDone(tempIsDone);
+                /*
+                 * this action shall not un-delete deleted countdowns
+                 */
+                this.setEnabled(false);
+                if (!countdown.isDeleted()) {
+                    list.removeMember(CountdownListMember.this);
+                }
+            });
+            this.seqTransition.playFromStart();
 
             event.consume();
         }

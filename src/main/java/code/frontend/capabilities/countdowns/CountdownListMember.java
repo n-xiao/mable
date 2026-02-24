@@ -60,11 +60,25 @@ final class CountdownListMember
     private final Dateplate dateplate;
     private final Counter counter;
     private final VBox container;
+    private final FadeTransition standbyTransition;
 
     CountdownListMember(final Countdown countdown, final CountdownList list) {
         super(list.getSelector());
         this.countdown = countdown;
         this.list = list;
+        /*
+         * init the content
+         */
+        this.content = new HBox();
+        this.standbyTransition = new FadeTransition(Duration.millis(200), this.content);
+        this.content.setBackground(null);
+        final var spacer = new Pane();
+        spacer.setVisible(false);
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        this.content.setFillHeight(false);
+        this.content.setAlignment(Pos.CENTER);
+        this.content.setMinHeight(35);
+
         /*
          * init the children
          */
@@ -76,17 +90,7 @@ final class CountdownListMember
         HBox.setMargin(dateplate, new Insets(0, 8, 0, 0));
         this.counter = new Counter();
         this.counter.setPrefHeight(25);
-        /*
-         * init the content
-         */
-        this.content = new HBox();
-        this.content.setBackground(null);
-        final var spacer = new Pane();
-        spacer.setVisible(false);
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-        this.content.setFillHeight(false);
-        this.content.setAlignment(Pos.CENTER);
-        this.content.setMinHeight(35);
+
         this.content.getChildren().addAll(completeButton, nameplate, spacer, dateplate, counter);
         /*
          * configure the vbox container
@@ -319,7 +323,7 @@ final class CountdownListMember
 
             this.fadeTransition = new FadeTransition(Duration.millis(200), this.fill);
             this.seqTransition = new SequentialTransition(
-                this.fadeTransition, new PauseTransition(Duration.millis(1300)));
+                this.fadeTransition, standbyTransition, new PauseTransition(Duration.millis(1100)));
             this.tempIsDone = countdown.isDone();
         }
 
@@ -366,9 +370,11 @@ final class CountdownListMember
 
             if (this.tempIsDone) {
                 this.fadeTransition.setToValue(0);
+                standbyTransition.setToValue(1);
             } else {
                 countdown.updateCompletionDateTime();
                 this.fadeTransition.setToValue(1);
+                standbyTransition.setToValue(0.75);
             }
             this.tempIsDone = !this.tempIsDone;
             this.seqTransition.setOnFinished(e -> {

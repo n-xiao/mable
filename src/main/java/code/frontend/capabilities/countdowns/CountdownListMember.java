@@ -30,10 +30,9 @@ import code.frontend.libs.katlaf.graphics.MableBorder;
 import code.frontend.libs.katlaf.interfaces.Colourable;
 import code.frontend.libs.katlaf.lists.SimpleListMember;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
+import code.frontend.libs.katlaf.transitions.Transitioner;
 import java.time.LocalDate;
 import javafx.animation.FadeTransition;
-import javafx.animation.PauseTransition;
-import javafx.animation.SequentialTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -60,7 +59,19 @@ final class CountdownListMember
     private final Dateplate dateplate;
     private final Counter counter;
     private final VBox container;
-    private final FadeTransition standbyTransition;
+    /*
+     * transition fields for complete action
+     */
+    private final Transitioner compTransitioner;
+    private final FadeTransition nameFade;
+    private final FadeTransition dateFade;
+    private final FadeTransition counterFade;
+    private final FadeTransition compFade;
+    /*
+     * transition fields for delete action
+     */
+    private final Transitioner deleteTransitioner;
+    private final FadeTransition globalFade;
 
     CountdownListMember(final Countdown countdown, final CountdownList list) {
         super(list.getSelector());
@@ -70,7 +81,6 @@ final class CountdownListMember
          * init the content
          */
         this.content = new HBox();
-        this.standbyTransition = new FadeTransition(Duration.millis(200), this.content);
         this.content.setBackground(null);
         final var spacer = new Pane();
         spacer.setVisible(false);
@@ -106,6 +116,22 @@ final class CountdownListMember
         divider.setColour("grey");
         this.container.getChildren().addAll(this.content, divider);
         this.getChildren().add(this.container);
+        /*
+         * set up transitions
+         */
+        final int millis = 400;
+        this.nameFade = new FadeTransition(Duration.millis(millis), this.nameplate);
+        this.dateFade = new FadeTransition(Duration.millis(millis), this.dateplate);
+        this.counterFade = new FadeTransition(Duration.millis(millis), this.counter);
+        this.compFade = new FadeTransition(Duration.millis(200), this.completeButton.fill);
+        this.compTransitioner =
+            new Transitioner()
+                .prepare()
+                .playParallel(this.nameFade, this.dateFade, this.counterFade, this.compFade)
+                .hold(Duration.millis(1200));
+
+        this.globalFade = new FadeTransition(Duration.millis(millis), this.content);
+        this.deleteTransitioner = new Transitioner().prepare().play(this.globalFade);
     }
 
     /*
@@ -298,8 +324,6 @@ final class CountdownListMember
     private class CompleteButton extends ButtonFoundation implements Colourable {
         private final MableBorder border;
         private final Region fill;
-        private final FadeTransition fadeTransition;
-        private final SequentialTransition seqTransition;
         private boolean tempIsDone;
         CompleteButton() {
             /*
@@ -321,9 +345,6 @@ final class CountdownListMember
             this.getChildren().addAll(this.border, this.fill);
             this.resize(18, 18);
 
-            this.fadeTransition = new FadeTransition(Duration.millis(200), this.fill);
-            this.seqTransition = new SequentialTransition(
-                this.fadeTransition, standbyTransition, new PauseTransition(Duration.millis(1100)));
             this.tempIsDone = countdown.isDone();
         }
 
@@ -365,19 +386,18 @@ final class CountdownListMember
             if (!this.isEnabled())
                 return;
 
-            this.seqTransition.pause();
             list.getSelector().deselectAll();
 
             if (this.tempIsDone) {
-                this.fadeTransition.setToValue(0);
-                standbyTransition.setToValue(1);
+                compTransitioner.setFadeToValues(1);
+                compFade.setToValue(0);
             } else {
+                compTransitioner.setFadeToValues(0.7);
+                compFade.setToValue(1);
                 countdown.updateCompletionDateTime();
-                this.fadeTransition.setToValue(1);
-                standbyTransition.setToValue(0.75);
             }
             this.tempIsDone = !this.tempIsDone;
-            this.seqTransition.setOnFinished(e -> {
+            compTransitioner.getTransition().setOnFinished(e -> {
                 if (this.tempIsDone == countdown.isDone())
                     return;
 
@@ -390,7 +410,7 @@ final class CountdownListMember
                     list.removeMember(CountdownListMember.this);
                 }
             });
-            this.seqTransition.playFromStart();
+            compTransitioner.getTransition().playFromStart();
 
             event.consume();
         }

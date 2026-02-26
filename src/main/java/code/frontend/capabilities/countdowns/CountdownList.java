@@ -21,8 +21,15 @@ package code.frontend.capabilities.countdowns;
 import code.backend.data.Countdown;
 import code.frontend.capabilities.concurrency.Updatable;
 import code.frontend.libs.katlaf.lists.SimpleList;
+import code.frontend.libs.katlaf.lists.SimpleListMember;
+import code.frontend.libs.katlaf.transitions.Transitioner;
 import java.util.List;
 import java.util.function.Function;
+import javafx.animation.FadeTransition;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
+import javafx.util.Duration;
 
 /**
  * The UI component that displays a set of Countdowns.
@@ -31,10 +38,13 @@ import java.util.function.Function;
  * @see Countdown
  */
 public final class CountdownList extends SimpleList implements Updatable {
+    private static final int REMOVE_DELAY = 1200;
     public enum CountdownFilter { ONGOING, COMPLETED, DELETED }
 
     private boolean populated;
     private final CountdownFilter filter;
+    private final ObservableList<CountdownListMember> pendingRemoval;
+    private final Transitioner rmTransitioner;
 
     public CountdownList() {
         this(CountdownFilter.ONGOING);
@@ -43,6 +53,48 @@ public final class CountdownList extends SimpleList implements Updatable {
     public CountdownList(final CountdownFilter filter) {
         this.populated = false;
         this.filter = filter;
+        this.rmTransitioner = new Transitioner().prepare();
+        this.pendingRemoval = FXCollections.observableArrayList();
+        this.pendingRemoval.addListener(new ListChangeListener<CountdownListMember>() {
+            @Override
+            public void onChanged(Change<? extends CountdownListMember> c) {
+                if (pendingRemoval.isEmpty())
+                    return;
+
+                final FadeTransition[] fades = new FadeTransition[pendingRemoval.size()];
+                int i = 0;
+                for (CountdownListMember member : pendingRemoval) {
+                    fades[i] = new FadeTransition(Duration.millis(200), member);
+                    fades[i].setToValue(0);
+                    i++;
+                }
+
+                rmTransitioner.prepare()
+                    .hold(Duration.millis(REMOVE_DELAY))
+                    .playParallel(fades)
+                    .getTransition()
+                    .setOnFinished(f -> {
+                        pendingRemoval.forEach(CountdownList.super::removeMember);
+                        pendingRemoval.clear();
+                    });
+
+                rmTransitioner.getTransition().playFromStart();
+            }
+        });
+    }
+
+    /*
+
+
+     PRIVATE API
+    -------------------------------------------------------------------------------------*/
+
+    void requestMarkAsDone(final CountdownListMember member) {
+        if (this.pendingRemoval.contains(member))
+            abortRemoveMember(member);
+        else
+            removeMember(member);
+        member.updateCountdownDone();
     }
 
     /*
@@ -50,6 +102,23 @@ public final class CountdownList extends SimpleList implements Updatable {
 
      PUBLIC API
     -------------------------------------------------------------------------------------*/
+
+    @Override
+    public synchronized void removeMember(SimpleListMember member) {
+        if (member instanceof CountdownListMember countdownMember) {
+            if (this.rmTransitioner.getTransition() != null)
+                this.rmTransitioner.getTransition().stop();
+            this.pendingRemoval.add(countdownMember);
+        }
+    }
+
+    public synchronized void abortRemoveMember(SimpleListMember member) {
+        if (member instanceof CountdownListMember countdownListMember) {
+            if (this.rmTransitioner.getTransition() != null)
+                this.rmTransitioner.getTransition().stop();
+            this.pendingRemoval.removeIf(m -> m.equals(countdownListMember));
+        }
+    }
 
     /**
      * Populates the current CountdownList, usually when it is empty (after instantiation)

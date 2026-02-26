@@ -95,7 +95,7 @@ public class SimpleList extends VBox {
      * This method is called during runtime, usually when a user adds a new member to this
      * list.
      */
-    public void addMember(final SimpleListMember member) {
+    public synchronized void addMember(final SimpleListMember member) {
         this.members.add(member);
         if (member instanceof Comparable) {
             this.members.sort(null);
@@ -108,19 +108,19 @@ public class SimpleList extends VBox {
         setVspacing();
     }
 
-    public void addMembers(final List<SimpleListMember> membersToAdd) {
+    public synchronized void addMembers(final List<SimpleListMember> membersToAdd) {
         for (SimpleListMember simpleListMember : membersToAdd) {
             addMember(simpleListMember);
         }
     }
 
-    public void removeMember(final SimpleListMember member) {
+    public synchronized void removeMember(final SimpleListMember member) {
         this.members.remove(member);
         this.getChildren().removeIf(
             m -> (m instanceof SimpleListMember currentMember && currentMember.equals(member)));
     }
 
-    public void removeMembers(final List<SimpleListMember> membersToRemove) {
+    public synchronized void removeMembers(final List<SimpleListMember> membersToRemove) {
         for (SimpleListMember simpleListMember : membersToRemove) {
             removeMember(simpleListMember);
         }

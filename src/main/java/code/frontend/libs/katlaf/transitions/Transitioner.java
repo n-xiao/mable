@@ -91,7 +91,7 @@ public final class Transitioner {
 
     public Transitioner prepare() {
         if (this.master != null)
-            this.master.pause();
+            this.master.stop();
         this.master = new SequentialTransition();
         return this;
     }

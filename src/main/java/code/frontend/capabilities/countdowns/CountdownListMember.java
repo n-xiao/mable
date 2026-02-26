@@ -67,11 +67,6 @@ final class CountdownListMember
     private final FadeTransition dateFade;
     private final FadeTransition counterFade;
     private final FadeTransition compFade;
-    /*
-     * transition fields for delete action
-     */
-    private final Transitioner deleteTransitioner;
-    private final FadeTransition globalFade;
 
     CountdownListMember(final Countdown countdown, final CountdownList list) {
         super(list.getSelector());
@@ -124,14 +119,20 @@ final class CountdownListMember
         this.dateFade = new FadeTransition(Duration.millis(millis), this.dateplate);
         this.counterFade = new FadeTransition(Duration.millis(millis), this.counter);
         this.compFade = new FadeTransition(Duration.millis(200), this.completeButton.fill);
-        this.compTransitioner =
-            new Transitioner()
-                .prepare()
-                .playParallel(this.nameFade, this.dateFade, this.counterFade, this.compFade)
-                .hold(Duration.millis(1200));
+        this.compTransitioner = new Transitioner().prepare().playParallel(
+            this.nameFade, this.dateFade, this.counterFade, this.compFade);
+    }
 
-        this.globalFade = new FadeTransition(Duration.millis(millis), this.content);
-        this.deleteTransitioner = new Transitioner().prepare().play(this.globalFade);
+    /*
+
+
+     PRIVATE API
+    -------------------------------------------------------------------------------------*/
+
+    void updateCountdownDone() {
+        if (this.completeButton.tempIsDone != this.countdown.isDone()) {
+            this.countdown.setDone(this.completeButton.tempIsDone);
+        }
     }
 
     /*
@@ -205,6 +206,12 @@ final class CountdownListMember
     @Override
     public int compareTo(CountdownListMember o) {
         return this.countdown.compareTo(o.countdown);
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        this.completeButton.setEnabled(enabled);
+        super.setEnabled(enabled);
     }
 
     /*
@@ -394,22 +401,10 @@ final class CountdownListMember
             } else {
                 compTransitioner.setFadeToValues(0.7);
                 compFade.setToValue(1);
-                countdown.updateCompletionDateTime();
             }
             this.tempIsDone = !this.tempIsDone;
-            compTransitioner.getTransition().setOnFinished(e -> {
-                if (this.tempIsDone == countdown.isDone())
-                    return;
-
-                countdown.setDone(tempIsDone);
-                /*
-                 * this action shall not un-delete deleted countdowns
-                 */
-                this.setEnabled(false);
-                if (!countdown.isDeleted()) {
-                    list.removeMember(CountdownListMember.this);
-                }
-            });
+            compTransitioner.getTransition().setOnFinished(
+                f -> { list.requestMarkAsDone(CountdownListMember.this); });
             compTransitioner.getTransition().playFromStart();
 
             event.consume();

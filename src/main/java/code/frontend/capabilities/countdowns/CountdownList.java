@@ -38,7 +38,7 @@ import javafx.util.Duration;
  * @see Countdown
  */
 public final class CountdownList extends SimpleList implements Updatable {
-    private static final int REMOVE_DELAY = 1200;
+    private static final int REMOVE_DELAY = 1500;
     public enum CountdownFilter { ONGOING, COMPLETED, DELETED }
 
     private boolean populated;
@@ -89,7 +89,7 @@ public final class CountdownList extends SimpleList implements Updatable {
      PRIVATE API
     -------------------------------------------------------------------------------------*/
 
-    void requestMarkAsDone(final CountdownListMember member) {
+    synchronized void requestMarkAsDone(final CountdownListMember member) {
         if (this.pendingRemoval.contains(member))
             abortRemoveMember(member);
         else

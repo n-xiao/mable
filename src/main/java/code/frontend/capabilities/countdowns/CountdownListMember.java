@@ -403,8 +403,7 @@ final class CountdownListMember
                 compFade.setToValue(1);
             }
             this.tempIsDone = !this.tempIsDone;
-            compTransitioner.getTransition().setOnFinished(
-                f -> { list.requestMarkAsDone(CountdownListMember.this); });
+            list.requestMarkAsDone(CountdownListMember.this);
             compTransitioner.getTransition().playFromStart();
 
             event.consume();

@@ -43,6 +43,12 @@ public class SimpleTable extends FlowPane {
         });
     }
 
+    /*
+
+
+     PROTECTED API
+    -------------------------------------------------------------------------------------*/
+
     /**
      * This allows for left to right listing of members; by
      * adding invisible Regions that act as "spacers" or "paddings", an incomplete
@@ -56,7 +62,7 @@ public class SimpleTable extends FlowPane {
      * affect the scrolling experience of the user. (as in, the invisible
      * paddings will probably not let the user scroll down to nothing)
      */
-    void requestAlign() {
+    protected void requestAlign() {
         this.getChildren().removeIf(child -> child instanceof FakeMember);
 
         final int totalWidth = (int) this.getBoundsInParent().getWidth();
@@ -79,21 +85,6 @@ public class SimpleTable extends FlowPane {
     /*
 
 
-     PROTECTED API
-    -------------------------------------------------------------------------------------*/
-
-    protected ArrayList<SimpleTableMember> getSelectedMembers() {
-        final ArrayList<SimpleTableMember> selected = new ArrayList<SimpleTableMember>();
-        members.forEach(member -> {
-            if (member.isToggled())
-                selected.add(member);
-        });
-        return selected;
-    }
-
-    /*
-
-
      PUBLIC API
     -------------------------------------------------------------------------------------*/
 
@@ -109,7 +100,6 @@ public class SimpleTable extends FlowPane {
         this.members.add(tableMember);
         this.members.sort(null);
         this.getChildren().add(this.members.indexOf(tableMember), tableMember);
-        this.requestAlign();
     }
 
     public void addMembers(final List<SimpleTableMember> tableMembers) {
@@ -120,7 +110,6 @@ public class SimpleTable extends FlowPane {
         this.members.sort(null);
         this.getChildren().clear();
         this.getChildren().addAll(this.members);
-        this.requestAlign();
     }
 
     /**
@@ -131,14 +120,16 @@ public class SimpleTable extends FlowPane {
     public void removeMember(final SimpleTableMember tableMember) {
         this.members.remove(tableMember);
         this.getChildren().remove(tableMember);
-        this.requestAlign();
     }
 
     public void removeMembers(final List<SimpleTableMember> tableMembers) {
         this.members.removeAll(tableMembers);
         this.getChildren().clear();
         this.getChildren().addAll(this.members);
-        this.requestAlign();
+    }
+
+    public SelectionCollection<SimpleTableMember> getSelector() {
+        return this.selcol;
     }
 
     /*

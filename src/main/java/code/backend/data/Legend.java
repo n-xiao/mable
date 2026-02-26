@@ -18,7 +18,6 @@
 
 package code.backend.data;
 
-import code.frontend.libs.katlaf.tables.Tablet;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -28,10 +27,9 @@ import java.util.UUID;
 import javafx.scene.paint.Color;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CountdownFolder extends Identifiable implements Tablet {
+public class Legend extends Identifiable implements Comparable<Legend> {
     private String name;
     private String rbgString;
-    private int pos;
     private final TreeSet<Countdown> contents;
 
     /*
@@ -40,7 +38,7 @@ public class CountdownFolder extends Identifiable implements Tablet {
      CONSTRUCTORS
     -------------------------------------------------------------------------------------*/
 
-    public CountdownFolder(String name) {
+    public Legend(String name) {
         this.name = name;
         this.contents = new TreeSet<Countdown>(new SortByRemainingDays());
         this.rbgString = "rgb(0, 0, 0)";
@@ -48,13 +46,12 @@ public class CountdownFolder extends Identifiable implements Tablet {
     }
 
     @JsonCreator
-    public CountdownFolder(@JsonProperty("ID") String folderId, @JsonProperty("name") String name,
+    public Legend(@JsonProperty("ID") String legendId, @JsonProperty("name") String name,
         @JsonProperty("contents") String[] contentAsIDs, @JsonProperty("pos") int pos,
         @JsonProperty("colour") String colour) {
-        super(folderId);
+        super(legendId);
         this.name = name;
         this.contents = new TreeSet<Countdown>(new SortByRemainingDays());
-        this.pos = pos;
         this.rbgString = colour;
         for (String id : contentAsIDs) {
             Countdown countdown = CountdownHandler.getCountdownByID(id);
@@ -110,14 +107,8 @@ public class CountdownFolder extends Identifiable implements Tablet {
         this.rbgString = "rgb(" + red + ", " + green + ", " + blue + ")";
     }
 
-    @JsonProperty("pos")
     @Override
-    public int getPosition() {
-        return this.pos;
-    }
-
-    @Override
-    public void setPosition(int pos) {
-        this.pos = pos;
+    public int compareTo(Legend o) {
+        return this.name.compareTo(o.name);
     }
 }

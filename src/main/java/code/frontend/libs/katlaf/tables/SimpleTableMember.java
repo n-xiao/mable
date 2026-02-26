@@ -23,32 +23,23 @@ import code.frontend.libs.katlaf.collections.SelectionCollection;
 import javafx.scene.layout.StackPane;
 
 /**
- * A SimpleTableMember has a fixed width and height. This class provides selection implementations
- * by extending SelectionChild.
+ * Although this class seems empty right now, drag and drop features such as reordering
+ * is planned for a future release. Please refrain from calling this boilerplate code.
  *
- * @see SelectionChild
  * @since v3.0.0-beta
  */
-public abstract class SimpleTableMember
-    extends SelectionChild implements Comparable<SimpleTableMember> {
+public abstract class SimpleTableMember extends SelectionChild {
     /**
      * Creates a new instance of this class. This constructor calls the hideFace() method
      * of the superclass, so as to provide implementations of this class the equivalent of
      * an empty StackPane.
      *
      * @param parent    the SelectionCollection that this SelectionChild instance belongs to
-     * @param width     the width of this instance
-     * @param height    the height of this instance
      * @see SelectionCollection
      * @see StackPane
      */
-    public SimpleTableMember(final SelectionCollection<? extends SelectionChild> parent,
-        final double width, final double height) {
+    public SimpleTableMember(final SelectionCollection<? extends SelectionChild> parent) {
         super(parent);
-        this.setBackground(null);
-        this.setMinWidth(width);
-        this.setMaxWidth(width);
-        this.setMinHeight(height);
-        this.setMaxHeight(height);
+        this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
     }
 }

@@ -28,7 +28,7 @@ import java.util.UUID;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY)
 @JsonSubTypes({
-    @JsonSubTypes.Type(value = CountdownFolder.class, name = "CountdownFolder")
+    @JsonSubTypes.Type(value = Legend.class, name = "Legend")
     , @JsonSubTypes.Type(value = Countdown.class, name = "Countdown")
 })
 public abstract class Identifiable {

@@ -23,41 +23,41 @@ import java.util.HashSet;
 import java.util.Stack;
 import javafx.scene.paint.Color;
 
-public final class FolderHandler {
-    private static final HashSet<CountdownFolder> FOLDERS = new HashSet<CountdownFolder>();
-    private static final Stack<CountdownFolder> DELETED_FOLDERS = new Stack<CountdownFolder>();
+public final class LegendHandler {
+    private static final HashSet<Legend> LEGENDS = new HashSet<Legend>();
+    private static final Stack<Legend> DELETED_LEGENDS = new Stack<Legend>();
 
-    static CountdownFolder createFolder(final String name) {
-        final CountdownFolder folder = new CountdownFolder(name);
-        FOLDERS.add(folder);
+    static Legend createLegend(final String name) {
+        final Legend legend = new Legend(name);
+        LEGENDS.add(legend);
         StorageHandler.save();
-        return folder;
+        return legend;
     }
 
-    static void removeFolder(final CountdownFolder folder) {
-        FOLDERS.remove(folder);
+    static void removeLegend(final Legend legend) {
+        LEGENDS.remove(legend);
     }
 
-    static HashSet<CountdownFolder> getFolders() {
-        return FOLDERS;
+    static HashSet<Legend> getLegends() {
+        return LEGENDS;
     }
 
-    static Stack<CountdownFolder> getDeletedFolders() {
-        return DELETED_FOLDERS;
+    static Stack<Legend> getDeletedLegends() {
+        return DELETED_LEGENDS;
     }
 
     static void eraseCountdown(final Countdown countdown) {
-        FOLDERS.forEach(folder -> folder.getContents().removeIf(c -> c.equals(countdown)));
-        DELETED_FOLDERS.forEach(folder -> folder.getContents().removeIf(c -> c.equals(countdown)));
+        LEGENDS.forEach(legend -> legend.getContents().removeIf(c -> c.equals(countdown)));
+        DELETED_LEGENDS.forEach(legend -> legend.getContents().removeIf(c -> c.equals(countdown)));
     }
 
     static Color lookupColour(final Countdown countdown) {
-        for (CountdownFolder countdownFolder : FOLDERS) {
-            if (countdownFolder.getContents().contains(countdown))
-                return countdownFolder.getColour();
+        for (Legend legend : LEGENDS) {
+            if (legend.getContents().contains(countdown))
+                return legend.getColour();
         }
         return RiceHandler.getColour("white");
     }
 
-    private FolderHandler() {}
+    private LegendHandler() {}
 }

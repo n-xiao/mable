@@ -172,7 +172,7 @@ public class Countdown extends Identifiable implements Listable<Countdown>, Reco
 
     @JsonIgnore
     public Color getColour() {
-        return FolderHandler.lookupColour(this);
+        return LegendHandler.lookupColour(this);
     }
 
     @Override
@@ -196,7 +196,7 @@ public class Countdown extends Identifiable implements Listable<Countdown>, Reco
         if (this.isDeleted()) {
             StorageHandler.save();
             CountdownHandler.eraseCountdown(this);
-            FolderHandler.eraseCountdown(this);
+            LegendHandler.eraseCountdown(this);
         }
     }
 

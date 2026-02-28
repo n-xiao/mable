@@ -68,7 +68,7 @@ public abstract class Popup extends Region {
         mc.heightProperty().addListener(sizeCl);
     }
 
-    public final static <E extends Popup> void spawn(final E popup) {
+    public final static void spawn(final Popup popup) {
         if (current != null && popup.getIdent().equals(current.getIdent())) {
             /*
              * this means that the user was not finished with what they were
@@ -106,11 +106,13 @@ public abstract class Popup extends Region {
     public Popup(final double width, final double height) {
         this.setBackground(null);
         this.content = new StackPane();
-        this.content.setBackground(RiceHandler.createBG(RiceHandler.getColour("midnight"), 8, 0));
-        this.content.setPrefSize(width, height);
+        this.content.setBackground(RiceHandler.createBG(RiceHandler.getColour("night"), 8, 0));
+        this.content.setMaxSize(width, height);
+        this.content.setMinSize(width, height);
+        this.content.setOnMousePressed(event -> event.consume());
 
         this.container = new BorderPane();
-        this.container.setBackground(RiceHandler.createBG(new Color(0, 0, 0, 0.8), 0, 0));
+        this.container.setBackground(RiceHandler.createBG(new Color(0, 0, 0, 0.7), 0, 0));
         this.container.setCenter(this.content);
         this.container.setOnMousePressed(event -> {
             this.setVisible(false);
@@ -142,6 +144,8 @@ public abstract class Popup extends Region {
      * Implementations should return a (hard-coded) String which serves as an identity,
      * so that, if a Popup with the same ident is hidden (but in use), it will be shown;
      * any inputs that the user might have done will not be lost.
+     * <p>
+     * This method cannot return null.
      */
     protected abstract String getIdent();
 }

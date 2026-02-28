@@ -21,10 +21,12 @@ package code;
 import code.frontend.MainContainer;
 import code.frontend.capabilities.concurrency.Watchdog;
 import code.frontend.libs.katlaf.FontHandler;
+import code.frontend.libs.katlaf.popup.Popup;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class Launcher extends Application {
@@ -60,6 +62,18 @@ public class Launcher extends Application {
         scene.setFill(RiceHandler.getColour("night"));
         stage.setScene(scene);
         stage.show();
+
+        Popup.spawn(new Popup(200, 200) {
+            @Override
+            protected void configureContent(StackPane content) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            protected String getIdent() {
+                return "hi";
+            }
+        });
 
         // Watchdog.startWatchdog();
     }

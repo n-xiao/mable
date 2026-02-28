@@ -69,14 +69,16 @@ public final class LegendTable extends StackPane {
         this.table.addMember(member);
     }
 
+    /*
+     * TODO: how to handle remove when legend is not empty?
+     */
     public void removeMember(final Legend legend) {
         LegendTableMember memberToDelete = null;
         for (LegendTableMember member : members) {
-            if (member.legend.equals(legend)) {
+            if (member.legend.equals(legend))
                 memberToDelete = member;
-                this.members.remove(member);
-            }
         }
+        this.members.remove(memberToDelete);
         this.table.removeMember(memberToDelete);
     }
 
@@ -98,6 +100,36 @@ public final class LegendTable extends StackPane {
         @Override
         public int compareTo(LegendTableMember o) {
             return this.legend.compareTo(o.legend);
+        }
+    }
+
+    private class LegendCreateButton
+        extends SimpleTableMember implements Comparable<LegendTableMember> {
+        LegendCreateButton() {
+            super(table.getSelector());
+        }
+
+        /**
+         * This acts as a click detector.
+         */
+        @Override
+        public void setToggle(boolean toggled) {
+            if (toggled) {
+                /*
+                 * must be set false to not interfere with methods such as
+                 * deselectAll()
+                 */
+                this.setToggle(false);
+                // TODO
+            }
+        }
+
+        /**
+         * This should always be located at the end of the Table.
+         */
+        @Override
+        public int compareTo(LegendTableMember o) {
+            return 1;
         }
     }
 }

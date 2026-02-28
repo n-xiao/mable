@@ -1,5 +1,4 @@
-/*
-    Copyright (C) 2026 Nicholas Siow <nxiao.dev@gmail.com>
+/*    Copyright (C) 2026 Nicholas Siow <nxiao.dev@gmail.com>
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 
     This program is free software: you can redistribute it and/or modify

@@ -25,14 +25,8 @@ import javafx.concurrent.Task;
 import javafx.util.Duration;
 
 public final class Watchdog extends ScheduledService<Void> {
+    private static final ArrayList<Updatable> UPDATABLES = new ArrayList<Updatable>();
     private static Watchdog watchdog = null;
-
-    private static final ArrayList<Updatable> UPDATABLES;
-    static {
-        UPDATABLES = new ArrayList<Updatable>();
-    }
-
-    private Watchdog() {}
 
     public static void startWatchdog() {
         watchdog = new Watchdog();
@@ -45,6 +39,8 @@ public final class Watchdog extends ScheduledService<Void> {
     public static void watch(Updatable updatable) {
         UPDATABLES.add(updatable);
     }
+
+    private Watchdog() {}
 
     /*
 

@@ -72,6 +72,16 @@ public class FilledButton extends ButtonFoundation {
         this.setBackground(RiceHandler.createBG(normal, RADIUS, 0));
     }
 
+    /*
+
+
+     PUBLIC API
+    -------------------------------------------------------------------------------------*/
+
+    public final void setLabel(final String label) {
+        this.face.setText(label);
+    }
+
     @Override
     public final void onMouseEntered(MouseEvent event) {
         if (this.isEnabled()) {

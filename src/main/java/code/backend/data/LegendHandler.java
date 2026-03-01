@@ -27,14 +27,15 @@ public final class LegendHandler {
     private static final HashSet<Legend> LEGENDS = new HashSet<Legend>();
     private static final Stack<Legend> DELETED_LEGENDS = new Stack<Legend>();
 
-    static Legend createLegend(final String name) {
+    public static Legend createLegend(final String name, final Color colour) {
         final Legend legend = new Legend(name);
+        legend.setColour(colour);
         LEGENDS.add(legend);
         StorageHandler.save();
         return legend;
     }
 
-    static void removeLegend(final Legend legend) {
+    public static void removeLegend(final Legend legend) {
         LEGENDS.remove(legend);
     }
 

@@ -20,13 +20,15 @@ package code.frontend.libs.katlaf.ricing;
 
 import java.util.ArrayList;
 import java.util.List;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
 /**
@@ -53,15 +55,75 @@ public class ColourPicker extends Region {
             throw new IllegalArgumentException(
                 "ColourPicker cannot be created with an empty List of Colors");
 
+        final HBox container = new HBox();
+        container.setBackground(null);
+
         this.colourReps = new ArrayList<ColourRep>();
         colours.forEach(colour -> { this.colourReps.add(new ColourRep(colour)); });
+        this.colourReps.forEach(colourRep -> HBox.setMargin(colourRep, new Insets(0, 5, 0, 5)));
+
+        container.prefWidthProperty().bind(this.widthProperty());
+        container.prefHeightProperty().bind(this.heightProperty());
+        container.setAlignment(Pos.CENTER);
+        this.getChildren().add(container);
+
+        container.getChildren().addAll(this.colourReps);
         this.colourReps.getFirst().select();
     }
 
+    /**
+     * A convenience constructor which accepts names of colours, registered by RiceHandler
+     * (and found in the Themes.json resource).
+     * <p>
+     * Creates a new ColourPicker. A List of colours should be specified, as this
+     * dictates the width of this entire UI component. The more colours are
+     * specified, the wider this instance gets.
+     *
+     * @param colourNames                   the names of colours registered by RiceHandler
+     *                                      which should be used to populate the instance
+     *
+     * @throws IllegalArgumentException     if the provided array of Strings is empty
+     *
+     * @see RiceHandler
+     */
+    public ColourPicker(final String... colourNames) {
+        if (colourNames.length < 1)
+            throw new IllegalArgumentException(
+                "ColourPicker cannot be created with an empty array of colour names");
+
+        final ArrayList<Color> colours = new ArrayList<Color>();
+        for (String name : colourNames) {
+            colours.add(RiceHandler.getColour(name));
+        }
+        this(colours);
+    }
+
+    /*
+
+
+     PRIVATE API
+    -------------------------------------------------------------------------------------*/
+
+    /**
+     * Deselects all colour representatives. A selection for one colour represenative
+     * should always be done after this method is called. Otherwise, errors might be
+     * thrown when calling getSelected().
+     */
     private void deselectAll() {
         this.colourReps.forEach(colourRep -> colourRep.deselect());
     }
 
+    /*
+
+
+     PUBLIC API
+    -------------------------------------------------------------------------------------*/
+
+    /**
+     * Returns the selected colour.
+     *
+     * @return Color    the selected colour
+     */
     public Color getSelected() {
         for (ColourRep colourRep : colourReps) {
             if (colourRep.isSelected())
@@ -71,20 +133,28 @@ public class ColourPicker extends Region {
             "ColourPicker is unable to obtain selected colour because none are selected.");
     }
 
+    public final void select(final String rgb) {
+        /*
+         * TODO this
+         */
+    }
+
     /*
 
 
      COMPOSITIONS
     -------------------------------------------------------------------------------------*/
 
-    private final class ColourRep extends StackPane {
+    private final class ColourRep extends Region {
         private final Border selectBorder;
         private final Color colour;
 
         ColourRep(final Color colour) {
             this.colour = colour;
             this.selectBorder = new Border(new BorderStroke(RiceHandler.getColour("lightblue"),
-                BorderStrokeStyle.SOLID, new CornerRadii(8), new BorderWidths(2)));
+                BorderStrokeStyle.SOLID, new CornerRadii(16), new BorderWidths(2)));
+
+            this.setBackground(RiceHandler.createBG(this.colour, 16, 0.5));
 
             this.setOnMousePressed(event -> {
                 ColourPicker.this.deselectAll();

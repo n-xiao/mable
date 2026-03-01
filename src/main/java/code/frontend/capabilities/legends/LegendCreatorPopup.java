@@ -19,23 +19,49 @@
 package code.frontend.capabilities.legends;
 
 import code.backend.data.Legend;
+import code.backend.data.LegendHandler;
+import code.frontend.libs.katlaf.buttons.FilledButton;
 import code.frontend.libs.katlaf.inputfields.BorderedField;
 import code.frontend.libs.katlaf.popup.Popup;
+import code.frontend.libs.katlaf.ricing.ColourPicker;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 public final class LegendCreatorPopup extends Popup {
+    private final BorderedField nameField;
+    private final ColourPicker colourPicker;
+    private Legend oldLegend;
+    /*
+
+
+     CONSTRUCTORS
+    -------------------------------------------------------------------------------------*/
+
     public LegendCreatorPopup() {
         super(200, 150);
+
+        this.nameField = new BorderedField("LEGEND NAME", RiceHandler.getColour("night"));
+        this.colourPicker =
+            new ColourPicker("green", "royalblue", "purple", "pink", "teal", "lightred");
+        this.oldLegend = null;
     }
 
     public LegendCreatorPopup(final Legend legend) {
-        /*
-         * TODO
-         */
         this();
+        this.oldLegend = legend;
     }
+
+    /*
+
+
+     PROTECTED API
+    -------------------------------------------------------------------------------------*/
 
     @Override
     protected String getIdent() {
@@ -44,16 +70,60 @@ public final class LegendCreatorPopup extends Popup {
 
     @Override
     protected void configureContent(final StackPane content) {
+        if (this.oldLegend != null) {
+            this.nameField.setUserInput(this.oldLegend.getName());
+            /*
+             * TODO: create own colour because its gotten too bad
+             */
+        }
+
+        VBox.setMargin(this.nameField, new Insets(0, 20, 10, 20));
+        VBox.setMargin(this.colourPicker, new Insets(0, 20, 20, 20));
+
         final VBox container = new VBox();
         container.setBackground(null);
-
-        final BorderedField nameField =
-            new BorderedField("LEGEND NAME", RiceHandler.getColour("night"));
-
-        /*
-         * TODO colour picker
-         */
+        container.setAlignment(Pos.CENTER);
+        container.getChildren().addAll(this.nameField, this.colourPicker, new ButtonPair());
 
         content.getChildren().add(container);
+    }
+
+    /*
+
+
+     PROTECTED API
+    -------------------------------------------------------------------------------------*/
+
+    private class ButtonPair extends HBox {
+        ButtonPair() {
+            this.setAlignment(Pos.CENTER);
+            this.setBackground(null);
+
+            final FilledButton accept =
+                new FilledButton(RiceHandler.getColour("dullblue"), RiceHandler.getColour("blue")) {
+                    @Override
+                    public void onMousePressed(MouseEvent event) {
+                        final String name = nameField.getUserInput();
+                        final Color colour = colourPicker.getSelected();
+                        LegendHandler.createLegend(name, colour);
+
+                        Popup.despawn();
+                    }
+                };
+            accept.setLabel("Create");
+            VBox.setMargin(accept, new Insets(0, 2.5, 0, 0));
+
+            final FilledButton decline =
+                new FilledButton(RiceHandler.getColour("dullpink"), RiceHandler.getColour("red")) {
+                    @Override
+                    public void onMousePressed(MouseEvent event) {
+                        Popup.despawn();
+                    }
+                };
+            decline.setLabel("Cancel");
+            VBox.setMargin(decline, new Insets(0, 0, 0, 2.5));
+
+            this.getChildren().addAll(decline, accept);
+        }
     }
 }

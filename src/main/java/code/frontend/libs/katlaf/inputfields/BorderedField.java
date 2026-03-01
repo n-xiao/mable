@@ -79,6 +79,14 @@ public class BorderedField extends StackPane {
      PUBLIC API
     -------------------------------------------------------------------------------------*/
 
+    public final String getUserInput() {
+        return this.getTextField().getText();
+    }
+
+    public final void setUserInput(final String input) {
+        this.getTextField().setText(input);
+    }
+
     /**
      * Wrapper method which just forwards the call to the Field.
      * <p>

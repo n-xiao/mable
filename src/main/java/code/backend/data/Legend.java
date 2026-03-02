@@ -18,18 +18,18 @@
 
 package code.backend.data;
 
+import code.frontend.libs.katlaf.ricing.Colour;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.TreeSet;
 import java.util.UUID;
-import javafx.scene.paint.Color;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Legend extends Identifiable implements Comparable<Legend> {
     private String name;
-    private String rbgString;
+    private Colour colour;
     private final TreeSet<Countdown> contents;
 
     /*
@@ -41,7 +41,7 @@ public class Legend extends Identifiable implements Comparable<Legend> {
     public Legend(String name) {
         this.name = name;
         this.contents = new TreeSet<Countdown>(new SortByRemainingDays());
-        this.rbgString = "rgb(0, 0, 0)";
+        this.colour = new Colour(0, 0, 0, 1);
         super(UUID.randomUUID());
     }
 
@@ -52,7 +52,7 @@ public class Legend extends Identifiable implements Comparable<Legend> {
         super(legendId);
         this.name = name;
         this.contents = new TreeSet<Countdown>(new SortByRemainingDays());
-        this.rbgString = colour;
+        this.colour = new Colour(colour);
         for (String id : contentAsIDs) {
             Countdown countdown = CountdownHandler.getCountdownByID(id);
             if (countdown != null)
@@ -92,19 +92,16 @@ public class Legend extends Identifiable implements Comparable<Legend> {
 
     @JsonProperty("colour")
     public String getColourString() {
-        return this.rbgString;
+        return this.colour.toString();
     }
 
     @JsonIgnore
-    public Color getColour() {
-        return Color.web(this.rbgString);
+    public Colour getColour() {
+        return this.colour;
     }
 
-    public void setColour(final Color colour) {
-        final String red = Integer.toString((int) colour.getRed());
-        final String green = Integer.toString((int) colour.getGreen());
-        final String blue = Integer.toString((int) colour.getBlue());
-        this.rbgString = "rgb(" + red + ", " + green + ", " + blue + ")";
+    public void setColour(final Colour colour) {
+        this.colour = colour;
     }
 
     @Override

@@ -18,6 +18,7 @@
 
 package code.backend.data;
 
+import code.frontend.libs.katlaf.ricing.Colour;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.util.HashSet;
 import java.util.Stack;
@@ -27,7 +28,7 @@ public final class LegendHandler {
     private static final HashSet<Legend> LEGENDS = new HashSet<Legend>();
     private static final Stack<Legend> DELETED_LEGENDS = new Stack<Legend>();
 
-    public static Legend createLegend(final String name, final Color colour) {
+    public static Legend createLegend(final String name, final Colour colour) {
         final Legend legend = new Legend(name);
         legend.setColour(colour);
         LEGENDS.add(legend);
@@ -55,7 +56,7 @@ public final class LegendHandler {
     static Color lookupColour(final Countdown countdown) {
         for (Legend legend : LEGENDS) {
             if (legend.getContents().contains(countdown))
-                return legend.getColour();
+                return legend.getColour().get();
         }
         return RiceHandler.getColour("white");
     }

@@ -42,6 +42,12 @@ public abstract class DragStopRegion<T> extends Region {
         });
     }
 
+    /*
+
+
+     PROTECTED API
+    -------------------------------------------------------------------------------------*/
+
     /**
      * This method is called when the mouse is released
      * whilst hovering over this {@link DragStopper},

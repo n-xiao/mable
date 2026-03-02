@@ -29,7 +29,6 @@ import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
 
 /**
  * This class serves as a colour picker. Custom colours are not supported at the moment,
@@ -50,7 +49,7 @@ public class ColourPicker extends Region {
      * @throws IllegalArgumentException     if the provided argument List of Colors is empty
      * @see Color
      */
-    public ColourPicker(final List<Color> colours) {
+    public ColourPicker(final List<Colour> colours) {
         if (colours.isEmpty())
             throw new IllegalArgumentException(
                 "ColourPicker cannot be created with an empty List of Colors");
@@ -91,9 +90,9 @@ public class ColourPicker extends Region {
             throw new IllegalArgumentException(
                 "ColourPicker cannot be created with an empty array of colour names");
 
-        final ArrayList<Color> colours = new ArrayList<Color>();
+        final ArrayList<Colour> colours = new ArrayList<Colour>();
         for (String name : colourNames) {
-            colours.add(RiceHandler.getColour(name));
+            colours.add(new Colour(RiceHandler.getColour(name)));
         }
         this(colours);
     }
@@ -124,7 +123,7 @@ public class ColourPicker extends Region {
      *
      * @return Color    the selected colour
      */
-    public Color getSelected() {
+    public Colour getSelected() {
         for (ColourRep colourRep : colourReps) {
             if (colourRep.isSelected())
                 return colourRep.colour;
@@ -133,10 +132,11 @@ public class ColourPicker extends Region {
             "ColourPicker is unable to obtain selected colour because none are selected.");
     }
 
-    public final void select(final String rgb) {
-        /*
-         * TODO this
-         */
+    public final void select(final Colour colour) {
+        for (ColourRep colourRep : colourReps) {
+            if (colourRep.colour.equals(colour))
+                colourRep.select();
+        }
     }
 
     /*
@@ -146,15 +146,18 @@ public class ColourPicker extends Region {
     -------------------------------------------------------------------------------------*/
 
     private final class ColourRep extends Region {
+        private static final double SIZE = 8;
         private final Border selectBorder;
-        private final Color colour;
+        private final Colour colour;
 
-        ColourRep(final Color colour) {
+        ColourRep(final Colour colour) {
+            this.setMinSize(SIZE, SIZE);
+            this.setMaxSize(SIZE, SIZE);
             this.colour = colour;
             this.selectBorder = new Border(new BorderStroke(RiceHandler.getColour("lightblue"),
                 BorderStrokeStyle.SOLID, new CornerRadii(16), new BorderWidths(2)));
 
-            this.setBackground(RiceHandler.createBG(this.colour, 16, 0.5));
+            this.setBackground(RiceHandler.createBG(this.colour.get(), 16, 0.5));
 
             this.setOnMousePressed(event -> {
                 ColourPicker.this.deselectAll();

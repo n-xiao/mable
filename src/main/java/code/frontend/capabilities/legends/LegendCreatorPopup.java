@@ -23,6 +23,7 @@ import code.backend.data.LegendHandler;
 import code.frontend.libs.katlaf.buttons.FilledButton;
 import code.frontend.libs.katlaf.inputfields.BorderedField;
 import code.frontend.libs.katlaf.popup.Popup;
+import code.frontend.libs.katlaf.ricing.Colour;
 import code.frontend.libs.katlaf.ricing.ColourPicker;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.geometry.Insets;
@@ -31,7 +32,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 
 public final class LegendCreatorPopup extends Popup {
     private final BorderedField nameField;
@@ -70,11 +70,10 @@ public final class LegendCreatorPopup extends Popup {
 
     @Override
     protected void configureContent(final StackPane content) {
-        if (this.oldLegend != null) {
+        final boolean isEditing = this.oldLegend != null;
+        if (isEditing) {
             this.nameField.setUserInput(this.oldLegend.getName());
-            /*
-             * TODO: create own colour because its gotten too bad
-             */
+            this.colourPicker.select(this.oldLegend.getColour());
         }
 
         VBox.setMargin(this.nameField, new Insets(0, 20, 10, 20));
@@ -83,7 +82,8 @@ public final class LegendCreatorPopup extends Popup {
         final VBox container = new VBox();
         container.setBackground(null);
         container.setAlignment(Pos.CENTER);
-        container.getChildren().addAll(this.nameField, this.colourPicker, new ButtonPair());
+        container.getChildren().addAll(
+            this.nameField, this.colourPicker, new ButtonPair(isEditing));
 
         content.getChildren().add(container);
     }
@@ -95,7 +95,7 @@ public final class LegendCreatorPopup extends Popup {
     -------------------------------------------------------------------------------------*/
 
     private class ButtonPair extends HBox {
-        ButtonPair() {
+        ButtonPair(final boolean isEditing) {
             this.setAlignment(Pos.CENTER);
             this.setBackground(null);
 
@@ -104,13 +104,13 @@ public final class LegendCreatorPopup extends Popup {
                     @Override
                     public void onMousePressed(MouseEvent event) {
                         final String name = nameField.getUserInput();
-                        final Color colour = colourPicker.getSelected();
+                        final Colour colour = colourPicker.getSelected();
                         LegendHandler.createLegend(name, colour);
 
                         Popup.despawn();
                     }
                 };
-            accept.setLabel("Create");
+            accept.setLabel(isEditing ? "Confirm" : "Create");
             VBox.setMargin(accept, new Insets(0, 2.5, 0, 0));
 
             final FilledButton decline =
@@ -120,7 +120,7 @@ public final class LegendCreatorPopup extends Popup {
                         Popup.despawn();
                     }
                 };
-            decline.setLabel("Cancel");
+            decline.setLabel(isEditing ? "Discard" : "Cancel");
             VBox.setMargin(decline, new Insets(0, 0, 0, 2.5));
 
             this.getChildren().addAll(decline, accept);

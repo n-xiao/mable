@@ -33,7 +33,9 @@ public class FontHandler {
         COUNTDOWN_NUM,
         COUNTDOWN_INFO,
         USER_INPUT,
-        BORDER
+        BORDER,
+        SYMBOL_IT,
+        SYMBOL
     }
 
     @Deprecated
@@ -99,6 +101,10 @@ public class FontHandler {
                 return Font.font(FONT_FAM + " Medium", 14);
             case BORDER:
                 return Font.font(FONT_FAM, FontWeight.BLACK, FontPosture.ITALIC, 12);
+            case SYMBOL_IT:
+                return Font.font(FONT_FAM, FontWeight.BOLD, FontPosture.ITALIC, 8);
+            case SYMBOL:
+                return Font.font(FONT_FAM, FontWeight.BOLD, FontPosture.REGULAR, 8);
             default:
                 return getNormal();
         }

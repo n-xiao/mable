@@ -23,6 +23,10 @@ import javafx.scene.paint.Color;
 /**
  * A wrapper class for JavaFX's Color class. Adds more methods and also
  * ensures some spelling consistency throughout the code.
+ *
+ * TODO: fully migrate all other classes from Color to Colour
+ *
+ * @since v3.0.0-beta
  */
 public final class Colour {
     private final Color color;
@@ -33,12 +37,16 @@ public final class Colour {
      CONSTRUCTORS
     -------------------------------------------------------------------------------------*/
 
-    public Colour(Color colour) {
-        this.color = colour;
+    public Colour(final String str) {
+        this(Color.web(str));
     }
 
-    public Colour(final String str) {
-        this.color = Color.web(str);
+    public Colour(final int r, final int g, final int b, final int a) {
+        this(Color.rgb(r, g, b, a));
+    }
+
+    public Colour(Color colour) {
+        this.color = colour;
     }
 
     /*

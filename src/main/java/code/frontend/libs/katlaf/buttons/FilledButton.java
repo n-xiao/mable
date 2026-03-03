@@ -53,8 +53,6 @@ public class FilledButton extends ButtonFoundation {
      */
     public FilledButton(final Color normal, final Color hover) {
         this.face = new LabelFace();
-        this.face.prefWidthProperty().bind(this.widthProperty());
-        this.face.prefHeightProperty().bind(this.heightProperty());
         this.getChildren().addFirst(this.face);
 
         this.normal = normal;
@@ -62,8 +60,6 @@ public class FilledButton extends ButtonFoundation {
 
         this.hoverRegion = new FillRegion(this.hover);
         this.hoverRegion.setOpacity(0);
-        this.hoverRegion.prefWidthProperty().bind(this.widthProperty());
-        this.hoverRegion.prefHeightProperty().bind(this.heightProperty());
         this.getChildren().addLast(this.hoverRegion); // stackpane child must be below the label
 
         this.transition = new FadeTransition();
@@ -80,6 +76,10 @@ public class FilledButton extends ButtonFoundation {
 
     public final void setLabel(final String label) {
         this.face.setText(label);
+    }
+
+    public final void setLabelColour(final Color colour) {
+        this.face.setTextFill(colour);
     }
 
     @Override

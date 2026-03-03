@@ -18,14 +18,16 @@
 
 package code.frontend.libs.katlaf.graphics;
 
+import code.frontend.libs.katlaf.interfaces.Colourable;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
 
 /**
  * A wrapper Region which has a MableBorder as a child node.
  *
  * @see MableBorder
  */
-public class BorderedRegion extends Region {
+public class BorderedRegion extends Region implements Colourable {
     private final MableBorder border;
 
     public BorderedRegion(
@@ -45,5 +47,15 @@ public class BorderedRegion extends Region {
 
     public MableBorder getCustomBorder() {
         return this.border;
+    }
+
+    @Override
+    public void setColour(Color colour) {
+        border.setColour(colour);
+    }
+
+    @Override
+    public void resetColour() {
+        border.resetColour();
     }
 }

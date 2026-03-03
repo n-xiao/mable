@@ -48,8 +48,6 @@ public class LabelFace extends StackPane {
         this.label.setFont(FontHandler.getNormal());
         this.label.setAlignment(Pos.CENTER);
         this.label.setMouseTransparent(true);
-        this.label.prefWidthProperty().bind(this.widthProperty());
-        this.label.prefHeightProperty().bind(this.heightProperty());
         this.getChildren().addLast(this.label);
     }
 

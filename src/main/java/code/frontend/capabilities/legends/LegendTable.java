@@ -77,9 +77,6 @@ public final class LegendTable extends StackPane {
         this.table.addMember(member);
     }
 
-    /*
-     * TODO: how to handle remove when legend is not empty?
-     */
     public void removeMember(final Legend legend) {
         LegendTableMember memberToDelete = null;
         for (LegendTableMember member : members) {

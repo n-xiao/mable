@@ -43,6 +43,9 @@ public final class LegendCreatorPopup extends Popup {
      CONSTRUCTORS
     -------------------------------------------------------------------------------------*/
 
+    /**
+     * Creates a new instance. Used when a new Legend needs to be created.
+     */
     public LegendCreatorPopup() {
         super(200, 150);
 
@@ -52,6 +55,11 @@ public final class LegendCreatorPopup extends Popup {
         this.oldLegend = null;
     }
 
+    /**
+     * Creates a new instance. Used when an existing Legend needs to be edited.
+     *
+     * @param legend        the Legend to edit
+     */
     public LegendCreatorPopup(final Legend legend) {
         this();
         this.oldLegend = legend;
@@ -65,7 +73,7 @@ public final class LegendCreatorPopup extends Popup {
 
     @Override
     protected String getIdent() {
-        return "legend";
+        return "create legend";
     }
 
     @Override

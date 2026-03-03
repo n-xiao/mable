@@ -20,7 +20,8 @@
         "royalblue" : "rgb(6, 58, 163)",
         "skyblue" : "rgb(136, 175, 252)",
         "teal" : "rgb(126, 182, 187)",
-    	"white" : "rgb(255, 255, 255)"
+    	"white" : "rgb(255, 255, 255)",
+        "white2" : "rgb(245, 245, 245)"
     },
     "LIGHT" : {
         "black" : "rgb(0, 0, 0)",
@@ -43,6 +44,7 @@
         "royalblue" : "rgb(6, 58, 163)",
         "skyblue" : "rgb(136, 175, 252)",
         "teal" : "rgb(126, 182, 187)",
-    	"white" : "rgb(255, 255, 255)"
+    	"white" : "rgb(255, 255, 255)",
+        "white2" : "rgb(245, 245, 245)"
     }
 }

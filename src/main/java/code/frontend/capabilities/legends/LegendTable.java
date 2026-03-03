@@ -19,6 +19,7 @@
 package code.frontend.capabilities.legends;
 
 import code.backend.data.Legend;
+import code.backend.data.LegendHandler;
 import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.FontHandler.DedicatedFont;
 import code.frontend.libs.katlaf.graphics.LabelledBorderedRegion;
@@ -67,6 +68,7 @@ public final class LegendTable extends StackPane {
         if (!this.populated) {
             legends.forEach(this::addMember);
         }
+        this.table.addMember(new LegendCreateButton());
 
         this.populated = true;
     }
@@ -146,12 +148,14 @@ public final class LegendTable extends StackPane {
             this.delete.getChildren().add(cross);
             this.delete.setMaxSize(HEIGHT, HEIGHT);
             this.delete.setMinSize(HEIGHT, HEIGHT);
-            this.delete.setOnMousePressed(event
-                -> {
-                    /*
-                     * TODO LEGEND DELETION
-                     */
-                });
+            this.delete.setOnMousePressed(event -> {
+                if (this.legend.getContents().isEmpty()) {
+                    LegendTable.this.removeMember(this.legend);
+                    LegendHandler.removeLegend(this.legend);
+                } else {
+                    Popup.spawn(new LegendDeletePopup(this.legend, LegendTable.this));
+                }
+            });
 
             this.container = new HBox();
             this.container.setBackground(null);

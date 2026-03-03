@@ -19,6 +19,7 @@
 package code.frontend.capabilities.legends;
 
 import code.backend.data.Legend;
+import code.backend.data.LegendHandler;
 import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.buttons.FilledButton;
 import code.frontend.libs.katlaf.graphics.LabelledBorderedRegion;
@@ -43,6 +44,7 @@ import javafx.scene.text.TextAlignment;
 public class LegendDeletePopup extends Popup {
     private final VBox container;
     private final Legend legend;
+    private final LegendTable table;
 
     /**
      * Creates a new instance.
@@ -50,7 +52,7 @@ public class LegendDeletePopup extends Popup {
      * @param legend        the Legend to be deleted
      *
      */
-    public LegendDeletePopup(final Legend legend) {
+    public LegendDeletePopup(final Legend legend, final LegendTable table) {
         super(200, 150);
         if (legend.getContents().isEmpty())
             throw new IllegalArgumentException(
@@ -58,6 +60,7 @@ public class LegendDeletePopup extends Popup {
 
         this.container = new VBox();
         this.legend = legend;
+        this.table = table;
     }
 
     /*
@@ -91,28 +94,31 @@ public class LegendDeletePopup extends Popup {
                 @Override
                 public void onMousePressed(MouseEvent event) {
                     legend.getContents().forEach(countdown -> countdown.delete());
+                    LegendHandler.removeLegend(legend);
+                    table.removeMember(legend);
                     Popup.despawn();
                 }
             };
         deleteAllButton.setLabel("Delete all Countdowns of this Legend, then delete the Legend");
 
-        final FilledButton disownAllButton =
+        final FilledButton keepAllButton =
             new FilledButton(RiceHandler.getColour("darkgrey"), RiceHandler.getColour("black")) {
                 @Override
                 public void onMousePressed(MouseEvent event) {
                     legend.getContents().clear();
+                    LegendHandler.removeLegend(legend);
+                    table.removeMember(legend);
                     Popup.despawn();
                 }
             };
-        disownAllButton.setLabel("Don't delete Countdowns, but remove all Countdowns from this "
-            + "Legend, then delete the Legend");
+        keepAllButton.setLabel("Keep all Countdowns, but delete the Legend");
 
         this.container.setPadding(new Insets(0, 20, 0, 20));
         this.container.setAlignment(Pos.CENTER);
         VBox.setMargin(header, new Insets(0, 0, 10, 0));
         VBox.setMargin(info, new Insets(0, 0, 20, 0));
         VBox.setMargin(deleteAllButton, new Insets(0, 0, 10, 0));
-        this.container.getChildren().addAll(header, info, deleteAllButton, disownAllButton);
+        this.container.getChildren().addAll(header, info, deleteAllButton, keepAllButton);
         content.getChildren().addAll(this.container);
     }
 

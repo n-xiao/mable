@@ -29,15 +29,15 @@ public abstract class DragStopRegion<T> extends Region {
     public DragStopRegion() {
         this.setBackground(null);
         this.setOnMouseDragEntered(event -> {
-            if (isAccepting())
+            if (isExpecting())
                 onDragRegionEnter(event);
         });
         this.setOnMouseDragExited(event -> {
-            if (isAccepting())
+            if (isExpecting())
                 onDragRegionExit(event);
         });
         this.setOnMouseDragReleased(event -> {
-            if (isAccepting())
+            if (isExpecting())
                 onDragStop(event);
         });
     }
@@ -104,7 +104,7 @@ public abstract class DragStopRegion<T> extends Region {
      * @return true if the data that is being dragged is of the
      * expected type of this {@link DragStopper}, false otherwise.
      */
-    protected boolean isAccepting() {
+    protected boolean isExpecting() {
         return DragDropOverlay.checkMatchingTypes(getExpectedType());
     }
 
@@ -115,7 +115,7 @@ public abstract class DragStopRegion<T> extends Region {
      * @return the transferred data
      */
     protected final T retrieveData() {
-        return isAccepting()
+        return isExpecting()
             ? getExpectedType().cast(DragDropOverlay.getActiveOverlay().getTransferData())
             : null;
     }

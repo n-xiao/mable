@@ -67,8 +67,8 @@ public final class LegendTable extends StackPane {
     public void populate(final List<Legend> legends) {
         if (!this.populated) {
             legends.forEach(this::addMember);
+            this.table.addMember(new LegendCreateButton());
         }
-        this.table.addMember(new LegendCreateButton());
 
         this.populated = true;
     }
@@ -105,8 +105,7 @@ public final class LegendTable extends StackPane {
      *
      * @since v3.0.0-beta
      */
-    private class LegendTableMember
-        extends SimpleTableMember implements Comparable<LegendTableMember> {
+    class LegendTableMember extends SimpleTableMember implements Comparable<LegendTableMember> {
         static final double HEIGHT = 7;
         static final double MAX_WIDTH = 20;
 
@@ -181,6 +180,18 @@ public final class LegendTable extends StackPane {
         }
     }
 
+    private class Uncategorised extends LegendTableMember {
+        Uncategorised() {
+            super(new Legend("Uncategorised"));
+            super.delete.setVisible(false);
+        }
+
+        @Override
+        public int compareTo(LegendTableMember o) {
+            return -1;
+        }
+    }
+
     private class LegendCreateButton
         extends SimpleTableMember implements Comparable<LegendTableMember> {
         private static final double WIDTH = 10;
@@ -217,9 +228,6 @@ public final class LegendTable extends StackPane {
             }
         }
 
-        /**
-         * This should always be located at the end of the Table.
-         */
         @Override
         public int compareTo(LegendTableMember o) {
             return 1;

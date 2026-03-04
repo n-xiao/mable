@@ -19,7 +19,6 @@
 package code.frontend.capabilities.legends;
 
 import code.backend.data.wrappers.CountdownPacket;
-import code.frontend.capabilities.legends.LegendTable.LegendTableMember;
 import code.frontend.libs.katlaf.dragndrop.DragStopRegion;
 import javafx.scene.input.MouseDragEvent;
 
@@ -38,17 +37,32 @@ final class CountdownToLegendDragStopper extends DragStopRegion<CountdownPacket>
 
     @Override
     protected void onDragStop(MouseDragEvent event) {
-        // TODO Auto-generated method stub
+        final CountdownPacket packet = this.retrieveData();
+        if (packet == null)
+            return;
+        /*
+         * remember that deleted countdowns shouldn't be draggable
+         * we will assume no countdown is deleted here
+         *
+         * TODO
+         * also need to change the colours of the CountdownListMember once done
+         */
+
+        packet.getCountdowns().forEach(
+            countdown -> countdown.moveToLegend(this.member.getLegend()));
+        this.member.onDragExited();
     }
 
     @Override
     protected void onDragRegionEnter(MouseDragEvent event) {
-        // TODO Auto-generated method stub
+        if (this.isExpecting())
+            this.member.onDragEntered();
     }
 
     @Override
     protected void onDragRegionExit(MouseDragEvent event) {
-        // TODO Auto-generated method stub
+        if (this.isExpecting())
+            this.member.onDragExited();
     }
 
     @Override

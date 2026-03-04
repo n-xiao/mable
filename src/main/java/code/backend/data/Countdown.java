@@ -180,6 +180,11 @@ public class Countdown extends Identifiable implements Listable<Countdown>, Reco
         CountdownHandler.deleteCountdown(this);
     }
 
+    public void moveToLegend(final Legend legend) {
+        LegendHandler.disownCountdown(this);
+        legend.getContents().add(this);
+    }
+
     /**
      * Removes this Countdown instance from all possible storage mediums. Note that this method
      * should only be called on a Countdown that has already been deleted. This operation cannot be

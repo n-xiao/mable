@@ -40,6 +40,13 @@ public final class LegendHandler {
         LEGENDS.remove(legend);
     }
 
+    /**
+     * Removes the specified Countdown from all Legends.
+     */
+    static void disownCountdown(final Countdown countdown) {
+        LEGENDS.forEach(legend -> legend.getContents().removeIf(c -> c.equals(countdown)));
+    }
+
     static HashSet<Legend> getLegends() {
         return LEGENDS;
     }
@@ -49,7 +56,7 @@ public final class LegendHandler {
     }
 
     static void eraseCountdown(final Countdown countdown) {
-        LEGENDS.forEach(legend -> legend.getContents().removeIf(c -> c.equals(countdown)));
+        disownCountdown(countdown);
         DELETED_LEGENDS.forEach(legend -> legend.getContents().removeIf(c -> c.equals(countdown)));
     }
 

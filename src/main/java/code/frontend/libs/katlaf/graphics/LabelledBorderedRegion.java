@@ -68,7 +68,7 @@ public class LabelledBorderedRegion extends BorderedRegion {
 
         this.getChildren().add(this.label);
 
-        this.location = Loc.BOTTOM_RIGHT;
+        this.location = Loc.TOP_LEFT;
     }
 
     /*

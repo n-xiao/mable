@@ -62,13 +62,6 @@ public class Launcher extends Application {
         stage.setScene(scene);
         stage.show();
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                Popup.spawn(new LegendCreatorPopup());
-            }
-        });
-
         // Watchdog.startWatchdog();
     }
 

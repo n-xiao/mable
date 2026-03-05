@@ -35,9 +35,10 @@ import javafx.scene.layout.VBox;
 public final class LegendCreatorPopup extends Popup {
     private static final double WIDTH = 300;
     private static final double HEIGHT = 220;
+    private final LegendTable table;
     private final BorderedField nameField;
     private final ColourPicker colourPicker;
-    private Legend oldLegend;
+    private LegendTableMember oldMember;
     /*
 
 
@@ -47,24 +48,26 @@ public final class LegendCreatorPopup extends Popup {
     /**
      * Creates a new instance. Used when a new Legend needs to be created.
      */
-    public LegendCreatorPopup() {
+    public LegendCreatorPopup(final LegendTable table) {
         this.nameField = new BorderedField("NAME", RiceHandler.getColour("night"));
         this.colourPicker =
             new ColourPicker("green", "royalblue", "purple", "pink", "teal", "lightred");
-        this.oldLegend = null;
+        this.table = table;
+        this.oldMember = null;
         super(WIDTH, HEIGHT);
     }
 
     /**
      * Creates a new instance. Used when an existing Legend needs to be edited.
      *
-     * @param legend        the Legend to edit
+     * @param member        the LegendTableMember to edit
      */
-    public LegendCreatorPopup(final Legend legend) {
+    public LegendCreatorPopup(final LegendTable table, final LegendTableMember member) {
         this.nameField = new BorderedField("NEW NAME", RiceHandler.getColour("night"));
         this.colourPicker =
             new ColourPicker("green", "royalblue", "purple", "pink", "teal", "lightred", "skyblue");
-        this.oldLegend = legend;
+        this.table = table;
+        this.oldMember = member;
         super(WIDTH, HEIGHT);
     }
 
@@ -81,10 +84,10 @@ public final class LegendCreatorPopup extends Popup {
 
     @Override
     protected void configureContent(final StackPane content) {
-        final boolean isEditing = this.oldLegend != null;
+        final boolean isEditing = this.oldMember != null;
         if (isEditing) {
-            this.nameField.setUserInput(this.oldLegend.getName());
-            this.colourPicker.select(this.oldLegend.getColour());
+            this.nameField.setUserInput(this.oldMember.getLegend().getName());
+            this.colourPicker.select(this.oldMember.getLegend().getColour());
         }
 
         this.colourPicker.setMinHeight(30);
@@ -95,8 +98,14 @@ public final class LegendCreatorPopup extends Popup {
             public void onMousePressed(MouseEvent event) {
                 final String name = nameField.getUserInput();
                 final Colour colour = colourPicker.getSelected();
-                LegendHandler.createLegend(name, colour);
-
+                if (isEditing) {
+                    oldMember.getLegend().setName(name);
+                    oldMember.getLegend().setColour(colour);
+                    oldMember.update();
+                } else {
+                    final Legend legend = LegendHandler.createLegend(name, colour);
+                    table.addMember(legend);
+                }
                 Popup.despawn();
             }
         };

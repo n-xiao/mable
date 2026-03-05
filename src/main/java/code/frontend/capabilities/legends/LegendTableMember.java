@@ -132,6 +132,11 @@ class LegendTableMember
      PUBLIC API
     -------------------------------------------------------------------------------------*/
 
+    public void update() {
+        this.label.setText(this.legend.getName());
+        this.colourIndicator.setBackground(RiceHandler.createBG(legend.getColour().get(), 10, 0.5));
+    }
+
     @Override
     public void onMouseEntered(MouseEvent event) {
         this.delete.setVisible(true);

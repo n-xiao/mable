@@ -29,7 +29,6 @@ import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -47,12 +46,11 @@ public final class LegendCreatorPopup extends Popup {
      * Creates a new instance. Used when a new Legend needs to be created.
      */
     public LegendCreatorPopup() {
-        super(200, 150);
-
         this.nameField = new BorderedField("LEGEND NAME", RiceHandler.getColour("night"));
         this.colourPicker =
             new ColourPicker("green", "royalblue", "purple", "pink", "teal", "lightred");
         this.oldLegend = null;
+        super(300, 250);
     }
 
     /**
@@ -84,54 +82,28 @@ public final class LegendCreatorPopup extends Popup {
             this.colourPicker.select(this.oldLegend.getColour());
         }
 
+        final FilledButton accept =
+            new FilledButton(RiceHandler.getColour("dullblue"), RiceHandler.getColour("blue")) {
+                @Override
+                public void onMousePressed(MouseEvent event) {
+                    final String name = nameField.getUserInput();
+                    final Colour colour = colourPicker.getSelected();
+                    LegendHandler.createLegend(name, colour);
+
+                    Popup.despawn();
+                }
+            };
+        accept.setLabel(isEditing ? "Confirm" : "Create");
+        accept.setPrefSize(80, 50);
+
         VBox.setMargin(this.nameField, new Insets(0, 20, 10, 20));
         VBox.setMargin(this.colourPicker, new Insets(0, 20, 20, 20));
 
         final VBox container = new VBox();
         container.setBackground(null);
         container.setAlignment(Pos.CENTER);
-        container.getChildren().addAll(
-            this.nameField, this.colourPicker, new ButtonPair(isEditing));
+        container.getChildren().addAll(this.nameField, this.colourPicker, accept);
 
         content.getChildren().add(container);
-    }
-
-    /*
-
-
-     PROTECTED API
-    -------------------------------------------------------------------------------------*/
-
-    private class ButtonPair extends HBox {
-        ButtonPair(final boolean isEditing) {
-            this.setAlignment(Pos.CENTER);
-            this.setBackground(null);
-
-            final FilledButton accept =
-                new FilledButton(RiceHandler.getColour("dullblue"), RiceHandler.getColour("blue")) {
-                    @Override
-                    public void onMousePressed(MouseEvent event) {
-                        final String name = nameField.getUserInput();
-                        final Colour colour = colourPicker.getSelected();
-                        LegendHandler.createLegend(name, colour);
-
-                        Popup.despawn();
-                    }
-                };
-            accept.setLabel(isEditing ? "Confirm" : "Create");
-            VBox.setMargin(accept, new Insets(0, 2.5, 0, 0));
-
-            final FilledButton decline =
-                new FilledButton(RiceHandler.getColour("dullpink"), RiceHandler.getColour("red")) {
-                    @Override
-                    public void onMousePressed(MouseEvent event) {
-                        Popup.despawn();
-                    }
-                };
-            decline.setLabel(isEditing ? "Discard" : "Cancel");
-            VBox.setMargin(decline, new Insets(0, 0, 0, 2.5));
-
-            this.getChildren().addAll(decline, accept);
-        }
     }
 }

@@ -20,6 +20,7 @@ package code.frontend.capabilities.countdowns;
 
 import code.backend.data.Countdown;
 import code.frontend.capabilities.concurrency.Updatable;
+import code.frontend.libs.katlaf.interfaces.Colourable;
 import code.frontend.libs.katlaf.lists.SimpleList;
 import code.frontend.libs.katlaf.lists.SimpleListMember;
 import code.frontend.libs.katlaf.transitions.Transitioner;
@@ -147,6 +148,15 @@ public final class CountdownList extends SimpleList implements Updatable {
                 this.addMember(new CountdownListMember(countdown, this));
             }
         }
+    }
+
+    public void colourCountdowns() {
+        this.getMembers().forEach(simpleListMember -> {
+            if (simpleListMember instanceof CountdownListMember
+                && simpleListMember instanceof Colourable colourable) {
+                colourable.resetColour();
+            }
+        });
     }
 
     @Override

@@ -19,9 +19,11 @@
 package code.frontend.libs.katlaf.popup;
 
 import code.frontend.MainContainer;
+import code.frontend.libs.katlaf.buttons.FilledButton;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
@@ -123,6 +125,10 @@ public abstract class Popup extends Region {
         this.getChildren().add(this.container);
 
         this.configureContent(this.content);
+
+        final DespawnButton despawnButton = new DespawnButton();
+        this.content.getChildren().addLast(despawnButton);
+        despawnButton.resizeRelocate(width - 19, 5, 14, 14);
     }
 
     /*
@@ -148,4 +154,25 @@ public abstract class Popup extends Region {
      * This method cannot return null.
      */
     protected abstract String getIdent();
+
+    /*
+
+
+     COMPOSITIONS
+    -------------------------------------------------------------------------------------*/
+
+    private class DespawnButton extends FilledButton {
+        DespawnButton() {
+            super(RiceHandler.getColour("lightred"), RiceHandler.getColour("red"));
+            this.setLabel("X");
+            this.setLabelColour(RiceHandler.getColour("black"));
+            this.setManaged(false);
+        }
+
+        @Override
+        public void onMousePressed(MouseEvent event) {
+            Popup.despawn();
+            event.consume();
+        }
+    }
 }

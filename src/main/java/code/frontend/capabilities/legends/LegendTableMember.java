@@ -157,6 +157,10 @@ class LegendTableMember
         this.resetColour();
     }
 
+    /**
+     * This sets the colour of the label and border of this instance.
+     * It does not set the colour of the associated Legend.
+     */
     @Override
     public void setColour(Color colour) {
         this.label.setTextFill(colour);

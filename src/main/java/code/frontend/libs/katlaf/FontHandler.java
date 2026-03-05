@@ -70,15 +70,15 @@ public class FontHandler {
     }
 
     public static Font getNormal() {
-        return Font.font(FONT_FAM + " Medium", 12.5);
+        return Font.font(FONT_FAM + " Medium", 11);
     }
 
     public static Font getItalic() {
-        return Font.font(FONT_FAM + " Medium", FontPosture.ITALIC, 12.5);
+        return Font.font(FONT_FAM + " Medium", FontPosture.ITALIC, 11);
     }
 
     public static Font getSubtitle() {
-        return Font.font(FONT_FAM, FontPosture.ITALIC, 12);
+        return Font.font(FONT_FAM, FontPosture.ITALIC, 11);
     }
 
     /**

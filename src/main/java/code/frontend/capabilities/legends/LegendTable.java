@@ -18,13 +18,16 @@
 
 package code.frontend.capabilities.legends;
 
+import code.backend.data.Countdown;
 import code.backend.data.Legend;
+import code.frontend.capabilities.countdowns.CountdownList;
 import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.FontHandler.DedicatedFont;
 import code.frontend.libs.katlaf.collections.SelectionCollection;
 import code.frontend.libs.katlaf.graphics.LabelledBorderedRegion;
 import code.frontend.libs.katlaf.graphics.MableBorder;
 import code.frontend.libs.katlaf.popup.Popup;
+import code.frontend.libs.katlaf.ricing.Colour;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import code.frontend.libs.katlaf.tables.SimpleTable;
 import code.frontend.libs.katlaf.tables.SimpleTableMember;
@@ -37,9 +40,11 @@ import javafx.scene.layout.StackPane;
 public final class LegendTable extends StackPane {
     private final SimpleTable table;
     private final ArrayList<LegendTableMember> members;
+    private final Uncategorised uncategorised;
+    private final CountdownList list;
     private boolean populated;
 
-    public LegendTable() {
+    public LegendTable(final CountdownList countdownList) {
         this.table = new SimpleTable();
         StackPane.setMargin(this.table, new Insets(4, 10, 4, 10));
 
@@ -50,8 +55,10 @@ public final class LegendTable extends StackPane {
 
         this.getChildren().addAll(region, this.table);
 
-        this.populated = false;
         this.members = new ArrayList<LegendTableMember>();
+        this.uncategorised = new Uncategorised();
+        this.list = countdownList;
+        this.populated = false;
     }
 
     /*
@@ -70,19 +77,31 @@ public final class LegendTable extends StackPane {
      PUBLIC API
     -------------------------------------------------------------------------------------*/
 
-    public void populate(final List<Legend> legends) {
+    public void populate(final List<Legend> legends, final List<Countdown> countdowns) {
         if (!this.populated) {
             legends.forEach(this::addMember);
             this.table.addMember(new LegendCreateButton());
+            this.table.addMember(this.uncategorised);
+            this.organiseCountdowns(countdowns);
         }
 
         this.populated = true;
+    }
+
+    public void organiseCountdowns(final List<Countdown> countdowns) {
+        countdowns.forEach(countdown -> {
+            if (!countdown.isInLegend()) {
+                countdown.moveToLegend(this.uncategorised.getLegend());
+            }
+        });
+        this.list.colourCountdowns();
     }
 
     public void addMember(final Legend legend) {
         final LegendTableMember member = new LegendTableMember(legend, this);
         this.members.add(member);
         this.table.addMember(member);
+        this.list.colourCountdowns();
     }
 
     public void removeMember(final Legend legend) {
@@ -103,7 +122,9 @@ public final class LegendTable extends StackPane {
 
     private class Uncategorised extends LegendTableMember {
         Uncategorised() {
-            super(new Legend("Uncategorised"), LegendTable.this);
+            final Legend legend = new Legend("Uncategorised");
+            legend.setColour(new Colour(0, 0, 0, 1));
+            super(legend, LegendTable.this);
             getDeletePane().setVisible(false);
         }
 

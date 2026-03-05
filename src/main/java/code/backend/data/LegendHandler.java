@@ -68,5 +68,13 @@ public final class LegendHandler {
         return RiceHandler.getColour("white");
     }
 
+    static boolean lookupCountdown(final Countdown countdown) {
+        for (Legend legend : LEGENDS) {
+            if (legend.getContents().contains(countdown))
+                return true;
+        }
+        return false;
+    }
+
     private LegendHandler() {}
 }

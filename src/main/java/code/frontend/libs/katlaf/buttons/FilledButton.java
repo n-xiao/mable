@@ -24,6 +24,7 @@ import javafx.animation.FadeTransition;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 /**
@@ -36,7 +37,7 @@ import javafx.util.Duration;
  * @see LabelFace
  */
 public class FilledButton extends ButtonFoundation {
-    private static final double RADIUS = 14;
+    private static final double RADIUS = 7;
     private final LabelFace face;
     private final Color normal;
     private final Color hover;
@@ -60,6 +61,7 @@ public class FilledButton extends ButtonFoundation {
 
         this.hoverRegion = new FillRegion(this.hover);
         this.hoverRegion.setOpacity(0);
+        this.hoverRegion.setViewOrder(1);
         this.getChildren().addLast(this.hoverRegion); // stackpane child must be below the label
 
         this.transition = new FadeTransition();
@@ -80,6 +82,10 @@ public class FilledButton extends ButtonFoundation {
 
     public final void setLabelColour(final Color colour) {
         this.face.setTextFill(colour);
+    }
+
+    public final void setLabelFont(final Font font) {
+        this.face.setFont(font);
     }
 
     @Override

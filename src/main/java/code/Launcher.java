@@ -19,13 +19,13 @@
 package code;
 
 import code.frontend.MainContainer;
-import code.frontend.capabilities.concurrency.Watchdog;
+import code.frontend.capabilities.legends.LegendCreatorPopup;
 import code.frontend.libs.katlaf.FontHandler;
+import code.frontend.libs.katlaf.popup.Popup;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class Launcher extends Application {
@@ -61,6 +61,13 @@ public class Launcher extends Application {
         scene.setFill(RiceHandler.getColour("night"));
         stage.setScene(scene);
         stage.show();
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Popup.spawn(new LegendCreatorPopup());
+            }
+        });
 
         // Watchdog.startWatchdog();
     }

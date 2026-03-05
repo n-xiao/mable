@@ -27,7 +27,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
 /**
  * This is a labelled version of a BorderedRegion which is composed of a MableBorder.
@@ -69,7 +68,7 @@ public class LabelledBorderedRegion extends BorderedRegion {
 
         this.getChildren().add(this.label);
 
-        this.location = Loc.TOP_LEFT;
+        this.location = Loc.BOTTOM_RIGHT;
     }
 
     /*
@@ -91,15 +90,17 @@ public class LabelledBorderedRegion extends BorderedRegion {
                 x = 15;
                 y = this.getCustomBorder().getPaddingDist()
                     - 0.5 * (Math.abs(height - this.getCustomBorder().getThickness()));
+                this.label.relocate(x, y);
                 break;
             default:
-                x = this.getCustomBorder().getWidth() - 15;
-                y = this.getCustomBorder().getHeight()
+                x = this.getCustomBorder().getWidth() - this.getCustomBorder().getPaddingDist()
+                    - width - 15;
+                y = this.getCustomBorder().getHeight() - this.getCustomBorder().getPaddingDist()
                     - 0.5 * (Math.abs(height - this.getCustomBorder().getThickness()));
+                this.label.relocate(x, 0);
+                this.label.setTranslateY(y);
                 break;
         }
-
-        this.label.relocate(x, y);
     }
 
     /*

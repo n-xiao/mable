@@ -55,7 +55,11 @@ public class RiceHandler {
     public static String getColourString(String name) {
         if (palette == null || palette.get(name) == null) {
             System.err.println("WARNING: COULD NOT FIND COLOUR: " + name);
-            System.err.println(Thread.currentThread().getStackTrace());
+            StackTraceElement[] stack = Thread.currentThread().getStackTrace();
+            for (StackTraceElement stackTraceElement : stack) {
+                System.out.println(stackTraceElement.toString());
+            }
+
             return "rgb(255,255,255)";
         }
 

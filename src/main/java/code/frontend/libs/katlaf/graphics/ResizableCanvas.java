@@ -45,7 +45,7 @@ abstract class ResizableCanvas extends Canvas implements Colourable {
     /*
 
 
-     BEHAVIOUR
+     PRIVATE API
     -------------------------------------------------------------------------------------*/
 
     /**

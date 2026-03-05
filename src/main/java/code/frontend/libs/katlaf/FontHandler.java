@@ -98,9 +98,9 @@ public class FontHandler {
             case COUNTDOWN_INFO:
                 return Font.font(FONT_FAM, FontWeight.BOLD, FontPosture.ITALIC, 12);
             case USER_INPUT:
-                return Font.font(FONT_FAM + " Medium", 14);
+                return Font.font(FONT_FAM + " Medium", 13);
             case BORDER:
-                return Font.font(FONT_FAM, FontWeight.BLACK, FontPosture.ITALIC, 12);
+                return Font.font(FONT_FAM, FontWeight.BLACK, FontPosture.REGULAR, 9.5);
             case SYMBOL_IT:
                 return Font.font(FONT_FAM, FontWeight.BOLD, FontPosture.ITALIC, 8);
             case SYMBOL:

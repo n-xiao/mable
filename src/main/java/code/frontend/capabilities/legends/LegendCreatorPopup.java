@@ -33,6 +33,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public final class LegendCreatorPopup extends Popup {
+    private static final double WIDTH = 300;
+    private static final double HEIGHT = 220;
     private final BorderedField nameField;
     private final ColourPicker colourPicker;
     private Legend oldLegend;
@@ -46,11 +48,11 @@ public final class LegendCreatorPopup extends Popup {
      * Creates a new instance. Used when a new Legend needs to be created.
      */
     public LegendCreatorPopup() {
-        this.nameField = new BorderedField("LEGEND NAME", RiceHandler.getColour("night"));
+        this.nameField = new BorderedField("NAME", RiceHandler.getColour("night"));
         this.colourPicker =
             new ColourPicker("green", "royalblue", "purple", "pink", "teal", "lightred");
         this.oldLegend = null;
-        super(300, 250);
+        super(WIDTH, HEIGHT);
     }
 
     /**
@@ -59,8 +61,11 @@ public final class LegendCreatorPopup extends Popup {
      * @param legend        the Legend to edit
      */
     public LegendCreatorPopup(final Legend legend) {
-        this();
+        this.nameField = new BorderedField("NEW NAME", RiceHandler.getColour("night"));
+        this.colourPicker =
+            new ColourPicker("green", "royalblue", "purple", "pink", "teal", "lightred", "skyblue");
         this.oldLegend = legend;
+        super(WIDTH, HEIGHT);
     }
 
     /*
@@ -82,22 +87,25 @@ public final class LegendCreatorPopup extends Popup {
             this.colourPicker.select(this.oldLegend.getColour());
         }
 
-        final FilledButton accept =
-            new FilledButton(RiceHandler.getColour("dullblue"), RiceHandler.getColour("blue")) {
-                @Override
-                public void onMousePressed(MouseEvent event) {
-                    final String name = nameField.getUserInput();
-                    final Colour colour = colourPicker.getSelected();
-                    LegendHandler.createLegend(name, colour);
+        this.colourPicker.setMinHeight(30);
 
-                    Popup.despawn();
-                }
-            };
+        final FilledButton accept = new FilledButton(
+            RiceHandler.getColour("dullblue"), RiceHandler.getColour("dullblue2")) {
+            @Override
+            public void onMousePressed(MouseEvent event) {
+                final String name = nameField.getUserInput();
+                final Colour colour = colourPicker.getSelected();
+                LegendHandler.createLegend(name, colour);
+
+                Popup.despawn();
+            }
+        };
         accept.setLabel(isEditing ? "Confirm" : "Create");
-        accept.setPrefSize(80, 50);
+        accept.setMinSize(80, 30);
+        accept.setMaxSize(80, 30);
 
         VBox.setMargin(this.nameField, new Insets(0, 20, 10, 20));
-        VBox.setMargin(this.colourPicker, new Insets(0, 20, 20, 20));
+        VBox.setMargin(this.colourPicker, new Insets(0, 20, 30, 20));
 
         final VBox container = new VBox();
         container.setBackground(null);

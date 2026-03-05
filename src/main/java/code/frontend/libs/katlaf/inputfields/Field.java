@@ -22,11 +22,12 @@ import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.FontHandler.DedicatedFont;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.util.function.UnaryOperator;
+import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextFormatter.Change;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
 /**
@@ -40,7 +41,7 @@ import javafx.scene.paint.Color;
  * @since v3.0.0-beta
  * @see TextField
  */
-public class Field extends Region {
+public class Field extends StackPane {
     private final TextField textField;
 
     public Field() {
@@ -54,9 +55,8 @@ public class Field extends Region {
         this.textField.setStyle(
             "-fx-text-fill: " + RiceHandler.getColourString("white") + "; user-select: none;");
         this.textField.setFocusTraversable(false);
-        this.textField.prefWidthProperty().bind(this.widthProperty());
-        this.textField.prefHeightProperty().bind(this.heightProperty());
         this.getChildren().add(this.textField);
+        StackPane.setMargin(this.textField, new Insets(6, 2, 6, 2));
 
         // filter setup
         this.filter = new InputFilter();

@@ -64,6 +64,7 @@ public class ColourPicker extends Region {
         container.prefWidthProperty().bind(this.widthProperty());
         container.prefHeightProperty().bind(this.heightProperty());
         container.setAlignment(Pos.CENTER);
+        container.setFillHeight(true);
         this.getChildren().add(container);
 
         container.getChildren().addAll(this.colourReps);
@@ -146,7 +147,7 @@ public class ColourPicker extends Region {
     -------------------------------------------------------------------------------------*/
 
     private final class ColourRep extends Region {
-        private static final double SIZE = 8;
+        private static final double SIZE = 20;
         private final Border selectBorder;
         private final Colour colour;
 
@@ -154,10 +155,10 @@ public class ColourPicker extends Region {
             this.setMinSize(SIZE, SIZE);
             this.setMaxSize(SIZE, SIZE);
             this.colour = colour;
-            this.selectBorder = new Border(new BorderStroke(RiceHandler.getColour("lightblue"),
+            this.selectBorder = new Border(new BorderStroke(RiceHandler.getColour("white"),
                 BorderStrokeStyle.SOLID, new CornerRadii(16), new BorderWidths(2)));
 
-            this.setBackground(RiceHandler.createBG(this.colour.get(), 16, 0.5));
+            this.setBackground(RiceHandler.createBG(this.colour.get(), 16, 1));
 
             this.setOnMousePressed(event -> {
                 ColourPicker.this.deselectAll();

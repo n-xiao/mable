@@ -22,10 +22,12 @@ import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.FontHandler.DedicatedFont;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 /**
  * This is a labelled version of a BorderedRegion which is composed of a MableBorder.
@@ -53,16 +55,21 @@ public class LabelledBorderedRegion extends BorderedRegion {
     public LabelledBorderedRegion(
         final MableBorder mableBorder, final String text, final Color bg) {
         super(mableBorder);
-        final BackgroundFill fill = new BackgroundFill(bg, null, new Insets(0, 10, 0, 10));
+        final BackgroundFill fill = new BackgroundFill(bg, null, new Insets(0, -3, 0, -3));
         this.label = new Label(text);
         this.label.setBackground(new Background(fill));
         this.label.setTextFill(RiceHandler.getColour("white"));
         this.label.setFont(FontHandler.getDedicated(DedicatedFont.BORDER));
         this.label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        this.label.setAlignment(Pos.TOP_CENTER);
         this.label.setViewOrder(-0.1); // above MableBorders
         // add listeners
         this.widthProperty().addListener((observable, oldValue, newValue) -> positionLabel());
         this.heightProperty().addListener((observable, oldValue, newValue) -> positionLabel());
+
+        this.getChildren().add(this.label);
+
+        this.location = Loc.TOP_LEFT;
     }
 
     /*
@@ -72,8 +79,8 @@ public class LabelledBorderedRegion extends BorderedRegion {
     -------------------------------------------------------------------------------------*/
 
     private void positionLabel() {
-        final double width = this.label.getWidth();
-        final double height = this.label.getHeight();
+        final double width = this.label.prefWidth(-1);
+        final double height = this.label.prefHeight(-1);
         if (width <= 0 || height <= 0)
             return;
 
@@ -81,22 +88,18 @@ public class LabelledBorderedRegion extends BorderedRegion {
         double y;
         switch (this.location) {
             case TOP_LEFT:
-                x = (this.getCustomBorder().getWidth() - this.getCustomBorder().getPaddingDist())
-                    * 0.5 * this.getCustomBorder().getCornerRadii();
+                x = 15;
                 y = this.getCustomBorder().getPaddingDist()
-                    + 0.5 * this.getCustomBorder().getThickness() - 0.5 * height;
-
+                    - 0.5 * (Math.abs(height - this.getCustomBorder().getThickness()));
                 break;
             default:
-                x = this.getCustomBorder().getWidth() - width
-                    - this.getCustomBorder().getPaddingDist();
-                y = this.getCustomBorder().getHeight() - this.getCustomBorder().getPaddingDist()
-                    - 0.5 * this.getCustomBorder().getThickness() - 0.5 * height;
+                x = this.getCustomBorder().getWidth() - 15;
+                y = this.getCustomBorder().getHeight()
+                    - 0.5 * (Math.abs(height - this.getCustomBorder().getThickness()));
                 break;
         }
 
-        if (x > 0 && y > 0)
-            this.label.relocate(x, y);
+        this.label.relocate(x, y);
     }
 
     /*

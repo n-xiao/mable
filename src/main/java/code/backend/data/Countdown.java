@@ -94,8 +94,15 @@ public class Countdown extends Identifiable implements Listable<Countdown>, Reco
 
      PUBLIC API
     -------------------------------------------------------------------------------------*/
-
     private final ZonedDateTime dueDateTime;
+
+    public static int getDaysBetween(LocalDate date1, LocalDate date2) {
+        final ZonedDateTime zoned1 = date1.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
+        final ZonedDateTime zoned2 = date2.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
+        final Duration duration = Duration.between(zoned1, zoned2);
+        return (int) duration.toDaysPart();
+    }
+
     /*
      * Returns days until due. Keep in mind that this is a vector, so
      * a Countdown that is past due will return a negative integer.

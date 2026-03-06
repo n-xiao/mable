@@ -18,6 +18,7 @@
 
 package code.frontend.libs.katlaf.inputfields;
 
+import code.backend.data.Countdown;
 import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.FontHandler.DedicatedFont;
 import code.frontend.libs.katlaf.graphics.LabelledBorderedRegion;
@@ -37,6 +38,23 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
+/**
+ * This represents a date input consisting of three separate input fields,
+ * facilitated by the Field class. The fields are presented horizontally,
+ * from left to right. The first two fields are responsible for collecting
+ * the day or month input and the last input collects the year input.
+ * <p>
+ * Note that the inputs are limited to numerics only, and the first two
+ * inputs have a maximum input length of two characters, with the last
+ * input having a maximum input length of four characters.
+ * <p>
+ * This UI component is also equipped with a warning, to advise users
+ * if they input an incorrect date -- sanitisation is handled here.
+ *
+ * @see Field
+ *
+ * @since v3.0.0-beta
+ */
 public final class DateField extends StackPane {
     private static String format;
     private static final String WARNING;
@@ -52,10 +70,23 @@ public final class DateField extends StackPane {
     private final Field monthField;
     private final Field yearField;
 
+    /**
+     * Creates a new instance. "DATE" is used as the title and the "night" colour,
+     * retrieved by RiceHandler, are used.
+     */
     public DateField() {
         this("DATE", RiceHandler.getColour("night"));
     }
 
+    /**
+     * Creates a new instance.
+     *
+     * @param title     the title of this component
+     * @param bgColour  in order to implement the title, the visual background
+     *                  colour of this component needs to be specified. Please
+     *                  use the colour which visually appears behind this
+     *                  component.
+     */
     public DateField(final String title, final Color bgColour) {
         this.warning = new Warning();
         this.dayField = new Field();
@@ -86,11 +117,13 @@ public final class DateField extends StackPane {
         vbox.setBackground(null);
         VBox.setMargin(this.warning, new Insets(10, 0, 0, 0));
         vbox.getChildren().addAll(hbox, this.warning);
+        StackPane.setMargin(vbox, new Insets(2));
         /*
          * and last, the border with everything else
          */
         final LabelledBorderedRegion region =
             new LabelledBorderedRegion(new MableBorder(1.5, 0.2, 0.4), title, bgColour);
+        region.setMouseTransparent(true);
         this.getChildren().addAll(region, vbox);
     }
 
@@ -147,6 +180,28 @@ public final class DateField extends StackPane {
                 this.warning.spawn();
             return null;
         }
+    }
+
+    public void linkDaysField(final DaysField daysField) {
+        final Field[] fields = {this.dayField, this.monthField, this.yearField};
+
+        for (Field field : fields) {
+            field.getTextField().textProperty().addListener(((o, ov, nv) -> {
+                if (!field.getTextField().isFocused())
+                    return;
+                final LocalDate date = DateField.this.getLocalDateInput(true);
+                if (date == null)
+                    return;
+                final int days = Countdown.getDaysBetween(LocalDate.now(), date);
+                daysField.setText(Integer.toString(days));
+            }));
+        }
+    }
+
+    public void setLocalDateInput(final LocalDate date) {
+        this.dayField.getTextField().setText(Integer.toString(date.getDayOfMonth()));
+        this.monthField.getTextField().setText(Integer.toString(date.getMonthValue()));
+        this.yearField.getTextField().setText(Integer.toString(date.getYear()));
     }
 
     /*

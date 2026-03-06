@@ -127,5 +127,6 @@ public class LabelledBorderedRegion extends BorderedRegion {
 
     public void setLocation(Loc location) {
         this.location = location;
+        this.positionLabel();
     }
 }

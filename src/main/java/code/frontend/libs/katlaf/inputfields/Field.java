@@ -23,12 +23,14 @@ import code.frontend.libs.katlaf.FontHandler.DedicatedFont;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.util.function.UnaryOperator;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextFormatter.Change;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
 
 /**
  * This class is a wrapper class for javafx.scene.control.TextField
@@ -41,7 +43,7 @@ import javafx.scene.paint.Color;
  * @since v3.0.0-beta
  * @see TextField
  */
-public class Field extends StackPane {
+public final class Field extends StackPane {
     private final TextField textField;
 
     public Field() {
@@ -69,7 +71,7 @@ public class Field extends StackPane {
      PROTECTED API
     -------------------------------------------------------------------------------------*/
 
-    protected final TextField getTextField() {
+    protected TextField getTextField() {
         return this.textField;
     }
 
@@ -86,7 +88,7 @@ public class Field extends StackPane {
      *
      * @param numOnly   true if only characters from 0-9 inclusive should be committed
      */
-    public final void setNumOnly(final boolean numOnly) {
+    public void setNumOnly(final boolean numOnly) {
         this.filter.numOnly = numOnly;
     }
 
@@ -96,7 +98,7 @@ public class Field extends StackPane {
      *
      * @param length    the maximum number of characters allowed
      */
-    public final void setMaxInputLength(final int length) {
+    public void setMaxInputLength(final int length) {
         this.filter.maxLength = length;
     }
 
@@ -105,8 +107,16 @@ public class Field extends StackPane {
      *
      * @param text      the text that should be set
      */
-    public final void setFieldText(final String text) {
+    public void setFieldText(final String text) {
         this.textField.setText(text);
+    }
+
+    public void setFieldPrompt(final String prompt) {
+        this.textField.setPromptText(prompt);
+    }
+
+    public void setFieldAlignment(Pos pos) {
+        this.textField.setAlignment(pos);
     }
 
     /**
@@ -116,7 +126,7 @@ public class Field extends StackPane {
      * @param colour    the colour that the text of the TextField should be set to
      * @see TextField
      */
-    public final void setTextFill(final Color colour) {
+    public void setTextFill(final Color colour) {
         final int red = (int) colour.getRed();
         final int green = (int) colour.getGreen();
         final int blue = (int) colour.getBlue();

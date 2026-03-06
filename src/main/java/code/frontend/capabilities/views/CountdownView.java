@@ -51,7 +51,6 @@ import javafx.scene.paint.Stop;
  */
 public class CountdownView extends VBox {
     private final CountdownList list;
-    private final StackPane listContainer;
     private final LegendTable table;
 
     /**
@@ -78,10 +77,12 @@ public class CountdownView extends VBox {
         bottom.setPrefHeight(20);
         StackPane.setAlignment(bottom, Pos.BOTTOM_CENTER);
 
-        this.listContainer = new StackPane();
-        this.listContainer.getChildren().addAll(listScrollPane, bottom);
+        StackPane listContainer = new StackPane();
+        listContainer.getChildren().addAll(listScrollPane, bottom);
 
         this.table = new LegendTable(this.list);
+
+        this.getChildren().addAll(this.table, listContainer);
 
         this.list.populate(countdowns);
         this.table.populate(legends, countdowns);
@@ -118,6 +119,7 @@ public class CountdownView extends VBox {
                 new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE, stops);
             final BackgroundFill fill = new BackgroundFill(gradient, null, null);
             this.setBackground(new Background(fill));
+            this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         }
     }
 }

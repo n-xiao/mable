@@ -22,8 +22,12 @@ import code.frontend.libs.katlaf.popup.Popup;
 import javafx.scene.layout.StackPane;
 
 public final class CountdownCreator extends Popup {
-    public CountdownCreator() {
-        super(200, 150);
+    public CountdownCreator(final CountdownList list) {
+        super(300, 290);
+    }
+
+    public CountdownCreator(final CountdownList list, final CountdownListMember member) {
+        this(list);
     }
 
     /*

@@ -19,9 +19,7 @@
 package code;
 
 import code.frontend.MainContainer;
-import code.frontend.capabilities.legends.LegendCreatorPopup;
 import code.frontend.libs.katlaf.FontHandler;
-import code.frontend.libs.katlaf.popup.Popup;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.application.Application;
 import javafx.application.Platform;

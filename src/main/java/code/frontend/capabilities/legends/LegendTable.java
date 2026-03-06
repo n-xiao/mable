@@ -166,7 +166,7 @@ public final class LegendTable extends StackPane {
                  * deselectAll()
                  */
                 this.setToggle(false);
-                Popup.spawn(new LegendCreatorPopup());
+                Popup.spawn(new LegendCreatorPopup(LegendTable.this));
             }
         }
 

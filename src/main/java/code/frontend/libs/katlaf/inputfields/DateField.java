@@ -193,7 +193,7 @@ public final class DateField extends StackPane {
                 if (date == null)
                     return;
                 final int days = Countdown.getDaysBetween(LocalDate.now(), date);
-                daysField.setText(Integer.toString(days));
+                daysField.setUserInput(Integer.toString(days));
             }));
         }
     }

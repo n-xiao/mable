@@ -18,12 +18,13 @@
 
 package code.backend.data;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Stack;
 import java.util.TreeSet;
 
-final class CountdownHandler {
+public final class CountdownHandler {
     private static final TreeSet<Countdown> COUNTDOWNS =
         new TreeSet<Countdown>(new SortByRemainingDays());
     private static final Stack<Countdown> DELETED_COUNTDOWNS = new Stack<Countdown>();
@@ -54,12 +55,18 @@ final class CountdownHandler {
         return DELETED_COUNTDOWNS;
     }
 
+    public static Countdown create(final String name, final LocalDate dueDate) {
+        final Countdown countdown = new Countdown(name, dueDate);
+        addCountdown(countdown);
+        return countdown;
+    }
+
     /**
      * This method is designed to be called during runtime, by user interaction.
      * It should never be called during load operations. Use the getCountdowns.add()
      * method for that.
      */
-    static void addCountdown(Countdown c) {
+    public static void addCountdown(Countdown c) {
         COUNTDOWNS.add(c);
         StorageHandler.save();
     }

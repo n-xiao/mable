@@ -20,15 +20,12 @@ package code.frontend.libs.katlaf.inputfields;
 
 import code.frontend.libs.katlaf.graphics.LabelledBorderedRegion;
 import code.frontend.libs.katlaf.graphics.MableBorder;
-import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
 /**
  * This UI component presents itself as a Field within a LabelledBorderedRegion.
- * The LabelledBorderedRegion will indicate when the Field has the user focus by being
- * recoloured to the "selected" colour, specified by the current theme.
  *
  * @see LabelledBorderedRegion
  * @see Field
@@ -51,15 +48,7 @@ public class BorderedField extends StackPane {
         final MableBorder mableBorder = new MableBorder(1.5, 0.2, 0.35);
         this.border = new LabelledBorderedRegion(mableBorder, label, bg);
         this.border.setMouseTransparent(true); // to be used for cosmetic purposes only
-
         this.setBackground(null);
-        this.field.focusedProperty().addListener(((observable, oldValue, newValue) -> {
-            final Color colour =
-                newValue ? RiceHandler.getColour("skyblue") : RiceHandler.getColour("white");
-            this.border.getCustomBorder().setColour(colour);
-            this.field.setTextFill(colour);
-        }));
-
         this.getChildren().addAll(this.border, this.field);
     }
 

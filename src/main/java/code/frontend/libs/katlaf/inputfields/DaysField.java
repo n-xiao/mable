@@ -75,7 +75,7 @@ public final class DaysField extends StackPane {
         });
     }
 
-    public void setText(final String text) {
+    public void setUserInput(final String text) {
         this.field.getTextField().setText(text);
     }
 }

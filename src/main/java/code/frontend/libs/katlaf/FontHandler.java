@@ -28,6 +28,8 @@ import javafx.scene.text.FontWeight;
 
 public class FontHandler {
     public static final String FONT_FAM = "Shantell Sans";
+    public static final String FONT_MONO = "mononoki";
+
     public static enum DedicatedFont {
         COUNTDOWN_NAME,
         COUNTDOWN_NUM,
@@ -81,6 +83,10 @@ public class FontHandler {
         return Font.font(FONT_FAM, FontPosture.ITALIC, 11);
     }
 
+    public static Font getMono() {
+        return Font.font(FONT_MONO, 12);
+    }
+
     /**
      * This returns fonts for specific user interface components
      * that require unique fonts for aesthetic reasons. Invalid arguments,
@@ -112,13 +118,13 @@ public class FontHandler {
 
     public static void initFonts() {
         try {
-            InputStream manifestStream =
+            final InputStream manifestStream =
                 Thread.currentThread().getContextClassLoader().getResourceAsStream("manifest.txt");
-            InputStreamReader manifestStreamReader = new InputStreamReader(manifestStream);
-            BufferedReader manifestReader = new BufferedReader(manifestStreamReader);
+            final InputStreamReader manifestStreamReader = new InputStreamReader(manifestStream);
+            final BufferedReader manifestReader = new BufferedReader(manifestStreamReader);
 
             String fileName;
-            ArrayList<String> fontFilePaths = new ArrayList<>();
+            final ArrayList<String> fontFilePaths = new ArrayList<>();
 
             while ((fileName = manifestReader.readLine()) != null) fontFilePaths.add(fileName);
 

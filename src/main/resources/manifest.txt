@@ -10,3 +10,7 @@ fonts/ShantellSans-MediumItalic.ttf
 fonts/ShantellSans-Regular.ttf
 fonts/ShantellSans-SemiBold.ttf
 fonts/ShantellSans-SemiBoldItalic.ttf
+fonts/mononoki-Bold.ttf
+fonts/mononoki-BoldItalic.ttf
+fonts/mononoki-Italic.ttf
+fonts/mononoki-Regular.ttf

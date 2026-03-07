@@ -19,10 +19,14 @@
 package code.frontend.libs.katlaf.popup;
 
 import code.frontend.MainContainer;
+import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.buttons.FilledButton;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
@@ -125,6 +129,17 @@ public abstract class Popup extends Region {
         this.getChildren().add(this.container);
 
         this.configureContent(this.content);
+
+        /*
+         * configure "title bar" stuff
+         */
+        final Label title = new Label(getIdent());
+        title.setFont(FontHandler.getMono());
+        title.setTextFill(RiceHandler.getColour("white2"));
+        title.setMouseTransparent(true);
+        StackPane.setAlignment(title, Pos.TOP_LEFT);
+        StackPane.setMargin(title, new Insets(5, 0, 0, 7));
+        this.content.getChildren().addLast(title);
 
         final DespawnButton despawnButton = new DespawnButton();
         this.content.getChildren().addLast(despawnButton);

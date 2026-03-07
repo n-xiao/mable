@@ -49,12 +49,7 @@ public final class LegendCreatorPopup extends Popup {
      * Creates a new instance. Used when a new Legend needs to be created.
      */
     public LegendCreatorPopup(final LegendTable table) {
-        this.nameField = new BorderedField("NAME", RiceHandler.getColour("night"));
-        this.colourPicker =
-            new ColourPicker("green", "royalblue", "purple", "pink", "teal", "lightred", "skyblue");
-        this.table = table;
-        this.oldMember = null;
-        super(WIDTH, HEIGHT);
+        this(table, null);
     }
 
     /**
@@ -74,18 +69,27 @@ public final class LegendCreatorPopup extends Popup {
     /*
 
 
+     PRIVATE API
+    -------------------------------------------------------------------------------------*/
+
+    private boolean isEditing() {
+        return this.oldMember != null;
+    }
+
+    /*
+
+
      PROTECTED API
     -------------------------------------------------------------------------------------*/
 
     @Override
     protected String getIdent() {
-        return "create legend";
+        return this.isEditing() ? "Editing Legend" : "Creating Legend";
     }
 
     @Override
     protected void configureContent(final StackPane content) {
-        final boolean isEditing = this.oldMember != null;
-        if (isEditing) {
+        if (this.isEditing()) {
             this.nameField.setUserInput(this.oldMember.getLegend().getName());
             this.colourPicker.select(this.oldMember.getLegend().getColour());
         }
@@ -98,7 +102,7 @@ public final class LegendCreatorPopup extends Popup {
             public void onMousePressed(MouseEvent event) {
                 final String name = nameField.getUserInput();
                 final Colour colour = colourPicker.getSelected();
-                if (isEditing) {
+                if (isEditing()) {
                     oldMember.getLegend().setName(name);
                     oldMember.getLegend().setColour(colour);
                     oldMember.update();
@@ -109,7 +113,7 @@ public final class LegendCreatorPopup extends Popup {
                 Popup.despawn();
             }
         };
-        accept.setLabel(isEditing ? "Confirm" : "Create");
+        accept.setLabel(this.isEditing() ? "Confirm" : "Create");
         accept.setMinSize(80, 30);
         accept.setMaxSize(80, 30);
 

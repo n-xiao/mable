@@ -53,7 +53,6 @@ public class LegendDeletePopup extends Popup {
      *
      */
     public LegendDeletePopup(final Legend legend, final LegendTable table) {
-        super(200, 150);
         if (legend.getContents().isEmpty())
             throw new IllegalArgumentException(
                 "LegendDeletePopup spawning when the legend is empty?! What is this madness?");
@@ -61,6 +60,7 @@ public class LegendDeletePopup extends Popup {
         this.container = new VBox();
         this.legend = legend;
         this.table = table;
+        super(200, 150);
     }
 
     /*
@@ -124,6 +124,6 @@ public class LegendDeletePopup extends Popup {
 
     @Override
     protected String getIdent() {
-        return "legend delete";
+        return "Deleting Legend";
     }
 }

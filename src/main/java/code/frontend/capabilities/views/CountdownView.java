@@ -20,11 +20,13 @@ package code.frontend.capabilities.views;
 
 import code.backend.data.Countdown;
 import code.backend.data.Legend;
+import code.frontend.capabilities.countdowns.CountdownCreateButton;
 import code.frontend.capabilities.countdowns.CountdownList;
 import code.frontend.capabilities.legends.LegendTable;
 import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.util.List;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -56,12 +58,14 @@ public class CountdownView extends VBox {
     /**
      * Creates a new instance of a CountdownView.
      *
+     * @param title         the String title of this instance
      * @param legends       the List of Legend instances that should be displayed in this
      *                      CountdownView
      * @param countdowns    the List of Countdown instances that should be displayed in
      *                      this CountdownView
      */
-    public CountdownView(final List<Legend> legends, final List<Countdown> countdowns) {
+    public CountdownView(
+        final String title, final List<Legend> legends, final List<Countdown> countdowns) {
         this.setBackground(null);
 
         this.list = new CountdownList();
@@ -77,15 +81,49 @@ public class CountdownView extends VBox {
         bottom.setPrefHeight(20);
         StackPane.setAlignment(bottom, Pos.BOTTOM_CENTER);
 
-        StackPane listContainer = new StackPane();
+        final StackPane listContainer = new StackPane();
         listContainer.getChildren().addAll(listScrollPane, bottom);
 
         this.table = new LegendTable(this.list);
 
-        this.getChildren().addAll(this.table, listContainer);
+        this.getChildren().addAll(new Top(title), this.table, listContainer);
 
         this.list.populate(countdowns);
         this.table.populate(legends, countdowns);
+    }
+
+    /**
+     * Creates a new instance without a LegendTable. Typically used when viewing
+     * deleted or completed Countdowns, where user edit capabilities are limited.
+     *
+     * @param title         the String title of this instance
+     * @param countdowns    the List of Countdown instances that should be displayed in
+     *                      this CountdownView
+     */
+    public CountdownView(final String title, final List<Countdown> countdowns) {
+        this.table = null;
+        this.setBackground(null);
+
+        this.list = new CountdownList();
+
+        final ScrollPane listScrollPane = new ScrollPane(this.list);
+        listScrollPane.setStyle("-fx-background: transparent;");
+        listScrollPane.setBackground(null);
+        listScrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
+        listScrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
+        listScrollPane.setFitToWidth(true);
+
+        final Bottom bottom = new Bottom();
+        bottom.setMinHeight(20);
+        bottom.setMaxHeight(20);
+        StackPane.setAlignment(bottom, Pos.BOTTOM_CENTER);
+
+        final StackPane listContainer = new StackPane();
+        listContainer.getChildren().addAll(listScrollPane, bottom);
+
+        this.getChildren().addAll(new Top(title), listContainer);
+
+        this.list.populate(countdowns);
     }
 
     /*
@@ -98,10 +136,22 @@ public class CountdownView extends VBox {
      * Contains the title and the Countdown creation button
      */
     private class Top extends BorderPane {
+        private static final double TOP_MARGIN = 2;
+        private static final double SIDE_MARGIN = 4;
+
         Top(final String title) {
+            this.setBackground(null);
+
             final Label label = new Label(title);
             label.setFont(FontHandler.getHeading(1));
             label.setTextFill(RiceHandler.getColour("white"));
+            label.setMouseTransparent(true);
+            BorderPane.setMargin(label, new Insets(TOP_MARGIN, 0, 0, SIDE_MARGIN));
+            this.setLeft(label);
+
+            final CountdownCreateButton button = new CountdownCreateButton(CountdownView.this.list);
+            BorderPane.setMargin(button, new Insets(TOP_MARGIN, SIDE_MARGIN, 0, 0));
+            this.setRight(button);
         }
     }
 
@@ -119,7 +169,7 @@ public class CountdownView extends VBox {
                 new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE, stops);
             final BackgroundFill fill = new BackgroundFill(gradient, null, null);
             this.setBackground(new Background(fill));
-            this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+            this.setMaxWidth(Double.MAX_VALUE);
         }
     }
 }

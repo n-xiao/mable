@@ -49,12 +49,7 @@ public final class CountdownCreatorPopup extends Popup {
      * @see CountdownList
      */
     public CountdownCreatorPopup(final CountdownList list) {
-        this.nameField = new BorderedField("NAME", RiceHandler.getColour("night"));
-        this.dateField = new DateField("DUE DATE", RiceHandler.getColour("night"));
-        this.daysField = new DaysField();
-        this.list = list;
-        this.oldMember = null;
-        super(300, 290);
+        this(list, null);
     }
 
     /**
@@ -70,8 +65,12 @@ public final class CountdownCreatorPopup extends Popup {
      * @see Countdown
      */
     public CountdownCreatorPopup(final CountdownList list, final CountdownListMember member) {
-        this(list);
+        this.nameField = new BorderedField("NAME", RiceHandler.getColour("night"));
+        this.dateField = new DateField("DUE DATE", RiceHandler.getColour("night"));
+        this.daysField = new DaysField();
+        this.list = list;
         this.oldMember = member;
+        super(300, 290);
     }
 
     /*

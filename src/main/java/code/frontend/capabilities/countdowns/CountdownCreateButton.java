@@ -21,11 +21,14 @@ package code.frontend.capabilities.countdowns;
 import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.FontHandler.DedicatedFont;
 import code.frontend.libs.katlaf.buttons.FilledButton;
+import code.frontend.libs.katlaf.popup.Popup;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.scene.input.MouseEvent;
 
 public class CountdownCreateButton extends FilledButton {
-    public CountdownCreateButton() {
+    private final CountdownList list;
+    public CountdownCreateButton(final CountdownList list) {
+        this.list = list;
         super(RiceHandler.getColour("white"), RiceHandler.getColour("white2"));
         this.setLabel("+");
         this.setLabelColour(RiceHandler.getColour("black"));
@@ -40,6 +43,6 @@ public class CountdownCreateButton extends FilledButton {
 
     @Override
     public void onMousePressed(MouseEvent event) {
-        // TODO THIS
+        Popup.spawn(new CountdownCreatorPopup(this.list));
     }
 }

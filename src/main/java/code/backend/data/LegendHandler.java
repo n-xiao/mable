@@ -40,19 +40,19 @@ public final class LegendHandler {
         LEGENDS.remove(legend);
     }
 
+    public static HashSet<Legend> getLegends() {
+        return LEGENDS;
+    }
+
+    public static Stack<Legend> getDeletedLegends() {
+        return DELETED_LEGENDS;
+    }
+
     /**
      * Removes the specified Countdown from all Legends.
      */
     static void disownCountdown(final Countdown countdown) {
         LEGENDS.forEach(legend -> legend.getContents().removeIf(c -> c.equals(countdown)));
-    }
-
-    static HashSet<Legend> getLegends() {
-        return LEGENDS;
-    }
-
-    static Stack<Legend> getDeletedLegends() {
-        return DELETED_LEGENDS;
     }
 
     static void eraseCountdown(final Countdown countdown) {

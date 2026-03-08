@@ -18,7 +18,9 @@
 
 package code;
 
+import code.backend.data.StorageHandler;
 import code.frontend.MainContainer;
+import code.frontend.capabilities.concurrency.Watchdog;
 import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.icons.IconHandler;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
@@ -37,7 +39,7 @@ public class Launcher extends Application {
     public void init() throws Exception {
         FontHandler.initFonts();
         IconHandler.init();
-        // StorageHandler.init();
+        StorageHandler.init();
     }
 
     @Override
@@ -62,12 +64,12 @@ public class Launcher extends Application {
         stage.setScene(scene);
         stage.show();
 
-        // Watchdog.startWatchdog();
+        Watchdog.startWatchdog();
     }
 
     @Override
     public void stop() throws Exception {
-        // StorageHandler.save(); // saves on app close
+        StorageHandler.save(); // saves on app close
     }
 
     public static void main(String[] args) {

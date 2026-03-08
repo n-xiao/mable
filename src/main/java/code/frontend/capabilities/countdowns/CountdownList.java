@@ -24,7 +24,7 @@ import code.frontend.libs.katlaf.interfaces.Colourable;
 import code.frontend.libs.katlaf.lists.SimpleList;
 import code.frontend.libs.katlaf.lists.SimpleListMember;
 import code.frontend.libs.katlaf.transitions.Transitioner;
-import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 import javafx.animation.FadeTransition;
 import javafx.collections.FXCollections;
@@ -127,7 +127,7 @@ public final class CountdownList extends SimpleList implements Updatable {
      * This method can only be run once per CountdownList instance.
      * Any further calls to this method after it has been run will be ignored.
      */
-    public void populate(final List<Countdown> countdowns) {
+    public void populate(final Set<Countdown> countdowns) {
         if (this.populated)
             return;
         else

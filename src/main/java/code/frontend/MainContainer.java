@@ -18,79 +18,96 @@
 
 package code.frontend;
 
-import code.backend.data.Countdown;
-import code.frontend.capabilities.countdowns.CountdownList;
+import code.backend.data.CountdownHandler;
+import code.backend.data.LegendHandler;
+import code.frontend.capabilities.concurrency.Watchdog;
+import code.frontend.capabilities.countdowns.CountdownList.CountdownFilter;
+import code.frontend.capabilities.sidebar.Sidebar;
+import code.frontend.capabilities.views.CountdownView;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
-import java.util.ArrayList;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import javafx.scene.input.MouseButton;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 
-public final class MainContainer extends Pane {
-    /*
-
-
-     SINGLETON CLASS
-    -------------------------------------------------------------------------------------*/
-
+public final class MainContainer extends HBox {
     private static MainContainer instance = null;
     public static MainContainer getInstance() {
         if (instance == null) {
             instance = new MainContainer();
-            instance.getChildren().add(instance.new CountdownListContainer());
+            instance.init();
         }
         return instance;
-    }
-
-    private MainContainer() {
-        this.setBackground(RiceHandler.createBG(RiceHandler.getColour("night"), 0, 0));
     }
 
     /*
 
 
-     COMPOSITIONS
+     FIELDS AND CONSTRUCTOR
     -------------------------------------------------------------------------------------*/
 
-    private class CountdownListContainer extends Region {
-        CountdownListContainer() {
-            this.setBackground(null);
-            this.prefHeightProperty().bind(MainContainer.this.heightProperty());
-            this.prefWidthProperty().bind(MainContainer.this.widthProperty());
+    private CountdownView activeView;
+    private CountdownView completedView;
+    private CountdownView deletedView;
 
-            final CountdownList countdownList = new CountdownList();
-            final ScrollPane scrollpane = new ScrollPane();
-            scrollpane.setStyle("-fx-background: transparent;");
-            scrollpane.setBackground(null);
-            scrollpane.setContent(countdownList);
-            scrollpane.setFitToWidth(true);
-            scrollpane.prefWidthProperty().bind(this.widthProperty());
-            scrollpane.prefHeightProperty().bind(this.heightProperty());
-            scrollpane.setHbarPolicy(ScrollBarPolicy.NEVER);
-            scrollpane.setVbarPolicy(ScrollBarPolicy.NEVER);
-            this.getChildren().add(scrollpane);
+    private MainContainer() {}
 
-            /*
-             * click "anywhere" to deselect
-             */
-            scrollpane.setOnMousePressed(event -> {
-                if (event.getButton() == MouseButton.PRIMARY) {
-                    countdownList.getSelector().deselectAll();
-                    event.consume();
-                }
-            });
+    /*
 
-            /*
-             * test
-             */
-            ArrayList<Countdown> test = new ArrayList<Countdown>();
-            test.add(new Countdown("testOverdue", 1, 1, 2025));
-            test.add(new Countdown("test", 1, 12, 2026));
-            test.add(new Countdown("test2", 2, 2, 2026));
-            test.add(new Countdown("test3", 3, 3, 2026));
-            countdownList.populate(test);
-        }
+
+     PRIVATE API
+    -------------------------------------------------------------------------------------*/
+
+    private void init() {
+        /*
+         * init the content first
+         */
+        final StackPane container = new StackPane();
+        this.activeView = new CountdownView(
+            "Active Countdowns", LegendHandler.getLegends(), CountdownHandler.getAll());
+        this.completedView = new CountdownView(
+            "Completed Countdowns", CountdownHandler.getAll(), CountdownFilter.COMPLETED);
+        this.deletedView = new CountdownView(
+            "Deleted Countdowns", CountdownHandler.getAll(), CountdownFilter.DELETED);
+
+        container.getChildren().addAll(this.activeView, this.completedView, this.deletedView);
+        container.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        HBox.setHgrow(container, Priority.ALWAYS);
+
+        this.selectActiveView();
+        /*
+         * then do everything else
+         */
+        this.setBackground(RiceHandler.createBG(RiceHandler.getColour("night"), 0, 0));
+        this.setFillHeight(true);
+        this.getChildren().addAll(new Sidebar(), container);
+
+        Watchdog.watch(this.activeView, this.completedView, this.deletedView);
+    }
+
+    private void hideAllViews() {
+        this.activeView.setVisible(false);
+        this.completedView.setVisible(false);
+        this.deletedView.setVisible(false);
+    }
+
+    /*
+
+
+     PUBLIC API
+    -------------------------------------------------------------------------------------*/
+
+    public void selectActiveView() {
+        this.hideAllViews();
+        this.activeView.setVisible(true);
+    }
+
+    public void selectCompletedView() {
+        this.hideAllViews();
+        this.completedView.setVisible(true);
+    }
+
+    public void selectDeletedView() {
+        this.hideAllViews();
+        this.deletedView.setVisible(true);
     }
 }

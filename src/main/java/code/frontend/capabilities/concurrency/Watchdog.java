@@ -40,6 +40,12 @@ public final class Watchdog extends ScheduledService<Void> {
         UPDATABLES.add(updatable);
     }
 
+    public static void watch(Updatable... updatables) {
+        for (Updatable updatable : updatables) {
+            watch(updatable);
+        }
+    }
+
     private Watchdog() {}
 
     /*

@@ -40,11 +40,6 @@ public final class FontHandler {
         SYMBOL
     }
 
-    @Deprecated
-    public static Font getButtonFont() {
-        return new Font(FONT_FAM + " Medium", 14);
-    }
-
     public static Font getTitle() {
         return Font.font(FONT_FAM, FontWeight.BOLD, 17);
     }

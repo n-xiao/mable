@@ -19,24 +19,67 @@
 package code.frontend.libs.katlaf.buttons;
 
 import code.frontend.libs.katlaf.ricing.RiceHandler;
+import javafx.scene.effect.ColorInput;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.SVGPath;
 
-public final class IconButton extends ButtonFoundation {
+public class IconButton extends ButtonFoundation {
     private static final Color HOVER_COLOUR =
-        RiceHandler.adjustOpacity(RiceHandler.getColour("white"), 0.2);
+        RiceHandler.adjustOpacity(RiceHandler.getColour("white"), 0.14);
 
-    public IconButton() {}
+    private final ImageView imageView;
+    private final ColorInput colourInput;
+    private final Color colour;
+    private Color selectedColour;
 
-    private String retrieveSvgString(final Icon icon) {
-        return switch (icon) {
-            case ONGOING -> "foobar";
-            case COMPLETED -> "foobar";
-            case DELETED -> "foobar";
-            case SETTINGS -> "foobar";
-            default -> throw new IllegalArgumentException("Illegal icon specified");
-        };
+    public IconButton(final Image image, final Color colour) {
+        this.imageView = new ImageView(image);
+        this.colour = colour;
+
+        this.setSelectedColour("skyblue");
+
+        this.colourInput = new ColorInput();
+        this.colourInput.widthProperty().bind(this.widthProperty());
+        this.colourInput.heightProperty().bind(this.heightProperty());
+        this.colourInput.setPaint(this.colour);
+        this.imageView.setEffect(this.colourInput);
+        this.imageView.setMouseTransparent(true);
+        this.imageView.setPreserveRatio(true);
+
+        this.getChildren().add(this.imageView);
     }
 
-    public enum Icon { ONGOING, COMPLETED, DELETED, SETTINGS }
+    /*
+
+
+     PUBLIC API
+    -------------------------------------------------------------------------------------*/
+
+    public final void useSelectedStyle() {
+        this.colourInput.setPaint(this.selectedColour);
+    }
+
+    public final void useDeselectedStyle() {
+        this.colourInput.setPaint(this.colour);
+    }
+
+    public final void setSelectedColour(final String colourName) {
+        setSelectedColour(RiceHandler.getColour(colourName));
+    }
+
+    public final void setSelectedColour(final Color colour) {
+        this.selectedColour = colour;
+    }
+
+    @Override
+    public final void onMouseEntered(MouseEvent event) {
+        this.setBackground(RiceHandler.createBG(HOVER_COLOUR, 3, 1));
+    }
+
+    @Override
+    public final void onMouseExited(MouseEvent event) {
+        this.setBackground(null);
+    }
 }

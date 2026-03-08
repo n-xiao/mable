@@ -29,7 +29,7 @@ public final class CountdownHandler {
         new TreeSet<Countdown>(new SortByRemainingDays());
     private static final Stack<Countdown> DELETED_COUNTDOWNS = new Stack<Countdown>();
 
-    static TreeSet<Countdown> getAll() {
+    public static TreeSet<Countdown> getAll() {
         return COUNTDOWNS;
     }
 

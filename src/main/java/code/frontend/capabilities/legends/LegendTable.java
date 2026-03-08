@@ -32,7 +32,7 @@ import code.frontend.libs.katlaf.ricing.RiceHandler;
 import code.frontend.libs.katlaf.tables.SimpleTable;
 import code.frontend.libs.katlaf.tables.SimpleTableMember;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -77,7 +77,7 @@ public final class LegendTable extends StackPane {
      PUBLIC API
     -------------------------------------------------------------------------------------*/
 
-    public void populate(final List<Legend> legends, final List<Countdown> countdowns) {
+    public void populate(final Set<Legend> legends, final Set<Countdown> countdowns) {
         if (!this.populated) {
             legends.forEach(this::addMember);
             this.table.addMember(new LegendCreateButton());
@@ -88,7 +88,7 @@ public final class LegendTable extends StackPane {
         this.populated = true;
     }
 
-    public void organiseCountdowns(final List<Countdown> countdowns) {
+    public void organiseCountdowns(final Set<Countdown> countdowns) {
         countdowns.forEach(countdown -> {
             if (!countdown.isInLegend()) {
                 countdown.moveToLegend(this.uncategorised.getLegend());

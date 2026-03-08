@@ -56,7 +56,7 @@ public class RiceHandler {
         try {
             stream.close();
         } catch (IOException e) {
-            System.err.println("RiceHandler stream could not be closed! Aborting...");
+            System.err.println("RiceHandler stream could not be closed?! Aborting...");
             Platform.exit();
         }
     }
@@ -64,7 +64,7 @@ public class RiceHandler {
     public static String getColourString(String name) {
         if (palette == null || palette.get(name) == null) {
             System.err.println("WARNING: COULD NOT FIND COLOUR: " + name);
-            StackTraceElement[] stack = Thread.currentThread().getStackTrace();
+            final StackTraceElement[] stack = Thread.currentThread().getStackTrace();
             for (StackTraceElement stackTraceElement : stack) {
                 System.out.println(stackTraceElement.toString());
             }

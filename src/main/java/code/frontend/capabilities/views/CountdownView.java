@@ -20,17 +20,19 @@ package code.frontend.capabilities.views;
 
 import code.backend.data.Countdown;
 import code.backend.data.Legend;
+import code.frontend.capabilities.concurrency.Updatable;
 import code.frontend.capabilities.countdowns.CountdownCreateButton;
 import code.frontend.capabilities.countdowns.CountdownList;
 import code.frontend.capabilities.legends.LegendTable;
 import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
-import java.util.List;
+import java.util.Set;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -51,7 +53,7 @@ import javafx.scene.paint.Stop;
  *
  * @since v3.0.0-beta
  */
-public class CountdownView extends VBox {
+public class CountdownView extends VBox implements Updatable {
     private final CountdownList list;
     private final LegendTable table;
 
@@ -59,13 +61,13 @@ public class CountdownView extends VBox {
      * Creates a new instance of a CountdownView.
      *
      * @param title         the String title of this instance
-     * @param legends       the List of Legend instances that should be displayed in this
+     * @param legends       the Set of Legend instances that should be displayed in this
      *                      CountdownView
-     * @param countdowns    the List of Countdown instances that should be displayed in
+     * @param countdowns    the Set of Countdown instances that should be displayed in
      *                      this CountdownView
      */
     public CountdownView(
-        final String title, final List<Legend> legends, final List<Countdown> countdowns) {
+        final String title, final Set<Legend> legends, final Set<Countdown> countdowns) {
         this.setBackground(null);
 
         this.list = new CountdownList();
@@ -76,6 +78,15 @@ public class CountdownView extends VBox {
         listScrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
         listScrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
         listScrollPane.setFitToWidth(true);
+        /*
+         * click "anywhere" to deselect
+         */
+        listScrollPane.setOnMousePressed(event -> {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                CountdownView.this.list.getSelector().deselectAll();
+                event.consume();
+            }
+        });
 
         final Bottom bottom = new Bottom();
         bottom.setPrefHeight(20);
@@ -97,14 +108,17 @@ public class CountdownView extends VBox {
      * deleted or completed Countdowns, where user edit capabilities are limited.
      *
      * @param title         the String title of this instance
-     * @param countdowns    the List of Countdown instances that should be displayed in
+     * @param countdowns    the Set of Countdown instances that should be displayed in
      *                      this CountdownView
+     * @param filter        the CountdownFilter which specifies what type of Countdown
+     *                      instances should be displayed
      */
-    public CountdownView(final String title, final List<Countdown> countdowns) {
+    public CountdownView(final String title, final Set<Countdown> countdowns,
+        final CountdownList.CountdownFilter filter) {
         this.table = null;
         this.setBackground(null);
 
-        this.list = new CountdownList();
+        this.list = new CountdownList(filter);
 
         final ScrollPane listScrollPane = new ScrollPane(this.list);
         listScrollPane.setStyle("-fx-background: transparent;");
@@ -124,6 +138,17 @@ public class CountdownView extends VBox {
         this.getChildren().addAll(new Top(title), listContainer);
 
         this.list.populate(countdowns);
+    }
+
+    /*
+
+
+     PUBLIC API
+    -------------------------------------------------------------------------------------*/
+
+    @Override
+    public void update() {
+        this.list.update();
     }
 
     /*

@@ -20,6 +20,7 @@ package code;
 
 import code.frontend.MainContainer;
 import code.frontend.libs.katlaf.FontHandler;
+import code.frontend.libs.katlaf.icons.IconHandler;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -35,6 +36,7 @@ public class Launcher extends Application {
     @Override
     public void init() throws Exception {
         FontHandler.initFonts();
+        IconHandler.init();
         // StorageHandler.init();
     }
 

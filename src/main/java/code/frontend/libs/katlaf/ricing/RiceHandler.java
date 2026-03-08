@@ -18,8 +18,10 @@
 
 package code.frontend.libs.katlaf.ricing;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -39,8 +41,8 @@ public class RiceHandler {
     private RiceHandler() {}
 
     public static void updatePalette(final String THEME_NAME) {
-        InputStream stream =
-            Thread.currentThread().getContextClassLoader().getResourceAsStream("Themes.json");
+        final InputStream stream =
+            Thread.currentThread().getContextClassLoader().getResourceAsStream("themes.json");
         final JsonNode JSON_ROOT = MAPPER.readTree(stream);
         TypeReference<HashMap<String, String>> typeRef =
             new TypeReference<HashMap<String, String>>() {};
@@ -49,7 +51,14 @@ public class RiceHandler {
 
         if (jsonTheme != null)
             palette = MAPPER.convertValue(JSON_ROOT.get(THEME_NAME), typeRef);
-        // else, continue with a custom theme
+        // TODO: else, continue with a custom theme
+
+        try {
+            stream.close();
+        } catch (IOException e) {
+            System.err.println("RiceHandler stream could not be closed! Aborting...");
+            Platform.exit();
+        }
     }
 
     public static String getColourString(String name) {

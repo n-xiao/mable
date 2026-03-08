@@ -16,8 +16,27 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package code.frontend.libs.katlaf.ricing;
+package code.frontend.libs.katlaf.buttons;
 
-public interface Ricing {
-    public void rice();
+import code.frontend.libs.katlaf.ricing.RiceHandler;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.SVGPath;
+
+public final class IconButton extends ButtonFoundation {
+    private static final Color HOVER_COLOUR =
+        RiceHandler.adjustOpacity(RiceHandler.getColour("white"), 0.2);
+
+    public IconButton() {}
+
+    private String retrieveSvgString(final Icon icon) {
+        return switch (icon) {
+            case ONGOING -> "foobar";
+            case COMPLETED -> "foobar";
+            case DELETED -> "foobar";
+            case SETTINGS -> "foobar";
+            default -> throw new IllegalArgumentException("Illegal icon specified");
+        };
+    }
+
+    public enum Icon { ONGOING, COMPLETED, DELETED, SETTINGS }
 }

@@ -1,0 +1,4 @@
+icons/calendar.png
+icons/check-circle.png
+icons/settings.png
+icons/trash-2.png

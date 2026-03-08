@@ -26,7 +26,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 
-public class FontHandler {
+public final class FontHandler {
     public static final String FONT_FAM = "Shantell Sans";
     public static final String FONT_MONO = "mononoki";
 
@@ -119,7 +119,8 @@ public class FontHandler {
     public static void initFonts() {
         try {
             final InputStream manifestStream =
-                Thread.currentThread().getContextClassLoader().getResourceAsStream("manifest.txt");
+                Thread.currentThread().getContextClassLoader().getResourceAsStream(
+                    "font_manifest.txt");
             final InputStreamReader manifestStreamReader = new InputStreamReader(manifestStream);
             final BufferedReader manifestReader = new BufferedReader(manifestStreamReader);
 
@@ -128,13 +129,17 @@ public class FontHandler {
 
             while ((fileName = manifestReader.readLine()) != null) fontFilePaths.add(fileName);
 
+            manifestReader.close();
+            manifestStreamReader.close();
             manifestStream.close();
 
             for (String string : fontFilePaths) loadFont(string);
 
         } catch (Exception e) {
             System.err.println("Failed to init fonts");
-            System.err.println(e.getStackTrace());
+            for (StackTraceElement element : e.getStackTrace()) {
+                System.err.println(element.toString());
+            }
         }
     }
 

@@ -41,7 +41,7 @@ public class IconButton extends ButtonFoundation {
         this.imageView = new ImageView(image);
         this.colour = colour;
 
-        this.setSelectedColour("skyblue");
+        this.setSelectedColour("blue");
 
         this.colourInput = new ColorInput();
         this.colourInput.widthProperty().bind(this.widthProperty());

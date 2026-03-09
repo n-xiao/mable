@@ -1,5 +1,4 @@
-/*
-    Copyright (C) 2026 Nicholas Siow <nxiao.dev@gmail.com>
+/*    Copyright (C) 2026 Nicholas Siow <nxiao.dev@gmail.com>
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 
     This program is free software: you can redistribute it and/or modify
@@ -62,6 +61,11 @@ public class SimpleList extends VBox {
 
     protected final ArrayList<SimpleListMember> getMembers() {
         return this.members;
+    }
+
+    protected final void clearMembers() {
+        this.getChildren().removeAll(this.members);
+        this.members.clear();
     }
 
     protected final void syncMembers() {

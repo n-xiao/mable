@@ -42,7 +42,6 @@ public final class CountdownList extends SimpleList implements Updatable {
     private static final int REMOVE_DELAY = 1500;
     public enum CountdownFilter { ONGOING, COMPLETED, DELETED }
 
-    private boolean populated;
     private final CountdownFilter filter;
     private final ObservableList<CountdownListMember> pendingRemoval;
     private final Transitioner rmTransitioner;
@@ -52,7 +51,6 @@ public final class CountdownList extends SimpleList implements Updatable {
     }
 
     public CountdownList(final CountdownFilter filter) {
-        this.populated = false;
         this.filter = filter;
         this.rmTransitioner = new Transitioner().prepare();
         this.pendingRemoval = FXCollections.observableArrayList();
@@ -95,7 +93,7 @@ public final class CountdownList extends SimpleList implements Updatable {
             abortRemoveMember(member);
         else
             removeMember(member);
-        member.updateCountdownDone();
+        member.getCountdown().setDone(!member.getCountdown().isDone());
     }
 
     /*
@@ -121,10 +119,15 @@ public final class CountdownList extends SimpleList implements Updatable {
         }
     }
 
+    public boolean isPendingRemoval(final CountdownListMember member) {
+        return this.pendingRemoval.contains(member);
+    }
+
     /**
      * Populates the current CountdownList
      */
     public void populate(final Set<Countdown> countdowns) {
+        this.clearMembers();
         /*
          * muahahaha functional go brrr
          */

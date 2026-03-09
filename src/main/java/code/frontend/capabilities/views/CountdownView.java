@@ -104,10 +104,17 @@ public class CountdownView extends VBox implements Updatable {
         this.table.setMinHeight(50);
         VBox.setMargin(this.table, new Insets(20, 0, 0, 0));
 
-        this.getChildren().addAll(new Top(title), listContainer, this.table);
+        final Top top = new Top(title);
+        VBox.setMargin(top, new Insets(0, 0, 10, 0));
+        this.getChildren().addAll(top, listContainer, this.table);
 
         this.list.populate(countdowns);
         this.table.populate(legends, countdowns);
+
+        this.visibleProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.booleanValue())
+                this.list.populate(countdowns);
+        });
     }
 
     /**
@@ -134,18 +141,32 @@ public class CountdownView extends VBox implements Updatable {
         listScrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
         listScrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
         listScrollPane.setFitToWidth(true);
+        /*
+         * click "anywhere" to deselect
+         */
+        listScrollPane.setOnMousePressed(event -> {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                CountdownView.this.list.getSelector().deselectAll();
+                event.consume();
+            }
+        });
 
         final Bottom bottom = new Bottom();
-        bottom.setMinHeight(20);
-        bottom.setMaxHeight(20);
         StackPane.setAlignment(bottom, Pos.BOTTOM_CENTER);
 
         final StackPane listContainer = new StackPane();
         listContainer.getChildren().addAll(listScrollPane, bottom);
 
-        this.getChildren().addAll(new Top(title), listContainer);
+        final Top top = new Top(title);
+        VBox.setMargin(top, new Insets(0, 0, 10, 0));
+        this.getChildren().addAll(top, listContainer);
 
         this.list.populate(countdowns);
+
+        this.visibleProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.booleanValue())
+                this.list.populate(countdowns);
+        });
     }
 
     /*

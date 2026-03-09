@@ -126,18 +126,6 @@ final class CountdownListMember
     /*
 
 
-     PRIVATE API
-    -------------------------------------------------------------------------------------*/
-
-    void updateCountdownDone() {
-        if (this.completeButton.tempIsDone != this.countdown.isDone()) {
-            this.countdown.setDone(this.completeButton.tempIsDone);
-        }
-    }
-
-    /*
-
-
      PROTECTED API
     -------------------------------------------------------------------------------------*/
 
@@ -292,6 +280,8 @@ final class CountdownListMember
 
         @Override
         public void update() {
+            if (list.isPendingRemoval(CountdownListMember.this))
+                return;
             String num;
             String post;
             final Countdown countdown = CountdownListMember.this.countdown;
@@ -331,7 +321,6 @@ final class CountdownListMember
     private class CompleteButton extends ButtonFoundation implements Colourable {
         private final MableBorder border;
         private final Region fill;
-        private boolean tempIsDone;
         CompleteButton() {
             /*
              * set the border up first
@@ -351,8 +340,6 @@ final class CountdownListMember
             this.setBackground(null);
             this.getChildren().addAll(this.border, this.fill);
             this.resize(18, 18);
-
-            this.tempIsDone = countdown.isDone();
         }
 
         @Override
@@ -373,8 +360,9 @@ final class CountdownListMember
          * not done. Marks the Countdown of this CountdownListMember as undone if it is
          * done.
          * <p>
-         * Logically speaking, this call should always remove the CountdownListMember
-         * from its current CountdownList because the list for completed Countdowns and
+         * Logically speaking, this call should always lead to the removal of
+         * the CountdownListMember from its current CountdownList because the
+         * list for completed Countdowns and
          * the list for incomplete Countdowns are different, and one one of such list(s)
          * should be displayed at any given moment.
          * <p>
@@ -383,10 +371,6 @@ final class CountdownListMember
          *
          * @see Countdown
          * @see CountdownList
-         *
-         * @throws IllegalCallerException      although technically possible, this method should
-         *                                     never be called on a Countdown that has already been
-         *                                     deleted. It doesn't make sense.
          */
         @Override
         public void onMousePressed(MouseEvent event) {
@@ -395,14 +379,18 @@ final class CountdownListMember
 
             list.getSelector().deselectAll();
 
-            if (this.tempIsDone) {
+            if (list.isPendingRemoval(CountdownListMember.this)) {
                 compTransitioner.setFadeToValues(1);
-                compFade.setToValue(0);
             } else {
                 compTransitioner.setFadeToValues(0.7);
+            }
+
+            if (countdown.isDone()) {
+                compFade.setToValue(0);
+            } else {
                 compFade.setToValue(1);
             }
-            this.tempIsDone = !this.tempIsDone;
+
             list.requestMarkAsDone(CountdownListMember.this);
             compTransitioner.getTransition().playFromStart();
 

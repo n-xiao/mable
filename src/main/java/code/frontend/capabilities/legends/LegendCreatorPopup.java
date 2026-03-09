@@ -64,6 +64,7 @@ public final class LegendCreatorPopup extends Popup {
         this.table = table;
         this.oldMember = member;
         super(WIDTH, HEIGHT);
+        this.nameField.setFieldInsets(new Insets(4, 0, 2, 0));
     }
 
     /*

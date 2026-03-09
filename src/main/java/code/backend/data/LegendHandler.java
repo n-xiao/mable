@@ -38,6 +38,7 @@ public final class LegendHandler {
 
     public static void removeLegend(final Legend legend) {
         LEGENDS.remove(legend);
+        DELETED_LEGENDS.add(legend);
     }
 
     public static HashSet<Legend> getLegends() {

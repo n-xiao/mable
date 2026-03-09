@@ -47,8 +47,7 @@ public class Legend extends Identifiable implements Comparable<Legend> {
 
     @JsonCreator
     public Legend(@JsonProperty("ID") String legendId, @JsonProperty("name") String name,
-        @JsonProperty("contents") String[] contentAsIDs, @JsonProperty("pos") int pos,
-        @JsonProperty("colour") String colour) {
+        @JsonProperty("contents") String[] contentAsIDs, @JsonProperty("colour") String colour) {
         super(legendId);
         this.name = name;
         this.contents = new TreeSet<Countdown>(new SortByRemainingDays());

@@ -84,9 +84,9 @@ public final class Colour {
      */
     @Override
     public String toString() {
-        final int red = (int) this.color.getRed();
-        final int green = (int) this.color.getGreen();
-        final int blue = (int) this.color.getBlue();
+        final int red = (int) (this.color.getRed() * 255);
+        final int green = (int) (this.color.getGreen() * 255);
+        final int blue = (int) (this.color.getBlue() * 255);
         final double alpha = this.color.getOpacity();
         return "rgba(" + red + ", " + green + ", " + blue + ", " + alpha + ")";
     }

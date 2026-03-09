@@ -23,6 +23,7 @@ import code.backend.data.Legend;
 import code.frontend.capabilities.concurrency.Updatable;
 import code.frontend.capabilities.countdowns.CountdownCreateButton;
 import code.frontend.capabilities.countdowns.CountdownList;
+import code.frontend.capabilities.countdowns.CountdownList.CountdownFilter;
 import code.frontend.capabilities.legends.LegendTable;
 import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
@@ -159,6 +160,9 @@ public class CountdownView extends VBox implements Updatable {
 
         final Top top = new Top(title);
         VBox.setMargin(top, new Insets(0, 0, 10, 0));
+        if (filter == CountdownFilter.DELETED || filter == CountdownFilter.COMPLETED)
+            top.setRight(null); // remove the button
+
         this.getChildren().addAll(top, listContainer);
 
         this.list.populate(countdowns);

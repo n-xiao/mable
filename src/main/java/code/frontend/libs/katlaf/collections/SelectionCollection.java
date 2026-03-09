@@ -140,4 +140,13 @@ public class SelectionCollection<E extends SelectionChild> {
         this.children.forEach(child -> child.setToggle(false));
         this.pivot = null;
     }
+
+    public int getNumberOfSelected() {
+        int count = 0;
+        for (SelectionChild child : this.children) {
+            if (child.isToggled())
+                count++;
+        }
+        return count;
+    }
 }

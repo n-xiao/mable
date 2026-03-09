@@ -47,8 +47,15 @@ public abstract class SelectionChild extends ButtonFoundation {
         } else if (event.isMetaDown()) {
             parent.metaSelected(this);
         } else {
-            parent.selected(this);
+            if (parent.getNumberOfSelected() < 1)
+                parent.selected(this);
         }
         event.consume();
+    }
+
+    @Override
+    public void onMouseReleased(MouseEvent event) {
+        if (parent.getNumberOfSelected() >= 1)
+            parent.selected(this);
     }
 }

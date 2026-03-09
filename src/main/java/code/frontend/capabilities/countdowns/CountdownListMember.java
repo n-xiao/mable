@@ -77,12 +77,14 @@ final class CountdownListMember
          */
         this.content = new HBox();
         this.content.setBackground(null);
-        final var spacer = new Pane();
-        spacer.setVisible(false);
-        HBox.setHgrow(spacer, Priority.ALWAYS);
         this.content.setFillHeight(false);
         this.content.setAlignment(Pos.CENTER);
         this.content.setMinHeight(35);
+
+        final var spacer = new Pane();
+        spacer.setVisible(false);
+        spacer.setMouseTransparent(true);
+        HBox.setHgrow(spacer, Priority.ALWAYS);
 
         /*
          * init the children
@@ -159,6 +161,16 @@ final class CountdownListMember
         this.content.getChildren().forEach(child -> {
             if (child instanceof Updatable updatable) {
                 updatable.update();
+            }
+            if (!this.countdown.isDone() && !this.countdown.isDeleted())
+                this.setColour(countdown.getColour());
+            else
+                this.setColour("white");
+
+            if (this.countdown.isOverdue(LocalDate.now())) {
+                this.dateplate.setTextFill(RiceHandler.getColour("pink"));
+            } else {
+                this.dateplate.setTextFill(RiceHandler.getColour("white"));
             }
         });
     }
@@ -237,8 +249,9 @@ final class CountdownListMember
     private class Dateplate extends Label {
         Dateplate() {
             this.setAlignment(Pos.CENTER);
+            this.setOpacity(0.8);
             this.setTextFill(RiceHandler.getColour("lightgrey"));
-            this.setFont(FontHandler.getSubtitle());
+            this.setFont(FontHandler.getMono());
             this.setMaxHeight(Double.MAX_VALUE);
             final LocalDate now = LocalDate.now();
             final LocalDate localDate = countdown.isDone() ? countdown.getLocalCompletionDate(now)
@@ -346,7 +359,7 @@ final class CountdownListMember
         @Override
         public void setColour(Color colour) {
             final var backgroundFill =
-                new BackgroundFill(colour, new CornerRadii(5), new Insets(1.5));
+                new BackgroundFill(countdown.getColour(), new CornerRadii(12), new Insets(4));
             this.fill.setBackground(new Background(backgroundFill));
             this.border.setColour(colour);
         }

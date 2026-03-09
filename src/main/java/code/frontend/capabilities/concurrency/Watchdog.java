@@ -69,7 +69,7 @@ public final class Watchdog extends ScheduledService<Void> {
 
     public static void startWatchdog() {
         watchdog = new Watchdog();
-        watchdog.setPeriod(Duration.millis(1000));
+        watchdog.setPeriod(Duration.millis(100));
         watchdog.setRestartOnFailure(true);
         watchdog.setMaximumFailureCount(10);
         watchdog.start();

@@ -37,16 +37,17 @@ final class CountdownToLegendDragStopper extends DragStopRegion<CountdownPacket>
 
     @Override
     protected void onDragStop(MouseDragEvent event) {
-        final CountdownPacket packet = this.retrieveData();
-        if (packet == null)
-            return;
         /*
          * remember that deleted countdowns shouldn't be draggable
          * we will assume no countdown is deleted here
          *
-         * TODO
-         * also need to change the colours of the CountdownListMember once done
+         * the change the colours of the CountdownListMember is handled
+         * via update
          */
+
+        final CountdownPacket packet = this.retrieveData();
+        if (packet == null)
+            return;
 
         packet.getCountdowns().forEach(
             countdown -> countdown.moveToLegend(this.member.getLegend()));

@@ -29,20 +29,20 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
 public final class Sidebar extends IconButtonList {
+    private static final double V_GAP = 8;
     public Sidebar() {
         final ActiveButton activeButton = new ActiveButton();
-        VBox.setMargin(activeButton, new Insets(0, 0, 3, 0));
+        VBox.setMargin(activeButton, new Insets(0, 0, V_GAP, 0));
         final CompletedButton completedButton = new CompletedButton();
-        VBox.setMargin(completedButton, new Insets(0, 0, 3, 0));
+        VBox.setMargin(completedButton, new Insets(0, 0, V_GAP, 0));
         final DeletedButton deletedButton = new DeletedButton();
-        VBox.setMargin(deletedButton, new Insets(0, 0, 3, 0));
+        VBox.setMargin(deletedButton, new Insets(0, 0, V_GAP, 0));
 
-        this.setPadding(new Insets(3));
+        this.setPadding(new Insets(5));
         this.setAlignment(Pos.TOP_CENTER);
         this.setMaxHeight(Double.MAX_VALUE);
-        this.add(activeButton);
-        this.add(completedButton);
-        this.add(deletedButton);
+        this.setBackground(RiceHandler.createBG(RiceHandler.getColour("midnight"), 0, 0));
+        this.add(activeButton, completedButton, deletedButton);
     }
 
     /*
@@ -50,7 +50,7 @@ public final class Sidebar extends IconButtonList {
 
      COMPOSITIONS
     -------------------------------------------------------------------------------------*/
-    private static final double SIZE = 15;
+    private static final double SIZE = 18;
 
     private class ActiveButton extends IconButton {
         ActiveButton() {
@@ -61,6 +61,7 @@ public final class Sidebar extends IconButtonList {
 
         @Override
         public void onMousePressed(MouseEvent event) {
+            Sidebar.this.deselectAll();
             MainContainer.getInstance().selectActiveView();
         }
     }
@@ -74,6 +75,7 @@ public final class Sidebar extends IconButtonList {
 
         @Override
         public void onMousePressed(MouseEvent event) {
+            Sidebar.this.deselectAll();
             MainContainer.getInstance().selectCompletedView();
         }
     }
@@ -87,6 +89,7 @@ public final class Sidebar extends IconButtonList {
 
         @Override
         public void onMousePressed(MouseEvent event) {
+            Sidebar.this.deselectAll();
             MainContainer.getInstance().selectDeletedView();
         }
     }

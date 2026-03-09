@@ -37,7 +37,7 @@ import javafx.util.Duration;
  * @see LabelFace
  */
 public class FilledButton extends ButtonFoundation {
-    private static final double RADIUS = 7;
+    private static final double RADIUS = 5;
     private final LabelFace face;
     private final Color normal;
     private final Color hover;

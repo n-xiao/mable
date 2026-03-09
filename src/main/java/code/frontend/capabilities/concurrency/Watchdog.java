@@ -28,30 +28,12 @@ public final class Watchdog extends ScheduledService<Void> {
     private static final ArrayList<Updatable> UPDATABLES = new ArrayList<Updatable>();
     private static Watchdog watchdog = null;
 
-    public static void startWatchdog() {
-        watchdog = new Watchdog();
-        watchdog.setPeriod(Duration.millis(1000));
-        watchdog.setRestartOnFailure(true);
-        watchdog.setMaximumFailureCount(10);
-        watchdog.start();
-    }
-
-    public static void watch(Updatable updatable) {
-        UPDATABLES.add(updatable);
-    }
-
-    public static void watch(Updatable... updatables) {
-        for (Updatable updatable : updatables) {
-            watch(updatable);
-        }
-    }
-
     private Watchdog() {}
 
     /*
 
 
-     BEHAVIOUR
+     PROTECTED API
     -------------------------------------------------------------------------------------*/
 
     @Override
@@ -76,6 +58,30 @@ public final class Watchdog extends ScheduledService<Void> {
             System.err.println("Watchdog has died! UI will no longer automatically update.");
         else {
             System.err.println("Watchdog has failed! Retrying...");
+        }
+    }
+
+    /*
+
+
+     PUBLIC API
+    -------------------------------------------------------------------------------------*/
+
+    public static void startWatchdog() {
+        watchdog = new Watchdog();
+        watchdog.setPeriod(Duration.millis(1000));
+        watchdog.setRestartOnFailure(true);
+        watchdog.setMaximumFailureCount(10);
+        watchdog.start();
+    }
+
+    public static void watch(Updatable updatable) {
+        UPDATABLES.add(updatable);
+    }
+
+    public static void watch(Updatable... updatables) {
+        for (Updatable updatable : updatables) {
+            watch(updatable);
         }
     }
 }

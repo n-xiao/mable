@@ -37,7 +37,7 @@ public class Launcher extends Application {
 
     @Override
     public void init() throws Exception {
-        FontHandler.initFonts();
+        FontHandler.init();
         IconHandler.init();
         StorageHandler.init();
     }
@@ -55,11 +55,11 @@ public class Launcher extends Application {
         stage.setHeight(PREF_HEIGHT);
         stage.setOnCloseRequest((event) -> { Platform.exit(); });
 
-        MainContainer root = MainContainer.getInstance();
+        final MainContainer root = MainContainer.getInstance();
         root.prefWidthProperty().bind(stage.widthProperty());
         root.prefHeightProperty().bind(stage.heightProperty());
 
-        Scene scene = new Scene(root);
+        final Scene scene = new Scene(root);
         scene.setFill(RiceHandler.getColour("night"));
         stage.setScene(scene);
         stage.show();

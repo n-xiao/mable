@@ -50,7 +50,6 @@ public final class IconHandler {
             String filePath;
             while ((filePath = reader.readLine()) != null) {
                 // does this even work i have no idea
-                System.out.println("attempting to load icon: " + filePath);
                 final InputStream fileStream =
                     Thread.currentThread().getContextClassLoader().getResourceAsStream(filePath);
                 IMAGES.put(filePath, new Image(fileStream));
@@ -73,13 +72,20 @@ public final class IconHandler {
      *
      * @param fileName      the name of the file, as found in the resource directory
      *                      under the subdirectory "icons"
-     * @return Image        the requested icon as a JavaFX Image. May return null.
+     * @return Image        the requested icon as a JavaFX Image.
+     *
+     * @throws IllegalArgumentException when the provided fileName returns a null
+     *                                  value when used as a key in the HashMap
+     *                                  of Image instances.
      *
      * @see Image
      * @see HashMap
      */
     public static Image getIconAsImage(final String fileName) {
         final String key = "icons/" + fileName;
+        final Image image = IMAGES.get(key);
+        if (image == null)
+            throw new IllegalArgumentException("Requested icon \"" + fileName + "\" is null!");
         return IMAGES.get(key);
     }
 }

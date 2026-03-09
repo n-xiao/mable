@@ -19,6 +19,9 @@
 package code.frontend.libs.katlaf.buttons;
 
 import code.frontend.libs.katlaf.ricing.RiceHandler;
+import javafx.scene.effect.Blend;
+import javafx.scene.effect.BlendMode;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.ColorInput;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -44,11 +47,25 @@ public class IconButton extends ButtonFoundation {
         this.colourInput.widthProperty().bind(this.widthProperty());
         this.colourInput.heightProperty().bind(this.heightProperty());
         this.colourInput.setPaint(this.colour);
-        this.imageView.setEffect(this.colourInput);
+        this.useDeselectedStyle();
         this.imageView.setMouseTransparent(true);
-        this.imageView.setPreserveRatio(true);
 
         this.getChildren().add(this.imageView);
+
+        this.widthProperty().addListener((observable, oldValue, newValue) -> {
+            this.imageView.setFitWidth(newValue.doubleValue());
+        });
+
+        this.heightProperty().addListener((observable, oldValue, newValue) -> {
+            this.imageView.setFitHeight(newValue.doubleValue());
+        });
+    }
+
+    private void updateStyle() {
+        final ColorAdjust monochrome = new ColorAdjust();
+        monochrome.setSaturation(-1);
+        final Blend blend = new Blend(BlendMode.SRC_ATOP, monochrome, this.colourInput);
+        this.imageView.setEffect(blend);
     }
 
     /*
@@ -59,10 +76,12 @@ public class IconButton extends ButtonFoundation {
 
     public final void useSelectedStyle() {
         this.colourInput.setPaint(this.selectedColour);
+        updateStyle();
     }
 
     public final void useDeselectedStyle() {
         this.colourInput.setPaint(this.colour);
+        updateStyle();
     }
 
     public final void setSelectedColour(final String colourName) {

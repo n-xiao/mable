@@ -111,7 +111,7 @@ public final class FontHandler {
         }
     }
 
-    public static void initFonts() {
+    public static void init() {
         try {
             final InputStream manifestStream =
                 Thread.currentThread().getContextClassLoader().getResourceAsStream(

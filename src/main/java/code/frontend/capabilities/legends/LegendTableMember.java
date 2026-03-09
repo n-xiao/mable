@@ -29,6 +29,8 @@ import code.frontend.libs.katlaf.popup.Popup;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import code.frontend.libs.katlaf.tables.SimpleTableMember;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -49,8 +51,8 @@ import javafx.scene.paint.Color;
  */
 class LegendTableMember
     extends SimpleTableMember implements Comparable<LegendTableMember>, DragReaction, Colourable {
-    static final double HEIGHT = 7;
-    static final double MAX_WIDTH = 20;
+    static final double HEIGHT = 20;
+    static final double MAX_WIDTH = 200;
 
     private final Legend legend;
 
@@ -69,7 +71,7 @@ class LegendTableMember
         this.legend = legend;
 
         this.colourIndicator = new Region();
-        this.colourIndicator.setBackground(RiceHandler.createBG(legend.getColour().get(), 10, 0.5));
+        this.colourIndicator.setBackground(RiceHandler.createBG(legend.getColour().get(), 10, 4));
         this.colourIndicator.setMouseTransparent(true);
         this.colourIndicator.setMinSize(HEIGHT, HEIGHT);
         this.colourIndicator.setMaxSize(HEIGHT, HEIGHT);
@@ -89,6 +91,8 @@ class LegendTableMember
         this.delete.getChildren().add(cross);
         this.delete.setMaxSize(HEIGHT, HEIGHT);
         this.delete.setMinSize(HEIGHT, HEIGHT);
+        this.delete.setCursor(Cursor.HAND);
+        this.delete.setOpacity(0.5);
         this.delete.setOnMousePressed(event -> {
             if (this.legend.getContents().isEmpty()) {
                 table.removeMember(this.legend);
@@ -101,8 +105,10 @@ class LegendTableMember
         this.container = new HBox();
         this.container.setBackground(null);
         this.container.getChildren().addAll(this.colourIndicator, this.label, this.delete);
+        this.container.setAlignment(Pos.CENTER);
 
-        this.border = new MableBorder(1.5, 0.8, 0.4);
+        this.border = new MableBorder(0.5, 0.05, 0.9);
+        this.border.bindSize(this.widthProperty(), this.heightProperty());
         this.getChildren().addAll(this.container, this.border);
     }
 
@@ -139,12 +145,12 @@ class LegendTableMember
 
     @Override
     public void onMouseEntered(MouseEvent event) {
-        this.delete.setVisible(true);
+        this.delete.setOpacity(1);
     }
 
     @Override
     public void onMouseExited(MouseEvent event) {
-        this.delete.setVisible(false);
+        this.delete.setOpacity(0.5);
     }
 
     @Override

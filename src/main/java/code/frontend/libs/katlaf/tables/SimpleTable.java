@@ -27,12 +27,16 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
 
 public class SimpleTable extends FlowPane {
+    private static final double V_GAP = 8;
+    private static final double H_GAP = 5;
     private final ArrayList<SimpleTableMember> members;
     private final SelectionCollection<SimpleTableMember> selcol;
 
     public SimpleTable() {
         this.members = new ArrayList<SimpleTableMember>();
         this.selcol = new SelectionCollection<SimpleTableMember>(this.members);
+        this.setVgap(V_GAP);
+        this.setHgap(H_GAP);
         this.setMaxHeight(Double.MAX_VALUE);
         this.setMaxWidth(Double.MAX_VALUE);
         this.setAlignment(Pos.TOP_CENTER);
@@ -91,9 +95,6 @@ public class SimpleTable extends FlowPane {
     /**
      * Adds a {@link SimpleTableMember member} to this table,
      * and attaches mouse listeners to it.
-     *
-     * This method will realign the members by
-     * calling `requestAlign()`
      */
     public void addMember(final SimpleTableMember tableMember) {
         this.selcol.deselectAll();
@@ -114,8 +115,6 @@ public class SimpleTable extends FlowPane {
 
     /**
      * Removes the provided member from this table.
-     * This method will realign the members by
-     * calling `requestAlign()`
      */
     public void removeMember(final SimpleTableMember tableMember) {
         this.members.remove(tableMember);

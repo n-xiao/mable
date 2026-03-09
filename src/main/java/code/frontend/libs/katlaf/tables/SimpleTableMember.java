@@ -30,9 +30,7 @@ import javafx.scene.layout.StackPane;
  */
 public abstract class SimpleTableMember extends SelectionChild {
     /**
-     * Creates a new instance of this class. This constructor calls the hideFace() method
-     * of the superclass, so as to provide implementations of this class the equivalent of
-     * an empty StackPane.
+     * Creates a new instance of this class.
      *
      * @param parent    the SelectionCollection that this SelectionChild instance belongs to
      * @see SelectionCollection

@@ -54,6 +54,7 @@ import javafx.scene.paint.Stop;
  * @since v3.0.0-beta
  */
 public class CountdownView extends VBox implements Updatable {
+    private static final double GLOBAL_PADDING = 10;
     private final CountdownList list;
     private final LegendTable table;
 
@@ -69,6 +70,8 @@ public class CountdownView extends VBox implements Updatable {
     public CountdownView(
         final String title, final Set<Legend> legends, final Set<Countdown> countdowns) {
         this.setBackground(null);
+        this.setFillWidth(true);
+        this.setPadding(new Insets(GLOBAL_PADDING));
 
         this.list = new CountdownList();
 
@@ -96,6 +99,8 @@ public class CountdownView extends VBox implements Updatable {
         listContainer.getChildren().addAll(listScrollPane, bottom);
 
         this.table = new LegendTable(this.list);
+        this.table.setMinHeight(50);
+        VBox.setMargin(this.table, new Insets(20, 0, 0, 0));
 
         this.getChildren().addAll(new Top(title), this.table, listContainer);
 
@@ -117,6 +122,7 @@ public class CountdownView extends VBox implements Updatable {
         final CountdownList.CountdownFilter filter) {
         this.table = null;
         this.setBackground(null);
+        this.setPadding(new Insets(GLOBAL_PADDING));
 
         this.list = new CountdownList(filter);
 
@@ -175,6 +181,7 @@ public class CountdownView extends VBox implements Updatable {
             this.setLeft(label);
 
             final CountdownCreateButton button = new CountdownCreateButton(CountdownView.this.list);
+            button.setMinWidth(40);
             BorderPane.setMargin(button, new Insets(TOP_MARGIN, SIDE_MARGIN, 0, 0));
             this.setRight(button);
         }

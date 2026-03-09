@@ -48,6 +48,12 @@ public class IconButtonList extends VBox {
         this.getChildren().add(button);
     }
 
+    public void add(final IconButton... buttons) {
+        for (IconButton iconButton : buttons) {
+            add(iconButton);
+        }
+    }
+
     public void select(final IconButton button) {
         this.deselectAll();
         button.useSelectedStyle();

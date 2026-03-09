@@ -23,7 +23,9 @@ import code.backend.data.Legend;
 import code.frontend.capabilities.countdowns.CountdownList;
 import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.FontHandler.DedicatedFont;
+import code.frontend.libs.katlaf.buttons.ButtonFoundation;
 import code.frontend.libs.katlaf.collections.SelectionCollection;
+import code.frontend.libs.katlaf.faces.BorderLabelFace;
 import code.frontend.libs.katlaf.graphics.LabelledBorderedRegion;
 import code.frontend.libs.katlaf.graphics.MableBorder;
 import code.frontend.libs.katlaf.popup.Popup;
@@ -34,7 +36,8 @@ import code.frontend.libs.katlaf.tables.SimpleTableMember;
 import java.util.ArrayList;
 import java.util.Set;
 import javafx.geometry.Insets;
-import javafx.scene.control.Label;
+import javafx.scene.Cursor;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 
 public final class LegendTable extends StackPane {
@@ -51,8 +54,10 @@ public final class LegendTable extends StackPane {
         final LabelledBorderedRegion region = new LabelledBorderedRegion(
             new MableBorder(1.5, 0.2, 0.2), "Legend", RiceHandler.getColour("night"));
         region.setColour(RiceHandler.getColour("lightgrey"));
+        region.setViewOrder(-1);
         region.setMouseTransparent(true);
 
+        StackPane.setMargin(this.table, new Insets(8));
         this.getChildren().addAll(region, this.table);
 
         this.members = new ArrayList<LegendTableMember>();
@@ -80,8 +85,8 @@ public final class LegendTable extends StackPane {
     public void populate(final Set<Legend> legends, final Set<Countdown> countdowns) {
         if (!this.populated) {
             legends.forEach(this::addMember);
-            this.table.addMember(new LegendCreateButton());
             this.table.addMember(this.uncategorised);
+            this.table.getChildren().addLast(new LegendCreateButton());
             this.organiseCountdowns(countdowns);
         }
 
@@ -123,10 +128,16 @@ public final class LegendTable extends StackPane {
     private class Uncategorised extends LegendTableMember {
         Uncategorised() {
             final Legend legend = new Legend("Uncategorised");
-            legend.setColour(new Colour(0, 0, 0, 1));
+            legend.setColour(new Colour(255, 255, 255, 1));
             super(legend, LegendTable.this);
             getDeletePane().setVisible(false);
         }
+
+        @Override
+        public void onMouseEntered(MouseEvent event) {}
+
+        @Override
+        public void onMouseExited(MouseEvent event) {}
 
         @Override
         public int compareTo(LegendTableMember o) {
@@ -134,45 +145,21 @@ public final class LegendTable extends StackPane {
         }
     }
 
-    private class LegendCreateButton
-        extends SimpleTableMember implements Comparable<LegendTableMember> {
-        private static final double WIDTH = 10;
-
+    private class LegendCreateButton extends ButtonFoundation {
         LegendCreateButton() {
-            super(table.getSelector());
-            this.setMaxSize(WIDTH, LegendTableMember.HEIGHT);
-            this.setMinSize(WIDTH, LegendTableMember.HEIGHT);
-
-            final Label label = new Label("+");
-            label.setFont(FontHandler.getDedicated(DedicatedFont.SYMBOL));
-            label.setTextFill(RiceHandler.getColour("white"));
-            label.setMouseTransparent(true);
-
-            final MableBorder border = new MableBorder(1.5, 0, 0.8);
-
-            this.getChildren().addAll(label, border);
-        }
-
-        /**
-         * This acts as a click detector.
-         * <p>
-         * {@inheritDoc}
-         */
-        @Override
-        public void setToggle(boolean toggled) {
-            if (toggled) {
-                /*
-                 * must be set false to not interfere with methods such as
-                 * deselectAll()
-                 */
-                this.setToggle(false);
-                Popup.spawn(new LegendCreatorPopup(LegendTable.this));
-            }
+            this.setMinSize(LegendTableMember.HEIGHT, LegendTableMember.HEIGHT);
+            this.setMaxSize(LegendTableMember.HEIGHT, LegendTableMember.HEIGHT);
+            this.setCursor(Cursor.HAND);
+            final BorderLabelFace face = new BorderLabelFace(new MableBorder(1.5, 0.1, 0.5));
+            face.setMouseTransparent(true);
+            face.setFont(FontHandler.getDedicated(DedicatedFont.SYMBOL));
+            face.setText("+");
+            this.getChildren().add(face);
         }
 
         @Override
-        public int compareTo(LegendTableMember o) {
-            return 1;
+        public void onMousePressed(MouseEvent event) {
+            Popup.spawn(new LegendCreatorPopup(LegendTable.this));
         }
     }
 }

@@ -18,7 +18,6 @@
 
 package code.frontend.libs.katlaf.tables;
 
-import code.frontend.libs.katlaf.collections.SelectionChild;
 import code.frontend.libs.katlaf.collections.SelectionCollection;
 import javafx.scene.layout.StackPane;
 
@@ -28,7 +27,7 @@ import javafx.scene.layout.StackPane;
  *
  * @since v3.0.0-beta
  */
-public abstract class SimpleTableMember extends SelectionChild {
+public abstract class SimpleTableMember extends StackPane {
     /**
      * Creates a new instance of this class.
      *
@@ -36,8 +35,7 @@ public abstract class SimpleTableMember extends SelectionChild {
      * @see SelectionCollection
      * @see StackPane
      */
-    public SimpleTableMember(final SelectionCollection<? extends SelectionChild> parent) {
-        super(parent);
+    public SimpleTableMember() {
         this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
     }
 }

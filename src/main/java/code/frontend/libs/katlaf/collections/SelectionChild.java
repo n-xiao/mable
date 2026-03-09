@@ -46,16 +46,9 @@ public abstract class SelectionChild extends ButtonFoundation {
             parent.shiftSelected(this);
         } else if (event.isMetaDown()) {
             parent.metaSelected(this);
-        } else {
-            if (parent.getNumberOfSelected() < 1)
-                parent.selected(this);
+        } else if (parent.getNumberOfSelected() == 0 || !this.isToggled()) {
+            parent.selected(this);
         }
         event.consume();
-    }
-
-    @Override
-    public void onMouseReleased(MouseEvent event) {
-        if (parent.getNumberOfSelected() >= 1)
-            parent.selected(this);
     }
 }

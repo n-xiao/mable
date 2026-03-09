@@ -19,6 +19,7 @@
 package code.frontend.libs.katlaf.dragndrop;
 
 import code.frontend.MainContainer;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.CacheHint;
 import javafx.scene.layout.Region;
 
@@ -34,6 +35,7 @@ import javafx.scene.layout.Region;
  */
 final class DragDropOverlay<T> extends Region {
     private static DragDropOverlay<?> activeOverlay = null; // max of one instance should exist
+    final static SimpleBooleanProperty active = new SimpleBooleanProperty(false);
     private final T data;
 
     private DragDropOverlay(DragStartRegion<T> dragStarter) {
@@ -54,10 +56,6 @@ final class DragDropOverlay<T> extends Region {
     private void init(DragStartRegion<T> dragStarter) {
         // hijack scene
         final MainContainer mc = MainContainer.getInstance();
-        mc.getScene().setOnMouseDragOver((event) -> {
-            // must be attached to scene so nodes can still detect drag release, enter and exit
-            dragStarter.getRepresentation().relocate(event.getSceneX(), event.getSceneY());
-        });
 
         // additional config
         this.setMouseTransparent(true);
@@ -65,10 +63,18 @@ final class DragDropOverlay<T> extends Region {
         this.resize(mc.getScene().getWidth(), mc.getScene().getHeight());
         this.setViewOrder(-200);
 
-        dragStarter.getRepresentation().setCacheHint(CacheHint.SPEED);
-        dragStarter.getRepresentation().setManaged(false);
-        this.getChildren().add(dragStarter.getRepresentation());
+        final Region representation = dragStarter.getRepresentation();
+        representation.setCacheHint(CacheHint.SPEED);
+        representation.setManaged(false);
+        this.getChildren().add(representation);
         mc.getChildren().add(this);
+
+        mc.getScene().setOnMouseDragOver((event) -> {
+            // must be attached to scene so nodes can still detect drag release, enter and exit
+            representation.relocate(event.getSceneX() + 9, event.getSceneY() - 2);
+        });
+
+        active.set(true);
     }
 
     /*
@@ -91,6 +97,7 @@ final class DragDropOverlay<T> extends Region {
     public static void killOverlay() {
         MainContainer.getInstance().getChildren().remove(activeOverlay);
         activeOverlay = null;
+        active.set(false);
     }
 
     public static boolean isActive() {

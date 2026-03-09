@@ -59,8 +59,7 @@ public final class LegendCreatorPopup extends Popup {
      */
     public LegendCreatorPopup(final LegendTable table, final LegendTableMember member) {
         this.nameField = new BorderedField("NEW NAME", RiceHandler.getColour("night"));
-        this.colourPicker =
-            new ColourPicker("green", "royalblue", "purple", "pink", "teal", "lightred", "skyblue");
+        this.colourPicker = new ColourPicker("green", "pink", "teal", "lightred", "lightblue");
         this.table = table;
         this.oldMember = member;
         super(WIDTH, HEIGHT);

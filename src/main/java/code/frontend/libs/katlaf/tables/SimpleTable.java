@@ -18,7 +18,6 @@
 
 package code.frontend.libs.katlaf.tables;
 
-import code.frontend.libs.katlaf.collections.SelectionCollection;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,11 +30,9 @@ public class SimpleTable extends FlowPane {
     private static final double V_GAP = 8;
     private static final double H_GAP = 5;
     private final ArrayList<SimpleTableMember> members;
-    private final SelectionCollection<SimpleTableMember> selcol;
 
     public SimpleTable() {
         this.members = new ArrayList<SimpleTableMember>();
-        this.selcol = new SelectionCollection<SimpleTableMember>(this.members);
         this.setPadding(new Insets(5, 10, 5, 10));
         this.setVgap(V_GAP);
         this.setHgap(H_GAP);
@@ -43,10 +40,6 @@ public class SimpleTable extends FlowPane {
         this.setMaxWidth(Double.MAX_VALUE);
         this.setAlignment(Pos.TOP_CENTER);
         this.setBackground(RiceHandler.createBG(RiceHandler.getColour("night"), 0, 0));
-        this.setOnMousePressed(event -> { // click anywhere to deselect
-            this.selcol.deselectAll();
-            event.consume();
-        });
     }
 
     /*
@@ -99,14 +92,12 @@ public class SimpleTable extends FlowPane {
      * and attaches mouse listeners to it.
      */
     public void addMember(final SimpleTableMember tableMember) {
-        this.selcol.deselectAll();
         this.members.add(tableMember);
         this.members.sort(null);
         this.getChildren().add(this.members.indexOf(tableMember), tableMember);
     }
 
     public void addMembers(final List<SimpleTableMember> tableMembers) {
-        this.selcol.deselectAll();
         for (SimpleTableMember simpleTableMember : tableMembers) {
             this.members.add(simpleTableMember);
         }
@@ -127,10 +118,6 @@ public class SimpleTable extends FlowPane {
         this.members.removeAll(tableMembers);
         this.getChildren().clear();
         this.getChildren().addAll(this.members);
-    }
-
-    public SelectionCollection<SimpleTableMember> getSelector() {
-        return this.selcol;
     }
 
     /*

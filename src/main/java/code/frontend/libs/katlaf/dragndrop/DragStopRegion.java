@@ -28,6 +28,9 @@ import javafx.scene.layout.Region;
  */
 public abstract class DragStopRegion<T> extends Region {
     public DragStopRegion() {
+        DragDropOverlay.active.addListener(
+            (observable, oldValue, newValue) -> this.setMouseTransparent(!newValue.booleanValue()));
+        this.setMouseTransparent(true);
         this.setBackground(null);
         this.setOnMouseDragEntered(event -> {
             if (isExpecting())

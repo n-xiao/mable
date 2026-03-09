@@ -43,6 +43,7 @@ public abstract class ButtonFoundation extends StackPane {
         this.enabled = true;
         setOnMousePressed(this::onMousePressed);
         setOnMouseReleased(this::onMouseReleased);
+        setOnMouseClicked(this::onMouseClicked);
         setOnMouseEntered(this::onMouseEntered);
         setOnMouseExited(this::onMouseExited);
     }
@@ -74,6 +75,11 @@ public abstract class ButtonFoundation extends StackPane {
      * Executed when this button is released from a mouse press.
      */
     public void onMouseReleased(final MouseEvent event){};
+
+    /**
+     * Executed when this button is clicked.
+     */
+    public void onMouseClicked(final MouseEvent event){};
 
     /**
      * Executed when a mouse enters this button.

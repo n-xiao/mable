@@ -24,7 +24,6 @@ import code.frontend.capabilities.countdowns.CountdownList;
 import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.FontHandler.DedicatedFont;
 import code.frontend.libs.katlaf.buttons.ButtonFoundation;
-import code.frontend.libs.katlaf.collections.SelectionCollection;
 import code.frontend.libs.katlaf.faces.BorderLabelFace;
 import code.frontend.libs.katlaf.graphics.LabelledBorderedRegion;
 import code.frontend.libs.katlaf.graphics.MableBorder;
@@ -32,7 +31,6 @@ import code.frontend.libs.katlaf.popup.Popup;
 import code.frontend.libs.katlaf.ricing.Colour;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import code.frontend.libs.katlaf.tables.SimpleTable;
-import code.frontend.libs.katlaf.tables.SimpleTableMember;
 import java.util.ArrayList;
 import java.util.Set;
 import javafx.geometry.Insets;
@@ -72,22 +70,17 @@ public final class LegendTable extends StackPane {
     /*
 
 
-     PRIVATE API
-    -------------------------------------------------------------------------------------*/
-
-    SelectionCollection<SimpleTableMember> getSelector() {
-        return this.table.getSelector();
-    }
-
-    /*
-
-
      PUBLIC API
     -------------------------------------------------------------------------------------*/
 
     public void populate(final Set<Legend> legends, final Set<Countdown> countdowns) {
         if (!this.populated) {
             legends.forEach(this::addMember);
+            final CountdownToLegendDragStopper stopper =
+                new CountdownToLegendDragStopper(this.uncategorised);
+            stopper.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+            stopper.setOpacity(0);
+            this.uncategorised.getChildren().addLast(stopper);
             this.table.addMember(this.uncategorised);
             this.table.getChildren().addLast(new LegendCreateButton());
             this.organiseCountdowns(countdowns);
@@ -116,7 +109,6 @@ public final class LegendTable extends StackPane {
         final CountdownToLegendDragStopper stopper = new CountdownToLegendDragStopper(member);
         stopper.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         stopper.setOpacity(0);
-        stopper.setViewOrder(-1);
         member.getChildren().addLast(stopper);
     }
 
@@ -143,12 +135,6 @@ public final class LegendTable extends StackPane {
             super(legend, LegendTable.this);
             getDeletePane().setVisible(false);
         }
-
-        @Override
-        public void onMouseEntered(MouseEvent event) {}
-
-        @Override
-        public void onMouseExited(MouseEvent event) {}
 
         @Override
         public int compareTo(LegendTableMember o) {

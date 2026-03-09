@@ -31,7 +31,6 @@ import code.frontend.libs.katlaf.tables.SimpleTableMember;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -62,7 +61,6 @@ class LegendTableMember
     private final MableBorder border;
 
     protected LegendTableMember(final Legend legend, final LegendTable table) {
-        super(table.getSelector());
         this.setMaxWidth(MAX_WIDTH);
         this.setMaxHeight(HEIGHT);
         this.setMinHeight(HEIGHT);
@@ -71,12 +69,10 @@ class LegendTableMember
 
         this.colourIndicator = new Region();
         this.colourIndicator.setBackground(RiceHandler.createBG(legend.getColour().get(), 10, 4));
-        this.colourIndicator.setMouseTransparent(true);
         this.colourIndicator.setMinSize(HEIGHT, HEIGHT);
         this.colourIndicator.setMaxSize(HEIGHT, HEIGHT);
 
         this.label = new Label(legend.getName());
-        this.label.setMouseTransparent(true);
         this.label.setFont(FontHandler.getNormal());
         this.label.setTextFill(RiceHandler.getColour("white"));
         HBox.setHgrow(this.label, Priority.ALWAYS);
@@ -108,6 +104,10 @@ class LegendTableMember
         this.border = new MableBorder(0.5, 0.05, 0.9);
         this.border.bindSize(this.widthProperty(), this.heightProperty());
         this.getChildren().addAll(this.container, this.border);
+
+        this.setOnMouseEntered(event -> { this.delete.setOpacity(1); });
+
+        this.setOnMouseExited(event -> { this.delete.setOpacity(0.5); });
     }
 
     /*
@@ -139,16 +139,6 @@ class LegendTableMember
     public void update() {
         this.label.setText(this.legend.getName());
         this.colourIndicator.setBackground(RiceHandler.createBG(legend.getColour().get(), 10, 0.5));
-    }
-
-    @Override
-    public void onMouseEntered(MouseEvent event) {
-        this.delete.setOpacity(1);
-    }
-
-    @Override
-    public void onMouseExited(MouseEvent event) {
-        this.delete.setOpacity(0.5);
     }
 
     @Override

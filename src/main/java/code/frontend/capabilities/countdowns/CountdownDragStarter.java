@@ -61,12 +61,12 @@ final class CountdownDragStarter extends DragStartRegion<CountdownPacket> {
     protected Region getRepresentation() {
         final StackPane result = new StackPane();
         result.setBackground(RiceHandler.createBG(RiceHandler.getColour("darkgrey"), 2, 0));
-        result.resize(50, 100);
+        result.resize(160, 30);
 
         final int size = getData().getCountdowns().size();
         final String sizeString = size > 9 ? "9+" : Integer.toString(size);
-        final Label label = new Label("Dragging " + sizeString + " Countdowns");
-        label.setFont(FontHandler.getNormal());
+        final Label label = new Label("Dragging " + sizeString + " Countdown(s)");
+        label.setFont(FontHandler.getMono());
         label.setTextFill(RiceHandler.getColour("white"));
         label.setAlignment(Pos.CENTER);
 

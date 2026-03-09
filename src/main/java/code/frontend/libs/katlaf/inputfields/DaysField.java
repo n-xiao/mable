@@ -39,7 +39,7 @@ public final class DaysField extends StackPane {
         this.field = new Field();
         this.field.setFieldAlignment(Pos.CENTER);
         this.field.setNumOnly(true);
-        StackPane.setMargin(this.field, new Insets(2));
+        StackPane.setMargin(this.field, new Insets(1.5));
 
         final LabelledBorderedRegion region =
             new LabelledBorderedRegion(new MableBorder(1.5, 0.2, 0.4), "DAYS", bgColour);

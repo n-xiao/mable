@@ -122,17 +122,9 @@ public final class CountdownList extends SimpleList implements Updatable {
     }
 
     /**
-     * Populates the current CountdownList, usually when it is empty (after instantiation)
-     * <p>
-     * This method can only be run once per CountdownList instance.
-     * Any further calls to this method after it has been run will be ignored.
+     * Populates the current CountdownList
      */
     public void populate(final Set<Countdown> countdowns) {
-        if (this.populated)
-            return;
-        else
-            this.populated = true;
-
         /*
          * muahahaha functional go brrr
          */

@@ -20,6 +20,7 @@ package code.frontend.libs.katlaf.inputfields;
 
 import code.frontend.libs.katlaf.graphics.LabelledBorderedRegion;
 import code.frontend.libs.katlaf.graphics.MableBorder;
+import javafx.geometry.Insets;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -109,5 +110,9 @@ public class BorderedField extends StackPane {
      */
     public final void setFieldText(final String text) {
         this.field.setFieldText(text);
+    }
+
+    public void setFieldInsets(final Insets insets) {
+        StackPane.setMargin(this.field, insets);
     }
 }

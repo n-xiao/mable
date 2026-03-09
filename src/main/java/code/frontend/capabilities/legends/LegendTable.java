@@ -36,6 +36,7 @@ import code.frontend.libs.katlaf.tables.SimpleTableMember;
 import java.util.ArrayList;
 import java.util.Set;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
@@ -49,6 +50,7 @@ public final class LegendTable extends StackPane {
 
     public LegendTable(final CountdownList countdownList) {
         this.table = new SimpleTable();
+        this.table.setAlignment(Pos.CENTER);
         StackPane.setMargin(this.table, new Insets(4, 10, 4, 10));
 
         final LabelledBorderedRegion region = new LabelledBorderedRegion(

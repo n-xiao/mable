@@ -32,6 +32,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -70,7 +72,7 @@ public final class CountdownCreatorPopup extends Popup {
         this.daysField = new DaysField();
         this.list = list;
         this.oldMember = member;
-        super(300, 290);
+        super(340, 340);
     }
 
     /*
@@ -101,20 +103,27 @@ public final class CountdownCreatorPopup extends Popup {
         /*
          * setup the styling of them fields
          */
-        VBox.setMargin(this.nameField, new Insets(0, 0, 10, 0));
-        VBox.setMargin(this.dateField, new Insets(0, 0, 10, 0));
+        this.nameField.setFieldInsets(new Insets(4, 0, 4, 0));
+        VBox.setMargin(this.nameField, new Insets(0, 0, 20, 0));
+
+        final double daysFieldWidth = 120;
+        this.daysField.setMaxWidth(daysFieldWidth);
+        this.daysField.setMinWidth(daysFieldWidth);
+
+        this.daysField.linkDateField(this.dateField);
+        this.dateField.linkDaysField(this.daysField);
         /*
          * need to add a label preceding the daysField; so it has
          * its own container
          */
-        final Label label = new Label("which means it's due in");
-        label.setAlignment(Pos.CENTER_RIGHT);
+        final Label label = new Label("which means it's due in...");
+        label.setAlignment(Pos.CENTER_LEFT);
         label.setFont(FontHandler.getNormal());
         label.setTextFill(RiceHandler.getColour("white"));
         label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        VBox.setMargin(label, new Insets(0, 8, 0, 0));
+        HBox.setMargin(label, new Insets(0, 16, 0, 0));
 
-        final VBox daysFieldContainer = new VBox();
+        final HBox daysFieldContainer = new HBox();
         daysFieldContainer.setAlignment(Pos.CENTER_RIGHT);
         daysFieldContainer.getChildren().addAll(label, this.daysField);
         /*
@@ -144,6 +153,7 @@ public final class CountdownCreatorPopup extends Popup {
         accept.setLabel(this.isEditing() ? "Confirm" : "Create");
         accept.setMinSize(80, 30);
         accept.setMaxSize(80, 30);
+        VBox.setMargin(accept, new Insets(40, 0, 0, 0));
         /*
          * add everything to container
          */
@@ -152,6 +162,8 @@ public final class CountdownCreatorPopup extends Popup {
         container.setPadding(new Insets(0, 10, 0, 10));
         container.setAlignment(Pos.CENTER);
         container.getChildren().addAll(this.nameField, this.dateField, daysFieldContainer, accept);
+
+        content.getChildren().add(container);
     }
 
     @Override

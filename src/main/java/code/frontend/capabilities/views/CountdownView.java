@@ -36,6 +36,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -97,12 +98,13 @@ public class CountdownView extends VBox implements Updatable {
 
         final StackPane listContainer = new StackPane();
         listContainer.getChildren().addAll(listScrollPane, bottom);
+        VBox.setVgrow(listContainer, Priority.ALWAYS);
 
         this.table = new LegendTable(this.list);
         this.table.setMinHeight(50);
         VBox.setMargin(this.table, new Insets(20, 0, 0, 0));
 
-        this.getChildren().addAll(new Top(title), this.table, listContainer);
+        this.getChildren().addAll(new Top(title), listContainer, this.table);
 
         this.list.populate(countdowns);
         this.table.populate(legends, countdowns);
@@ -198,7 +200,7 @@ public class CountdownView extends VBox implements Updatable {
             final Stop[] stops = {
                 new Stop(0, RiceHandler.getColour("night")), new Stop(1, Color.color(0, 0, 0, 0))};
             final LinearGradient gradient =
-                new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE, stops);
+                new LinearGradient(0, 1, 0, 0.95, true, CycleMethod.NO_CYCLE, stops);
             final BackgroundFill fill = new BackgroundFill(gradient, null, null);
             this.setBackground(new Background(fill));
             this.setMaxWidth(Double.MAX_VALUE);

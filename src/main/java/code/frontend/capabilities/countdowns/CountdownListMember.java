@@ -347,7 +347,7 @@ final class CountdownListMember
             final var backgroundFill =
                 new BackgroundFill(countdown.getColour(), new CornerRadii(12), new Insets(4));
             this.fill.setBackground(new Background(backgroundFill));
-            this.fill.setOpacity(0);
+            this.fill.setOpacity(CountdownListMember.this.countdown.isDone() ? 1 : 0);
             this.setBackground(null);
             this.getChildren().addAll(this.border, this.fill);
             this.resize(18, 18);

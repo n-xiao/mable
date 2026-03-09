@@ -33,11 +33,29 @@ import javafx.scene.paint.Color;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Countdown extends Identifiable implements Listable<Countdown>, Recoverable {
+    private static final String ZONE_ID_STR = "UTC";
+
+    @JsonProperty("name") private final String name;
+    @JsonProperty("due") private final ZonedDateTime dueDateTime;
+    @JsonProperty("completed") private ZonedDateTime completionDate;
+    @JsonProperty("isDone") private boolean isDone;
+
     /*
 
 
      CONSTRUCTORS
     -------------------------------------------------------------------------------------*/
+
+    @JsonCreator
+    public Countdown(@JsonProperty("ID") String id, @JsonProperty("name") String name,
+        @JsonProperty("isDone") boolean isDone, @JsonProperty("due") String due,
+        @JsonProperty("completed") String completed) {
+        super(id);
+        this.name = name;
+        this.dueDateTime = ZonedDateTime.parse(due);
+        this.isDone = isDone;
+        this.completionDate = completed == null ? null : ZonedDateTime.parse(completed);
+    }
 
     /**
      * Creates a Countdown object. The responsibility for sanitising inputs is handed to
@@ -57,23 +75,11 @@ public class Countdown extends Identifiable implements Listable<Countdown>, Reco
         this.completionDate = null;
     }
 
-    @JsonCreator
-    public Countdown(@JsonProperty("ID") String id, @JsonProperty("name") String name,
-        @JsonProperty("isDone") boolean isDone, @JsonProperty("due") String due,
-        @JsonProperty("completed") String completed) {
-        super(id);
-        this.name = name;
-        this.isDone = isDone;
-        this.dueDateTime = ZonedDateTime.parse(due);
-        this.completionDate = ZonedDateTime.parse(completed);
-    }
-
     /*
 
 
      PRIVATE API
     -------------------------------------------------------------------------------------*/
-    private static final String ZONE_ID_STR = "UTC";
 
     private static int getDaysUntilDate(final LocalDate now, final ZonedDateTime zonedDateTime) {
         final ZonedDateTime zonedNow = now.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
@@ -94,7 +100,6 @@ public class Countdown extends Identifiable implements Listable<Countdown>, Reco
 
      PUBLIC API
     -------------------------------------------------------------------------------------*/
-    private final ZonedDateTime dueDateTime;
 
     public static int getDaysBetween(LocalDate date1, LocalDate date2) {
         final ZonedDateTime zoned1 = date1.atTime(0, 0).atZone(ZoneId.of(ZONE_ID_STR));
@@ -123,7 +128,6 @@ public class Countdown extends Identifiable implements Listable<Countdown>, Reco
      * Useful for displaying the due date in the user's local date and
      * time.
      */
-    @JsonIgnore
     public LocalDate getLocalDueDate(LocalDate now) {
         return now.plusDays(getDaysUntilDue(now));
     }
@@ -132,19 +136,17 @@ public class Countdown extends Identifiable implements Listable<Countdown>, Reco
         return now.plusDays(getDaysUntilCompletion(now));
     }
 
-    @JsonIgnore
     public boolean isOverdue(LocalDate now) {
         ZonedDateTime nowDateTime = convertLocalDate(now);
         return this.dueDateTime.isBefore(nowDateTime);
     }
 
-    @JsonIgnore
     public boolean isDueToday(LocalDate now) {
         ZonedDateTime nowDateTime = convertLocalDate(now);
         return this.dueDateTime.isEqual(nowDateTime);
     }
 
-    @JsonProperty("name") private final String name;
+    @JsonProperty("name")
     public String getName() {
         return this.name;
     }
@@ -154,7 +156,7 @@ public class Countdown extends Identifiable implements Listable<Countdown>, Reco
         return this.dueDateTime;
     }
 
-    @JsonProperty("completed") private ZonedDateTime completionDate;
+    @JsonProperty("completed")
     public ZonedDateTime getCompletionDateTime() {
         return this.completionDate;
     }
@@ -166,7 +168,7 @@ public class Countdown extends Identifiable implements Listable<Countdown>, Reco
         this.completionDate = convertLocalDate(LocalDate.now());
     }
 
-    @JsonProperty("isDone") private boolean isDone;
+    @JsonProperty("isDone")
     public boolean isDone() {
         return this.isDone;
     }
@@ -192,6 +194,7 @@ public class Countdown extends Identifiable implements Listable<Countdown>, Reco
         legend.getContents().add(this);
     }
 
+    @JsonIgnore
     public boolean isInLegend() {
         return LegendHandler.lookupCountdown(this);
     }
@@ -217,6 +220,7 @@ public class Countdown extends Identifiable implements Listable<Countdown>, Reco
     }
 
     @Override
+    @JsonIgnore
     public boolean isDeleted() {
         return CountdownHandler.isCountdownDeleted(this);
     }
@@ -227,6 +231,7 @@ public class Countdown extends Identifiable implements Listable<Countdown>, Reco
     }
 
     @Override
+    @JsonIgnore
     public int compareTo(Countdown other) {
         final LocalDate now = LocalDate.now();
         final int daysDiff = this.getDaysUntilDue(now) - other.getDaysUntilDue(now);
@@ -234,6 +239,7 @@ public class Countdown extends Identifiable implements Listable<Countdown>, Reco
     }
 
     @Override
+    @JsonIgnore
     public String getDisplayString() {
         return this.getName();
     }

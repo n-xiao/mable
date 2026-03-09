@@ -27,7 +27,6 @@ import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import javafx.animation.FadeTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -61,8 +60,7 @@ public final class DateField extends StackPane {
 
     static {
         format = "dd-MM-yyyy";
-        WARNING = "Sorry, the date you provided doesn't follow the accepted format: "
-            + DateField.format.toLowerCase();
+        WARNING = "The date must follow this format: " + DateField.format.toLowerCase();
     }
 
     private final Warning warning;
@@ -96,7 +94,7 @@ public final class DateField extends StackPane {
          * setup the fields
          */
         setupFields(this.dayField, this.monthField, this.yearField);
-        final String dayFormat = DateField.format.substring(0, 3);
+        final String dayFormat = DateField.format.substring(0, 2);
         final String monthFormat = dayFormat.equals("dd") ? "mm" : "dd";
         this.dayField.setFieldPrompt(dayFormat);
         this.monthField.setFieldPrompt(monthFormat);
@@ -111,20 +109,20 @@ public final class DateField extends StackPane {
         hbox.getChildren().addAll(
             this.dayField, new Separator(), this.monthField, new Separator(), this.yearField);
         hbox.setFillHeight(true);
+        StackPane.setMargin(hbox, new Insets(5));
+
+        final LabelledBorderedRegion region =
+            new LabelledBorderedRegion(new MableBorder(1.5, 0.2, 0.4), title, bgColour);
+        region.setMouseTransparent(true);
 
         final VBox vbox = new VBox();
         vbox.setFillWidth(true);
         vbox.setBackground(null);
-        VBox.setMargin(this.warning, new Insets(10, 0, 0, 0));
-        vbox.getChildren().addAll(hbox, this.warning);
+        VBox.setMargin(this.warning, new Insets(5, 0, 0, 0));
+        vbox.getChildren().addAll(new StackPane(region, hbox), this.warning);
         StackPane.setMargin(vbox, new Insets(2));
-        /*
-         * and last, the border with everything else
-         */
-        final LabelledBorderedRegion region =
-            new LabelledBorderedRegion(new MableBorder(1.5, 0.2, 0.4), title, bgColour);
-        region.setMouseTransparent(true);
-        this.getChildren().addAll(region, vbox);
+
+        this.getChildren().addAll(vbox);
     }
 
     /*
@@ -169,13 +167,13 @@ public final class DateField extends StackPane {
         final String year = this.yearField.getTextField().getText();
 
         final DecimalFormat decimalFormat = new DecimalFormat("00");
-        day = decimalFormat.format(Integer.parseInt(day));
-        month = decimalFormat.format(Integer.parseInt(month));
-        final String dateString = day + "-" + month + "-" + year;
-        final DateTimeFormatter dtFormat = DateTimeFormatter.ofPattern(DateField.format);
         try {
+            day = decimalFormat.format(Integer.parseInt(day));
+            month = decimalFormat.format(Integer.parseInt(month));
+            final String dateString = day + "-" + month + "-" + year;
+            final DateTimeFormatter dtFormat = DateTimeFormatter.ofPattern(DateField.format);
             return LocalDate.parse(dateString, dtFormat);
-        } catch (DateTimeParseException e) {
+        } catch (Exception e) {
             if (!silent)
                 this.warning.spawn();
             return null;
@@ -219,6 +217,7 @@ public final class DateField extends StackPane {
             label.setAlignment(Pos.CENTER);
             label.setFont(FontHandler.getDedicated(DedicatedFont.USER_INPUT));
             label.setTextFill(RiceHandler.getColour("white"));
+            this.getChildren().add(label);
         }
     }
 

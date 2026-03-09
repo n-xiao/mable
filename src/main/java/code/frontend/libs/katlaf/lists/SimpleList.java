@@ -68,11 +68,6 @@ public class SimpleList extends VBox {
         this.members.clear();
     }
 
-    protected final void syncMembers() {
-        this.getChildren().clear();
-        this.members.forEach(member -> { this.getChildren().add(member); });
-    }
-
     protected void setVspacing(final double spacing) {
         final ObservableList<Node> children = this.getChildren();
         if (children.isEmpty())
@@ -94,6 +89,11 @@ public class SimpleList extends VBox {
 
      PUBLIC API
     -------------------------------------------------------------------------------------*/
+
+    public final void syncMembers() {
+        this.getChildren().clear();
+        this.members.forEach(member -> { this.getChildren().add(member); });
+    }
 
     /**
      * This method is called during runtime, usually when a user adds a new member to this

@@ -30,7 +30,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 public final class Sidebar extends IconButtonList {
-    private static final double V_GAP = 12;
+    private static final double V_GAP = 14;
     public Sidebar() {
         final ActiveButton activeButton = new ActiveButton();
         VBox.setMargin(activeButton, new Insets(0, 0, V_GAP, 0));
@@ -39,7 +39,7 @@ public final class Sidebar extends IconButtonList {
         final DeletedButton deletedButton = new DeletedButton();
         VBox.setMargin(deletedButton, new Insets(0, 0, V_GAP, 0));
 
-        this.setPadding(new Insets(8));
+        this.setPadding(new Insets(V_GAP, 8, V_GAP, 8));
         this.setAlignment(Pos.TOP_CENTER);
         this.setMaxHeight(Double.MAX_VALUE);
         this.setBackground(RiceHandler.createBG(RiceHandler.getColour("midnight"), 0, 0));

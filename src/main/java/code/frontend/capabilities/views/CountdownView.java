@@ -111,6 +111,9 @@ public class CountdownView extends VBox implements Updatable {
         this.list.populate(countdowns);
         this.table.populate(legends, countdowns);
 
+        this.widthProperty().addListener(
+            (observable, oldValue, newValue) -> { this.list.populate(countdowns); });
+
         this.visibleProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.booleanValue())
                 this.list.populate(countdowns);
@@ -155,6 +158,7 @@ public class CountdownView extends VBox implements Updatable {
         StackPane.setAlignment(bottom, Pos.BOTTOM_CENTER);
 
         final StackPane listContainer = new StackPane();
+        StackPane.clearConstraints(listScrollPane);
         listContainer.getChildren().addAll(listScrollPane, bottom);
 
         final Top top = new Top(title);
@@ -165,6 +169,9 @@ public class CountdownView extends VBox implements Updatable {
         this.getChildren().addAll(top, listContainer);
 
         this.list.populate(countdowns);
+
+        this.widthProperty().addListener(
+            (observable, oldValue, newValue) -> { this.list.populate(countdowns); });
 
         this.visibleProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.booleanValue())

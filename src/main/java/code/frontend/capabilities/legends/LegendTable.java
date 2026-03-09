@@ -110,6 +110,14 @@ public final class LegendTable extends StackPane {
         this.members.add(member);
         this.table.addMember(member);
         this.list.colourCountdowns();
+        /*
+         * drag drop stuff
+         */
+        final CountdownToLegendDragStopper stopper = new CountdownToLegendDragStopper(member);
+        stopper.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        stopper.setOpacity(0);
+        stopper.setViewOrder(-1);
+        member.getChildren().addLast(stopper);
     }
 
     public void removeMember(final Legend legend) {

@@ -18,6 +18,7 @@
 
 package code.frontend.libs.katlaf.dragndrop;
 
+import javafx.beans.value.ObservableDoubleValue;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.layout.Region;
 
@@ -118,5 +119,17 @@ public abstract class DragStopRegion<T> extends Region {
         return isExpecting()
             ? getExpectedType().cast(DragDropOverlay.getActiveOverlay().getTransferData())
             : null;
+    }
+
+    /*
+
+
+     PUBLIC API
+    -------------------------------------------------------------------------------------*/
+
+    public final void bindPrefSize(
+        final ObservableDoubleValue width, final ObservableDoubleValue height) {
+        this.prefWidthProperty().bind(width);
+        this.prefHeightProperty().bind(height);
     }
 }

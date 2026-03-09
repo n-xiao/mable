@@ -19,11 +19,14 @@
 package code.frontend.capabilities.countdowns;
 
 import code.backend.data.Countdown;
+import code.backend.data.wrappers.CountdownPacket;
 import code.frontend.capabilities.concurrency.Updatable;
 import code.frontend.libs.katlaf.interfaces.Colourable;
 import code.frontend.libs.katlaf.lists.SimpleList;
 import code.frontend.libs.katlaf.lists.SimpleListMember;
 import code.frontend.libs.katlaf.transitions.Transitioner;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import javafx.animation.FadeTransition;
@@ -96,11 +99,37 @@ public final class CountdownList extends SimpleList implements Updatable {
         member.getCountdown().setDone(!member.getCountdown().isDone());
     }
 
+    CountdownPacket getSelectedCountdowns() {
+        final ArrayList<Countdown> list = new ArrayList<Countdown>();
+        this.getSelectedMembers().forEach(member -> list.add(member.getCountdown()));
+        return new CountdownPacket(list);
+    }
+
+    List<CountdownListMember> getSelectedMembers() {
+        final List<SimpleListMember> simpleMembers = this.getMembers();
+        final ArrayList<CountdownListMember> members = new ArrayList<CountdownListMember>();
+        for (SimpleListMember simpleMember : simpleMembers) {
+            if (simpleMember instanceof CountdownListMember member && member.isToggled()) {
+                members.add(member);
+            }
+        }
+        return members;
+    }
+
     /*
 
 
      PUBLIC API
     -------------------------------------------------------------------------------------*/
+
+    @Override
+    public synchronized void addMember(SimpleListMember member) {
+        super.addMember(member);
+        if (member instanceof CountdownListMember listMember) {
+            final CountdownDragStarter dragStarter = new CountdownDragStarter(this);
+            dragStarter.install(listMember);
+        }
+    }
 
     @Override
     public synchronized void removeMember(SimpleListMember member) {

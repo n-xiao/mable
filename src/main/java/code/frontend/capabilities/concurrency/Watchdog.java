@@ -55,7 +55,7 @@ public final class Watchdog extends ScheduledService<Void> {
     protected void failed() {
         super.failed();
         if (getCurrentFailureCount() == getMaximumFailureCount())
-            System.err.println("Watchdog has died! UI will no longer automatically update.");
+            System.err.println("Watchdog has died! UI will no longer update automatically.");
         else {
             System.err.println("Watchdog has failed! Retrying...");
         }
@@ -69,7 +69,7 @@ public final class Watchdog extends ScheduledService<Void> {
 
     public static void startWatchdog() {
         watchdog = new Watchdog();
-        watchdog.setPeriod(Duration.millis(100));
+        watchdog.setPeriod(Duration.millis(500));
         watchdog.setRestartOnFailure(true);
         watchdog.setMaximumFailureCount(10);
         watchdog.start();

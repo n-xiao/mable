@@ -93,7 +93,6 @@ public class SimpleTable extends FlowPane {
      */
     public void addMember(final SimpleTableMember tableMember) {
         this.members.add(tableMember);
-        this.members.sort(null);
         this.getChildren().add(this.members.indexOf(tableMember), tableMember);
     }
 
@@ -101,7 +100,6 @@ public class SimpleTable extends FlowPane {
         for (SimpleTableMember simpleTableMember : tableMembers) {
             this.members.add(simpleTableMember);
         }
-        this.members.sort(null);
         this.getChildren().clear();
         this.getChildren().addAll(this.members);
     }

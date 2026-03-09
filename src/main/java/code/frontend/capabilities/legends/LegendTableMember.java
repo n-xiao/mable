@@ -47,8 +47,7 @@ import javafx.scene.paint.Color;
  *
  * @since v3.0.0-beta
  */
-class LegendTableMember
-    extends SimpleTableMember implements Comparable<LegendTableMember>, DragReaction, Colourable {
+class LegendTableMember extends SimpleTableMember implements DragReaction, Colourable {
     static final double HEIGHT = 20;
     static final double MAX_WIDTH = 200;
 
@@ -139,11 +138,6 @@ class LegendTableMember
     public void update() {
         this.label.setText(this.legend.getName());
         this.colourIndicator.setBackground(RiceHandler.createBG(legend.getColour().get(), 10, 0.5));
-    }
-
-    @Override
-    public int compareTo(LegendTableMember o) {
-        return this.legend.compareTo(o.legend);
     }
 
     @Override

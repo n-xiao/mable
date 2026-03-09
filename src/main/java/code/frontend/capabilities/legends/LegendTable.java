@@ -80,7 +80,7 @@ public final class LegendTable extends StackPane {
                 new CountdownToLegendDragStopper(this.uncategorised);
             stopper.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
             stopper.setOpacity(0);
-            this.uncategorised.getChildren().addLast(stopper);
+            this.uncategorised.getChildren().addFirst(stopper);
             this.table.addMember(this.uncategorised);
             this.table.getChildren().addLast(new LegendCreateButton());
             this.organiseCountdowns(countdowns);
@@ -134,11 +134,6 @@ public final class LegendTable extends StackPane {
             legend.setColour(new Colour(255, 255, 255, 1));
             super(legend, LegendTable.this);
             getDeletePane().setVisible(false);
-        }
-
-        @Override
-        public int compareTo(LegendTableMember o) {
-            return -1;
         }
     }
 

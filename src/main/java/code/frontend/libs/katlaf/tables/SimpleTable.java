@@ -22,6 +22,7 @@ import code.frontend.libs.katlaf.collections.SelectionCollection;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
@@ -35,6 +36,7 @@ public class SimpleTable extends FlowPane {
     public SimpleTable() {
         this.members = new ArrayList<SimpleTableMember>();
         this.selcol = new SelectionCollection<SimpleTableMember>(this.members);
+        this.setPadding(new Insets(5, 10, 5, 10));
         this.setVgap(V_GAP);
         this.setHgap(H_GAP);
         this.setMaxHeight(Double.MAX_VALUE);

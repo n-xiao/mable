@@ -56,7 +56,6 @@ import javafx.scene.paint.Stop;
  * @since v3.0.0-beta
  */
 public class CountdownView extends VBox implements Updatable {
-    private static final double GLOBAL_PADDING = 10;
     private final CountdownList list;
     private final LegendTable table;
 
@@ -73,7 +72,7 @@ public class CountdownView extends VBox implements Updatable {
         final String title, final Set<Legend> legends, final Set<Countdown> countdowns) {
         this.setBackground(null);
         this.setFillWidth(true);
-        this.setPadding(new Insets(GLOBAL_PADDING));
+        this.setPadding(new Insets(10, 0, 10, 0));
 
         this.list = new CountdownList();
 
@@ -103,10 +102,10 @@ public class CountdownView extends VBox implements Updatable {
 
         this.table = new LegendTable(this.list);
         this.table.setMinHeight(50);
-        VBox.setMargin(this.table, new Insets(20, 0, 0, 0));
+        VBox.setMargin(this.table, new Insets(20, 7, 0, 7));
 
         final Top top = new Top(title);
-        VBox.setMargin(top, new Insets(0, 0, 10, 0));
+        VBox.setMargin(top, new Insets(0, 7, 10, 7));
         this.getChildren().addAll(top, listContainer, this.table);
 
         this.list.populate(countdowns);
@@ -132,7 +131,7 @@ public class CountdownView extends VBox implements Updatable {
         final CountdownList.CountdownFilter filter) {
         this.table = null;
         this.setBackground(null);
-        this.setPadding(new Insets(GLOBAL_PADDING));
+        this.setPadding(new Insets(10, 0, 10, 0));
 
         this.list = new CountdownList(filter);
 
@@ -159,7 +158,7 @@ public class CountdownView extends VBox implements Updatable {
         listContainer.getChildren().addAll(listScrollPane, bottom);
 
         final Top top = new Top(title);
-        VBox.setMargin(top, new Insets(0, 0, 10, 0));
+        VBox.setMargin(top, new Insets(0, 7, 10, 7));
         if (filter == CountdownFilter.DELETED || filter == CountdownFilter.COMPLETED)
             top.setRight(null); // remove the button
 
@@ -208,7 +207,7 @@ public class CountdownView extends VBox implements Updatable {
             this.setLeft(label);
 
             final CountdownCreateButton button = new CountdownCreateButton(CountdownView.this.list);
-            button.setMinWidth(40);
+            button.setMinWidth(50);
             BorderPane.setMargin(button, new Insets(TOP_MARGIN, SIDE_MARGIN, 0, 0));
             this.setRight(button);
         }

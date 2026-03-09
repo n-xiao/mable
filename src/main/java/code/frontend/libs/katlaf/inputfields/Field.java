@@ -54,7 +54,6 @@ public final class Field extends StackPane {
         this.textField.setFont(FontHandler.getDedicated(DedicatedFont.USER_INPUT));
         this.textField.setStyle(
             "-fx-text-fill: " + RiceHandler.getColourString("white") + "; user-select: none;");
-        this.textField.setFocusTraversable(false);
         this.getChildren().add(this.textField);
 
         // filter setup

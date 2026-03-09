@@ -88,12 +88,13 @@ final class CountdownListMember
          * init the children
          */
         this.completeButton = new CompleteButton();
-        HBox.setMargin(completeButton, new Insets(3, 2, 3, 2));
+        HBox.setMargin(this.completeButton, new Insets(3, 2, 3, 9));
         this.nameplate = new Nameplate();
-        HBox.setMargin(nameplate, new Insets(0, 0, 0, 8));
+        HBox.setMargin(this.nameplate, new Insets(0, 0, 0, 8));
         this.dateplate = new Dateplate();
-        HBox.setMargin(dateplate, new Insets(0, 8, 0, 0));
+        HBox.setMargin(this.dateplate, new Insets(0, 8, 0, 0));
         this.counter = new Counter();
+        HBox.setMargin(this.counter, new Insets(0, 7, 0, 0));
         this.counter.setPrefHeight(25);
 
         this.content.getChildren().addAll(completeButton, nameplate, spacer, dateplate, counter);
@@ -325,7 +326,7 @@ final class CountdownListMember
             /*
              * set the border up first
              */
-            this.border = new MableBorder(1, 0.05, 1);
+            this.border = new MableBorder(1, 0.02, 1);
             this.border.bindSize(this.widthProperty(), this.heightProperty());
             /*
              * set the fill up now

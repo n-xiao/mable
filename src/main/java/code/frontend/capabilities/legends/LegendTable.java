@@ -57,6 +57,7 @@ public final class LegendTable extends StackPane {
             new MableBorder(1.5, 0.2, 0.2), "Legend", RiceHandler.getColour("night"));
         region.setColour(RiceHandler.getColour("lightgrey"));
         region.setViewOrder(-1);
+        region.setOpacity(0.5);
         region.setMouseTransparent(true);
 
         StackPane.setMargin(this.table, new Insets(8));

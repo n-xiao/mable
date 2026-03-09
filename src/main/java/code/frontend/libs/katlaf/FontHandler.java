@@ -56,7 +56,7 @@ public final class FontHandler {
     public static Font getHeading(int type) {
         switch (type) {
             case 1:
-                return Font.font(FONT_FAM, FontWeight.BOLD, 16);
+                return Font.font(FONT_FAM, FontWeight.BOLD, 17);
             case 2:
                 return Font.font(FONT_FAM, FontWeight.BOLD, 15);
             case 3:

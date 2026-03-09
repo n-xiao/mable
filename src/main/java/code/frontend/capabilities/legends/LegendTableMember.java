@@ -30,7 +30,6 @@ import code.frontend.libs.katlaf.ricing.RiceHandler;
 import code.frontend.libs.katlaf.tables.SimpleTableMember;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -91,7 +90,6 @@ class LegendTableMember
         this.delete.getChildren().add(cross);
         this.delete.setMaxSize(HEIGHT, HEIGHT);
         this.delete.setMinSize(HEIGHT, HEIGHT);
-        this.delete.setCursor(Cursor.HAND);
         this.delete.setOpacity(0.5);
         this.delete.setOnMousePressed(event -> {
             if (this.legend.getContents().isEmpty()) {

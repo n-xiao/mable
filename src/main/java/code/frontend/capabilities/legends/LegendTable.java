@@ -81,7 +81,7 @@ public final class LegendTable extends StackPane {
             stopper.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
             stopper.setOpacity(0);
             this.uncategorised.getChildren().addFirst(stopper);
-            this.table.addMember(this.uncategorised);
+            this.table.getChildren().addFirst(this.uncategorised);
             this.table.getChildren().addLast(new LegendCreateButton());
             this.organiseCountdowns(countdowns);
         }

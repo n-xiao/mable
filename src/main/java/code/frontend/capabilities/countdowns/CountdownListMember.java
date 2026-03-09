@@ -168,9 +168,9 @@ final class CountdownListMember
                 this.setColour("white");
 
             if (this.countdown.isOverdue(LocalDate.now())) {
-                this.dateplate.setTextFill(RiceHandler.getColour("pink"));
+                this.dateplate.setFont(FontHandler.getHeavyMono());
             } else {
-                this.dateplate.setTextFill(RiceHandler.getColour("white"));
+                this.dateplate.setFont(FontHandler.getMono());
             }
         });
     }

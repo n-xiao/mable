@@ -82,6 +82,10 @@ public final class FontHandler {
         return Font.font(FONT_MONO, 12);
     }
 
+    public static Font getHeavyMono() {
+        return Font.font(FONT_MONO, FontWeight.EXTRA_BOLD, 12);
+    }
+
     /**
      * This returns fonts for specific user interface components
      * that require unique fonts for aesthetic reasons. Invalid arguments,

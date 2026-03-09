@@ -22,6 +22,7 @@ import code.backend.data.wrappers.CountdownPacket;
 import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.dragndrop.DragStartRegion;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
@@ -98,6 +99,7 @@ final class CountdownDragStarter extends DragStartRegion<CountdownPacket> {
             member.getChildren().addLast(this);
             this.setViewOrder(-1);
             this.installed = true;
+            StackPane.setMargin(this, new Insets(0, 0, 0, 30));
         }
     }
 }

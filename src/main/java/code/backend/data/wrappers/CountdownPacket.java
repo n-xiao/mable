@@ -20,7 +20,9 @@ package code.backend.data.wrappers;
 
 import code.backend.data.Countdown;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Because of how drag and drop is implemented, classes with generic types
@@ -54,5 +56,9 @@ public final class CountdownPacket {
 
     public List<Countdown> getCountdowns() {
         return countdowns;
+    }
+
+    public Set<Countdown> getCountdownsAsSet() {
+        return new HashSet<>(countdowns);
     }
 }

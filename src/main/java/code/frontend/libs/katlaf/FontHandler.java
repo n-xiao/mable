@@ -37,7 +37,8 @@ public final class FontHandler {
         USER_INPUT,
         BORDER,
         SYMBOL_IT,
-        SYMBOL
+        SYMBOL,
+        RIGHT_CLICK
     }
 
     public static Font getTitle() {
@@ -110,6 +111,8 @@ public final class FontHandler {
                 return Font.font(FONT_FAM, FontWeight.BOLD, FontPosture.ITALIC, 8);
             case SYMBOL:
                 return Font.font(FONT_FAM, FontWeight.BOLD, FontPosture.REGULAR, 12);
+            case RIGHT_CLICK:
+                return Font.font(FONT_FAM, 10);
             default:
                 return getNormal();
         }

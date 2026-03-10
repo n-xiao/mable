@@ -19,6 +19,8 @@
 package code.frontend.libs.katlaf.menus;
 
 import code.frontend.MainContainer;
+import code.frontend.libs.katlaf.FontHandler;
+import code.frontend.libs.katlaf.FontHandler.DedicatedFont;
 import code.frontend.libs.katlaf.buttons.FilledButton;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.util.ArrayList;
@@ -108,7 +110,10 @@ public final class RightClickMenu extends Region {
 
         mc.getChildren().add(this);
 
-        this.setOnMousePressed(event -> this.despawn());
+        this.setOnMousePressed(event -> {
+            this.despawn();
+            event.consume();
+        });
     }
 
     /**
@@ -131,6 +136,7 @@ public final class RightClickMenu extends Region {
                 }
             };
         button.setLabel(label);
+        button.setLabelFont(FontHandler.getDedicated(DedicatedFont.RIGHT_CLICK));
         button.setMinSize(WIDTH, BUTTON_HEIGHT);
         button.setMaxSize(WIDTH, BUTTON_HEIGHT);
         VBox.setMargin(button, new Insets(0, 0, PADDING, 0));

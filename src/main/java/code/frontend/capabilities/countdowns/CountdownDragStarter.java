@@ -21,10 +21,14 @@ package code.frontend.capabilities.countdowns;
 import code.backend.data.wrappers.CountdownPacket;
 import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.dragndrop.DragStartRegion;
+import code.frontend.libs.katlaf.menus.RightClickMenu;
+import code.frontend.libs.katlaf.popup.Popup;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
+import java.util.List;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 
@@ -35,6 +39,46 @@ final class CountdownDragStarter extends DragStartRegion<CountdownPacket> {
     CountdownDragStarter(final CountdownList list) {
         this.list = list;
         this.installed = false;
+
+        /*
+         * implementation of right click behaviour
+         */
+        this.setOnMouseClicked(event -> {
+            if (event.getButton() == MouseButton.SECONDARY) {
+                final List<CountdownListMember> selectedMembers = list.getSelectedMembers();
+
+                if (selectedMembers.isEmpty())
+                    return;
+
+                final Runnable edit = new Runnable() {
+                    @Override
+                    public void run() {
+                        Popup.spawn(new CountdownCreatorPopup(list, selectedMembers.getFirst()));
+                    }
+                };
+
+                final Runnable delete = new Runnable() {
+                    @Override
+                    public void run() {
+                        selectedMembers.forEach(member -> member.getCountdown().delete());
+                        list.removeMembers(list.getSelectedCountdowns().getCountdownsAsSet());
+                    }
+                };
+
+                if (selectedMembers.size() > 1) {
+                    new RightClickMenu()
+                        .addButton("Delete", delete)
+                        .init(event.getSceneX(), event.getSceneY());
+                } else {
+                    new RightClickMenu()
+                        .addButton("Edit", edit)
+                        .addButton("Delete", delete)
+                        .init(event.getSceneX(), event.getSceneY());
+                }
+
+                event.consume();
+            }
+        });
     }
 
     /*

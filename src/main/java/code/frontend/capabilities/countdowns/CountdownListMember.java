@@ -162,7 +162,8 @@ final class CountdownListMember
             if (child instanceof Updatable updatable) {
                 updatable.update();
             }
-            if (!this.countdown.isDone() && !this.countdown.isDeleted())
+            if (list.isPendingRemoval(this)
+                || !this.countdown.isDone() && !this.countdown.isDeleted())
                 this.setColour(countdown.getColour());
             else
                 this.setColour("white");
@@ -359,7 +360,7 @@ final class CountdownListMember
         @Override
         public void setColour(Color colour) {
             final var backgroundFill =
-                new BackgroundFill(countdown.getColour(), new CornerRadii(12), new Insets(4));
+                new BackgroundFill(colour, new CornerRadii(12), new Insets(4));
             this.fill.setBackground(new Background(backgroundFill));
             this.border.setColour(colour);
         }

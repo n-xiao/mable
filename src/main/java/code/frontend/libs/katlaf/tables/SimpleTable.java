@@ -20,7 +20,6 @@ package code.frontend.libs.katlaf.tables;
 
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.util.ArrayList;
-import java.util.List;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.FlowPane;
@@ -79,43 +78,6 @@ public class SimpleTable extends FlowPane {
             final FakeMember fakeMember = new FakeMember(widths);
             this.getChildren().addLast(fakeMember);
         }
-    }
-
-    /*
-
-
-     PUBLIC API
-    -------------------------------------------------------------------------------------*/
-
-    /**
-     * Adds a {@link SimpleTableMember member} to this table,
-     * and attaches mouse listeners to it.
-     */
-    public void addMember(final SimpleTableMember tableMember) {
-        this.members.add(tableMember);
-        this.getChildren().add(this.members.indexOf(tableMember), tableMember);
-    }
-
-    public void addMembers(final List<SimpleTableMember> tableMembers) {
-        for (SimpleTableMember simpleTableMember : tableMembers) {
-            this.members.add(simpleTableMember);
-        }
-        this.getChildren().clear();
-        this.getChildren().addAll(this.members);
-    }
-
-    /**
-     * Removes the provided member from this table.
-     */
-    public void removeMember(final SimpleTableMember tableMember) {
-        this.members.remove(tableMember);
-        this.getChildren().remove(tableMember);
-    }
-
-    public void removeMembers(final List<SimpleTableMember> tableMembers) {
-        this.members.removeAll(tableMembers);
-        this.getChildren().clear();
-        this.getChildren().addAll(this.members);
     }
 
     /*

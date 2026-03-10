@@ -91,6 +91,17 @@ public final class CountdownList extends SimpleList implements Updatable {
      PRIVATE API
     -------------------------------------------------------------------------------------*/
 
+    private List<CountdownListMember> getCountdownMembers() {
+        final ArrayList<CountdownListMember> members = new ArrayList<CountdownListMember>();
+        final List<SimpleListMember> simpleMembers = this.getMembers();
+        for (SimpleListMember simpleListMember : simpleMembers) {
+            if (simpleListMember instanceof CountdownListMember member) {
+                members.add(member);
+            }
+        }
+        return members;
+    }
+
     synchronized void requestMarkAsDone(final CountdownListMember member) {
         if (this.pendingRemoval.contains(member))
             abortRemoveMember(member);
@@ -106,14 +117,13 @@ public final class CountdownList extends SimpleList implements Updatable {
     }
 
     List<CountdownListMember> getSelectedMembers() {
-        final List<SimpleListMember> simpleMembers = this.getMembers();
-        final ArrayList<CountdownListMember> members = new ArrayList<CountdownListMember>();
-        for (SimpleListMember simpleMember : simpleMembers) {
-            if (simpleMember instanceof CountdownListMember member && member.isToggled()) {
-                members.add(member);
-            }
-        }
-        return members;
+        final List<CountdownListMember> members = this.getCountdownMembers();
+        final ArrayList<CountdownListMember> selectedMembers = new ArrayList<CountdownListMember>();
+        members.forEach(member -> {
+            if (member.isToggled())
+                selectedMembers.add(member);
+        });
+        return selectedMembers;
     }
 
     /*
@@ -137,6 +147,25 @@ public final class CountdownList extends SimpleList implements Updatable {
             if (this.rmTransitioner.getTransition() != null)
                 this.rmTransitioner.getTransition().stop();
             this.pendingRemoval.add(countdownMember);
+        }
+    }
+
+    public synchronized void removeMember(Countdown countdown) {
+        final List<CountdownListMember> members = this.getCountdownMembers();
+        CountdownListMember memberToRemove = null;
+        for (CountdownListMember countdownListMember : members) {
+            if (countdownListMember.getCountdown().equals(countdown)) {
+                memberToRemove = countdownListMember;
+                break;
+            }
+        }
+        if (memberToRemove != null)
+            super.removeMember(memberToRemove);
+    }
+
+    public synchronized void removeMembers(Set<Countdown> countdowns) {
+        for (Countdown countdown : countdowns) {
+            removeMember(countdown);
         }
     }
 

@@ -20,6 +20,7 @@ package code.frontend.capabilities.legends;
 
 import code.backend.data.Legend;
 import code.backend.data.LegendHandler;
+import code.frontend.capabilities.countdowns.CountdownList;
 import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.FontHandler.DedicatedFont;
 import code.frontend.libs.katlaf.dragndrop.DragReaction;
@@ -59,7 +60,8 @@ class LegendTableMember extends SimpleTableMember implements DragReaction, Colou
     private final HBox container;
     private final MableBorder border;
 
-    protected LegendTableMember(final Legend legend, final LegendTable table) {
+    protected LegendTableMember(
+        final Legend legend, final LegendTable table, final CountdownList list) {
         this.setMaxWidth(MAX_WIDTH);
         this.setMaxHeight(HEIGHT);
         this.setMinHeight(HEIGHT);
@@ -91,7 +93,7 @@ class LegendTableMember extends SimpleTableMember implements DragReaction, Colou
                 table.removeMember(this.legend);
                 LegendHandler.removeLegend(this.legend);
             } else {
-                Popup.spawn(new LegendDeletePopup(this.legend, table));
+                Popup.spawn(new LegendDeletePopup(this.legend, table, list));
             }
         });
 

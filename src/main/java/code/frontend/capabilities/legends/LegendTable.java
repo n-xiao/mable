@@ -75,18 +75,19 @@ public final class LegendTable extends StackPane {
 
     public void populate(final Set<Legend> legends, final Set<Countdown> countdowns) {
         if (!this.populated) {
-            legends.forEach(this::addMember);
             final CountdownToLegendDragStopper stopper =
                 new CountdownToLegendDragStopper(this.uncategorised);
             stopper.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
             stopper.setOpacity(0);
-            this.uncategorised.getChildren().addFirst(stopper);
+            this.uncategorised.getChildren().addLast(stopper);
             this.table.getChildren().addFirst(this.uncategorised);
             this.table.getChildren().addLast(new LegendCreateButton());
+
+            this.populated = true;
+
+            legends.forEach(this::addMember);
             this.organiseCountdowns(countdowns);
         }
-
-        this.populated = true;
     }
 
     public void organiseCountdowns(final Set<Countdown> countdowns) {
@@ -99,9 +100,12 @@ public final class LegendTable extends StackPane {
     }
 
     public void addMember(final Legend legend) {
-        final LegendTableMember member = new LegendTableMember(legend, this);
+        if (!this.populated)
+            throw new IllegalStateException("You must populate the LegendTable first!");
+
+        final LegendTableMember member = new LegendTableMember(legend, this, this.list);
         this.members.add(member);
-        this.table.addMember(member);
+        this.table.getChildren().add(this.table.getChildren().size() - 1, member);
         this.list.colourCountdowns();
         /*
          * drag drop stuff
@@ -119,7 +123,7 @@ public final class LegendTable extends StackPane {
                 memberToDelete = member;
         }
         this.members.remove(memberToDelete);
-        this.table.removeMember(memberToDelete);
+        this.table.getChildren().remove(memberToDelete);
     }
 
     /*
@@ -132,7 +136,7 @@ public final class LegendTable extends StackPane {
         Uncategorised() {
             final Legend legend = new Legend("Uncategorised");
             legend.setColour(new Colour(255, 255, 255, 1));
-            super(legend, LegendTable.this);
+            super(legend, LegendTable.this, LegendTable.this.list);
             getDeletePane().setVisible(false);
         }
     }

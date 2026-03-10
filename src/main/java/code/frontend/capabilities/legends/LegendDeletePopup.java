@@ -20,6 +20,7 @@ package code.frontend.capabilities.legends;
 
 import code.backend.data.Legend;
 import code.backend.data.LegendHandler;
+import code.frontend.capabilities.countdowns.CountdownList;
 import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.buttons.FilledButton;
 import code.frontend.libs.katlaf.graphics.LabelledBorderedRegion;
@@ -45,14 +46,17 @@ public class LegendDeletePopup extends Popup {
     private final VBox container;
     private final Legend legend;
     private final LegendTable table;
+    private final CountdownList list;
 
     /**
      * Creates a new instance.
      *
      * @param legend        the Legend to be deleted
-     *
+     * @param table         the associated LegendTable
+     * @param list          the associated CountdownList
      */
-    public LegendDeletePopup(final Legend legend, final LegendTable table) {
+    public LegendDeletePopup(
+        final Legend legend, final LegendTable table, final CountdownList list) {
         if (legend.getContents().isEmpty())
             throw new IllegalArgumentException(
                 "LegendDeletePopup spawning when the legend is empty?! What is this madness?");
@@ -60,7 +64,8 @@ public class LegendDeletePopup extends Popup {
         this.container = new VBox();
         this.legend = legend;
         this.table = table;
-        super(200, 150);
+        this.list = list;
+        super(370, 250);
     }
 
     /*
@@ -78,7 +83,7 @@ public class LegendDeletePopup extends Popup {
 
         final String num = Integer.toString(this.legend.getContents().size());
         final Label header = new Label("You are trying to delete \"" + this.legend.getName()
-            + "\", a Legend containing " + num + " countdown(s).");
+            + "\"\nwhich contains " + num + " countdown(s).");
         header.setFont(FontHandler.getHeading(3));
         header.setTextFill(RiceHandler.getColour("white"));
         header.setAlignment(Pos.CENTER);
@@ -96,13 +101,15 @@ public class LegendDeletePopup extends Popup {
                     legend.getContents().forEach(countdown -> countdown.delete());
                     LegendHandler.removeLegend(legend);
                     table.removeMember(legend);
+                    list.removeMembers(legend.getContents());
                     Popup.despawn();
                 }
             };
-        deleteAllButton.setLabel("Delete all Countdowns of this Legend, then delete the Legend");
+        deleteAllButton.setLabel("Delete the Countdowns, then delete the Legend");
+        deleteAllButton.setMinHeight(40);
 
         final FilledButton keepAllButton =
-            new FilledButton(RiceHandler.getColour("darkgrey"), RiceHandler.getColour("black")) {
+            new FilledButton(RiceHandler.getColour("darkgrey"), RiceHandler.getColour("grey")) {
                 @Override
                 public void onMousePressed(MouseEvent event) {
                     legend.getContents().clear();
@@ -112,6 +119,7 @@ public class LegendDeletePopup extends Popup {
                 }
             };
         keepAllButton.setLabel("Keep all Countdowns, but delete the Legend");
+        keepAllButton.setMinHeight(40);
 
         this.container.setPadding(new Insets(0, 20, 0, 20));
         this.container.setAlignment(Pos.CENTER);

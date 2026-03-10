@@ -36,8 +36,12 @@ public final class CountdownHandler {
 
     public static Set<Countdown> getAll() {
         final LinkedHashSet<Countdown> result = new LinkedHashSet<Countdown>();
-        result.addAll(COUNTDOWNS);
-        result.addAll(DELETED_COUNTDOWNS);
+        for (Countdown countdown : COUNTDOWNS) {
+            result.add(countdown);
+        }
+        for (Countdown countdown : DELETED_COUNTDOWNS) {
+            result.add(countdown);
+        }
         return result;
     }
 

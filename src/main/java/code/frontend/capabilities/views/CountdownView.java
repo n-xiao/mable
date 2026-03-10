@@ -55,7 +55,7 @@ import javafx.scene.paint.Stop;
  *
  * @since v3.0.0-beta
  */
-public class CountdownView extends VBox implements Updatable {
+public abstract class CountdownView extends VBox implements Updatable {
     private final CountdownList list;
     private final LegendTable table;
 
@@ -65,11 +65,8 @@ public class CountdownView extends VBox implements Updatable {
      * @param title         the String title of this instance
      * @param legends       the Set of Legend instances that should be displayed in this
      *                      CountdownView
-     * @param countdowns    the Set of Countdown instances that should be displayed in
-     *                      this CountdownView
      */
-    public CountdownView(
-        final String title, final Set<Legend> legends, final Set<Countdown> countdowns) {
+    public CountdownView(final String title, final Set<Legend> legends) {
         this.setBackground(null);
         this.setFillWidth(true);
         this.setPadding(new Insets(10, 0, 10, 0));
@@ -108,15 +105,15 @@ public class CountdownView extends VBox implements Updatable {
         VBox.setMargin(top, new Insets(0, 7, 10, 7));
         this.getChildren().addAll(top, listContainer, this.table);
 
-        this.list.populate(countdowns);
-        this.table.populate(legends, countdowns);
+        this.list.populate(getCountdowns());
+        this.table.populate(legends, getCountdowns());
 
         this.widthProperty().addListener(
-            (observable, oldValue, newValue) -> { this.list.populate(countdowns); });
+            (observable, oldValue, newValue) -> { this.list.populate(getCountdowns()); });
 
         this.visibleProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.booleanValue())
-                this.list.populate(countdowns);
+                this.list.populate(getCountdowns());
         });
     }
 
@@ -125,13 +122,10 @@ public class CountdownView extends VBox implements Updatable {
      * deleted or completed Countdowns, where user edit capabilities are limited.
      *
      * @param title         the String title of this instance
-     * @param countdowns    the Set of Countdown instances that should be displayed in
-     *                      this CountdownView
      * @param filter        the CountdownFilter which specifies what type of Countdown
      *                      instances should be displayed
      */
-    public CountdownView(final String title, final Set<Countdown> countdowns,
-        final CountdownList.CountdownFilter filter) {
+    public CountdownView(final String title, final CountdownList.CountdownFilter filter) {
         this.table = null;
         this.setBackground(null);
         this.setPadding(new Insets(10, 0, 10, 0));
@@ -168,14 +162,14 @@ public class CountdownView extends VBox implements Updatable {
 
         this.getChildren().addAll(top, listContainer);
 
-        this.list.populate(countdowns);
+        this.list.populate(getCountdowns());
 
         this.widthProperty().addListener(
-            (observable, oldValue, newValue) -> { this.list.populate(countdowns); });
+            (observable, oldValue, newValue) -> { this.list.populate(getCountdowns()); });
 
         this.visibleProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.booleanValue())
-                this.list.populate(countdowns);
+                this.list.populate(getCountdowns());
         });
     }
 
@@ -189,6 +183,8 @@ public class CountdownView extends VBox implements Updatable {
     public void update() {
         this.list.update();
     }
+
+    public abstract Set<Countdown> getCountdowns();
 
     /*
 

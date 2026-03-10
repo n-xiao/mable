@@ -18,6 +18,7 @@
 
 package code.frontend;
 
+import code.backend.data.Countdown;
 import code.backend.data.CountdownHandler;
 import code.backend.data.LegendHandler;
 import code.frontend.capabilities.concurrency.Watchdog;
@@ -25,6 +26,7 @@ import code.frontend.capabilities.countdowns.CountdownList.CountdownFilter;
 import code.frontend.capabilities.sidebar.Sidebar;
 import code.frontend.capabilities.views.CountdownView;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
+import java.util.Set;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
@@ -62,12 +64,24 @@ public final class MainContainer extends HBox {
          * init the content first
          */
         final StackPane container = new StackPane();
-        this.activeView = new CountdownView(
-            "Active Countdowns", LegendHandler.getLegends(), CountdownHandler.getAll());
-        this.completedView = new CountdownView(
-            "Completed Countdowns", CountdownHandler.getAll(), CountdownFilter.COMPLETED);
-        this.deletedView = new CountdownView(
-            "Deleted Countdowns", CountdownHandler.getAll(), CountdownFilter.DELETED);
+        this.activeView = new CountdownView("Active Countdowns", LegendHandler.getLegends()) {
+            @Override
+            public Set<Countdown> getCountdowns() {
+                return CountdownHandler.getAll();
+            }
+        };
+        this.completedView = new CountdownView("Completed Countdowns", CountdownFilter.COMPLETED) {
+            @Override
+            public Set<Countdown> getCountdowns() {
+                return CountdownHandler.getAll();
+            }
+        };
+        this.deletedView = new CountdownView("Deleted Countdowns", CountdownFilter.DELETED) {
+            @Override
+            public Set<Countdown> getCountdowns() {
+                return CountdownHandler.getAll();
+            }
+        };
 
         container.getChildren().addAll(this.activeView, this.completedView, this.deletedView);
         container.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);

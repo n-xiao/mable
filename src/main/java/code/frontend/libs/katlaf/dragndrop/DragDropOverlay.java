@@ -47,7 +47,7 @@ final class DragDropOverlay<T> extends Region {
     /*
 
 
-     PRIVATE
+     PRIVATE API
     -------------------------------------------------------------------------------------*/
 
     /**

@@ -135,9 +135,14 @@ public final class CountdownList extends SimpleList implements Updatable {
     @Override
     public synchronized void addMember(SimpleListMember member) {
         super.addMember(member);
-        if (member instanceof CountdownListMember listMember) {
+        if (member instanceof CountdownListMember listMember
+            && this.filter == CountdownFilter.ONGOING) {
             final CountdownDragStarter dragStarter = new CountdownDragStarter(this);
             dragStarter.install(listMember);
+        } else if (member instanceof CountdownListMember listMember
+            && this.filter == CountdownFilter.DELETED) {
+            listMember.removeDateplate();
+            listMember.removeCounter();
         }
     }
 
@@ -199,14 +204,6 @@ public final class CountdownList extends SimpleList implements Updatable {
         for (Countdown countdown : countdowns) {
             if (verification.apply(countdown)) {
                 this.addMember(new CountdownListMember(countdown, this));
-            }
-
-            // TODO remove this after debug
-            if (this.filter == CountdownFilter.DELETED) {
-                System.out.println("deleted filter");
-                System.out.println(countdown.getName());
-                System.out.println(verification.apply(countdown));
-                System.out.println();
             }
         }
     }

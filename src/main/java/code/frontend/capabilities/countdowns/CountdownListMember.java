@@ -140,6 +140,10 @@ final class CountdownListMember
         this.content.getChildren().remove(this.counter);
     }
 
+    protected final void removeDateplate() {
+        this.content.getChildren().remove(this.dateplate);
+    }
+
     protected final Countdown getCountdown() {
         return this.countdown;
     }

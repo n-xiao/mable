@@ -33,7 +33,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -67,39 +66,12 @@ public abstract class CountdownView extends VBox implements Updatable {
      *                      CountdownView
      */
     public CountdownView(final String title, final Set<Legend> legends) {
-        this.setBackground(null);
-        this.setFillWidth(true);
-        this.setPadding(new Insets(10, 0, 10, 0));
-
         this.list = new CountdownList();
-
-        final ScrollPane listScrollPane = new ScrollPane(this.list);
-        listScrollPane.setStyle("-fx-background: transparent;");
-        listScrollPane.setBackground(null);
-        listScrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
-        listScrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
-        listScrollPane.setFitToWidth(true);
-        /*
-         * click "anywhere" to deselect
-         */
-        listScrollPane.setOnMousePressed(event -> {
-            if (event.getButton() == MouseButton.PRIMARY) {
-                CountdownView.this.list.getSelector().deselectAll();
-                event.consume();
-            }
-        });
-
-        final Bottom bottom = new Bottom();
-        bottom.setPrefHeight(20);
-        StackPane.setAlignment(bottom, Pos.BOTTOM_CENTER);
-
-        final StackPane listContainer = new StackPane();
-        listContainer.getChildren().addAll(listScrollPane, bottom);
-        VBox.setVgrow(listContainer, Priority.ALWAYS);
-
         this.table = new LegendTable(this.list);
         this.table.setMinHeight(50);
         VBox.setMargin(this.table, new Insets(20, 7, 0, 7));
+
+        final StackPane listContainer = this.initListContainer(CountdownFilter.ONGOING);
 
         final Top top = new Top(title);
         VBox.setMargin(top, new Insets(0, 7, 10, 7));
@@ -108,13 +80,7 @@ public abstract class CountdownView extends VBox implements Updatable {
         this.list.populate(getCountdowns());
         this.table.populate(legends, getCountdowns());
 
-        this.widthProperty().addListener(
-            (observable, oldValue, newValue) -> { this.list.populate(getCountdowns()); });
-
-        this.visibleProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.booleanValue())
-                this.list.populate(getCountdowns());
-        });
+        this.initListeners();
     }
 
     /**
@@ -126,11 +92,32 @@ public abstract class CountdownView extends VBox implements Updatable {
      *                      instances should be displayed
      */
     public CountdownView(final String title, final CountdownList.CountdownFilter filter) {
-        this.table = null;
-        this.setBackground(null);
-        this.setPadding(new Insets(10, 0, 10, 0));
-
         this.list = new CountdownList(filter);
+        this.table = null;
+
+        final StackPane listContainer = this.initListContainer(filter);
+
+        final Top top = new Top(title);
+        VBox.setMargin(top, new Insets(0, 7, 10, 7));
+        if (filter == CountdownFilter.DELETED || filter == CountdownFilter.COMPLETED)
+            top.setRight(null); // remove the button
+        this.getChildren().addAll(top, listContainer);
+
+        this.list.populate(getCountdowns());
+
+        this.initListeners();
+    }
+
+    /*
+
+
+     PRIVATE API
+    -------------------------------------------------------------------------------------*/
+
+    private StackPane initListContainer(final CountdownFilter filter) {
+        this.setBackground(null);
+        this.setFillWidth(true);
+        this.setPadding(new Insets(10, 0, 10, 0));
 
         final ScrollPane listScrollPane = new ScrollPane(this.list);
         listScrollPane.setStyle("-fx-background: transparent;");
@@ -142,28 +129,22 @@ public abstract class CountdownView extends VBox implements Updatable {
          * click "anywhere" to deselect
          */
         listScrollPane.setOnMousePressed(event -> {
-            if (event.getButton() == MouseButton.PRIMARY) {
-                CountdownView.this.list.getSelector().deselectAll();
-                event.consume();
-            }
+            CountdownView.this.list.getSelector().deselectAll();
+            event.consume();
         });
 
         final Bottom bottom = new Bottom();
+        bottom.setPrefHeight(20);
         StackPane.setAlignment(bottom, Pos.BOTTOM_CENTER);
 
         final StackPane listContainer = new StackPane();
-        StackPane.clearConstraints(listScrollPane);
         listContainer.getChildren().addAll(listScrollPane, bottom);
+        VBox.setVgrow(listContainer, Priority.ALWAYS);
 
-        final Top top = new Top(title);
-        VBox.setMargin(top, new Insets(0, 7, 10, 7));
-        if (filter == CountdownFilter.DELETED || filter == CountdownFilter.COMPLETED)
-            top.setRight(null); // remove the button
+        return listContainer;
+    }
 
-        this.getChildren().addAll(top, listContainer);
-
-        this.list.populate(getCountdowns());
-
+    private void initListeners() {
         this.widthProperty().addListener(
             (observable, oldValue, newValue) -> { this.list.populate(getCountdowns()); });
 

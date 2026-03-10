@@ -84,24 +84,26 @@ final class CountdownDragStarter extends DragStartRegion<CountdownPacket> {
             });
         else
             this.setOnMouseClicked(event -> {
-                final List<CountdownListMember> selectedMembers = list.getSelectedMembers();
+                if (event.getButton() == MouseButton.SECONDARY) {
+                    final List<CountdownListMember> selectedMembers = list.getSelectedMembers();
 
-                if (selectedMembers.isEmpty())
-                    return;
+                    if (selectedMembers.isEmpty())
+                        return;
 
-                final Runnable recover = new Runnable() {
-                    @Override
-                    public void run() {
-                        selectedMembers.forEach(member -> member.getCountdown().recover());
-                        list.removeMembers(list.getSelectedCountdowns().getCountdownsAsSet());
-                    }
-                };
+                    final Runnable recover = new Runnable() {
+                        @Override
+                        public void run() {
+                            selectedMembers.forEach(member -> member.getCountdown().recover());
+                            list.removeMembers(list.getSelectedCountdowns().getCountdownsAsSet());
+                        }
+                    };
 
-                new RightClickMenu()
-                    .addButton("Recover", recover)
-                    .init(event.getSceneX(), event.getSceneY());
+                    new RightClickMenu()
+                        .addButton("Recover", recover)
+                        .init(event.getSceneX(), event.getSceneY());
 
-                event.consume();
+                    event.consume();
+                }
             });
     }
 

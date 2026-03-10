@@ -27,8 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
@@ -88,12 +90,12 @@ public final class RightClickMenu extends Region {
 
         this.setManaged(false);
         this.resize(mc.getScene().getWidth(), mc.getScene().getHeight());
-        this.setViewOrder(-200);
 
         final VBox container = new VBox();
         container.setAlignment(Pos.CENTER);
         container.setPadding(new Insets(PADDING, PADDING, 0, PADDING));
-        container.setBackground(RiceHandler.createBG(RiceHandler.getColour("dullgrey"), 5, 0));
+        container.setBackground(RiceHandler.createBG(RiceHandler.getColour("darkgrey"), 8, 0));
+        container.setViewOrder(-200);
         this.buttons.forEach(container.getChildren()::add);
 
         this.getChildren().add(container);
@@ -110,10 +112,7 @@ public final class RightClickMenu extends Region {
 
         mc.getChildren().add(this);
 
-        this.setOnMousePressed(event -> {
-            this.despawn();
-            event.consume();
-        });
+        this.setOnMouseClicked(event -> { this.despawn(); });
     }
 
     /**
@@ -133,15 +132,24 @@ public final class RightClickMenu extends Region {
                 public void onMouseClicked(MouseEvent event) {
                     runnable.run();
                     despawn();
+                    event.consume();
                 }
             };
-        button.setLabel(label);
-        button.setLabelFont(FontHandler.getDedicated(DedicatedFont.RIGHT_CLICK));
-        button.setMinSize(WIDTH, BUTTON_HEIGHT);
-        button.setMaxSize(WIDTH, BUTTON_HEIGHT);
         VBox.setMargin(button, new Insets(0, 0, PADDING, 0));
 
         this.buttons.add(button);
+
+        final Label text = new Label("  " + label);
+        text.setAlignment(Pos.CENTER_LEFT);
+        text.setTextFill(RiceHandler.getColour("white"));
+        text.setFont(FontHandler.getDedicated(DedicatedFont.RIGHT_CLICK));
+        text.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
+        button.setMinSize(WIDTH, BUTTON_HEIGHT);
+        button.setMaxSize(WIDTH, BUTTON_HEIGHT);
+        button.setTransitionDuration(50);
+        button.getChildren().addAll(text);
+        button.setViewOrder(-1);
 
         return this;
     }

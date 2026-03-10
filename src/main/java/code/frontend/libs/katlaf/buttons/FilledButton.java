@@ -21,6 +21,7 @@ package code.frontend.libs.katlaf.buttons;
 import code.frontend.libs.katlaf.faces.LabelFace;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.animation.FadeTransition;
+import javafx.geometry.Pos;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
@@ -86,6 +87,18 @@ public class FilledButton extends ButtonFoundation {
 
     public final void setLabelFont(final Font font) {
         this.face.setFont(font);
+    }
+
+    public final void setLabelAlignment(final Pos alignment) {
+        this.face.setLabelAlignment(alignment);
+    }
+
+    public final void setTransitionDuration(final double millis) {
+        this.transition.setDuration(Duration.millis(millis));
+    }
+
+    public final LabelFace getFace() {
+        return this.face;
     }
 
     @Override

@@ -70,11 +70,11 @@ public final class StorageHandler {
     }
 
     private static void loadCountdowns() throws JacksonException {
-        assert CountdownHandler.getAll().isEmpty();
+        assert CountdownHandler.getCountdowns().isEmpty();
         final JsonNode JSON_ROOT = MAPPER.readTree(COUNTDOWNS_PATH);
         JSON_ROOT.forEachEntry((_k, v) -> {
             Countdown cd = MAPPER.treeToValue(v, Countdown.class);
-            CountdownHandler.getAll().add(cd);
+            CountdownHandler.getCountdowns().add(cd);
         });
     }
 
@@ -82,7 +82,7 @@ public final class StorageHandler {
         final JsonNode JSON_ROOT = MAPPER.readTree(COUNTDOWNS_PATH);
         final ObjectNode OBJ_ROOT = JSON_ROOT.isObject() ? ((ObjectNode) JSON_ROOT)
                                                          : MAPPER.createObjectNode().putObject("");
-        CountdownHandler.getAll().forEach(cd -> { OBJ_ROOT.putPOJO(cd.getID().toString(), cd); });
+        CountdownHandler.getCountdowns().forEach(cd -> { OBJ_ROOT.putPOJO(cd.getID().toString(), cd); });
         CountdownHandler.getDeletedCountdowns().forEach(
             cd -> { OBJ_ROOT.remove(cd.getID().toString()); });
         MAPPER.writeValue(COUNTDOWNS_PATH, OBJ_ROOT);

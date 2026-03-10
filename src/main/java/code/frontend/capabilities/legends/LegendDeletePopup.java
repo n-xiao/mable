@@ -95,7 +95,7 @@ public class LegendDeletePopup extends Popup {
         info.setTextAlignment(TextAlignment.CENTER);
 
         final FilledButton deleteAllButton =
-            new FilledButton(RiceHandler.getColour("dullred"), RiceHandler.getColour("red")) {
+            new FilledButton(RiceHandler.getColour("dullred"), RiceHandler.getColour("dullred2")) {
                 @Override
                 public void onMousePressed(MouseEvent event) {
                     legend.getContents().forEach(countdown -> countdown.delete());

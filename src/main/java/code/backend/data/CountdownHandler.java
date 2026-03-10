@@ -19,8 +19,9 @@
 package code.backend.data;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
 
@@ -29,26 +30,15 @@ public final class CountdownHandler {
         new TreeSet<Countdown>(new SortByRemainingDays());
     private static final Stack<Countdown> DELETED_COUNTDOWNS = new Stack<Countdown>();
 
-    public static TreeSet<Countdown> getAll() {
+    public static TreeSet<Countdown> getCountdowns() {
         return COUNTDOWNS;
     }
 
-    static ArrayList<Countdown> getIncomplete() {
-        final ArrayList<Countdown> arr = new ArrayList<Countdown>();
-        COUNTDOWNS.forEach(c -> {
-            if (!c.isDone())
-                arr.add(c);
-        });
-        return arr;
-    }
-
-    static ArrayList<Countdown> getComplete() {
-        final ArrayList<Countdown> arr = new ArrayList<>();
-        COUNTDOWNS.forEach(c -> {
-            if (c.isDone())
-                arr.add(c);
-        });
-        return arr;
+    public static Set<Countdown> getAll() {
+        final LinkedHashSet<Countdown> result = new LinkedHashSet<Countdown>();
+        result.addAll(COUNTDOWNS);
+        result.addAll(DELETED_COUNTDOWNS);
+        return result;
     }
 
     static Stack<Countdown> getDeletedCountdowns() {

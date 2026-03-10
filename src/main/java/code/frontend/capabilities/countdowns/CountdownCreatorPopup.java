@@ -138,13 +138,15 @@ public final class CountdownCreatorPopup extends Popup {
                 if (due == null)
                     return;
 
-                if (isEditing()) {
-                    list.removeMemberImmediately(oldMember);
-                    oldMember.getCountdown().delete();
-                }
-
                 final Countdown countdown = CountdownHandler.create(name, due);
                 list.addMember(new CountdownListMember(countdown, list));
+
+                if (isEditing()) {
+                    if (oldMember.getCountdown().isInLegend())
+                        countdown.moveToLegend(oldMember.getCountdown().getLegend());
+                    list.removeMemberImmediately(oldMember);
+                    oldMember.getCountdown().deleteForever();
+                }
 
                 Popup.despawn();
             }

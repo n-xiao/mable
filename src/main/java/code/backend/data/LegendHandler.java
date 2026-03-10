@@ -77,5 +77,13 @@ public final class LegendHandler {
         return false;
     }
 
+    static Legend getLegend(final Countdown countdown) {
+        for (Legend legend : LEGENDS) {
+            if (legend.getContents().contains(countdown))
+                return legend;
+        }
+        return null;
+    }
+
     private LegendHandler() {}
 }

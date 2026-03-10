@@ -202,9 +202,13 @@ public class Countdown extends Identifiable implements Listable<Countdown>, Reco
         return LegendHandler.lookupCountdown(this);
     }
 
+    @JsonIgnore
+    public Legend getLegend() {
+        return LegendHandler.getLegend(this);
+    }
+
     /**
-     * Removes this Countdown instance from all possible storage mediums. Note that this method
-     * should only be called on a Countdown that has already been deleted. This operation cannot be
+     * Removes this Countdown instance from all possible storage mediums. This operation cannot be
      * undone.
      * <p>
      * Note that a save to persistent storage is done before erasing the runtime storage
@@ -215,11 +219,11 @@ public class Countdown extends Identifiable implements Listable<Countdown>, Reco
      */
     @Override
     public void deleteForever() {
-        if (this.isDeleted()) {
-            StorageHandler.save();
-            CountdownHandler.eraseCountdown(this);
-            LegendHandler.eraseCountdown(this);
-        }
+        if (!this.isDeleted())
+            this.delete();
+        StorageHandler.save();
+        CountdownHandler.eraseCountdown(this);
+        LegendHandler.eraseCountdown(this);
     }
 
     @Override

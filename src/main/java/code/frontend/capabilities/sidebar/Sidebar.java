@@ -39,7 +39,7 @@ public final class Sidebar extends IconButtonList {
         final DeletedButton deletedButton = new DeletedButton();
         VBox.setMargin(deletedButton, new Insets(0, 0, V_GAP, 0));
 
-        this.setPadding(new Insets(17, 10, 10, 10));
+        this.setPadding(new Insets(16, 10, 10, 10));
         this.setAlignment(Pos.TOP_CENTER);
         this.setMaxHeight(Double.MAX_VALUE);
         this.setBackground(RiceHandler.createBG(RiceHandler.getColour("midnight"), 0, 0));

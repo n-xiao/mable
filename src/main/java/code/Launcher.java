@@ -31,7 +31,8 @@ import javafx.stage.Stage;
 
 public class Launcher extends Application {
     private static final int PREF_HEIGHT = 600;
-    private static final int MIN_WIDTH = 500;
+    private static final int PREF_WIDTH = 500;
+    private static final int MIN_WIDTH = 450;
     private static final int MIN_HEIGHT = 400;
 
     @Override
@@ -50,7 +51,7 @@ public class Launcher extends Application {
             stage.setTitle("");
         stage.setMinWidth(MIN_WIDTH);
         stage.setMinHeight(MIN_HEIGHT);
-        stage.setWidth(MIN_WIDTH);
+        stage.setWidth(PREF_WIDTH);
         stage.setHeight(PREF_HEIGHT);
         stage.setOnCloseRequest((event) -> { Platform.exit(); });
 

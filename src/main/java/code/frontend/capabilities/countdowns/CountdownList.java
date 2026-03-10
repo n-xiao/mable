@@ -103,9 +103,9 @@ public final class CountdownList extends SimpleList implements Updatable {
     }
 
     synchronized void requestMarkAsDone(final CountdownListMember member) {
-        if (this.pendingRemoval.contains(member))
+        if (this.filter != CountdownFilter.DELETED && this.pendingRemoval.contains(member))
             abortRemoveMember(member);
-        else
+        else if (this.filter != CountdownFilter.DELETED)
             removeMember(member);
         member.getCountdown().setDone(!member.getCountdown().isDone());
     }
@@ -135,14 +135,13 @@ public final class CountdownList extends SimpleList implements Updatable {
     @Override
     public synchronized void addMember(SimpleListMember member) {
         super.addMember(member);
-        if (member instanceof CountdownListMember listMember
-            && this.filter == CountdownFilter.ONGOING) {
+        if (member instanceof CountdownListMember listMember) {
             final CountdownDragStarter dragStarter = new CountdownDragStarter(this);
             dragStarter.install(listMember);
-        } else if (member instanceof CountdownListMember listMember
-            && this.filter == CountdownFilter.DELETED) {
-            listMember.removeDateplate();
-            listMember.removeCounter();
+            if (this.getFilter() == CountdownFilter.DELETED) {
+                listMember.removeDateplate();
+                listMember.removeCounter();
+            }
         }
     }
 
@@ -153,6 +152,10 @@ public final class CountdownList extends SimpleList implements Updatable {
                 this.rmTransitioner.getTransition().stop();
             this.pendingRemoval.add(countdownMember);
         }
+    }
+
+    public void removeMemberImmediately(CountdownListMember member) {
+        super.removeMember(member);
     }
 
     public synchronized void removeMember(Countdown countdown) {
@@ -224,5 +227,9 @@ public final class CountdownList extends SimpleList implements Updatable {
                 updatable.update();
             }
         });
+    }
+
+    public CountdownFilter getFilter() {
+        return filter;
     }
 }

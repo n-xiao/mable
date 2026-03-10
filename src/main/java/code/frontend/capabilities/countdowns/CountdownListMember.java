@@ -20,6 +20,7 @@ package code.frontend.capabilities.countdowns;
 
 import code.backend.data.Countdown;
 import code.frontend.capabilities.concurrency.Updatable;
+import code.frontend.capabilities.countdowns.CountdownList.CountdownFilter;
 import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.FontHandler.DedicatedFont;
 import code.frontend.libs.katlaf.FormatHandler;
@@ -122,8 +123,10 @@ final class CountdownListMember
         this.dateFade = new FadeTransition(Duration.millis(millis), this.dateplate);
         this.counterFade = new FadeTransition(Duration.millis(millis), this.counter);
         this.compFade = new FadeTransition(Duration.millis(200), this.completeButton.fill);
-        this.compTransitioner = new Transitioner().prepare().playParallel(
-            this.nameFade, this.dateFade, this.counterFade, this.compFade);
+        this.compTransitioner = list.getFilter() == CountdownFilter.DELETED
+            ? new Transitioner().prepare().play(this.compFade)
+            : new Transitioner().prepare().playParallel(
+                  this.nameFade, this.dateFade, this.counterFade, this.compFade);
     }
 
     /*

@@ -139,7 +139,7 @@ public final class CountdownCreatorPopup extends Popup {
                     return;
 
                 if (isEditing()) {
-                    list.removeMember(oldMember);
+                    list.removeMemberImmediately(oldMember);
                     oldMember.getCountdown().delete();
                 }
 

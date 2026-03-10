@@ -19,6 +19,7 @@
 package code.frontend.capabilities.countdowns;
 
 import code.backend.data.wrappers.CountdownPacket;
+import code.frontend.capabilities.countdowns.CountdownList.CountdownFilter;
 import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.dragndrop.DragStartRegion;
 import code.frontend.libs.katlaf.menus.RightClickMenu;
@@ -43,42 +44,65 @@ final class CountdownDragStarter extends DragStartRegion<CountdownPacket> {
         /*
          * implementation of right click behaviour
          */
-        this.setOnMouseClicked(event -> {
-            if (event.getButton() == MouseButton.SECONDARY) {
+        if (list.getFilter() != CountdownFilter.DELETED)
+            this.setOnMouseClicked(event -> {
+                if (event.getButton() == MouseButton.SECONDARY) {
+                    final List<CountdownListMember> selectedMembers = list.getSelectedMembers();
+
+                    if (selectedMembers.isEmpty())
+                        return;
+
+                    final Runnable edit = new Runnable() {
+                        @Override
+                        public void run() {
+                            Popup.spawn(
+                                new CountdownCreatorPopup(list, selectedMembers.getFirst()));
+                        }
+                    };
+
+                    final Runnable delete = new Runnable() {
+                        @Override
+                        public void run() {
+                            selectedMembers.forEach(member -> member.getCountdown().delete());
+                            list.removeMembers(list.getSelectedCountdowns().getCountdownsAsSet());
+                        }
+                    };
+
+                    if (selectedMembers.size() > 1) {
+                        new RightClickMenu()
+                            .addButton("Delete", delete)
+                            .init(event.getSceneX(), event.getSceneY());
+                    } else {
+                        new RightClickMenu()
+                            .addButton("Edit", edit)
+                            .addButton("Delete", delete)
+                            .init(event.getSceneX(), event.getSceneY());
+                    }
+
+                    event.consume();
+                }
+            });
+        else
+            this.setOnMouseClicked(event -> {
                 final List<CountdownListMember> selectedMembers = list.getSelectedMembers();
 
                 if (selectedMembers.isEmpty())
                     return;
 
-                final Runnable edit = new Runnable() {
+                final Runnable recover = new Runnable() {
                     @Override
                     public void run() {
-                        Popup.spawn(new CountdownCreatorPopup(list, selectedMembers.getFirst()));
-                    }
-                };
-
-                final Runnable delete = new Runnable() {
-                    @Override
-                    public void run() {
-                        selectedMembers.forEach(member -> member.getCountdown().delete());
+                        selectedMembers.forEach(member -> member.getCountdown().recover());
                         list.removeMembers(list.getSelectedCountdowns().getCountdownsAsSet());
                     }
                 };
 
-                if (selectedMembers.size() > 1) {
-                    new RightClickMenu()
-                        .addButton("Delete", delete)
-                        .init(event.getSceneX(), event.getSceneY());
-                } else {
-                    new RightClickMenu()
-                        .addButton("Edit", edit)
-                        .addButton("Delete", delete)
-                        .init(event.getSceneX(), event.getSceneY());
-                }
+                new RightClickMenu()
+                    .addButton("Recover", recover)
+                    .init(event.getSceneX(), event.getSceneY());
 
                 event.consume();
-            }
-        });
+            });
     }
 
     /*

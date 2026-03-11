@@ -18,9 +18,9 @@
 
 package code.backend.data;
 
+import code.backend.settings.SettingsHandler;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.SerializationFeature;
@@ -36,6 +36,7 @@ public final class StorageHandler {
     private static final Path DATA_DIR = Path.of(System.getProperty("user.home") + "/mable_data");
     private static final Path COUNTDOWNS_PATH = Path.of(DATA_DIR.toString() + "/countdowns.json");
     private static final Path LEGEND_PATH = Path.of(DATA_DIR.toString() + "/legends.json");
+    private static final Path SETTINGS_PATH = Path.of(DATA_DIR.toString() + "/settings.json");
     private static final ObjectMapper MAPPER =
         JsonMapper.builder().enable(SerializationFeature.INDENT_OUTPUT).build();
 
@@ -54,6 +55,10 @@ public final class StorageHandler {
                 Files.createFile(LEGEND_PATH);
                 saveLegends();
             }
+            if (Files.notExists(SETTINGS_PATH)) {
+                Files.createFile(SETTINGS_PATH);
+                SettingsHandler.resetToDefault();
+            }
 
             load();
         }
@@ -62,14 +67,16 @@ public final class StorageHandler {
     public static void save() {
         saveCountdowns();
         saveLegends();
+        saveSettings();
     }
 
     private static void load() {
         loadCountdowns(); // ALWAYS LOAD COUNTDOWNS FIRST
         loadLegends();
+        loadSettings();
     }
 
-    private static void loadCountdowns() throws JacksonException {
+    private static void loadCountdowns() {
         assert CountdownHandler.getCountdowns().isEmpty();
         final JsonNode JSON_ROOT = MAPPER.readTree(COUNTDOWNS_PATH);
         JSON_ROOT.forEachEntry((_k, v) -> {
@@ -89,12 +96,12 @@ public final class StorageHandler {
         MAPPER.writeValue(COUNTDOWNS_PATH, OBJ_ROOT);
     }
 
-    private static void loadLegends() throws JacksonException {
+    private static void loadLegends() {
         assert LegendHandler.getLegends().isEmpty();
         final JsonNode JSON_ROOT = MAPPER.readTree(LEGEND_PATH);
         JSON_ROOT.forEachEntry((_k, v) -> {
-            Legend cdf = MAPPER.treeToValue(v, Legend.class);
-            LegendHandler.getLegends().add(cdf);
+            Legend legend = MAPPER.treeToValue(v, Legend.class);
+            LegendHandler.getLegends().add(legend);
         });
     }
 
@@ -107,6 +114,20 @@ public final class StorageHandler {
         LegendHandler.getDeletedLegends().forEach(
             deletedLegend -> { OBJ_ROOT.remove(deletedLegend.getID().toString()); });
         MAPPER.writeValue(LEGEND_PATH, OBJ_ROOT);
+    }
+
+    private static void loadSettings() {
+        final JsonNode jsonRoot = MAPPER.readTree(SETTINGS_PATH);
+        jsonRoot.forEachEntry(
+            (k, v) -> { SettingsHandler.get().put(k, MAPPER.treeToValue(v, String.class)); });
+    }
+
+    private static void saveSettings() {
+        final JsonNode jsonRoot = MAPPER.readTree(SETTINGS_PATH);
+        final ObjectNode objRoot =
+            jsonRoot.isObject() ? ((ObjectNode) jsonRoot) : MAPPER.createObjectNode().putObject("");
+        SettingsHandler.get().forEach((k, v) -> { objRoot.put(k, v); });
+        MAPPER.writeValue(SETTINGS_PATH, objRoot);
     }
 
     private StorageHandler() {}

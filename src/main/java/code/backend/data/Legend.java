@@ -120,6 +120,23 @@ public class Legend extends Identifiable implements Comparable<Legend> {
         countdowns.forEach(LegendHandler::disownCountdown);
     }
 
+    /**
+     * Returns the number of Countdown instances contained that are
+     * neither marked as completed nor deleted.
+     *
+     * @see Countdown
+     */
+    @JsonIgnore
+    public int getActiveSize() {
+        int count = 0;
+        final Set<Countdown> countdowns = this.getContents();
+        for (Countdown countdown : countdowns) {
+            if (!countdown.isDone() && !countdown.isDeleted())
+                count++;
+        }
+        return count;
+    }
+
     @Override
     @JsonIgnore
     public int compareTo(Legend o) {

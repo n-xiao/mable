@@ -188,23 +188,13 @@ public abstract class CountdownView extends VBox implements Updatable {
     /**
      * Contains the title and the Countdown creation button
      */
-    private class Top extends BorderPane {
-        private static final double TOP_MARGIN = 2;
-        private static final double SIDE_MARGIN = 4;
-
-        Top(final String title) {
-            this.setBackground(null);
-
-            final Label label = new Label(title);
-            label.setFont(FontHandler.getHeading(1));
-            label.setTextFill(RiceHandler.getColour("white"));
-            label.setMouseTransparent(true);
-            BorderPane.setMargin(label, new Insets(TOP_MARGIN, 0, 0, SIDE_MARGIN));
-            this.setLeft(label);
+    private class Top extends Title {
+        Top(final String text) {
+            super(text);
 
             final CountdownCreateButton button = new CountdownCreateButton(CountdownView.this.list);
             button.setMinWidth(50);
-            BorderPane.setMargin(button, new Insets(TOP_MARGIN, SIDE_MARGIN, 0, 0));
+            BorderPane.setMargin(button, new Insets(Title.TOP_MARGIN, Title.SIDE_MARGIN, 0, 0));
             this.setRight(button);
         }
     }

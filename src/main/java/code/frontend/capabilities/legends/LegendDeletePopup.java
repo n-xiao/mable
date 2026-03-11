@@ -81,7 +81,7 @@ public class LegendDeletePopup extends Popup {
             new LabelledBorderedRegion(mb, "CAUTION", RiceHandler.getColour("night"));
         border.setColour(RiceHandler.getColour("red"));
 
-        final String num = Integer.toString(this.legend.getContents().size());
+        final String num = Integer.toString(this.legend.getActiveSize());
         final Label header = new Label("You are trying to delete \"" + this.legend.getName()
             + "\"\nwhich contains " + num + " countdown(s).");
         header.setFont(FontHandler.getHeading(3));

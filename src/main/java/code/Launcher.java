@@ -19,6 +19,8 @@
 package code;
 
 import code.backend.data.StorageHandler;
+import code.backend.settings.SettingsHandler;
+import code.backend.settings.SettingsHandler.Key;
 import code.frontend.MainContainer;
 import code.frontend.capabilities.concurrency.Watchdog;
 import code.frontend.libs.katlaf.FontHandler;
@@ -44,7 +46,11 @@ public class Launcher extends Application {
 
     @Override
     public void start(Stage stage) {
-        RiceHandler.updatePalette("DARK");
+        if (SettingsHandler.getBooleanValue(Key.LIGHT_MODE))
+            RiceHandler.updatePalette("LIGHT");
+        else
+            RiceHandler.updatePalette("DARK");
+
         if (System.getProperty("os.name").startsWith("Windows"))
             stage.setTitle("Mable"); // only set title if on windows
         else

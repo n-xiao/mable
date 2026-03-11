@@ -19,6 +19,8 @@
 package code.frontend.libs.katlaf.inputfields;
 
 import code.backend.data.Countdown;
+import code.backend.settings.SettingsHandler;
+import code.backend.settings.SettingsHandler.Key;
 import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.FontHandler.DedicatedFont;
 import code.frontend.libs.katlaf.graphics.LabelledBorderedRegion;
@@ -59,7 +61,7 @@ public final class DateField extends StackPane {
     private static final String WARNING;
 
     static {
-        format = "dd-MM-yyyy";
+        format = SettingsHandler.getBooleanValue(Key.ALT_DATE) ? "MM-dd-yyyy" : "dd-MM-yyyy";
         WARNING = "The date must follow this format: " + DateField.format.toLowerCase();
     }
 

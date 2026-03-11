@@ -21,7 +21,7 @@ package code.backend.settings;
 import java.util.HashMap;
 
 public final class SettingsHandler {
-    private final static HashMap<String, String> MAP = new HashMap<String, String>();
+    private static final HashMap<String, String> MAP = new HashMap<String, String>();
 
     private SettingsHandler(){};
 
@@ -31,7 +31,21 @@ public final class SettingsHandler {
 
     public static void resetToDefault() {
         MAP.clear();
-        MAP.put("theme", "DARK");
-        MAP.put("use_alternate_date", "false");
+        MAP.put(Key.LIGHT_MODE, "false");
+        MAP.put(Key.ALT_DATE, "false");
+    }
+
+    public static boolean getBooleanValue(final String key) {
+        return Boolean.parseBoolean(MAP.get(key));
+    }
+
+    public static void setBooleanValue(final String key, final boolean bool) {
+        MAP.put(key, Boolean.toString(bool));
+    }
+
+    public static final class Key {
+        public static final String LIGHT_MODE = "use_light_mode";
+        public static final String ALT_DATE = "use_alternate_date";
+        private Key() {}
     }
 }

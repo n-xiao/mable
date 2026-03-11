@@ -19,6 +19,8 @@
 package code.frontend.capabilities.countdowns;
 
 import code.backend.data.Countdown;
+import code.backend.settings.SettingsHandler;
+import code.backend.settings.SettingsHandler.Key;
 import code.frontend.capabilities.concurrency.Updatable;
 import code.frontend.capabilities.countdowns.CountdownList.CountdownFilter;
 import code.frontend.libs.katlaf.FontHandler;
@@ -269,7 +271,10 @@ final class CountdownListMember
             final String month = Integer.toString(localDate.getMonthValue());
             final String year = Integer.toString(localDate.getYear());
 
-            final String text = pretext + day + "/" + month + "/" + year;
+            final String text = pretext
+                + ((SettingsHandler.getBooleanValue(Key.ALT_DATE)) ? month + "/" + day
+                                                                   : day + "/" + month)
+                + "/" + year;
             this.setText(text);
         }
     }

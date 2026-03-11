@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
 
@@ -103,7 +104,23 @@ public class Legend extends Identifiable implements Comparable<Legend> {
         this.colour = colour;
     }
 
+    @JsonIgnore
+    public boolean isEmpty() {
+        final Set<Countdown> countdowns = this.getContents();
+        for (Countdown countdown : countdowns) {
+            if (!countdown.isDone() && !countdown.isDeleted())
+                return false;
+        }
+        return true;
+    }
+
+    public void disownContents() {
+        final Set<Countdown> countdowns = this.getContents();
+        countdowns.forEach(LegendHandler::disownCountdown);
+    }
+
     @Override
+    @JsonIgnore
     public int compareTo(Legend o) {
         return this.name.compareTo(o.name);
     }

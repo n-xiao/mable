@@ -37,6 +37,7 @@ public final class LegendHandler {
     }
 
     public static void removeLegend(final Legend legend) {
+        legend.disownContents();
         LEGENDS.remove(legend);
         DELETED_LEGENDS.add(legend);
     }

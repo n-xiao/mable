@@ -89,7 +89,7 @@ class LegendTableMember extends SimpleTableMember implements DragReaction, Colou
         this.delete.setMinSize(HEIGHT, HEIGHT);
         this.delete.setOpacity(0.5);
         this.delete.setOnMousePressed(event -> {
-            if (this.legend.getContents().isEmpty()) {
+            if (this.legend.isEmpty()) {
                 table.removeMember(this.legend);
                 LegendHandler.removeLegend(this.legend);
             } else {

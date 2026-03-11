@@ -177,7 +177,6 @@ public class Countdown extends Identifiable implements Listable<Countdown>, Reco
         this.isDone = isDone;
         if (this.isDone) {
             this.completionDate = convertLocalDate(LocalDate.now());
-            LegendHandler.disownCountdown(this);
         }
     }
 
@@ -188,7 +187,6 @@ public class Countdown extends Identifiable implements Listable<Countdown>, Reco
 
     @Override
     public void delete() {
-        LegendHandler.disownCountdown(this);
         CountdownHandler.deleteCountdown(this);
     }
 

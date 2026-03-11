@@ -141,6 +141,18 @@ public abstract class CountdownView extends VBox implements Updatable {
         listContainer.getChildren().addAll(listScrollPane, bottom);
         VBox.setVgrow(listContainer, Priority.ALWAYS);
 
+        if (filter == CountdownFilter.DELETED) {
+            final Label hint =
+                new Label("These will be permanently deleted when you close the app.");
+            hint.setFont(FontHandler.getItalic());
+            hint.setTextFill(RiceHandler.getColour("lightgrey"));
+            hint.setAlignment(Pos.CENTER);
+            hint.setMouseTransparent(true);
+            StackPane.setAlignment(hint, Pos.BOTTOM_CENTER);
+            StackPane.setMargin(hint, new Insets(0, 0, 2, 0));
+            listContainer.getChildren().add(hint);
+        }
+
         return listContainer;
     }
 
@@ -208,7 +220,7 @@ public abstract class CountdownView extends VBox implements Updatable {
             final Stop[] stops = {
                 new Stop(0, RiceHandler.getColour("night")), new Stop(1, Color.color(0, 0, 0, 0))};
             final LinearGradient gradient =
-                new LinearGradient(0, 1, 0, 0.95, true, CycleMethod.NO_CYCLE, stops);
+                new LinearGradient(0, 1, 0, 0.96, true, CycleMethod.NO_CYCLE, stops);
             final BackgroundFill fill = new BackgroundFill(gradient, null, null);
             this.setBackground(new Background(fill));
             this.setMaxWidth(Double.MAX_VALUE);

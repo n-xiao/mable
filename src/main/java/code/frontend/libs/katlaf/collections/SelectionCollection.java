@@ -81,7 +81,7 @@ public class SelectionCollection<E extends SelectionChild> {
             if (child.equals(caller) || child.equals(this.pivot)) {
                 selecting = !selecting;
                 child.setToggle(true);
-            } else if (selecting && !child.isToggled()) {
+            } else if (selecting) {
                 child.setToggle(true);
             } else {
                 child.setToggle(false);

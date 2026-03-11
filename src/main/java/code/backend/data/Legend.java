@@ -114,6 +114,7 @@ public class Legend extends Identifiable implements Comparable<Legend> {
         return true;
     }
 
+    @JsonIgnore
     public void disownContents() {
         final Set<Countdown> countdowns = this.getContents();
         countdowns.forEach(LegendHandler::disownCountdown);

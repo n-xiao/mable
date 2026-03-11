@@ -65,7 +65,7 @@ public final class LegendHandler {
     static Color lookupColour(final Countdown countdown) {
         for (Legend legend : LEGENDS) {
             if (legend.getContents().contains(countdown))
-                return legend.getColour().get();
+                return legend.getColour().get().brighter();
         }
         return RiceHandler.getColour("white");
     }

@@ -39,6 +39,7 @@ public final class Transitioner {
 
      PUBLIC API
     -------------------------------------------------------------------------------------*/
+
     public Transitioner play(final Transition transition) {
         this.master.getChildren().add(transition);
         return this;

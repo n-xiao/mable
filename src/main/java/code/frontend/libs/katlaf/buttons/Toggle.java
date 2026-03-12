@@ -57,6 +57,9 @@ public class Toggle extends ButtonFoundation {
     private final PauseTransition pause;
     private final Transitioner transitioner;
 
+    private Runnable runOnceOnline;
+    private Runnable runOnceOffline;
+
     public Toggle() {
         this.setMinSize(WIDTH, HEIGHT);
         this.setMaxSize(WIDTH, HEIGHT);
@@ -89,30 +92,12 @@ public class Toggle extends ButtonFoundation {
             new Transitioner().prepare().playParallel(sequential, this.boxTranslate);
 
         this.isOnline.addListener((o, ov, newValue) -> {
-            if (newValue.booleanValue())
-                goneOnline();
-            else
-                goneOffline();
+            if (newValue.booleanValue() && this.runOnceOnline != null)
+                this.runOnceOnline.run();
+            else if (!newValue.booleanValue() && this.runOnceOffline != null)
+                this.runOnceOffline.run();
         });
     }
-
-    /*
-
-
-     PROTECTED API
-    -------------------------------------------------------------------------------------*/
-
-    /**
-     * When this toggle is set from the offline to the online position, this
-     * method is executed. By default, this method does nothing.
-     */
-    protected void goneOnline(){};
-
-    /**
-     * When this toggle is set from the online to the offline position, this
-     * method is executed. By default, this method does nothing.
-     */
-    protected void goneOffline(){};
 
     /*
 
@@ -134,5 +119,29 @@ public class Toggle extends ButtonFoundation {
         }
         this.transitioner.getTransition().play();
         this.isOnline.set(!this.isOnline.get());
+    }
+
+    /**
+     * The provided Runnable is run when this instance is pressed,
+     * and moved from the offline position to the online position.
+     *
+     * @param runnable      the Runnable that should be run
+     *
+     * @see Runnable
+     */
+    public final void setRunOnceOnline(final Runnable runnable) {
+        this.runOnceOnline = runnable;
+    }
+
+    /**
+     * The provided Runnable is run when this instance is pressed,
+     * and moved from the online position to the offline position.
+     *
+     * @param runnable      the Runnable that should be run
+     *
+     * @see Runnable
+     */
+    public final void setRunOnceOffline(final Runnable runnable) {
+        this.runOnceOffline = runnable;
     }
 }

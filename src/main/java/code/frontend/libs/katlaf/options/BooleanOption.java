@@ -107,7 +107,10 @@ public final class BooleanOption extends HBox {
     }
 
     public void showWarning() {
+        this.warningFade.stop();
+        this.textBox.getChildren().remove(this.warning);
         this.warningFade.setOnFinished(null);
+
         this.warning.setOpacity(0);
         this.textBox.getChildren().add(this.warning);
         this.warningFade.setFromValue(0);
@@ -116,6 +119,7 @@ public final class BooleanOption extends HBox {
     }
 
     public void hideWarning() {
+        this.warningFade.stop();
         this.warningFade.setOnFinished(f -> { this.textBox.getChildren().remove(this.warning); });
         this.warningFade.setFromValue(1);
         this.warningFade.setToValue(0);

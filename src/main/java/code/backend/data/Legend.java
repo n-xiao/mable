@@ -42,7 +42,7 @@ public class Legend extends Identifiable implements Comparable<Legend> {
     public Legend(String name) {
         this.name = name;
         this.contents = new TreeSet<Countdown>(new SortByRemainingDays());
-        this.colour = new Colour(0, 0, 0, 1);
+        this.colour = new Colour("black");
         super(UUID.randomUUID());
     }
 

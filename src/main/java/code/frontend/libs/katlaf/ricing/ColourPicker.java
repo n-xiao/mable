@@ -93,7 +93,7 @@ public class ColourPicker extends Region {
 
         final ArrayList<Colour> colours = new ArrayList<Colour>();
         for (String name : colourNames) {
-            colours.add(new Colour(RiceHandler.getColour(name)));
+            colours.add(new Colour(name));
         }
         this(colours);
     }

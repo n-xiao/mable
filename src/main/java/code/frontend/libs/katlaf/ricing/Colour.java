@@ -29,7 +29,7 @@ import javafx.scene.paint.Color;
  * @since v3.0.0-beta
  */
 public final class Colour {
-    private final Color color;
+    private final String name;
 
     /*
 
@@ -37,16 +37,8 @@ public final class Colour {
      CONSTRUCTORS
     -------------------------------------------------------------------------------------*/
 
-    public Colour(final String str) {
-        this(Color.web(str));
-    }
-
-    public Colour(final int r, final int g, final int b, final int a) {
-        this(Color.rgb(r, g, b, a));
-    }
-
-    public Colour(Color colour) {
-        this.color = colour;
+    public Colour(final String name) {
+        this.name = name;
     }
 
     /*
@@ -59,7 +51,7 @@ public final class Colour {
      * Returns the Color contained within this instance.
      */
     public Color get() {
-        return this.color;
+        return RiceHandler.getColour(name);
     }
 
     /**
@@ -84,10 +76,6 @@ public final class Colour {
      */
     @Override
     public String toString() {
-        final int red = (int) Math.round(this.color.getRed() * 255);
-        final int green = (int) Math.round(this.color.getGreen() * 255);
-        final int blue = (int) Math.round(this.color.getBlue() * 255);
-        final double alpha = this.color.getOpacity();
-        return "rgba(" + red + ", " + green + ", " + blue + ", " + alpha + ")";
+        return name;
     }
 }

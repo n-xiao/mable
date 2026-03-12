@@ -135,7 +135,7 @@ public final class LegendTable extends StackPane {
     private class Uncategorised extends LegendTableMember {
         Uncategorised() {
             final Legend legend = new Legend("Uncategorised");
-            legend.setColour(new Colour(RiceHandler.getColour("white")));
+            legend.setColour(new Colour("white"));
             super(legend, LegendTable.this, LegendTable.this.list);
             getDeletePane().setVisible(false);
         }

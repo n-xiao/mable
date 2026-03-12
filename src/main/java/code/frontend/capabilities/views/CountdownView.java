@@ -56,6 +56,7 @@ import javafx.scene.paint.Stop;
  * @since v3.0.0-beta
  */
 public abstract class CountdownView extends VBox implements Updatable {
+    private static final double SIDE_MARGIN = 7;
     private final CountdownList list;
     private final LegendTable table;
 
@@ -70,14 +71,14 @@ public abstract class CountdownView extends VBox implements Updatable {
         this.list = new CountdownList();
         this.table = new LegendTable(this.list);
         this.table.setMinHeight(50);
-        VBox.setMargin(this.table, new Insets(20, 7, 0, 7));
+        VBox.setMargin(this.table, new Insets(20, SIDE_MARGIN, 0, SIDE_MARGIN));
 
         final StackPane listContainer = this.initListContainer(CountdownFilter.ONGOING);
 
         final Top top = new Top(title);
-        VBox.setMargin(top, new Insets(0, 7, 10, 7));
+        VBox.setMargin(top, new Insets(0, SIDE_MARGIN, 10, SIDE_MARGIN));
         this.setAlignment(Pos.CENTER);
-        this.table.prefWidthProperty().bind(this.widthProperty().add(-14));
+        this.table.prefWidthProperty().bind(this.widthProperty().add(-SIDE_MARGIN * 2));
         this.getChildren().addAll(top, listContainer, new Group(this.table));
 
         this.list.populate(getCountdowns());
@@ -101,7 +102,7 @@ public abstract class CountdownView extends VBox implements Updatable {
         final StackPane listContainer = this.initListContainer(filter);
 
         final Top top = new Top(title);
-        VBox.setMargin(top, new Insets(0, 7, 10, 7));
+        VBox.setMargin(top, new Insets(0, SIDE_MARGIN, 10, SIDE_MARGIN));
         if (filter == CountdownFilter.DELETED || filter == CountdownFilter.COMPLETED)
             top.setRight(null); // remove the button
         this.getChildren().addAll(top, listContainer);

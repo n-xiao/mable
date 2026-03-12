@@ -33,19 +33,31 @@ public final class Sidebar extends IconButtonList {
     private static final double V_GAP = 18;
     public Sidebar() {
         final ActiveButton activeButton = new ActiveButton();
-        VBox.setMargin(activeButton, new Insets(0, 0, V_GAP, 0));
         final CompletedButton completedButton = new CompletedButton();
-        VBox.setMargin(completedButton, new Insets(0, 0, V_GAP, 0));
         final DeletedButton deletedButton = new DeletedButton();
-        VBox.setMargin(deletedButton, new Insets(0, 0, V_GAP, 0));
+        final SettingsButton settingsButton = new SettingsButton();
+        configureButtons(activeButton, completedButton, deletedButton, settingsButton);
 
         this.setPadding(new Insets(16, 10, 10, 10));
         this.setAlignment(Pos.TOP_CENTER);
         this.setMaxHeight(Double.MAX_VALUE);
         this.setBackground(RiceHandler.createBG(RiceHandler.getColour("midnight"), 0, 0));
-        this.add(activeButton, completedButton, deletedButton);
+        this.add(activeButton, completedButton, deletedButton, settingsButton);
 
         this.select(activeButton);
+    }
+
+    /*
+
+
+     PRIVATE API
+    -------------------------------------------------------------------------------------*/
+
+    private static void configureButtons(final IconButton... buttons) {
+        for (IconButton button : buttons) {
+            VBox.setMargin(button, new Insets(0, 0, V_GAP, 0));
+            button.setMaxSize(SIZE, SIZE);
+        }
     }
 
     /*
@@ -59,8 +71,6 @@ public final class Sidebar extends IconButtonList {
     private class ActiveButton extends IconButton {
         ActiveButton() {
             super(IconHandler.getIconAsImage("calendar.png"), COLOUR);
-            this.setMinSize(SIZE, SIZE);
-            this.setMaxSize(SIZE, SIZE);
         }
 
         @Override
@@ -73,8 +83,6 @@ public final class Sidebar extends IconButtonList {
     private class CompletedButton extends IconButton {
         CompletedButton() {
             super(IconHandler.getIconAsImage("check-circle.png"), COLOUR);
-            this.setMinSize(SIZE, SIZE);
-            this.setMaxSize(SIZE, SIZE);
         }
 
         @Override
@@ -87,14 +95,24 @@ public final class Sidebar extends IconButtonList {
     private class DeletedButton extends IconButton {
         DeletedButton() {
             super(IconHandler.getIconAsImage("trash-2.png"), COLOUR);
-            this.setMinSize(SIZE, SIZE);
-            this.setMaxSize(SIZE, SIZE);
         }
 
         @Override
         public void onMousePressed(MouseEvent event) {
             select(this);
             MainContainer.getInstance().selectDeletedView();
+        }
+    }
+
+    private class SettingsButton extends IconButton {
+        SettingsButton() {
+            super(IconHandler.getIconAsImage("settings.png"), COLOUR);
+        }
+
+        @Override
+        public void onMousePressed(MouseEvent event) {
+            select(this);
+            MainContainer.getInstance().selectSettingsView();
         }
     }
 }

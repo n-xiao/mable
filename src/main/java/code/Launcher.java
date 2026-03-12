@@ -34,7 +34,7 @@ import javafx.stage.Stage;
 public class Launcher extends Application {
     private static final int PREF_HEIGHT = 600;
     private static final int PREF_WIDTH = 500;
-    private static final int MIN_WIDTH = 450;
+    private static final int MIN_WIDTH = 500;
     private static final int MIN_HEIGHT = 400;
 
     @Override
@@ -62,8 +62,8 @@ public class Launcher extends Application {
         stage.setOnCloseRequest((event) -> { Platform.exit(); });
 
         final MainContainer root = MainContainer.getInstance();
-        root.prefWidthProperty().bind(stage.widthProperty());
-        root.prefHeightProperty().bind(stage.heightProperty());
+        // root.prefWidthProperty().bind(stage.widthProperty());
+        // root.prefHeightProperty().bind(stage.heightProperty());
 
         final Scene scene = new Scene(root);
         scene.setFill(RiceHandler.getColour("night"));

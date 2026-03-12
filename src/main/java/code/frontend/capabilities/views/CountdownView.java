@@ -77,6 +77,7 @@ public abstract class CountdownView extends VBox implements Updatable {
         final Top top = new Top(title);
         VBox.setMargin(top, new Insets(0, 7, 10, 7));
         this.setAlignment(Pos.CENTER);
+        this.table.prefWidthProperty().bind(this.widthProperty().add(-14));
         this.getChildren().addAll(top, listContainer, new Group(this.table));
 
         this.list.populate(getCountdowns());

@@ -55,7 +55,7 @@ public final class BooleanOption extends HBox {
         this.title.setFont(FontHandler.getHeading(3));
 
         this.subtitle = new Label();
-        this.subtitle.setTextFill(RiceHandler.getColour("grey2"));
+        this.subtitle.setTextFill(RiceHandler.getColour("lightgrey"));
         this.subtitle.setFont(FontHandler.getNormal());
         VBox.setMargin(this.subtitle, new Insets(3, 0, 0, 0));
 

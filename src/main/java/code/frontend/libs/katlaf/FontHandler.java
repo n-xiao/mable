@@ -102,9 +102,9 @@ public final class FontHandler {
     public static Font getDedicated(final DedicatedFont FONT) {
         switch (FONT) {
             case COUNTDOWN_NAME:
-                return Font.font(FONT_FAM, FontWeight.SEMI_BOLD, 13);
+                return Font.font(FONT_FAM + " Medium", 13);
             case COUNTDOWN_NUM:
-                return Font.font(FONT_FAM, 11);
+                return Font.font(FONT_FAM + " Medium", 11);
             case COUNTDOWN_INFO:
                 return Font.font(FONT_FAM, FontWeight.BOLD, FontPosture.ITALIC, 13);
             case USER_INPUT:

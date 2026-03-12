@@ -20,16 +20,17 @@ package code.backend.data;
 
 import code.frontend.libs.katlaf.ricing.Colour;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
-import java.util.HashSet;
 import java.util.Stack;
+import java.util.TreeSet;
 import javafx.scene.paint.Color;
 
 public final class LegendHandler {
-    private static final HashSet<Legend> LEGENDS = new HashSet<Legend>();
+    private static final TreeSet<Legend> LEGENDS = new TreeSet<Legend>();
     private static final Stack<Legend> DELETED_LEGENDS = new Stack<Legend>();
 
-    public static Legend createLegend(final String name, final Colour colour) {
+    public static Legend createLegend(final String name, final Colour colour, final int index) {
         final Legend legend = new Legend(name);
+        legend.setIndex(index);
         legend.setColour(colour);
         LEGENDS.add(legend);
         StorageHandler.save();
@@ -42,7 +43,7 @@ public final class LegendHandler {
         DELETED_LEGENDS.add(legend);
     }
 
-    public static HashSet<Legend> getLegends() {
+    public static TreeSet<Legend> getLegends() {
         return LEGENDS;
     }
 

@@ -59,7 +59,7 @@ public final class LegendCreatorPopup extends Popup {
      */
     public LegendCreatorPopup(final LegendTable table, final LegendTableMember member) {
         this.nameField = new BorderedField("NEW NAME", RiceHandler.getColour("night"));
-        this.colourPicker = new ColourPicker("green", "pink", "teal", "lightred", "lightblue");
+        this.colourPicker = new ColourPicker("green", "purple", "pink", "teal", "lightblue", "red");
         this.table = table;
         this.oldMember = member;
         super(WIDTH, HEIGHT);
@@ -96,26 +96,28 @@ public final class LegendCreatorPopup extends Popup {
 
         this.colourPicker.setMinHeight(30);
 
-        final FilledButton accept = new FilledButton(
-            RiceHandler.getColour("dullblue"), RiceHandler.getColour("dullblue2")) {
-            @Override
-            public void onMousePressed(MouseEvent event) {
-                final String name = nameField.getUserInput();
-                final Colour colour = colourPicker.getSelected();
-                if (isEditing()) {
-                    oldMember.getLegend().setName(name);
-                    oldMember.getLegend().setColour(colour);
-                    oldMember.update();
-                } else {
-                    final Legend legend = LegendHandler.createLegend(name, colour);
-                    table.addMember(legend);
+        final FilledButton accept =
+            new FilledButton(RiceHandler.getColour("white"), RiceHandler.getColour("white2")) {
+                @Override
+                public void onMousePressed(MouseEvent event) {
+                    final String name = nameField.getUserInput();
+                    final Colour colour = colourPicker.getSelected();
+                    if (isEditing()) {
+                        oldMember.getLegend().setName(name);
+                        oldMember.getLegend().setColour(colour);
+                        oldMember.update();
+                    } else {
+                        final Legend legend =
+                            LegendHandler.createLegend(name, colour, table.getNextIndex());
+                        table.addMember(legend);
+                    }
+                    Popup.despawn();
                 }
-                Popup.despawn();
-            }
-        };
+            };
         accept.setLabel(this.isEditing() ? "Confirm" : "Create");
-        accept.setMinSize(80, 30);
-        accept.setMaxSize(80, 30);
+        accept.setLabelColour(RiceHandler.getColour("black"));
+        accept.setMinSize(75, 25);
+        accept.setMaxSize(75, 25);
 
         VBox.setMargin(this.nameField, new Insets(0, 20, 10, 20));
         VBox.setMargin(this.colourPicker, new Insets(0, 20, 30, 20));

@@ -109,7 +109,7 @@ public class LegendDeletePopup extends Popup {
         deleteAllButton.setMinHeight(40);
 
         final FilledButton keepAllButton =
-            new FilledButton(RiceHandler.getColour("darkgrey"), RiceHandler.getColour("grey")) {
+            new FilledButton(RiceHandler.getColour("grey"), RiceHandler.getColour("grey2")) {
                 @Override
                 public void onMousePressed(MouseEvent event) {
                     legend.getContents().clear();

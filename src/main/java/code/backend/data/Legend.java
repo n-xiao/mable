@@ -31,6 +31,7 @@ import java.util.UUID;
 public class Legend extends Identifiable implements Comparable<Legend> {
     private String name;
     private Colour colour;
+    private int index;
     private final TreeSet<Countdown> contents;
 
     /*
@@ -43,16 +44,19 @@ public class Legend extends Identifiable implements Comparable<Legend> {
         this.name = name;
         this.contents = new TreeSet<Countdown>(new SortByRemainingDays());
         this.colour = new Colour("black");
+        this.index = 0;
         super(UUID.randomUUID());
     }
 
     @JsonCreator
     public Legend(@JsonProperty("ID") String legendId, @JsonProperty("name") String name,
-        @JsonProperty("contents") String[] contentAsIDs, @JsonProperty("colour") String colour) {
+        @JsonProperty("contents") String[] contentAsIDs, @JsonProperty("colour") String colour,
+        @JsonProperty("index") int index) {
         super(legendId);
         this.name = name;
         this.contents = new TreeSet<Countdown>(new SortByRemainingDays());
         this.colour = new Colour(colour);
+        this.index = index;
         for (String id : contentAsIDs) {
             Countdown countdown = CountdownHandler.getCountdownByID(id);
             if (countdown != null)
@@ -93,6 +97,15 @@ public class Legend extends Identifiable implements Comparable<Legend> {
     @JsonProperty("colour")
     public String getColourString() {
         return this.colour.toString();
+    }
+
+    @JsonProperty("index")
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     @JsonIgnore
@@ -140,6 +153,9 @@ public class Legend extends Identifiable implements Comparable<Legend> {
     @Override
     @JsonIgnore
     public int compareTo(Legend o) {
-        return this.name.compareTo(o.name);
+        int comp = this.getIndex() - o.getIndex();
+        if (comp == 0)
+            comp = this.getID().compareTo(o.getID());
+        return comp;
     }
 }

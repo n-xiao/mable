@@ -70,6 +70,16 @@ public final class LegendTable extends StackPane {
     /*
 
 
+     PRIVATE API
+    -------------------------------------------------------------------------------------*/
+
+    private void refreshIndexes() {
+        this.members.forEach(member -> member.getLegend().setIndex(this.members.indexOf(member)));
+    }
+
+    /*
+
+
      PUBLIC API
     -------------------------------------------------------------------------------------*/
 
@@ -124,6 +134,11 @@ public final class LegendTable extends StackPane {
         }
         this.members.remove(memberToDelete);
         this.table.getChildren().remove(memberToDelete);
+        this.refreshIndexes();
+    }
+
+    public int getNextIndex() {
+        return this.members.size();
     }
 
     /*

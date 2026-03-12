@@ -25,6 +25,7 @@ import code.frontend.capabilities.concurrency.Watchdog;
 import code.frontend.capabilities.countdowns.CountdownList.CountdownFilter;
 import code.frontend.capabilities.sidebar.Sidebar;
 import code.frontend.capabilities.views.CountdownView;
+import code.frontend.capabilities.views.SettingsView;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.util.Set;
 import javafx.scene.layout.HBox;
@@ -50,6 +51,7 @@ public final class MainContainer extends HBox {
     private CountdownView activeView;
     private CountdownView completedView;
     private CountdownView deletedView;
+    private SettingsView settingsView;
 
     private MainContainer() {}
 
@@ -82,8 +84,10 @@ public final class MainContainer extends HBox {
                 return CountdownHandler.getAll();
             }
         };
+        this.settingsView = SettingsView.setup();
 
-        container.getChildren().addAll(this.activeView, this.completedView, this.deletedView);
+        container.getChildren().addAll(
+            this.activeView, this.completedView, this.deletedView, this.settingsView);
         container.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         HBox.setHgrow(container, Priority.ALWAYS);
 
@@ -102,6 +106,7 @@ public final class MainContainer extends HBox {
         this.activeView.setVisible(false);
         this.completedView.setVisible(false);
         this.deletedView.setVisible(false);
+        this.settingsView.setVisible(false);
     }
 
     /*
@@ -123,5 +128,10 @@ public final class MainContainer extends HBox {
     public void selectDeletedView() {
         this.hideAllViews();
         this.deletedView.setVisible(true);
+    }
+
+    public void selectSettingsView() {
+        this.hideAllViews();
+        this.settingsView.setVisible(true);
     }
 }

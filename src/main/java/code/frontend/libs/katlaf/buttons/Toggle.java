@@ -97,6 +97,9 @@ public class Toggle extends ButtonFoundation {
             else if (!newValue.booleanValue() && this.runOnceOffline != null)
                 this.runOnceOffline.run();
         });
+
+        this.runOnceOnline = null;
+        this.runOnceOffline = null;
     }
 
     /*
@@ -107,6 +110,10 @@ public class Toggle extends ButtonFoundation {
 
     @Override
     public final void onMousePressed(MouseEvent event) {
+        this.toggle();
+    }
+
+    public final void toggle() {
         this.transitioner.getTransition().stop();
         if (this.isOnline.get()) {
             this.boxTranslate.setFromX(WIDTH - HEIGHT - 7);

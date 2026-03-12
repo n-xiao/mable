@@ -143,9 +143,9 @@ public abstract class CountdownView extends VBox implements Updatable {
 
         if (filter == CountdownFilter.DELETED) {
             final Label hint =
-                new Label("These will be permanently deleted when you close the app.");
+                new Label("Countdowns here will be permanently deleted when you close the app.");
             hint.setFont(FontHandler.getItalic());
-            hint.setTextFill(RiceHandler.getColour("lightgrey"));
+            hint.setTextFill(RiceHandler.getColour("grey"));
             hint.setAlignment(Pos.CENTER);
             hint.setMouseTransparent(true);
             StackPane.setAlignment(hint, Pos.BOTTOM_CENTER);

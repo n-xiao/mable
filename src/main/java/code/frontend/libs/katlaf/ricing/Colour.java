@@ -20,14 +20,6 @@ package code.frontend.libs.katlaf.ricing;
 
 import javafx.scene.paint.Color;
 
-/**
- * A wrapper class for JavaFX's Color class. Adds more methods and also
- * ensures some spelling consistency throughout the code.
- *
- * TODO: fully migrate all other classes from Color to Colour
- *
- * @since v3.0.0-beta
- */
 public final class Colour {
     private final String name;
 
@@ -47,19 +39,10 @@ public final class Colour {
      PUBLIC API
     -------------------------------------------------------------------------------------*/
 
-    /**
-     * Returns the Color contained within this instance.
-     */
     public Color get() {
         return RiceHandler.getColour(name);
     }
 
-    /**
-     * If two colours has the same red, green, blue and alpha values,
-     * they are considered the same. Applying this method would return true.
-     * <p>
-     * Note that this method utilises the toString() method.
-     */
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Colour colour) {
@@ -68,12 +51,6 @@ public final class Colour {
         return false;
     }
 
-    /**
-     * Returns a String representing the web equivalent of this colour (rgba format).
-     * For example, fully opaque black would return "rgb(0, 0, 0, 1)"
-     *
-     * @return String       an rgba String representation
-     */
     @Override
     public String toString() {
         return name;

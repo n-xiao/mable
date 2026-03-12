@@ -61,7 +61,7 @@ public final class DateField extends StackPane {
     private static final String WARNING;
 
     static {
-        format = SettingsHandler.getBooleanValue(Key.ALT_DATE) ? "MM-dd-yyyy" : "dd-MM-yyyy";
+        format = usingAltDate() ? "MM-dd-yyyy" : "dd-MM-yyyy";
         WARNING = "The date must follow this format: " + DateField.format.toLowerCase();
     }
 
@@ -96,7 +96,7 @@ public final class DateField extends StackPane {
          * setup the fields
          */
         setupFields(this.dayField, this.monthField, this.yearField);
-        final String dayFormat = DateField.format.substring(0, 2);
+        final String dayFormat = DateField.format.substring(0, 2).toLowerCase();
         final String monthFormat = dayFormat.equals("dd") ? "mm" : "dd";
         this.dayField.setFieldPrompt(dayFormat);
         this.monthField.setFieldPrompt(monthFormat);
@@ -140,18 +140,15 @@ public final class DateField extends StackPane {
         }
     }
 
+    private static boolean usingAltDate() {
+        return SettingsHandler.getBooleanValue(Key.ALT_DATE);
+    }
+
     /*
 
 
      PUBLIC API
     -------------------------------------------------------------------------------------*/
-
-    /**
-     * This should only be called on startup.
-     */
-    public static void useAltFormat() {
-        DateField.format = "MM-dd-yyy";
-    }
 
     /**
      * Returns a LocalDate while handling sanitisation. If a LocalDate cannot be parsed,
@@ -199,8 +196,13 @@ public final class DateField extends StackPane {
     }
 
     public void setLocalDateInput(final LocalDate date) {
-        this.dayField.getTextField().setText(Integer.toString(date.getDayOfMonth()));
-        this.monthField.getTextField().setText(Integer.toString(date.getMonthValue()));
+        if (usingAltDate()) {
+            this.dayField.getTextField().setText(Integer.toString(date.getMonthValue()));
+            this.monthField.getTextField().setText(Integer.toString(date.getDayOfMonth()));
+        } else {
+            this.dayField.getTextField().setText(Integer.toString(date.getDayOfMonth()));
+            this.monthField.getTextField().setText(Integer.toString(date.getMonthValue()));
+        }
         this.yearField.getTextField().setText(Integer.toString(date.getYear()));
     }
 

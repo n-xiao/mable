@@ -99,9 +99,9 @@ public class LegendDeletePopup extends Popup {
                 @Override
                 public void onMousePressed(MouseEvent event) {
                     legend.getContents().forEach(countdown -> countdown.delete());
+                    list.removeMembers(legend.getContents());
                     LegendHandler.removeLegend(legend);
                     table.removeMember(legend);
-                    list.removeMembers(legend.getContents());
                     Popup.despawn();
                 }
             };

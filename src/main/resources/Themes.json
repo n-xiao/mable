@@ -36,12 +36,12 @@
         "dullblue" : "rgb(92, 204, 242)",
         "dullblue2" : "rgb(56, 199, 247)",
         "dullgrey" : "rgb(200, 200, 230)",
-        "dullpink" : "rgb(255, 199, 247)",
-        "dullpink2" : "rgb(252, 217, 247)",
+        "dullpink" : "rgb(225, 179, 217)",
+        "dullpink2" : "rgb(222, 187, 217)",
         "dullpurple" : "rgb(144, 136, 252)",
         "dullred" : "rgb(252, 58, 58)",
         "dullred2" : "rgb(252, 85, 85)",
-        "green": "rgb(69, 244, 95)",
+        "green": "rgb(9, 184, 55)",
         "grey" : "rgb(155, 155, 155)",
         "grey2" : "rgb(100, 100, 100)",
         "lightblue" : "rgb(95, 122, 176)",
@@ -49,14 +49,14 @@
         "lightred" : "rgb(181, 47, 32)",
         "midnight" : "rgb(225, 225, 225)",
         "night" : "rgb(242, 242, 240)",
-        "orange" : "rgb(164, 83, 29)",
+        "orange" : "rgb(164, 63, 9)",
         "pink" : "rgb(199, 137, 128)",
         "purple" : "rgb(124, 125, 252)",
         "red" : "rgb(250, 11, 11)",
         "royalblue" : "rgb(136, 175, 252)",
         "skyblue" : "rgb(6, 58, 163)",
         "teal" : "rgb(93, 169, 172)",
-    	"white" : "rgb(0, 0, 0)",
-        "white2" : "rgb(30, 30, 30)"
+    	"white" : "rgb(10, 10, 10)",
+        "white2" : "rgb(40, 40, 40)"
     }
 }

@@ -161,8 +161,10 @@ public abstract class CountdownView extends VBox implements Updatable {
             (observable, oldValue, newValue) -> { this.list.populate(getCountdowns()); });
 
         this.visibleProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.booleanValue())
+            if (newValue.booleanValue()) {
                 this.list.populate(getCountdowns());
+                update();
+            }
         });
     }
 
@@ -173,7 +175,7 @@ public abstract class CountdownView extends VBox implements Updatable {
     -------------------------------------------------------------------------------------*/
 
     @Override
-    public void update() {
+    public synchronized void update() {
         this.list.update();
     }
 

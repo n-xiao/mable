@@ -360,7 +360,7 @@ final class CountdownListMember
             /*
              * set the border up first
              */
-            this.border = new MableBorder(1.25, 0.01, 0.9999);
+            this.border = new MableBorder(1.25, 0, 1);
             this.border.bindSize(this.widthProperty(), this.heightProperty());
             /*
              * set the fill up now

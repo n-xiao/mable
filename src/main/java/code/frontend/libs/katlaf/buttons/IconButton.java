@@ -29,8 +29,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 public class IconButton extends ButtonFoundation {
-    private static final Color HOVER_COLOUR =
-        RiceHandler.adjustOpacity(RiceHandler.getColour("white"), 0.14);
+    private static final Color HOVER_COLOUR = Color.color(1, 1, 1, 0.14);
 
     private final ImageView imageView;
     private final ColorInput colourInput;
@@ -76,11 +75,13 @@ public class IconButton extends ButtonFoundation {
 
     public final void useSelectedStyle() {
         this.colourInput.setPaint(this.selectedColour);
+        this.setOpacity(1);
         updateStyle();
     }
 
     public final void useDeselectedStyle() {
         this.colourInput.setPaint(this.colour);
+        this.setOpacity(0.8);
         updateStyle();
     }
 

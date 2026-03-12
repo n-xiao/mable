@@ -30,6 +30,7 @@ import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.util.Set;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
@@ -75,7 +76,8 @@ public abstract class CountdownView extends VBox implements Updatable {
 
         final Top top = new Top(title);
         VBox.setMargin(top, new Insets(0, 7, 10, 7));
-        this.getChildren().addAll(top, listContainer, this.table);
+        this.setAlignment(Pos.CENTER);
+        this.getChildren().addAll(top, listContainer, new Group(this.table));
 
         this.list.populate(getCountdowns());
         this.table.populate(legends, getCountdowns());

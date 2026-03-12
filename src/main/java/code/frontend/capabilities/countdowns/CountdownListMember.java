@@ -305,6 +305,14 @@ final class CountdownListMember
             this.getChildren().addLast(label);
         }
 
+        String getDayString(final int days, final String appendix) {
+            return switch (days) {
+                case 0 -> "TODAY";
+                case 1 -> "day " + appendix;
+                default -> "days " + appendix;
+            };
+        }
+
         @Override
         public void update() {
             if (list.isPendingRemoval(CountdownListMember.this))
@@ -316,17 +324,17 @@ final class CountdownListMember
 
             int days = Math.abs(countdown.getDaysUntilDue(now));
             num = days > 9999 ? FormatHandler.intToString(days) : Integer.toString(days);
-            post = "days left";
+            post = getDayString(days, "left");
 
             if (countdown.isDone() || countdown.isDeleted()) {
                 days = Math.abs(countdown.getDaysUntilCompletion(now));
                 num = FormatHandler.intToString(days);
-                post = "days ago";
+                post = getDayString(days, "ago");
             } else if (countdown.isOverdue(now)) {
-                post = "days overdue";
+                post = getDayString(days, "overdue");
             }
 
-            this.label.setText(num + " " + post);
+            this.label.setText(days == 0 ? post : num + " " + post);
         }
 
         @Override

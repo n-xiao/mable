@@ -46,8 +46,8 @@ import javafx.util.Duration;
  * @since v3.0.0-beta
  */
 public class Toggle extends ButtonFoundation {
-    protected static double WIDTH = 50;
-    protected static double HEIGHT = 20;
+    protected static double WIDTH = 37;
+    protected static double HEIGHT = 15;
     protected static Color ENABLED_COLOUR = RiceHandler.getColour("royalblue");
     protected static Color DISABLED_COLOUR = RiceHandler.getColour("black");
 
@@ -64,13 +64,13 @@ public class Toggle extends ButtonFoundation {
         this.setMinSize(WIDTH, HEIGHT);
         this.setMaxSize(WIDTH, HEIGHT);
 
-        final BorderStroke stroke = new BorderStroke(RiceHandler.getColour("white"),
-            BorderStrokeStyle.SOLID, new CornerRadii(5), new BorderWidths(1.5));
+        final BorderStroke stroke = new BorderStroke(RiceHandler.getColour("lightgrey"),
+            BorderStrokeStyle.SOLID, new CornerRadii(7), new BorderWidths(1.5));
         this.setBorder(new Border(stroke));
-        this.setBackground(RiceHandler.createBG(DISABLED_COLOUR, 5, 0));
+        this.setBackground(RiceHandler.createBG(DISABLED_COLOUR, 7, 0));
 
         final Region bgRegion = new Region();
-        bgRegion.setBackground(RiceHandler.createBG(ENABLED_COLOUR, 3, 0));
+        bgRegion.setBackground(RiceHandler.createBG(ENABLED_COLOUR, 7, 0));
         bgRegion.setOpacity(0);
 
         final Region box = new Region();

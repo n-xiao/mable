@@ -27,10 +27,13 @@ import javafx.scene.layout.VBox;
 
 public final class SettingsView extends VBox {
     public SettingsView() {
+        this.setPadding(new Insets(10, 0, 10, 0));
         this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         this.setVisible(false);
         this.setBackground(null);
-        this.getChildren().add(new Title("Settings"));
+        final Title title = new Title("Settings");
+        SettingsView.setMargin(title, new Insets(0, 7, 10, 7));
+        this.getChildren().add(title);
     }
 
     /*
@@ -61,14 +64,14 @@ public final class SettingsView extends VBox {
         lightModeOption.getSubtitle().setText("Switches the current theme to light mode.");
         lightModeOption.getWarning().setText(restartWarning);
         lightModeOption.getToggle().setRunOnceOnline(() -> {
-            if (!SettingsHandler.getBooleanValue(Key.LIGHT_MODE))
+            if (!lightModeEnabled)
                 lightModeOption.showWarning();
             else
                 lightModeOption.hideWarning();
             SettingsHandler.setBooleanValue(Key.LIGHT_MODE, true);
         });
         lightModeOption.getToggle().setRunOnceOffline(() -> {
-            if (SettingsHandler.getBooleanValue(Key.LIGHT_MODE))
+            if (lightModeEnabled)
                 lightModeOption.showWarning();
             else
                 lightModeOption.hideWarning();
@@ -83,18 +86,18 @@ public final class SettingsView extends VBox {
         if (altDateEnabled) {
             altDateOption.getToggle().toggle();
         }
-        altDateOption.getSubtitle().setText("When enabled, Mable will format dates in the order: "
-            + "month, day year instead of: day, month, year.");
+        altDateOption.getSubtitle().setText("When enabled, dates will be formatted in the order: "
+            + "\nmonth, day, year instead of: day, month, year.");
         altDateOption.getWarning().setText(restartWarning);
         altDateOption.getToggle().setRunOnceOnline(() -> {
-            if (!SettingsHandler.getBooleanValue(Key.ALT_DATE))
+            if (!altDateEnabled)
                 altDateOption.showWarning();
             else
                 altDateOption.hideWarning();
             SettingsHandler.setBooleanValue(Key.ALT_DATE, true);
         });
         altDateOption.getToggle().setRunOnceOffline(() -> {
-            if (SettingsHandler.getBooleanValue(Key.ALT_DATE))
+            if (altDateEnabled)
                 altDateOption.showWarning();
             else
                 altDateOption.hideWarning();
@@ -112,8 +115,8 @@ public final class SettingsView extends VBox {
      * @see BooleanOption
      */
     public SettingsView addBooleanOption(final BooleanOption booleanOption) {
-        booleanOption.setBackground(RiceHandler.createBG(RiceHandler.getColour("dullgrey"), 8, -5));
-        SettingsView.setMargin(booleanOption, new Insets(5));
+        booleanOption.setBackground(RiceHandler.createBG(RiceHandler.getColour("black"), 8, 0));
+        SettingsView.setMargin(booleanOption, new Insets(6));
         this.getChildren().add(booleanOption);
         return this;
     }

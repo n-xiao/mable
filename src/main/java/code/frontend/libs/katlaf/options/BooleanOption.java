@@ -52,15 +52,17 @@ public final class BooleanOption extends HBox {
     public BooleanOption(final String title) {
         this.title = new Label(title);
         this.title.setTextFill(RiceHandler.getColour("white"));
-        this.title.setFont(FontHandler.getHeading(2));
+        this.title.setFont(FontHandler.getHeading(3));
 
         this.subtitle = new Label();
         this.subtitle.setTextFill(RiceHandler.getColour("grey2"));
         this.subtitle.setFont(FontHandler.getNormal());
+        VBox.setMargin(this.subtitle, new Insets(3, 0, 0, 0));
 
         this.warning = new Label();
         this.warning.setTextFill(RiceHandler.getColour("orange"));
-        this.warning.setFont(FontHandler.getMono());
+        this.warning.setFont(FontHandler.getMono(10));
+        VBox.setMargin(this.warning, new Insets(3, 0, 0, 0));
 
         this.textBox = new VBox(this.title, this.subtitle);
         this.textBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
@@ -76,7 +78,7 @@ public final class BooleanOption extends HBox {
 
         this.setAlignment(Pos.CENTER);
         this.setFillHeight(true);
-        this.setPadding(new Insets(8, 5, 8, 5));
+        this.setPadding(new Insets(8, 12, 8, 12));
         this.getChildren().addAll(this.textBox, spacer, toggleContainer);
 
         this.warningFade = new FadeTransition(Duration.millis(200), this.warning);

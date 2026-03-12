@@ -79,6 +79,10 @@ public final class FontHandler {
         return Font.font(FONT_FAM, FontPosture.ITALIC, 11);
     }
 
+    public static Font getMono(final int size) {
+        return Font.font(FONT_MONO, size);
+    }
+
     public static Font getMono() {
         return Font.font(FONT_MONO, 12);
     }

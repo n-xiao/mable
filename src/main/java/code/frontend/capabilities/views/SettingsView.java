@@ -116,7 +116,7 @@ public final class SettingsView extends VBox {
      */
     public SettingsView addBooleanOption(final BooleanOption booleanOption) {
         booleanOption.setBackground(RiceHandler.createBG(RiceHandler.getColour("black"), 8, 0));
-        SettingsView.setMargin(booleanOption, new Insets(6));
+        SettingsView.setMargin(booleanOption, new Insets(6, 10, 6, 10));
         this.getChildren().add(booleanOption);
         return this;
     }

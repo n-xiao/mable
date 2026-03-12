@@ -26,6 +26,8 @@ import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
@@ -37,12 +39,21 @@ public final class Sidebar extends IconButtonList {
         final DeletedButton deletedButton = new DeletedButton();
         final SettingsButton settingsButton = new SettingsButton();
         configureButtons(activeButton, completedButton, deletedButton, settingsButton);
+        VBox.setMargin(settingsButton, null);
 
-        this.setPadding(new Insets(16, 10, 10, 10));
+        this.setPadding(new Insets(17, 10, 14, 10));
         this.setAlignment(Pos.TOP_CENTER);
         this.setMaxHeight(Double.MAX_VALUE);
         this.setBackground(RiceHandler.createBG(RiceHandler.getColour("midnight"), 0, 0));
-        this.add(activeButton, completedButton, deletedButton, settingsButton);
+        this.add(activeButton, completedButton, deletedButton);
+
+        final var spacer = new Region();
+        spacer.setVisible(false);
+        spacer.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        Sidebar.setVgrow(spacer, Priority.ALWAYS);
+        this.getChildren().add(spacer);
+
+        this.add(settingsButton);
 
         this.select(activeButton);
     }
@@ -57,6 +68,7 @@ public final class Sidebar extends IconButtonList {
         for (IconButton button : buttons) {
             VBox.setMargin(button, new Insets(0, 0, V_GAP, 0));
             button.setMaxSize(SIZE, SIZE);
+            button.setMinSize(SIZE, SIZE);
         }
     }
 

@@ -1,7 +1,7 @@
 plugins {
   id 'application'
   id 'org.openjfx.javafxplugin' version '0.1.0'
-  id 'com.gradleup.shadow' version '9.3.1'
+  id 'com.gradleup.shadow' version '9.3.2'
 }
 
 repositories {
@@ -19,7 +19,7 @@ application {
 
 dependencies {
     // Jackson license: https://github.com/FasterXML/jackson-databind/blob/3.x/LICENSE
-    implementation("tools.jackson.core:jackson-databind:3.0.3")
+    implementation("tools.jackson.core:jackson-databind:3.1.0")
     // tests
     testImplementation("org.mockito:mockito-junit-jupiter:5.21.0")
 	testImplementation(platform('org.junit:junit-bom:6.0.2'))

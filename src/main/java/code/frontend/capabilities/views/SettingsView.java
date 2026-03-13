@@ -88,21 +88,10 @@ public final class SettingsView extends VBox {
         }
         altDateOption.getSubtitle().setText("When enabled, dates will be formatted in the order: "
             + "\nmonth, day, year instead of: day, month, year.");
-        altDateOption.getWarning().setText(restartWarning);
-        altDateOption.getToggle().setRunOnceOnline(() -> {
-            if (!altDateEnabled)
-                altDateOption.showWarning();
-            else
-                altDateOption.hideWarning();
-            SettingsHandler.setBooleanValue(Key.ALT_DATE, true);
-        });
-        altDateOption.getToggle().setRunOnceOffline(() -> {
-            if (altDateEnabled)
-                altDateOption.showWarning();
-            else
-                altDateOption.hideWarning();
-            SettingsHandler.setBooleanValue(Key.ALT_DATE, false);
-        });
+        altDateOption.getToggle().setRunOnceOnline(
+            () -> { SettingsHandler.setBooleanValue(Key.ALT_DATE, true); });
+        altDateOption.getToggle().setRunOnceOffline(
+            () -> { SettingsHandler.setBooleanValue(Key.ALT_DATE, false); });
 
         return new SettingsView().addBooleanOption(lightModeOption).addBooleanOption(altDateOption);
     }

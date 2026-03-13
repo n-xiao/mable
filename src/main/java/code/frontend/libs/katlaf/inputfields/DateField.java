@@ -57,12 +57,10 @@ import javafx.util.Duration;
  * @since v3.0.0-beta
  */
 public final class DateField extends StackPane {
-    private static String format;
     private static final String WARNING;
 
     static {
-        format = usingAltDate() ? "MM-dd-yyyy" : "dd-MM-yyyy";
-        WARNING = "The date must follow this format: " + DateField.format.toLowerCase();
+        WARNING = "The date must follow this format: " + DateField.getFormat().toLowerCase();
     }
 
     private final Warning warning;
@@ -96,7 +94,7 @@ public final class DateField extends StackPane {
          * setup the fields
          */
         setupFields(this.dayField, this.monthField, this.yearField);
-        final String dayFormat = DateField.format.substring(0, 2).toLowerCase();
+        final String dayFormat = DateField.getFormat().substring(0, 2).toLowerCase();
         final String monthFormat = dayFormat.equals("dd") ? "mm" : "dd";
         this.dayField.setFieldPrompt(dayFormat);
         this.monthField.setFieldPrompt(monthFormat);
@@ -144,6 +142,10 @@ public final class DateField extends StackPane {
         return SettingsHandler.getBooleanValue(Key.ALT_DATE);
     }
 
+    private static String getFormat() {
+        return usingAltDate() ? "MM-dd-yyyy" : "dd-MM-yyyy";
+    }
+
     /*
 
 
@@ -170,7 +172,7 @@ public final class DateField extends StackPane {
             day = decimalFormat.format(Integer.parseInt(day));
             month = decimalFormat.format(Integer.parseInt(month));
             final String dateString = day + "-" + month + "-" + year;
-            final DateTimeFormatter dtFormat = DateTimeFormatter.ofPattern(DateField.format);
+            final DateTimeFormatter dtFormat = DateTimeFormatter.ofPattern(DateField.getFormat());
             return LocalDate.parse(dateString, dtFormat);
         } catch (Exception e) {
             if (!silent)

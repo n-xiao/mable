@@ -57,12 +57,6 @@ import javafx.util.Duration;
  * @since v3.0.0-beta
  */
 public final class DateField extends StackPane {
-    private static final String WARNING;
-
-    static {
-        WARNING = "The date must follow this format: " + DateField.getFormat().toLowerCase();
-    }
-
     private final Warning warning;
     private final Field dayField;
     private final Field monthField;
@@ -239,7 +233,8 @@ public final class DateField extends StackPane {
 
         Warning() {
             this.ft = new FadeTransition();
-            final Label label = new Label(WARNING);
+            final Label label = new Label(
+                "The date must follow this format: " + DateField.getFormat().toLowerCase());
             label.setAlignment(Pos.CENTER);
             label.setFont(FontHandler.getNormal());
             label.setTextFill(RiceHandler.getColour("orange"));

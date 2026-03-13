@@ -42,7 +42,7 @@ public class RiceHandler {
 
     public static void updatePalette(final String THEME_NAME) {
         final InputStream stream =
-            Thread.currentThread().getContextClassLoader().getResourceAsStream("themes.json");
+            Thread.currentThread().getContextClassLoader().getResourceAsStream("Themes.json");
         final JsonNode JSON_ROOT = MAPPER.readTree(stream);
         TypeReference<HashMap<String, String>> typeRef =
             new TypeReference<HashMap<String, String>>() {};

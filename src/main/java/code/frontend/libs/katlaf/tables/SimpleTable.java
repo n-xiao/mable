@@ -1,0 +1,96 @@
+/*
+    Copyright (C) 2026 Nicholas Siow <nxiao.dev@gmail.com>
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+package code.frontend.libs.katlaf.tables;
+
+import code.frontend.libs.katlaf.ricing.RiceHandler;
+import java.util.ArrayList;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Region;
+
+public class SimpleTable extends FlowPane {
+    private static final double V_GAP = 8;
+    private static final double H_GAP = 5;
+    private final ArrayList<SimpleTableMember> members;
+
+    public SimpleTable() {
+        this.members = new ArrayList<SimpleTableMember>();
+        this.setPadding(new Insets(5, 10, 5, 10));
+        this.setVgap(V_GAP);
+        this.setHgap(H_GAP);
+        this.setMaxHeight(Double.MAX_VALUE);
+        this.setMaxWidth(Double.MAX_VALUE);
+        this.setAlignment(Pos.TOP_CENTER);
+        this.setBackground(RiceHandler.createBG(RiceHandler.getColour("night"), 0, 0));
+    }
+
+    /*
+
+
+     PROTECTED API
+    -------------------------------------------------------------------------------------*/
+
+    /**
+     * This allows for left to right listing of members; by
+     * adding invisible Regions that act as "spacers" or "paddings", an incomplete
+     * row of a FlowPane will be aligned to the left when all children of the
+     * FlowPane are centered. It is attached to a listener for when the window
+     * is resized.
+     *
+     * At the time of writing, I can't seem to figure out how to reliably get
+     * the extra number of paddings needed. Hence, one extra padding is added
+     * and the height of the paddings are locked to 1 pixel, so it should not
+     * affect the scrolling experience of the user. (as in, the invisible
+     * paddings will probably not let the user scroll down to nothing)
+     */
+    protected void requestAlign() {
+        this.getChildren().removeIf(child -> child instanceof FakeMember);
+
+        final int totalWidth = (int) this.getBoundsInParent().getWidth();
+        final int widths = (int) members.getFirst().getWidth();
+        final int numMembers = members.size();
+        final int columns = (int) (totalWidth / widths);
+
+        if (columns == 0)
+            return;
+
+        final int numLastRow = (int) (numMembers % columns); // finds num of members on last row
+        final int remainder = columns - numLastRow + 1;
+
+        for (int i = 0; i < remainder; i++) {
+            final FakeMember fakeMember = new FakeMember(widths);
+            this.getChildren().addLast(fakeMember);
+        }
+    }
+
+    /*
+
+
+     COMPOSITIONS
+    -------------------------------------------------------------------------------------*/
+
+    class FakeMember extends Region {
+        FakeMember(final double width) {
+            this.setMinSize(width, 1);
+            this.setMaxSize(width, 1);
+            this.setVisible(false);
+        }
+    }
+}

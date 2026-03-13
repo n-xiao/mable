@@ -16,10 +16,16 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package code;
+package code.frontend.libs.katlaf;
 
-public class EntryPoint {
-    public static void main(String[] args) {
-        Launcher.main(args);
+import java.text.NumberFormat;
+import java.util.Locale;
+
+public class FormatHandler {
+    public static String intToString(int input) {
+        NumberFormat formatter =
+            NumberFormat.getCompactNumberInstance(Locale.US, NumberFormat.Style.SHORT);
+        return formatter.format(input);
     }
+    private FormatHandler() {}
 }

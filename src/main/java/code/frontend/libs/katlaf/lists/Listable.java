@@ -16,10 +16,14 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package code;
+package code.frontend.libs.katlaf.lists;
 
-public class EntryPoint {
-    public static void main(String[] args) {
-        Launcher.main(args);
-    }
+public interface Listable<T> extends Comparable<T> {
+    /**
+     * The return String value will be used to display
+     * the label of a SimpleListMember.
+     *
+     * @return a String to be displayed
+     */
+    public String getDisplayString();
 }

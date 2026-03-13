@@ -16,10 +16,25 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package code;
+package code.frontend.libs.katlaf.dragndrop;
 
-public class EntryPoint {
-    public static void main(String[] args) {
-        Launcher.main(args);
-    }
+/**
+ * An interface for UI components to implement effects to their appearance
+ * which can be called by implementations of DragStopRegion (or DragStartRegion)
+ *
+ * @see DragStopRegion
+ * @since v3.0.0-beta
+ */
+public interface DragReaction {
+    /**
+     * This method is called when the user's mouse is dragged into
+     * the associated drag detector Region.
+     */
+    public void onDragEntered();
+
+    /**
+     * This method is called when the user's mouse is dragged out of
+     * the associated drag detector Region.
+     */
+    public void onDragExited();
 }

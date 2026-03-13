@@ -1,0 +1,127 @@
+/*
+    Copyright (C) 2026 Nicholas Siow <nxiao.dev@gmail.com>
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+package code.frontend.libs.katlaf.dragndrop;
+
+import code.frontend.MainContainer;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.scene.CacheHint;
+import javafx.scene.layout.Region;
+
+/**
+ * This is an unmanaged Region which implements drag and drop
+ * visuals, as well as facilitates some communication between
+ * {@link DragStarter} instances and {@link DragStopper}
+ * instances.
+ *
+ * Note: it should be impossible for a user to resize a window
+ * whilst dragging and dropping something. Hence that case
+ * will not be handled unless enough geniuses convince me otherwise.
+ */
+final class DragDropOverlay<T> extends Region {
+    private static DragDropOverlay<?> activeOverlay = null; // max of one instance should exist
+    final static SimpleBooleanProperty active = new SimpleBooleanProperty(false);
+    private final T data;
+
+    private DragDropOverlay(DragStartRegion<T> dragStarter) {
+        DragDropOverlay.activeOverlay = this;
+        this.data = dragStarter.getData();
+        init(dragStarter);
+    }
+
+    /*
+
+
+     PRIVATE API
+    -------------------------------------------------------------------------------------*/
+
+    /**
+     * Initialises this {@link DragDropOverlay} and adds it to the {@link MainContainer}.
+     */
+    private void init(DragStartRegion<T> dragStarter) {
+        // hijack scene
+        final MainContainer mc = MainContainer.getInstance();
+
+        // additional config
+        this.setMouseTransparent(true);
+        this.setManaged(false);
+        this.resize(mc.getScene().getWidth(), mc.getScene().getHeight());
+        this.setViewOrder(-200);
+
+        final Region representation = dragStarter.getRepresentation();
+        representation.setCacheHint(CacheHint.SPEED);
+        representation.setManaged(false);
+        this.getChildren().add(representation);
+        mc.getChildren().add(this);
+
+        mc.getScene().setOnMouseDragOver((event) -> {
+            // must be attached to scene so nodes can still detect drag release, enter and exit
+            representation.relocate(event.getSceneX() + 9, event.getSceneY() - 2);
+        });
+
+        active.set(true);
+    }
+
+    /*
+
+
+     UTILITIES
+    -------------------------------------------------------------------------------------*/
+
+    /**
+     * Spawns a new {@link DragDropOverlay}
+     */
+    public static <E> void spawnOverlay(DragStartRegion<E> dragStarter) {
+        new DragDropOverlay<E>(dragStarter);
+    }
+
+    /**
+     * Kills the current instance of {@link DragDropOverlay},
+     * removing it from the {@link MainContainer}.
+     */
+    public static void killOverlay() {
+        MainContainer.getInstance().getChildren().remove(activeOverlay);
+        activeOverlay = null;
+        active.set(false);
+    }
+
+    public static boolean isActive() {
+        return activeOverlay != null;
+    }
+
+    protected T getTransferData() {
+        return this.data;
+    }
+
+    /**
+     * A method which compares the class of the data that is being
+     * transferred by the current drag and drop process with a provided
+     * class.
+     *
+     * @return true if the class of the data is equal to the provided class.
+     */
+    protected static <E> boolean checkMatchingTypes(Class<? extends E> c) {
+        if (activeOverlay == null || activeOverlay.data == null)
+            return false; // if null checks fail
+        return activeOverlay.data.getClass().equals(c);
+    }
+
+    protected static DragDropOverlay<?> getActiveOverlay() {
+        return activeOverlay;
+    }
+}

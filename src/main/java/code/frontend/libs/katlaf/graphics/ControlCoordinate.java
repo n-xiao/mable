@@ -16,10 +16,25 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package code;
+package code.frontend.libs.katlaf.graphics;
 
-public class EntryPoint {
-    public static void main(String[] args) {
-        Launcher.main(args);
+import code.frontend.libs.math.functions.LinearFun;
+
+public class ControlCoordinate extends Coordinate {
+    private LinearFun xModel;
+    private LinearFun yModel;
+
+    public ControlCoordinate(double x, double y, Coordinate xCoord, Coordinate yCoord) {
+        super(x, y);
+        this.xModel = new LinearFun(x, y, xCoord.x, xCoord.y);
+        this.yModel = new LinearFun(x, y, yCoord.x, yCoord.y);
+    }
+
+    public LinearFun getXmodel() {
+        return xModel;
+    }
+
+    public LinearFun getYmodel() {
+        return yModel;
     }
 }

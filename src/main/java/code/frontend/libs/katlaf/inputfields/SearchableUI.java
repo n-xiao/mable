@@ -16,10 +16,16 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package code;
+package code.frontend.libs.katlaf.inputfields;
 
-public class EntryPoint {
-    public static void main(String[] args) {
-        Launcher.main(args);
-    }
+/**
+ * This interface allows a UI component to be searched, through the
+ * use of a {@link SearchField}.
+ */
+public interface SearchableUI {
+    /**
+     * Called every time the input for the input field changes.
+     * @param `input` is the current text in the {@link SearchField}
+     */
+    void onSearchChange(String input);
 }

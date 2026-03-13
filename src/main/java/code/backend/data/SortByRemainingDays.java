@@ -16,10 +16,19 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package code;
+package code.backend.data;
 
-public class EntryPoint {
-    public static void main(String[] args) {
-        Launcher.main(args);
+import java.time.LocalDate;
+import java.util.Comparator;
+
+public class SortByRemainingDays implements Comparator<Countdown> {
+    @Override
+    public int compare(Countdown c1, Countdown c2) {
+        LocalDate now = LocalDate.now();
+        int dist1 = c1.getDaysUntilDue(now);
+        int dist2 = c2.getDaysUntilDue(now);
+        int dateDiff = dist1 - dist2;
+        int idDiff = c1.getID().compareTo(c2.getID()); // enforces uniqueness for sets
+        return (dateDiff == 0) ? idDiff : dateDiff;
     }
 }

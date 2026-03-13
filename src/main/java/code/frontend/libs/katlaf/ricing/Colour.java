@@ -16,10 +16,43 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package code;
+package code.frontend.libs.katlaf.ricing;
 
-public class EntryPoint {
-    public static void main(String[] args) {
-        Launcher.main(args);
+import javafx.scene.paint.Color;
+
+public final class Colour {
+    private final String name;
+
+    /*
+
+
+     CONSTRUCTORS
+    -------------------------------------------------------------------------------------*/
+
+    public Colour(final String name) {
+        this.name = name;
+    }
+
+    /*
+
+
+     PUBLIC API
+    -------------------------------------------------------------------------------------*/
+
+    public Color get() {
+        return RiceHandler.getColour(name);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Colour colour) {
+            return colour.toString().equals(this.toString());
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

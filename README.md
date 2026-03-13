@@ -1,6 +1,6 @@
 <h3 align="center">
   <img src="https://github.com/n-xiao/mable-artifacts/blob/main/media/icons/mable-repo-banner.png"/>
-  
+
   <a href="https://github.com/n-xiao/mable/wiki/Installing-Mable">Installation Guide</a>
 </h3>
 
@@ -10,32 +10,23 @@
 
 ## About
 Mable is an application which allows you to create Countdowns — it counts down the days till a date you set.
-When a Countdown approaches or passes its due date, the built-in *Heads Up Display*
-will update, showing you how many Countdowns are either overdue, due today or due tomorrow. Mable is **not**
-intended to replace your Calendar or To-Do list. Instead, it provides you with a quick overview about how much time
-you have left for multiple deadlines.
+Countdowns are shown in a compact list, sorted based on the number of days remaining before its due date.
+This allows you to check up on how much time you have left at a glance. Instead of folders, Mable uses colour-coded
+Countdowns to help you stay organised — we don't want you to be blind-sided by stuff *hidden* in folders!
 
 ## Features
 - Add and remove Countdowns easily
 - Shift-Click + Meta-Click functionality for selecting multiple Countdowns
 - Drag n' Drop to organise Countdowns
 - Mark Countdowns as Completed
-- Add and remove Folders
-- Search for Folders
-- Number of Countdowns that are Overdue, Due today or Due tomorrow at a glance
+- Add and remove Legends
+- Colour-coded Countdowns
 - Auto-saves to local storage
 - Scrollable views
+- Cross-platform
 - Free of charge
 
 Check out the [Wiki](https://github.com/n-xiao/mable/wiki) to learn more!
-
-## Roadmap
- - User settings
- - In-app toast notifications
- - Undo and redo function
-
-Development is ongoing for the next release (`v3.0.0-beta`)
-
 
 ## Contributing
 If you have an issue and/or want to contribute to the codebase, I recommend you start with reading
@@ -46,6 +37,7 @@ If you have an issue and/or want to contribute to the codebase, I recommend you 
 License [here](https://github.com/openjdk/jfx/blob/master/LICENSE).
 - Mable uses [Jackson](https://github.com/FasterXML/jackson) as a Gradle dependency. You can find a copy of their
 License [here](https://github.com/FasterXML/jackson-core/blob/3.x/LICENSE).
+- Mable uses [Feather Icons](https://github.com/feathericons/feather). You can find a copy of their License [here](https://github.com/feathericons/feather/blob/main/LICENSE).
 
 ## License
 This file is part of Mable.

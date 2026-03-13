@@ -16,10 +16,26 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package code;
+package code.frontend.libs.katlaf.tables;
 
-public class EntryPoint {
-    public static void main(String[] args) {
-        Launcher.main(args);
+import code.frontend.libs.katlaf.collections.SelectionCollection;
+import javafx.scene.layout.StackPane;
+
+/**
+ * Although this class seems empty right now, drag and drop features such as reordering
+ * is planned for a future release. Please refrain from calling this boilerplate code.
+ *
+ * @since v3.0.0-beta
+ */
+public abstract class SimpleTableMember extends StackPane {
+    /**
+     * Creates a new instance of this class.
+     *
+     * @param parent    the SelectionCollection that this SelectionChild instance belongs to
+     * @see SelectionCollection
+     * @see StackPane
+     */
+    public SimpleTableMember() {
+        this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
     }
 }

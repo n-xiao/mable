@@ -1,12 +1,10 @@
-<h3 align="center">
-  <img src="https://github.com/n-xiao/mable-artifacts/blob/main/media/icons/mable-repo-banner.png"/>
+![Preview_IMG](https://github.com/n-xiao/mable-artifacts/blob/main/media/public-readme/preview-0.png)
 
+<h3 align="center">
   <a href="https://github.com/n-xiao/mable/wiki/Installing-Mable">Installation Guide</a>
 </h3>
 
 ---
-
-![Preview_IMG](https://github.com/n-xiao/mable-artifacts/blob/main/media/public-readme/preview-0.png)
 
 ## About
 Mable is an application which allows you to create Countdowns — it counts down the days till a date you set.

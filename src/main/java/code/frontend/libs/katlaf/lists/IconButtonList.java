@@ -59,6 +59,10 @@ public class IconButtonList extends VBox {
         button.useSelectedStyle();
     }
 
+    public void select(final int index) {
+        select(this.buttons.get(index));
+    }
+
     public void deselectAll() {
         this.buttons.forEach(button -> button.useDeselectedStyle());
     }

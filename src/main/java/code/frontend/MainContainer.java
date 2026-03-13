@@ -28,6 +28,7 @@ import code.frontend.capabilities.views.CountdownView;
 import code.frontend.capabilities.views.SettingsView;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.util.Set;
+import javafx.application.Platform;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
@@ -48,6 +49,7 @@ public final class MainContainer extends HBox {
      FIELDS AND CONSTRUCTOR
     -------------------------------------------------------------------------------------*/
 
+    private Sidebar sidebar;
     private CountdownView activeView;
     private CountdownView completedView;
     private CountdownView deletedView;
@@ -65,39 +67,52 @@ public final class MainContainer extends HBox {
         /*
          * init the content first
          */
-        final StackPane container = new StackPane();
-        this.activeView = new CountdownView("Active Countdowns", LegendHandler.getLegends()) {
-            @Override
-            public Set<Countdown> getCountdowns() {
-                return CountdownHandler.getAll();
-            }
-        };
-        this.completedView = new CountdownView("Completed Countdowns", CountdownFilter.COMPLETED) {
-            @Override
-            public Set<Countdown> getCountdowns() {
-                return CountdownHandler.getAll();
-            }
-        };
-        this.deletedView = new CountdownView("Deleted Countdowns", CountdownFilter.DELETED) {
-            @Override
-            public Set<Countdown> getCountdowns() {
-                return CountdownHandler.getAll();
-            }
-        };
-        this.settingsView = SettingsView.setup();
+        final CountdownView activeView =
+            new CountdownView("Active Countdowns", LegendHandler.getLegends()) {
+                @Override
+                public Set<Countdown> getCountdowns() {
+                    return CountdownHandler.getAll();
+                }
+            };
+        final CountdownView completedView =
+            new CountdownView("Completed Countdowns", CountdownFilter.COMPLETED) {
+                @Override
+                public Set<Countdown> getCountdowns() {
+                    return CountdownHandler.getAll();
+                }
+            };
+        final CountdownView deletedView =
+            new CountdownView("Deleted Countdowns", CountdownFilter.DELETED) {
+                @Override
+                public Set<Countdown> getCountdowns() {
+                    return CountdownHandler.getAll();
+                }
+            };
+        final SettingsView settingsView = SettingsView.setup();
 
+        init(activeView, completedView, deletedView, settingsView);
+
+        this.selectActiveView();
+    }
+
+    private void init(final CountdownView activeView, final CountdownView completedView,
+        final CountdownView deletedView, final SettingsView settingsView) {
+        this.activeView = activeView;
+        this.completedView = completedView;
+        this.deletedView = deletedView;
+        this.settingsView = settingsView;
+
+        final StackPane container = new StackPane();
         container.getChildren().addAll(
             this.activeView, this.completedView, this.deletedView, this.settingsView);
         container.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         HBox.setHgrow(container, Priority.ALWAYS);
 
-        this.selectActiveView();
-        /*
-         * then do everything else
-         */
         this.setBackground(RiceHandler.createBG(RiceHandler.getColour("night"), 0, 0));
         this.setFillHeight(true);
-        this.getChildren().addAll(new Sidebar(), container);
+
+        this.sidebar = new Sidebar();
+        this.getChildren().addAll(this.sidebar, container);
 
         Watchdog.watch(this.activeView, this.completedView, this.deletedView);
     }
@@ -114,6 +129,47 @@ public final class MainContainer extends HBox {
 
      PUBLIC API
     -------------------------------------------------------------------------------------*/
+
+    public static synchronized void refresh() {
+        Platform.runLater(() -> {
+            Watchdog.unwatch(instance.activeView, instance.completedView, instance.deletedView);
+
+            final CountdownView activeView =
+                new CountdownView("Active Countdowns", LegendHandler.getLegends()) {
+                    @Override
+                    public Set<Countdown> getCountdowns() {
+                        return CountdownHandler.getAll();
+                    }
+                };
+            activeView.setVisible(instance.activeView.isVisible());
+
+            final CountdownView completedView =
+                new CountdownView("Completed Countdowns", CountdownFilter.COMPLETED) {
+                    @Override
+                    public Set<Countdown> getCountdowns() {
+                        return CountdownHandler.getAll();
+                    }
+                };
+            completedView.setVisible(instance.completedView.isVisible());
+
+            final CountdownView deletedView =
+                new CountdownView("Deleted Countdowns", CountdownFilter.DELETED) {
+                    @Override
+                    public Set<Countdown> getCountdowns() {
+                        return CountdownHandler.getAll();
+                    }
+                };
+            deletedView.setVisible(instance.deletedView.isVisible());
+
+            final SettingsView settingsView = SettingsView.setup();
+            settingsView.setVisible(instance.settingsView.isVisible());
+
+            instance.getChildren().clear();
+
+            instance.init(activeView, completedView, deletedView, settingsView);
+            instance.sidebar.match(activeView, completedView, deletedView, settingsView);
+        });
+    }
 
     public void selectActiveView() {
         this.hideAllViews();

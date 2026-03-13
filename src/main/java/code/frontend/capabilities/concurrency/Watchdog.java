@@ -19,6 +19,7 @@
 package code.frontend.capabilities.concurrency;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import javafx.application.Platform;
 import javafx.concurrent.ScheduledService;
 import javafx.concurrent.Task;
@@ -77,6 +78,14 @@ public final class Watchdog extends ScheduledService<Void> {
 
     public static void watch(Updatable updatable) {
         UPDATABLES.add(updatable);
+    }
+
+    public static void unwatch(Updatable updatable) {
+        UPDATABLES.remove(updatable);
+    }
+
+    public static void unwatch(Updatable... updatables) {
+        UPDATABLES.removeAll(Arrays.asList(updatables));
     }
 
     public static void watch(Updatable... updatables) {

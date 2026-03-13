@@ -25,6 +25,7 @@ import code.frontend.libs.katlaf.lists.IconButtonList;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -72,17 +73,37 @@ public final class Sidebar extends IconButtonList {
         }
     }
 
+    private static Color getButtonColour() {
+        return RiceHandler.getColour("lightgrey");
+    }
+
+    /*
+
+
+     PUBLIC API
+    -------------------------------------------------------------------------------------*/
+
+    public void match(final Node... nodes) {
+        int index = 0;
+        for (Node node : nodes) {
+            if (node.isVisible()) {
+                this.select(index);
+                return;
+            }
+            index++;
+        }
+    }
+
     /*
 
 
      COMPOSITIONS
     -------------------------------------------------------------------------------------*/
     private static final double SIZE = 17;
-    private static final Color COLOUR = RiceHandler.getColour("lightgrey");
 
     private class ActiveButton extends IconButton {
         ActiveButton() {
-            super(IconHandler.getIconAsImage("calendar.png"), COLOUR);
+            super(IconHandler.getIconAsImage("calendar.png"), getButtonColour());
         }
 
         @Override
@@ -94,7 +115,7 @@ public final class Sidebar extends IconButtonList {
 
     private class CompletedButton extends IconButton {
         CompletedButton() {
-            super(IconHandler.getIconAsImage("check-circle.png"), COLOUR);
+            super(IconHandler.getIconAsImage("check-circle.png"), getButtonColour());
         }
 
         @Override
@@ -106,7 +127,7 @@ public final class Sidebar extends IconButtonList {
 
     private class DeletedButton extends IconButton {
         DeletedButton() {
-            super(IconHandler.getIconAsImage("trash-2.png"), COLOUR);
+            super(IconHandler.getIconAsImage("trash-2.png"), getButtonColour());
         }
 
         @Override
@@ -118,7 +139,7 @@ public final class Sidebar extends IconButtonList {
 
     private class SettingsButton extends IconButton {
         SettingsButton() {
-            super(IconHandler.getIconAsImage("settings.png"), COLOUR);
+            super(IconHandler.getIconAsImage("settings.png"), getButtonColour());
         }
 
         @Override

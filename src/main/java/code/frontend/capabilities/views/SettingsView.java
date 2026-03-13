@@ -20,6 +20,7 @@ package code.frontend.capabilities.views;
 
 import code.backend.settings.SettingsHandler;
 import code.backend.settings.SettingsHandler.Key;
+import code.frontend.MainContainer;
 import code.frontend.libs.katlaf.options.BooleanOption;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.geometry.Insets;
@@ -51,8 +52,6 @@ public final class SettingsView extends VBox {
      * properly)
      */
     public static SettingsView setup() {
-        final String restartWarning = "Restart the application for changes to take effect.";
-
         /*
          * light mode option
          */
@@ -62,20 +61,15 @@ public final class SettingsView extends VBox {
             lightModeOption.getToggle().toggle();
         }
         lightModeOption.getSubtitle().setText("Switches the current theme to light mode.");
-        lightModeOption.getWarning().setText(restartWarning);
         lightModeOption.getToggle().setRunOnceOnline(() -> {
-            if (!lightModeEnabled)
-                lightModeOption.showWarning();
-            else
-                lightModeOption.hideWarning();
+            RiceHandler.updatePalette("LIGHT");
             SettingsHandler.setBooleanValue(Key.LIGHT_MODE, true);
+            MainContainer.refresh();
         });
         lightModeOption.getToggle().setRunOnceOffline(() -> {
-            if (lightModeEnabled)
-                lightModeOption.showWarning();
-            else
-                lightModeOption.hideWarning();
+            RiceHandler.updatePalette("DARK");
             SettingsHandler.setBooleanValue(Key.LIGHT_MODE, false);
+            MainContainer.refresh();
         });
 
         /*

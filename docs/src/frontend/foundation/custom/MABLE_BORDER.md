@@ -100,7 +100,7 @@ as demonstrated below.
 Note that in the image above, `this.ctrl` is used; it is just an explicit reference to a `Corner` instance
 and doesn't change any meaning discussed here.
 
-By keeping since `messiness` is used to determine the positioning of `ctrl`, SC1 is achieved.
+Since `messiness` is used to determine the positioning of `ctrl`, SC1 is achieved.
 
 ## Connecting the corners
 Here's where the cubic bezier curve shines. When the `ctrl` positioning has been determined for all

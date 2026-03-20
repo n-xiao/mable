@@ -27,6 +27,7 @@ dependencies {
 	testRuntimeOnly('org.junit.platform:junit-platform-launcher')
 }
 
+
 test {
     failOnNoDiscoveredTests = false
 	useJUnitPlatform()

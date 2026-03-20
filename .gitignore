@@ -56,3 +56,5 @@ app/.classpath
 app/bin/
 .classpath
 bin/
+dist
+java_fx_modules

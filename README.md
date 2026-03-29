@@ -6,6 +6,8 @@
 
 ---
 
+![Preview_IMG](https://github.com/n-xiao/mable-artifacts/blob/main/media/public-readme/preview-0.png)
+
 ## About
 Mable is an application which allows you to create Countdowns — it counts down the days till a date you set.
 Countdowns are shown in a compact list, sorted based on the number of days remaining before its due date.
@@ -31,11 +33,25 @@ If you have an issue and/or want to contribute to the codebase, I recommend you 
 [the docs](https://github.com/n-xiao/mable/tree/master/docs).
 
 ## Acknowledgements
-- Mable uses [JavaFX](https://github.com/openjdk/jfx/tree/master) as a Gradle dependency. You can find a copy of their
-License [here](https://github.com/openjdk/jfx/blob/master/LICENSE).
-- Mable uses [Jackson](https://github.com/FasterXML/jackson) as a Gradle dependency. You can find a copy of their
+
+*IMPORTANT NOTE:* Various works are named below to credit their authors and fulfill
+any necessary terms outlined by their respective Licenses, as they are used to facilitate certain features of Mable.
+This section, "Acknowledgements", **DOES NOT** imply any brand affiliation or collaboration with said works,
+or the authors of said works.
+
+- Mable uses [Jackson](https://github.com/FasterXML/jackson) as a build dependency. You can find a copy of their
 License [here](https://github.com/FasterXML/jackson-core/blob/3.x/LICENSE).
+
 - Mable uses [Feather Icons](https://github.com/feathericons/feather). You can find a copy of their License [here](https://github.com/feathericons/feather/blob/main/LICENSE).
+
+- Mable uses [JavaFX](https://github.com/openjdk/jfx/tree/master) as a runtime dependency. You can find a copy of their
+License [here](https://github.com/openjdk/jfx/blob/master/LICENSE).
+
+- Mable utilises non-source (compiled) forms of [CoreNLP](https://github.com/stanfordnlp/CoreNLP) at runtime.
+You can find a copy of their License [here](https://github.com/stanfordnlp/CoreNLP/blob/main/LICENSE.txt).
+No changes have been made to the original source code; only original binaries were obtained through
+Gradle's plugin system.
+Anyone can obtain a copy of the source code by cloning their repository on GitHub: <https://github.com/stanfordnlp/CoreNLP>
 
 ## License
 This file is part of Mable.

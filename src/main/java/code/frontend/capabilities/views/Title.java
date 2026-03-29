@@ -23,19 +23,46 @@ import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 
+/**
+ * A basic left-aligned title which can be used in various views
+ * for consistency. Should be placed at the top of the view.
+ *
+ * @since v3.0.0-beta
+ */
 public class Title extends BorderPane {
     protected static final double TOP_MARGIN = 2;
     protected static final double SIDE_MARGIN = 4;
 
+    private final HBox container;
+
+    /**
+     * Creates a new instance with the provided text as the title.
+     *
+     * @param text      the String which should be used as the title
+     */
     public Title(final String text) {
         this.setBackground(null);
 
         final Label label = new Label(text);
         label.setFont(FontHandler.getHeading(1));
         label.setTextFill(RiceHandler.getColour("white"));
-        label.setMouseTransparent(true);
-        BorderPane.setMargin(label, new Insets(TOP_MARGIN, 0, 0, SIDE_MARGIN));
-        this.setLeft(label);
+
+        this.container = new HBox();
+        this.container.getChildren().add(label);
+        BorderPane.setMargin(this.container, new Insets(TOP_MARGIN, 0, 0, SIDE_MARGIN));
+
+        this.setLeft(this.container);
+    }
+
+    /*
+
+
+     PROTECTED API
+    -------------------------------------------------------------------------------------*/
+
+    protected final HBox getLeftContainer() {
+        return this.container;
     }
 }

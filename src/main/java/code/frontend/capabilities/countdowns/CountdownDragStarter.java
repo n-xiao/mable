@@ -68,16 +68,18 @@ final class CountdownDragStarter extends DragStartRegion<CountdownPacket> {
                         }
                     };
 
-                    if (selectedMembers.size() > 1) {
-                        new RightClickMenu()
-                            .addButton("Delete", delete)
-                            .init(event.getSceneX(), event.getSceneY());
-                    } else {
-                        new RightClickMenu()
-                            .addButton("Edit", edit)
-                            .addButton("Delete", delete)
-                            .init(event.getSceneX(), event.getSceneY());
-                    }
+                    final Runnable export = () -> {
+                        Popup.spawn(new CountdownExportPopup(
+                            this.list.getSelectedCountdowns().getCountdowns()));
+                    };
+
+                    RightClickMenu menu = new RightClickMenu();
+
+                    if (selectedMembers.size() == 1)
+                        menu = menu.addButton("Edit", edit);
+                    menu.addButton("Export", export)
+                        .addButton("Delete", delete)
+                        .spawn(event.getSceneX(), event.getSceneY());
 
                     event.consume();
                 }
@@ -100,7 +102,7 @@ final class CountdownDragStarter extends DragStartRegion<CountdownPacket> {
 
                     new RightClickMenu()
                         .addButton("Recover", recover)
-                        .init(event.getSceneX(), event.getSceneY());
+                        .spawn(event.getSceneX(), event.getSceneY());
 
                     event.consume();
                 }

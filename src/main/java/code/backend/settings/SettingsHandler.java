@@ -33,6 +33,7 @@ public final class SettingsHandler {
         MAP.clear();
         MAP.put(Key.LIGHT_MODE, "false");
         MAP.put(Key.ALT_DATE, "false");
+        MAP.put(Key.NLP_ENABLE, "false");
     }
 
     public static boolean getBooleanValue(final String key) {
@@ -46,6 +47,7 @@ public final class SettingsHandler {
     public static final class Key {
         public static final String LIGHT_MODE = "use_light_mode";
         public static final String ALT_DATE = "use_alternate_date";
+        public static final String NLP_ENABLE = "use_nlp_features";
         private Key() {}
     }
 }

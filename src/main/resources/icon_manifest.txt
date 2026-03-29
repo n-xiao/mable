@@ -2,3 +2,9 @@ icons/calendar.png
 icons/check-circle.png
 icons/settings.png
 icons/trash-2.png
+icons/share.png
+icons/edit.png
+icons/download.png
+icons/alert-triangle.png
+icons/alert-circle.png
+icons/folder.png

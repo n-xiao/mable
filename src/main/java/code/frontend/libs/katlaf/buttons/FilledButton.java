@@ -77,6 +77,30 @@ public class FilledButton extends ButtonFoundation {
      PUBLIC API
     -------------------------------------------------------------------------------------*/
 
+    /**
+     * Convenience method for creating action buttons. Used when a significant action is performed
+     * as a result of the user clicking the button.
+     *
+     * @param runnable        the procedure to run when the button is pressed
+     * @return FilledButton   the FilledButton instance with size 75x25
+     *
+     * @since v3.1.0
+     */
+    public final static FilledButton createActionButton(final Runnable runnable) {
+        final FilledButton button =
+            new FilledButton(RiceHandler.getColour("white"), RiceHandler.getColour("white2")) {
+                @Override
+                public void onMousePressed(MouseEvent event) {
+                    runnable.run();
+                }
+            };
+        button.setLabelColour(RiceHandler.getColour("black"));
+        button.setMinSize(75, 25);
+        button.setMaxSize(75, 25);
+
+        return button;
+    }
+
     public final void setLabel(final String label) {
         this.face.setText(label);
     }

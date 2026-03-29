@@ -20,6 +20,13 @@ application {
 dependencies {
     // Jackson license: https://github.com/FasterXML/jackson-databind/blob/3.x/LICENSE
     implementation("tools.jackson.core:jackson-databind:3.1.0")
+
+    // CoreNLP license: https://github.com/stanfordnlp/CoreNLP/blob/main/LICENSE.txt
+    implementation 'edu.stanford.nlp:stanford-corenlp:4.5.5'
+    implementation "edu.stanford.nlp:stanford-corenlp:4.5.5:models"
+    implementation "edu.stanford.nlp:stanford-corenlp:4.5.5:models-english"
+    implementation "edu.stanford.nlp:stanford-corenlp:4.5.5:models-english-kbp"
+
     // tests
     testImplementation("org.mockito:mockito-junit-jupiter:5.21.0")
 	testImplementation(platform('org.junit:junit-bom:6.0.2'))

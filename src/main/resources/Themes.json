@@ -15,6 +15,7 @@
         "grey" : "rgb(100, 100, 100)",
         "grey2" : "rgb(120, 120, 120)",
         "lightblue" : "rgb(92, 204, 242)",
+        "lightgreen" : "rgb(29, 226, 29)",
         "lightgrey" : "rgb(190, 190, 220)",
         "lightred" : "rgb(252, 103, 105)",
         "midnight" : "rgb(10, 2, 22)",
@@ -27,7 +28,8 @@
         "skyblue" : "rgb(136, 175, 252)",
         "teal" : "rgb(126, 182, 187)",
     	"white" : "rgb(255, 255, 255)",
-        "white2" : "rgb(225, 225, 225)"
+        "white2" : "rgb(225, 225, 225)",
+        "yellow" : "rgb(247, 219, 42)"
     },
     "LIGHT" : {
         "black" : "rgb(255, 255, 255)",
@@ -45,6 +47,7 @@
         "grey" : "rgb(170, 170, 170)",
         "grey2" : "rgb(190, 190, 190)",
         "lightblue" : "rgb(95, 122, 176)",
+        "lightgreen" : "rgb(29, 170, 29)",
         "lightgrey" : "rgb(50, 50, 52)",
         "lightred" : "rgb(181, 47, 32)",
         "midnight" : "rgb(225, 225, 225)",
@@ -57,6 +60,7 @@
         "skyblue" : "rgb(6, 58, 163)",
         "teal" : "rgb(83, 159, 162)",
     	"white" : "rgb(10, 10, 10)",
-        "white2" : "rgb(40, 40, 40)"
+        "white2" : "rgb(40, 40, 40)",
+        "yellow" : "rgb(188, 168, 39)"
     }
 }

@@ -61,9 +61,8 @@ public class Launcher extends Application {
         stage.setHeight(PREF_HEIGHT);
         stage.setOnCloseRequest((event) -> { Platform.exit(); });
 
+        MainContainer.setStage(stage);
         final MainContainer root = MainContainer.getInstance();
-        // root.prefWidthProperty().bind(stage.widthProperty());
-        // root.prefHeightProperty().bind(stage.heightProperty());
 
         final Scene scene = new Scene(root);
         scene.setFill(RiceHandler.getColour("night"));

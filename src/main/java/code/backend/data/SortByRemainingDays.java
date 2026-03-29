@@ -28,7 +28,7 @@ public class SortByRemainingDays implements Comparator<Countdown> {
         int dist1 = c1.getDaysUntilDue(now);
         int dist2 = c2.getDaysUntilDue(now);
         int dateDiff = dist1 - dist2;
-        int idDiff = c1.getID().compareTo(c2.getID()); // enforces uniqueness for sets
+        int idDiff = c1.getId().compareTo(c2.getId()); // enforces uniqueness for sets
         return (dateDiff == 0) ? idDiff : dateDiff;
     }
 }

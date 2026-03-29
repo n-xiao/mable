@@ -68,11 +68,19 @@ public final class FontHandler {
     }
 
     public static Font getNormal() {
-        return Font.font(FONT_FAM + " Medium", 11);
+        return getNormal(11);
+    }
+
+    public static Font getNormal(final double size) {
+        return Font.font(FONT_FAM + " Medium", size);
     }
 
     public static Font getItalic() {
-        return Font.font(FONT_FAM + " Medium", FontPosture.ITALIC, 11);
+        return getItalic(11);
+    }
+
+    public static Font getItalic(final double size) {
+        return Font.font(FONT_FAM + " Medium", FontPosture.ITALIC, size);
     }
 
     public static Font getSubtitle() {
@@ -88,7 +96,11 @@ public final class FontHandler {
     }
 
     public static Font getHeavyMono() {
-        return Font.font(FONT_MONO, FontWeight.EXTRA_BOLD, 12);
+        return getHeavyMono(12);
+    }
+
+    public static Font getHeavyMono(final double size) {
+        return Font.font(FONT_MONO, FontWeight.EXTRA_BOLD, size);
     }
 
     /**

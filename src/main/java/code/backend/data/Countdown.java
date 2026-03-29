@@ -19,11 +19,13 @@
 package code.backend.data;
 
 import code.backend.data.interfaces.Recoverable;
-import code.frontend.libs.katlaf.lists.Listable;
+import code.backend.settings.SettingsHandler;
+import code.backend.settings.SettingsHandler.Key;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.text.DecimalFormat;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -32,7 +34,7 @@ import java.util.UUID;
 import javafx.scene.paint.Color;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Countdown extends Identifiable implements Listable<Countdown>, Recoverable {
+public class Countdown extends Identifiable implements Comparable<Countdown>, Recoverable {
     private static final String ZONE_ID_STR = "UTC";
 
     @JsonProperty("name") private final String name;
@@ -132,6 +134,18 @@ public class Countdown extends Identifiable implements Listable<Countdown>, Reco
         return now.plusDays(getDaysUntilDue(now));
     }
 
+    @JsonIgnore
+    public String getDisplayDate(final LocalDate now) {
+        final LocalDate date = this.isDone ? getLocalCompletionDate(now) : getLocalDueDate(now);
+        final DecimalFormat decimalFormat = new DecimalFormat("00");
+        final String day = decimalFormat.format(date.getDayOfMonth());
+        final String month = decimalFormat.format(date.getMonthValue());
+        final String year = new DecimalFormat("0000").format(date.getYear());
+        return (SettingsHandler.getBooleanValue(Key.ALT_DATE) ? month + "/" + day
+                                                              : day + "/" + month)
+            + "/" + year;
+    }
+
     public LocalDate getLocalCompletionDate(LocalDate now) {
         return now.plusDays(getDaysUntilCompletion(now));
     }
@@ -190,6 +204,7 @@ public class Countdown extends Identifiable implements Listable<Countdown>, Reco
         CountdownHandler.deleteCountdown(this);
     }
 
+    @JsonIgnore
     public void moveToLegend(final Legend legend) {
         LegendHandler.disownCountdown(this);
         legend.getContents().add(this);
@@ -216,6 +231,7 @@ public class Countdown extends Identifiable implements Listable<Countdown>, Reco
      * @see StorageHandler#save()
      */
     @Override
+    @JsonIgnore
     public void deleteForever() {
         if (!this.isDeleted())
             this.delete();
@@ -240,12 +256,15 @@ public class Countdown extends Identifiable implements Listable<Countdown>, Reco
     public int compareTo(Countdown other) {
         final LocalDate now = LocalDate.now();
         final int daysDiff = this.getDaysUntilDue(now) - other.getDaysUntilDue(now);
-        return daysDiff == 0 ? this.getID().compareTo(other.getID()) : daysDiff;
+        return daysDiff == 0 ? this.getId().compareTo(other.getId()) : daysDiff;
     }
 
-    @Override
+    /**
+     * Returns a new {@link PortableCountdown} instance using the name
+     * and dueDateTime fields of this Countdown instance.
+     */
     @JsonIgnore
-    public String getDisplayString() {
-        return this.getName();
+    public PortableCountdown getPortable() {
+        return new PortableCountdown(this.name, this.dueDateTime);
     }
 }

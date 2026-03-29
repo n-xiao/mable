@@ -18,11 +18,18 @@
 
 package code.frontend.libs.katlaf.icons;
 
+import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import javafx.scene.effect.Blend;
+import javafx.scene.effect.BlendMode;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.ColorInput;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 
 public final class IconHandler {
     /*
@@ -87,5 +94,24 @@ public final class IconHandler {
         if (image == null)
             throw new IllegalArgumentException("Requested icon \"" + fileName + "\" is null!");
         return IMAGES.get(key);
+    }
+
+    public static ImageView getIconAsImageView(final String fileName, final String colour) {
+        final Color colourOverlay = RiceHandler.getColour("colour");
+        final Image image = getIconAsImage(fileName);
+
+        final ColorInput colourInput = new ColorInput();
+        colourInput.widthProperty().bind(image.widthProperty());
+        colourInput.heightProperty().bind(image.heightProperty());
+        colourInput.setPaint(colourOverlay);
+
+        final ColorAdjust monochrome = new ColorAdjust();
+        monochrome.setSaturation(-1);
+        final Blend blend = new Blend(BlendMode.SRC_ATOP, monochrome, colourInput);
+
+        final ImageView imageView = new ImageView(image);
+        imageView.setEffect(blend);
+
+        return imageView;
     }
 }

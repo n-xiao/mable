@@ -87,7 +87,33 @@ public final class SettingsView extends VBox {
         altDateOption.getToggle().setRunOnceOffline(
             () -> { SettingsHandler.setBooleanValue(Key.ALT_DATE, false); });
 
-        return new SettingsView().addBooleanOption(lightModeOption).addBooleanOption(altDateOption);
+        /*
+         * NLP features option
+         */
+        final boolean nlpEnabled = SettingsHandler.getBooleanValue(Key.NLP_ENABLE);
+        final BooleanOption nlpOption = new BooleanOption("Use NLP features");
+        if (nlpEnabled) {
+            nlpOption.getToggle().toggle();
+        }
+        nlpOption.getWarning().setText(
+            "NLP systems can be inaccurate and may produce incorrect outputs.");
+        nlpOption.getSubtitle().setText("Enables Natural Language Processing (NLP) features.");
+        nlpOption.getToggle().setRunOnceOnline(() -> {
+            SettingsHandler.setBooleanValue(Key.NLP_ENABLE, true);
+            MainContainer.refresh();
+        });
+        nlpOption.getToggle().setRunOnceOffline(() -> {
+            SettingsHandler.setBooleanValue(Key.NLP_ENABLE, false);
+            MainContainer.refresh();
+        });
+
+        if (nlpEnabled)
+            nlpOption.showWarning();
+
+        return new SettingsView()
+            .addBooleanOption(lightModeOption)
+            .addBooleanOption(altDateOption)
+            .addBooleanOption(nlpOption);
     }
 
     /**

@@ -31,7 +31,6 @@ import java.time.LocalDate;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -71,7 +70,7 @@ public final class CountdownCreatorPopup extends Popup {
         this.daysField = new DaysField();
         this.list = list;
         this.oldMember = member;
-        super(340, 340);
+        super(320, 300);
     }
 
     /*
@@ -125,37 +124,32 @@ public final class CountdownCreatorPopup extends Popup {
         final HBox daysFieldContainer = new HBox();
         daysFieldContainer.setAlignment(Pos.CENTER_RIGHT);
         daysFieldContainer.getChildren().addAll(label, this.daysField);
+
         /*
          * setup the button
          */
-        final FilledButton accept =
-            new FilledButton(RiceHandler.getColour("white"), RiceHandler.getColour("white2")) {
-                @Override
-                public void onMousePressed(MouseEvent event) {
-                    final String name = nameField.getUserInput();
-                    final LocalDate due = dateField.getLocalDateInput(false);
+        final FilledButton accept = FilledButton.createActionButton(() -> {
+            final String name = nameField.getUserInput();
+            final LocalDate due = dateField.getLocalDateInput(false);
 
-                    if (due == null)
-                        return;
+            if (due == null)
+                return;
 
-                    final Countdown countdown = CountdownHandler.create(name, due);
-                    list.addMember(new CountdownListMember(countdown, list));
+            final Countdown countdown = CountdownHandler.create(name, due);
+            list.addMember(new CountdownListMember(countdown, list));
 
-                    if (isEditing()) {
-                        if (oldMember.getCountdown().isInLegend())
-                            countdown.moveToLegend(oldMember.getCountdown().getLegend());
-                        list.removeMemberImmediately(oldMember);
-                        oldMember.getCountdown().deleteForever();
-                    }
+            if (isEditing()) {
+                if (oldMember.getCountdown().isInLegend())
+                    countdown.moveToLegend(oldMember.getCountdown().getLegend());
+                list.removeMemberImmediately(oldMember);
+                oldMember.getCountdown().deleteForever();
+            }
 
-                    Popup.despawn();
-                }
-            };
-        accept.setLabel(this.isEditing() ? "Confirm" : "Create");
-        accept.setLabelColour(RiceHandler.getColour("black"));
-        accept.setMinSize(75, 25);
-        accept.setMaxSize(75, 25);
+            Popup.despawn();
+        });
+        accept.setLabel("Done");
         VBox.setMargin(accept, new Insets(40, 0, 0, 0));
+
         /*
          * add everything to container
          */
@@ -170,6 +164,6 @@ public final class CountdownCreatorPopup extends Popup {
 
     @Override
     protected String getIdent() {
-        return "countdown creator";
+        return "Countdown Wizard";
     }
 }

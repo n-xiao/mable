@@ -18,7 +18,6 @@
 
 package code.backend.data;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -29,24 +28,23 @@ import java.util.UUID;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY)
 @JsonSubTypes({
     @JsonSubTypes.Type(value = Legend.class, name = "Legend")
-    , @JsonSubTypes.Type(value = Countdown.class, name = "Countdown")
+    , @JsonSubTypes.Type(value = Countdown.class, name = "Countdown"),
+        @JsonSubTypes.Type(value = PortableCountdown.class, name = "PortableCountdown")
 })
 public abstract class Identifiable {
-    private final UUID ID;
-    @JsonIgnore private boolean markedForDeletion;
+    private final UUID id;
 
-    protected Identifiable(final String ID_STRING) {
-        this(UUID.fromString(ID_STRING));
+    protected Identifiable(final String idString) {
+        this(UUID.fromString(idString));
     }
 
-    protected Identifiable(final UUID ID) {
-        this.ID = ID;
-        this.markedForDeletion = false;
+    protected Identifiable(final UUID id) {
+        this.id = id;
     }
 
     @JsonProperty("ID")
-    public UUID getID() {
-        return ID;
+    public UUID getId() {
+        return id;
     }
 
     @Override
@@ -55,7 +53,7 @@ public abstract class Identifiable {
             return false;
         else {
             Identifiable other = (Identifiable) obj;
-            return other.ID.equals(this.ID);
+            return other.id.equals(this.id);
         }
     }
 }

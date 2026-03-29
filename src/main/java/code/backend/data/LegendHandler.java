@@ -25,31 +25,16 @@ import java.util.TreeSet;
 import javafx.scene.paint.Color;
 
 public final class LegendHandler {
+    private LegendHandler() {}
+
     private static final TreeSet<Legend> LEGENDS = new TreeSet<Legend>();
     private static final Stack<Legend> DELETED_LEGENDS = new Stack<Legend>();
 
-    public static Legend createLegend(final String name, final Colour colour, final int index) {
-        final Legend legend = new Legend(name);
-        legend.setIndex(index);
-        legend.setColour(colour);
-        LEGENDS.add(legend);
-        StorageHandler.save();
-        return legend;
-    }
+    /*
 
-    public static void removeLegend(final Legend legend) {
-        legend.disownContents();
-        LEGENDS.remove(legend);
-        DELETED_LEGENDS.add(legend);
-    }
 
-    public static TreeSet<Legend> getLegends() {
-        return LEGENDS;
-    }
-
-    public static Stack<Legend> getDeletedLegends() {
-        return DELETED_LEGENDS;
-    }
+     PRIVATE API
+    -------------------------------------------------------------------------------------*/
 
     /**
      * Removes the specified Countdown from all Legends.
@@ -87,5 +72,41 @@ public final class LegendHandler {
         return null;
     }
 
-    private LegendHandler() {}
+    /*
+
+
+     PUBLIC API
+    -------------------------------------------------------------------------------------*/
+
+    public static Legend createLegend(final String name, final Colour colour, final int index) {
+        final Legend legend = new Legend(name);
+        legend.setIndex(index);
+        legend.setColour(colour);
+        LEGENDS.add(legend);
+        StorageHandler.save();
+        return legend;
+    }
+
+    public static void removeLegend(final Legend legend) {
+        legend.disownContents();
+        LEGENDS.remove(legend);
+        DELETED_LEGENDS.add(legend);
+    }
+
+    public static TreeSet<Legend> getLegends() {
+        return LEGENDS;
+    }
+
+    public static Legend findLegend(final String name, final boolean matchCase) {
+        for (Legend legend : LEGENDS) {
+            if (name.equals(legend.getName()) && matchCase
+                || name.toLowerCase().equals(legend.getName().toLowerCase()) && !matchCase)
+                return legend;
+        }
+        return null;
+    }
+
+    public static Stack<Legend> getDeletedLegends() {
+        return DELETED_LEGENDS;
+    }
 }

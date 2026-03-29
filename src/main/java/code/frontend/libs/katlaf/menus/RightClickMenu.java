@@ -49,6 +49,7 @@ public final class RightClickMenu extends Region {
     private static final double PADDING = 5;
 
     private final List<FilledButton> buttons;
+    private Color backgroundColour;
 
     /**
      * Creates a new instance of this class. Use the addButton() method to
@@ -56,6 +57,7 @@ public final class RightClickMenu extends Region {
      */
     public RightClickMenu() {
         this.buttons = new ArrayList<FilledButton>();
+        this.backgroundColour = RiceHandler.getColour("darkgrey");
     }
 
     /*
@@ -84,16 +86,17 @@ public final class RightClickMenu extends Region {
      * @param y     the y coordinate at which this instance should position its top
      *              left corner
      */
-    public void init(double x, double y) {
+    public void spawn(double x, double y) {
         final MainContainer mc = MainContainer.getInstance();
 
         this.setManaged(false);
+        this.setVisible(true);
         this.resize(mc.getScene().getWidth(), mc.getScene().getHeight());
 
         final VBox container = new VBox();
         container.setAlignment(Pos.CENTER);
         container.setPadding(new Insets(PADDING, PADDING, 0, PADDING));
-        container.setBackground(RiceHandler.createBG(RiceHandler.getColour("darkgrey"), 8, 0));
+        container.setBackground(RiceHandler.createBG(this.backgroundColour, 8, 0));
         container.setViewOrder(-200);
         this.buttons.forEach(container.getChildren()::add);
 
@@ -150,6 +153,24 @@ public final class RightClickMenu extends Region {
         button.getChildren().addAll(text);
         button.setViewOrder(-1);
 
+        return this;
+    }
+
+    /**
+     * Sets the background colour of this RightClickMenu to the specified Color.
+     * This method does not accept null as a parameter.
+     *
+     * @param colour                the Color which the background should be set to.
+     *                              By default, the return value of
+     *                              RiceHandler.getColour("darkgrey") is used.
+     *
+     * @return RightClickMenu       the current instance to facilitate method chaining
+     */
+    public RightClickMenu setBackgroundColour(final Color colour) {
+        if (colour == null)
+            throw new IllegalArgumentException("Cannot set Color to null");
+
+        this.backgroundColour = colour;
         return this;
     }
 }

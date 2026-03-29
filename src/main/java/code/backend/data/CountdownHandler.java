@@ -18,51 +18,40 @@
 
 package code.backend.data;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.SerializationFeature;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 public final class CountdownHandler {
+    private static final ObjectMapper MAPPER =
+        JsonMapper.builder().enable(SerializationFeature.INDENT_OUTPUT).build();
     private static final TreeSet<Countdown> COUNTDOWNS =
         new TreeSet<Countdown>(new SortByRemainingDays());
     private static final Stack<Countdown> DELETED_COUNTDOWNS = new Stack<Countdown>();
 
-    public static TreeSet<Countdown> getCountdowns() {
-        return COUNTDOWNS;
-    }
+    private CountdownHandler() {}
 
-    public static Set<Countdown> getAll() {
-        final LinkedHashSet<Countdown> result = new LinkedHashSet<Countdown>();
-        for (Countdown countdown : COUNTDOWNS) {
-            result.add(countdown);
-        }
-        for (Countdown countdown : DELETED_COUNTDOWNS) {
-            result.add(countdown);
-        }
-        return result;
-    }
+    /*
+
+
+     PRIVATE API
+    -------------------------------------------------------------------------------------*/
 
     static Stack<Countdown> getDeletedCountdowns() {
         return DELETED_COUNTDOWNS;
-    }
-
-    public static Countdown create(final String name, final LocalDate dueDate) {
-        final Countdown countdown = new Countdown(name, dueDate);
-        addCountdown(countdown);
-        return countdown;
-    }
-
-    /**
-     * This method is designed to be called during runtime, by user interaction.
-     * It should never be called during load operations. Use the getCountdowns.add()
-     * method for that.
-     */
-    public static void addCountdown(Countdown c) {
-        COUNTDOWNS.add(c);
-        StorageHandler.save();
     }
 
     static void deleteCountdown(final Countdown countdown) {
@@ -90,11 +79,72 @@ public final class CountdownHandler {
 
     static Countdown getCountdownByID(String id) {
         for (Countdown countdown : COUNTDOWNS) {
-            if (countdown.getID().toString().equals(id))
+            if (countdown.getId().toString().equals(id))
                 return countdown;
         }
         return null;
     }
 
-    private CountdownHandler() {}
+    /*
+
+
+     PUBLIC API
+    -------------------------------------------------------------------------------------*/
+
+    public static TreeSet<Countdown> getCountdowns() {
+        return COUNTDOWNS;
+    }
+
+    public static Set<Countdown> getAll() {
+        final LinkedHashSet<Countdown> result = new LinkedHashSet<Countdown>();
+        for (Countdown countdown : COUNTDOWNS) {
+            result.add(countdown);
+        }
+        for (Countdown countdown : DELETED_COUNTDOWNS) {
+            result.add(countdown);
+        }
+        return result;
+    }
+
+    public static Countdown create(final String name, final LocalDate dueDate) {
+        final Countdown countdown = new Countdown(name, dueDate);
+        addCountdown(countdown);
+        return countdown;
+    }
+
+    public static List<PortableCountdown> extractPortables(final File file) {
+        final JsonNode jsonRoot = MAPPER.readTree(file);
+        final ArrayList<PortableCountdown> result = new ArrayList<PortableCountdown>();
+        jsonRoot.forEachEntry((k, v) -> result.add(MAPPER.treeToValue(v, PortableCountdown.class)));
+        return result;
+    }
+
+    public static void exportCountdowns(final List<Countdown> countdowns, final Path path)
+        throws Exception {
+        if (Files.notExists(path)) {
+            Files.createFile(path);
+        }
+        final JsonNode jsonRoot = MAPPER.readTree(path);
+        final ObjectNode objRoot =
+            jsonRoot.isObject() ? ((ObjectNode) jsonRoot) : MAPPER.createObjectNode().putObject("");
+
+        for (Countdown countdown : countdowns) {
+            if (!countdown.isDone() && !countdown.isDeleted()) {
+                final PortableCountdown portable = countdown.getPortable();
+                objRoot.putPOJO(portable.getId().toString(), portable);
+            }
+        }
+
+        MAPPER.writeValue(path, objRoot);
+    }
+
+    /**
+     * This method is designed to be called during runtime, by user interaction.
+     * It should never be called during load operations. Use the getCountdowns.add()
+     * method for that.
+     */
+    public static void addCountdown(Countdown c) {
+        COUNTDOWNS.add(c);
+        StorageHandler.save();
+    }
 }

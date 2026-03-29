@@ -84,7 +84,7 @@ public class Legend extends Identifiable implements Comparable<Legend> {
         String[] stringIDs = new String[this.contents.size()];
         int index = 0;
         for (Countdown countdown : this.contents) {
-            stringIDs[index] = countdown.getID().toString();
+            stringIDs[index] = countdown.getId().toString();
             index++;
         }
         return stringIDs;
@@ -155,7 +155,7 @@ public class Legend extends Identifiable implements Comparable<Legend> {
     public int compareTo(Legend o) {
         int comp = this.getIndex() - o.getIndex();
         if (comp == 0)
-            comp = this.getID().compareTo(o.getID());
+            comp = this.getId().compareTo(o.getId());
         return comp;
     }
 }

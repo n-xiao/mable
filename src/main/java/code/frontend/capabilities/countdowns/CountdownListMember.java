@@ -19,8 +19,6 @@
 package code.frontend.capabilities.countdowns;
 
 import code.backend.data.Countdown;
-import code.backend.settings.SettingsHandler;
-import code.backend.settings.SettingsHandler.Key;
 import code.frontend.capabilities.concurrency.Updatable;
 import code.frontend.capabilities.countdowns.CountdownList.CountdownFilter;
 import code.frontend.libs.katlaf.FontHandler;
@@ -264,18 +262,8 @@ final class CountdownListMember
             this.setFont(FontHandler.getMono());
             this.setMaxHeight(Double.MAX_VALUE);
             final LocalDate now = LocalDate.now();
-            final LocalDate localDate = countdown.isDone() ? countdown.getLocalCompletionDate(now)
-                                                           : countdown.getLocalDueDate(now);
             final String pretext = countdown.isDone() ? "Completed: " : "Due: ";
-            final String day = Integer.toString(localDate.getDayOfMonth());
-            final String month = Integer.toString(localDate.getMonthValue());
-            final String year = Integer.toString(localDate.getYear());
-
-            final String text = pretext
-                + ((SettingsHandler.getBooleanValue(Key.ALT_DATE)) ? month + "/" + day
-                                                                   : day + "/" + month)
-                + "/" + year;
-            this.setText(text);
+            this.setText(pretext + countdown.getDisplayDate(now));
         }
     }
 

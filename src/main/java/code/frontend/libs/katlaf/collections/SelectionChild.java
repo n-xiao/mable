@@ -49,6 +49,7 @@ public abstract class SelectionChild extends ButtonFoundation {
         } else if (parent.getNumberOfSelected() == 0 || !this.isToggled()) {
             parent.selected(this);
         }
+        this.requestFocus();
         event.consume();
     }
 }

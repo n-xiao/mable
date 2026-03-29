@@ -34,6 +34,8 @@ import javafx.scene.paint.Color;
 
 public final class Sidebar extends IconButtonList {
     private static final double V_GAP = 18;
+    private static final double SIZE = 17;
+
     public Sidebar() {
         final ActiveButton activeButton = new ActiveButton();
         final CompletedButton completedButton = new CompletedButton();
@@ -99,8 +101,6 @@ public final class Sidebar extends IconButtonList {
 
      COMPOSITIONS
     -------------------------------------------------------------------------------------*/
-    private static final double SIZE = 17;
-
     private class ActiveButton extends IconButton {
         ActiveButton() {
             super(IconHandler.getIconAsImage("calendar.png"), getButtonColour());

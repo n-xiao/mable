@@ -28,7 +28,6 @@ import code.frontend.libs.katlaf.ricing.ColourPicker;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -96,28 +95,21 @@ public final class LegendCreatorPopup extends Popup {
 
         this.colourPicker.setMinHeight(30);
 
-        final FilledButton accept =
-            new FilledButton(RiceHandler.getColour("white"), RiceHandler.getColour("white2")) {
-                @Override
-                public void onMousePressed(MouseEvent event) {
-                    final String name = nameField.getUserInput();
-                    final Colour colour = colourPicker.getSelected();
-                    if (isEditing()) {
-                        oldMember.getLegend().setName(name);
-                        oldMember.getLegend().setColour(colour);
-                        oldMember.update();
-                    } else {
-                        final Legend legend =
-                            LegendHandler.createLegend(name, colour, table.getNextIndex());
-                        table.addMember(legend);
-                    }
-                    Popup.despawn();
-                }
-            };
-        accept.setLabel(this.isEditing() ? "Confirm" : "Create");
-        accept.setLabelColour(RiceHandler.getColour("black"));
-        accept.setMinSize(75, 25);
-        accept.setMaxSize(75, 25);
+        final FilledButton accept = FilledButton.createActionButton(() -> {
+            final String name = nameField.getUserInput();
+            final Colour colour = colourPicker.getSelected();
+            if (isEditing()) {
+                oldMember.getLegend().setName(name);
+                oldMember.getLegend().setColour(colour);
+                oldMember.update();
+            } else {
+                final Legend legend =
+                    LegendHandler.createLegend(name, colour, table.getNextIndex());
+                table.addMember(legend);
+            }
+            Popup.despawn();
+        });
+        accept.setLabel("Done");
 
         VBox.setMargin(this.nameField, new Insets(0, 20, 10, 20));
         VBox.setMargin(this.colourPicker, new Insets(0, 20, 30, 20));

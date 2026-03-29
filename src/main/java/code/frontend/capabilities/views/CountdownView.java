@@ -20,12 +20,19 @@ package code.frontend.capabilities.views;
 
 import code.backend.data.Countdown;
 import code.backend.data.Legend;
+import code.backend.settings.SettingsHandler;
+import code.backend.settings.SettingsHandler.Key;
 import code.frontend.capabilities.concurrency.Updatable;
 import code.frontend.capabilities.countdowns.CountdownCreateButton;
+import code.frontend.capabilities.countdowns.CountdownImportPopup;
 import code.frontend.capabilities.countdowns.CountdownList;
 import code.frontend.capabilities.countdowns.CountdownList.CountdownFilter;
+import code.frontend.capabilities.countdowns.CountdownQuickCreate;
 import code.frontend.capabilities.legends.LegendTable;
 import code.frontend.libs.katlaf.FontHandler;
+import code.frontend.libs.katlaf.buttons.IconButton;
+import code.frontend.libs.katlaf.icons.IconHandler;
+import code.frontend.libs.katlaf.popup.Popup;
 import code.frontend.libs.katlaf.ricing.RiceHandler;
 import java.util.Set;
 import javafx.geometry.Insets;
@@ -34,9 +41,11 @@ import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
@@ -47,6 +56,7 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 
 /**
+ * I hereby present the messiest class of the entire project.
  * This is a combination of a LegendTable instance and a CountdownList instance
  * within a single container.
  *
@@ -71,7 +81,7 @@ public abstract class CountdownView extends VBox implements Updatable {
         this.list = new CountdownList();
         this.table = new LegendTable(this.list);
         this.table.setMinHeight(50);
-        VBox.setMargin(this.table, new Insets(20, SIDE_MARGIN, 0, SIDE_MARGIN));
+        VBox.setMargin(this.table, new Insets(0, SIDE_MARGIN, 15, SIDE_MARGIN));
 
         final StackPane listContainer = this.initListContainer(CountdownFilter.ONGOING);
 
@@ -79,7 +89,15 @@ public abstract class CountdownView extends VBox implements Updatable {
         VBox.setMargin(top, new Insets(0, SIDE_MARGIN, 10, SIDE_MARGIN));
         this.setAlignment(Pos.CENTER);
         this.table.prefWidthProperty().bind(this.widthProperty().add(-SIDE_MARGIN * 2));
-        this.getChildren().addAll(top, listContainer, new Group(this.table));
+
+        final CountdownQuickCreate quickCreate = new CountdownQuickCreate(this.list);
+        quickCreate.setMinHeight(34);
+        VBox.setMargin(quickCreate, new Insets(3, SIDE_MARGIN, 12, SIDE_MARGIN + 4));
+
+        if (SettingsHandler.getBooleanValue(Key.NLP_ENABLE))
+            this.getChildren().addAll(top, listContainer, quickCreate, new Group(this.table));
+        else
+            this.getChildren().addAll(top, listContainer, new Group(this.table));
 
         this.list.populate(getCountdowns());
         this.table.populate(legends, getCountdowns());
@@ -122,6 +140,7 @@ public abstract class CountdownView extends VBox implements Updatable {
         this.setBackground(null);
         this.setFillWidth(true);
         this.setPadding(new Insets(10, 0, 10, 0));
+        this.setOnMouseClicked(event -> this.requestFocus());
 
         final ScrollPane listScrollPane = new ScrollPane(this.list);
         listScrollPane.setStyle("-fx-background: transparent;");
@@ -198,10 +217,31 @@ public abstract class CountdownView extends VBox implements Updatable {
         Top(final String text) {
             super(text);
 
-            final CountdownCreateButton button = new CountdownCreateButton(CountdownView.this.list);
-            button.setMinWidth(50);
-            BorderPane.setMargin(button, new Insets(Title.TOP_MARGIN, Title.SIDE_MARGIN, 0, 0));
-            this.setRight(button);
+            final ImportCountdownButton importer = new ImportCountdownButton();
+            HBox.setMargin(importer, new Insets(0, 15, 0, 0));
+
+            final CountdownCreateButton create = new CountdownCreateButton(CountdownView.this.list);
+            create.setMinWidth(50);
+
+            final HBox hbox = new HBox(importer, create);
+            hbox.setAlignment(Pos.CENTER);
+            BorderPane.setMargin(hbox, new Insets(Title.TOP_MARGIN, Title.SIDE_MARGIN, 0, 0));
+            this.setRight(hbox);
+
+            this.setOnMousePressed(event -> CountdownView.this.list.getSelector().deselectAll());
+        }
+    }
+
+    private class ImportCountdownButton extends IconButton {
+        ImportCountdownButton() {
+            super(IconHandler.getIconAsImage("download.png"), RiceHandler.getColour("white2"));
+            this.setMaxSize(16, 16);
+            this.setMinSize(16, 16);
+        }
+
+        @Override
+        public void onMousePressed(MouseEvent event) {
+            Popup.spawn(new CountdownImportPopup(list));
         }
     }
 

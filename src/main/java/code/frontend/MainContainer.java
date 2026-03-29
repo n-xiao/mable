@@ -32,9 +32,21 @@ import javafx.application.Platform;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 public final class MainContainer extends HBox {
     private static MainContainer instance = null;
+    private static Stage stage = null;
+
+    public static void setStage(final Stage stage) {
+        if (stage == null)
+            MainContainer.stage = stage;
+    }
+
+    public static Stage getStage() {
+        return MainContainer.stage;
+    }
+
     public static MainContainer getInstance() {
         if (instance == null) {
             instance = new MainContainer();

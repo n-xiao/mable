@@ -64,19 +64,13 @@ public final class Field extends StackPane {
     /*
 
 
-     PROTECTED API
-    -------------------------------------------------------------------------------------*/
-
-    protected TextField getTextField() {
-        return this.textField;
-    }
-
-    /*
-
-
      PUBLIC API
     -------------------------------------------------------------------------------------*/
     private final InputFilter filter;
+
+    public TextField getTextField() {
+        return this.textField;
+    }
 
     /**
      * Sets whether or not the InputField accepts only numerical characters or not.

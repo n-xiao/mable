@@ -25,12 +25,13 @@ import code.frontend.libs.katlaf.ricing.RiceHandler;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 /**
@@ -106,20 +107,21 @@ public abstract class Popup extends Region {
      FIELDS & CONSTRUCTORS
     -------------------------------------------------------------------------------------*/
 
-    private final StackPane content;
+    private final VBox virtualWindow;
     private final BorderPane container;
 
     public Popup(final double width, final double height) {
         this.setBackground(null);
-        this.content = new StackPane();
-        this.content.setBackground(RiceHandler.createBG(RiceHandler.getColour("night"), 8, 0));
-        this.content.setMaxSize(width, height);
-        this.content.setMinSize(width, height);
-        this.content.setOnMousePressed(event -> event.consume());
+        this.virtualWindow = new VBox();
+        this.virtualWindow.setBackground(
+            RiceHandler.createBG(RiceHandler.getColour("night"), 8, 0));
+        this.virtualWindow.setMaxSize(width, height);
+        this.virtualWindow.setMinSize(width, height);
+        this.virtualWindow.setOnMousePressed(event -> event.consume());
 
         this.container = new BorderPane();
         this.container.setBackground(RiceHandler.createBG(new Color(0, 0, 0, 0.7), 0, 0));
-        this.container.setCenter(this.content);
+        this.container.setCenter(this.virtualWindow);
         this.container.setOnMousePressed(event -> {
             this.setVisible(false);
             event.consume();
@@ -128,22 +130,33 @@ public abstract class Popup extends Region {
         this.container.prefHeightProperty().bind(this.heightProperty());
         this.getChildren().add(this.container);
 
-        this.configureContent(this.content);
+        final StackPane content = new StackPane();
+        VBox.setVgrow(content, Priority.ALWAYS);
 
         /*
          * configure "title bar" stuff
          */
+        final BorderPane titleBar = new BorderPane();
+
         final Label title = new Label(getIdent());
         title.setFont(FontHandler.getMono());
         title.setTextFill(RiceHandler.getColour("white2"));
         title.setMouseTransparent(true);
-        StackPane.setAlignment(title, Pos.TOP_LEFT);
-        StackPane.setMargin(title, new Insets(5, 0, 0, 7));
-        this.content.getChildren().addLast(title);
+        BorderPane.setMargin(title, new Insets(0, 0, 5, 5));
+        titleBar.setLeft(title);
 
         final DespawnButton despawnButton = new DespawnButton();
-        this.content.getChildren().addLast(despawnButton);
-        despawnButton.resizeRelocate(width - 19, 5, 14, 14);
+        despawnButton.setMinSize(15, 15);
+        despawnButton.setMaxSize(15, 15);
+        BorderPane.setMargin(despawnButton, new Insets(0, 5, 5, 0));
+        titleBar.setRight(despawnButton);
+        titleBar.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        titleBar.setMinHeight(20);
+        this.virtualWindow.setPadding(new Insets(5, 3, 5, 3));
+
+        this.virtualWindow.getChildren().addAll(titleBar, content);
+
+        this.configureContent(content);
     }
 
     /*
@@ -181,7 +194,6 @@ public abstract class Popup extends Region {
             super(RiceHandler.getColour("lightred"), RiceHandler.getColour("red"));
             this.setLabel("X");
             this.setLabelColour(RiceHandler.getColour("black"));
-            this.setManaged(false);
         }
 
         @Override

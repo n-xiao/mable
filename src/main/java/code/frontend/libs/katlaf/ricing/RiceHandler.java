@@ -79,8 +79,14 @@ public class RiceHandler {
         return Color.web(getColourString(name));
     }
 
-    public static Background createBG(Color c, double radius, double ins) {
-        BackgroundFill bgFill = new BackgroundFill(c, new CornerRadii(radius), new Insets(ins));
+    public static Background createBG(final Color c, final double radius, final double ins) {
+        final BackgroundFill bgFill =
+            new BackgroundFill(c, new CornerRadii(radius), new Insets(ins));
+        return new Background(bgFill);
+    }
+
+    public static Background createBG(final Color c, final CornerRadii radii, final Insets insets) {
+        final BackgroundFill bgFill = new BackgroundFill(c, radii, insets);
         return new Background(bgFill);
     }
 

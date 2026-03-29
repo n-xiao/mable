@@ -90,9 +90,9 @@ public final class StorageHandler {
         final ObjectNode OBJ_ROOT = JSON_ROOT.isObject() ? ((ObjectNode) JSON_ROOT)
                                                          : MAPPER.createObjectNode().putObject("");
         CountdownHandler.getCountdowns().forEach(
-            cd -> { OBJ_ROOT.putPOJO(cd.getID().toString(), cd); });
+            cd -> { OBJ_ROOT.putPOJO(cd.getId().toString(), cd); });
         CountdownHandler.getDeletedCountdowns().forEach(
-            cd -> { OBJ_ROOT.remove(cd.getID().toString()); });
+            cd -> { OBJ_ROOT.remove(cd.getId().toString()); });
         MAPPER.writeValue(COUNTDOWNS_PATH, OBJ_ROOT);
     }
 
@@ -110,9 +110,9 @@ public final class StorageHandler {
         final ObjectNode OBJ_ROOT = JSON_ROOT.isObject() ? ((ObjectNode) JSON_ROOT)
                                                          : MAPPER.createObjectNode().putObject("");
         LegendHandler.getLegends().forEach(
-            legend -> { OBJ_ROOT.putPOJO(legend.getID().toString(), legend); });
+            legend -> { OBJ_ROOT.putPOJO(legend.getId().toString(), legend); });
         LegendHandler.getDeletedLegends().forEach(
-            deletedLegend -> { OBJ_ROOT.remove(deletedLegend.getID().toString()); });
+            deletedLegend -> { OBJ_ROOT.remove(deletedLegend.getId().toString()); });
         MAPPER.writeValue(LEGEND_PATH, OBJ_ROOT);
     }
 

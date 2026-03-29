@@ -6,8 +6,6 @@
 
 ---
 
-![Preview_IMG](https://github.com/n-xiao/mable-artifacts/blob/main/media/public-readme/preview-0.png)
-
 ## About
 Mable is an application which allows you to create Countdowns — it counts down the days till a date you set.
 Countdowns are shown in a compact list, sorted based on the number of days remaining before its due date.

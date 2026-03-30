@@ -30,11 +30,11 @@ Check out the [Wiki](https://github.com/n-xiao/mable/wiki) to learn more!
 If you have an issue and/or want to contribute to the codebase, I recommend you start with reading
 [the docs](https://github.com/n-xiao/mable/tree/master/docs).
 
-## Acknowledgements
+## Attribution
 
 *IMPORTANT NOTE:* Various works are named below to credit their authors and fulfill
 any necessary terms outlined by their respective Licenses, as they are used to facilitate certain features of Mable.
-This section, "Acknowledgements", **DOES NOT** imply any brand affiliation or collaboration with said works,
+This section, "Attribution", **DOES NOT** imply any brand affiliation or collaboration with said works,
 or the authors of said works.
 
 - Mable uses [Jackson](https://github.com/FasterXML/jackson) as a build dependency. You can find a copy of their

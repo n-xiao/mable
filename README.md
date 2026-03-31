@@ -8,7 +8,9 @@
 
 ## About
 **Purpose:** Mable is *not* a reminders application. It does not send annoying notifications when a Countdown's due date approaches. It serves as a dashboard for you to monitor long-term deadlines, allowing you to check how many days you have left until a due date.
+
 **Who should use Mable:** Anyone with deadlines to meet, especially those who have multiple deadlines that span over multiple days (e.g students).
+
 **Why you should use it:** Besides all the common features listed below, Mable prioritises task awareness above all else; other To-Do applications tend to hide your tasks within folders, in the name of "being organised". Mable doesn't do this. Instead, your tasks (or Countdowns) are always visible, with the most urgent Countdown being at the top of the list. Colour codes are used to stay organised, like what it found on a map (with Legends). This way, you'll never be blindsided.
 
 ## Features

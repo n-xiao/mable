@@ -14,6 +14,9 @@
 **Why you should use it:** Besides all the common features listed below, Mable prioritises task awareness above all else; other To-Do applications tend to hide your tasks within folders, in the name of "being organised". Mable doesn't do this. Instead, your tasks (or Countdowns) are always visible, with the most urgent Countdown being at the top of the list. Colour codes are used to stay organised, like what it found on a map (with Legends). This way, you'll never be blindsided.
 
 ## Features
+
+https://github.com/user-attachments/assets/bde28399-2aed-47d9-beaf-798ae6084d96
+
 - Add and remove Countdowns easily
 - Shift-Click + Meta-Click functionality for selecting multiple Countdowns
 - Drag n' Drop to organise Countdowns

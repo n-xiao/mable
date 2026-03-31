@@ -20,6 +20,7 @@ package code.frontend.capabilities.legends;
 
 import code.backend.data.Countdown;
 import code.backend.data.Legend;
+import code.backend.data.LegendHandler;
 import code.frontend.capabilities.countdowns.CountdownList;
 import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.FontHandler.DedicatedFont;
@@ -134,6 +135,7 @@ public final class LegendTable extends StackPane {
         }
         this.members.remove(memberToDelete);
         this.table.getChildren().remove(memberToDelete);
+        LegendHandler.removeLegend(legend);
         this.refreshIndexes();
     }
 

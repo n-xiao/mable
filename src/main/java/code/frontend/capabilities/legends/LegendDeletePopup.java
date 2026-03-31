@@ -19,7 +19,6 @@
 package code.frontend.capabilities.legends;
 
 import code.backend.data.Legend;
-import code.backend.data.LegendHandler;
 import code.frontend.capabilities.countdowns.CountdownList;
 import code.frontend.libs.katlaf.FontHandler;
 import code.frontend.libs.katlaf.buttons.FilledButton;
@@ -100,7 +99,6 @@ public class LegendDeletePopup extends Popup {
                 public void onMousePressed(MouseEvent event) {
                     legend.getContents().forEach(countdown -> countdown.delete());
                     list.removeMembers(legend.getContents());
-                    LegendHandler.removeLegend(legend);
                     table.removeMember(legend);
                     Popup.despawn();
                 }
@@ -113,7 +111,6 @@ public class LegendDeletePopup extends Popup {
                 @Override
                 public void onMousePressed(MouseEvent event) {
                     legend.getContents().clear();
-                    LegendHandler.removeLegend(legend);
                     table.removeMember(legend);
                     Popup.despawn();
                 }

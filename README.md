@@ -7,10 +7,11 @@
 ---
 
 ## About
-Mable is an application which allows you to create Countdowns — it counts down the days till a date you set.
-Countdowns are shown in a compact list, sorted based on the number of days remaining before its due date.
-This allows you to check up on how much time you have left at a glance. Instead of folders, Mable uses colour-coded
-Countdowns to help you stay organised — we don't want you to be blind-sided by stuff *hidden* in folders!
+**Purpose:** Mable is *not* a reminders application. It does not send annoying notifications when a Countdown's due date approaches. It serves as a dashboard for you to monitor long-term deadlines, allowing you to check how many days you have left until a due date.
+
+**Who should use Mable:** Anyone with deadlines to meet, especially those who have multiple deadlines that span over multiple days (e.g students).
+
+**Why you should use it:** Besides all the common features listed below, Mable prioritises task awareness above all else; other To-Do applications tend to hide your tasks within folders, in the name of "being organised". Mable doesn't do this. Instead, your tasks (or Countdowns) are always visible, with the most urgent Countdown being at the top of the list. Colour codes are used to stay organised, like what it found on a map (with Legends). This way, you'll never be blindsided.
 
 ## Features
 - Add and remove Countdowns easily
@@ -30,11 +31,11 @@ Check out the [Wiki](https://github.com/n-xiao/mable/wiki) to learn more!
 If you have an issue and/or want to contribute to the codebase, I recommend you start with reading
 [the docs](https://github.com/n-xiao/mable/tree/master/docs).
 
-## Acknowledgements
+## Attribution
 
 *IMPORTANT NOTE:* Various works are named below to credit their authors and fulfill
 any necessary terms outlined by their respective Licenses, as they are used to facilitate certain features of Mable.
-This section, "Acknowledgements", **DOES NOT** imply any brand affiliation or collaboration with said works,
+This section, "Attribution", **DOES NOT** imply any brand affiliation or collaboration with said works,
 or the authors of said works.
 
 - Mable uses [Jackson](https://github.com/FasterXML/jackson) as a build dependency. You can find a copy of their

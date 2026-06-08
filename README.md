@@ -13,6 +13,14 @@
 
 **Why you should use it:** Besides all the common features listed below, Mable prioritises task awareness above all else; other To-Do applications tend to hide your tasks within folders, in the name of "being organised". Mable doesn't do this. Instead, your tasks (or Countdowns) are always visible, with the most urgent Countdown being at the top of the list. Colour codes are used to stay organised, like what it found on a map (with Legends). This way, you'll never be blindsided.
 
+> [!NOTE]
+> As of 8 June 2026, Mable is on long-term support. This means that no new features will be added, but bugs will still be fixed as required.
+> I plan to do a full rewrite of Mable in another programming language which has a better GUI ecosystem as doing it in Java has made it very
+> difficult to scale.
+>
+> brb!
+> 
+
 ## Features
 
 https://github.com/user-attachments/assets/bde28399-2aed-47d9-beaf-798ae6084d96
